@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Baby Tracker</title>
+<style>
+  :root {
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --night: #6366f1;
+    --night-bg: #eef2ff;
+    --wake: #f59e0b;
+    --wake-bg: #fffbeb;
+    --nap: #8b5cf6;
+    --nap-bg: #f5f3ff;
+    --feed: #10b981;
+    --feed-bg: #ecfdf5;
+    --radius: 12px;
+  }
+
+  * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body { background: var(--bg); color: var(--text); margin: 0; padding: 16px; display: flex; justify-content: center; }
+  .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 12px; }
+
+  /* Row Cards */
+  .tracker-row {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  }
+
+  .row-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px; }
+  
+  /* Row 1: Night Sleep & Yesterday's Total */
+  .row-night { background: var(--night-bg); border-color: rgba(99, 102, 241, 0.2); }
+  .row-night .row-header { color: var(--night); }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat-value { font-size: 16px; font-weight: 700; color: var(--text); }
+  .stat-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  /* Row 2: Wake Time */
+  .row-wake { background: var(--wake-bg); border-color: rgba(245, 158, 11, 0.2); }
+  .row-wake .row-header { color: var(--wake); }
+
+  /* Row 3 & 4: Interactive Input Forms */
+  .input-group { display: flex; gap: 6px; margin-top: 6px; }
+  input[type="time"], input[type="number"] {
+    flex: 1;
+    height: 38px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0 10px;
+    font-size: 14px;
+    background: var(--card);
+    color: var(--text);
+    outline: none;
+  }
+  button {
+    background: var(--text);
+    color: var(--bg);
+    border: 0;
+    border-radius: 8px;
+    padding: 0 14px;
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  /* Analytics & Progress Bars */
+  .analytics-box {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border);
+  }
+  .progress-header { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 6px; }
+  .progress-bar-bg { width: 100%; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; border-radius: 4px; width: 0%; transition: width 0.3s ease; }
+  .fill-nap { background: var(--nap); }
+  .fill-feed { background: var(--feed); }
+
+  /* Lists */
+  .log-list { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
+  .log-item { display: flex; justify-content: space-between; padding: 4px 0; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ROW 1: LAST NIGHT SLEEP + YESTERDAY TOTAL SLEEP -->
+  <div class="tracker-row row-night">
+    <div class="row-header">Yesterday's 24-Hr Sleep Summary</div>
+    <div class="stat-grid">
+      <div>
+        <div class="stat-value" id="lastNightDisplay">10h 15m</div>
+        <div class="stat-sub">Last Night Sleep</div>
+      </div>
+      <div>
+        <div class="stat-value" id="yesterdayTotalDisplay">13h 45m</div>
+        <div class="stat-sub">Total (Night + Day Naps)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 2: MORNING WAKE TIME -->
+  <div class="tracker-row row-wake">
+    <div class="row-header">Today's Morning Wake-up Time</div>
+    <div class="input-group">
+      <input type="time" id="wakeTimeInput" value="08:45" />
+      <button onclick="saveWakeTime()">Save</button>
+    </div>
+  </div>
+
+  <!-- ROW 3: NAP SECTION WITH DONE VS PENDING ANALYTICS -->
+  <div class="tracker-row">
+    <div class="row-header" style="color: var(--nap);">Daytime Naps</div>
+    <div class="input-group">
+      <input type="time" id="napStart" placeholder="Start" />
+      <input type="time" id="napEnd" placeholder="End" />
+      <button onclick="logNap()">Add</button>
+    </div>
+
+    <!-- Nap List -->
+    <div class="log-list" id="napList"></div>
+
+    <!-- Nap Analytics -->
+    <div class="analytics-box">
+      <div class="progress-header">
+        <span>Naps Completed: <b id="napDoneText">0h 0m</b></span>
+        <span style="color: var(--nap);" id="napPendingText">3h 30m Pending</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill fill-nap" id="napProgressBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROW 4: FEEDING SECTION WITH DONE VS PENDING ANALYTICS -->
+  <div class="tracker-row">
+    <div class="row-header" style="color: var(--feed);">Feeding Intake</div>
+    <div class="input-group">
+      <input type="time" id="feedTime" />
+      <input type="number" id="feedMl" placeholder="Amount (ml)" min="0" step="10" />
+      <button onclick="logFeed()">Add</button>
+    </div>
+
+    <!-- Feed List -->
+    <div class="log-list" id="feedList"></div>
+
+    <!-- Feed Analytics -->
+    <div class="analytics-box">
+      <div class="progress-header">
+        <span>Intake: <b id="feedDoneText">0 ml</b></span>
+        <span style="color: var(--feed);" id="feedPendingText">800 ml Pending</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill fill-feed" id="feedProgressBar"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Target Constants
+  const NAP_TARGET_MINS = 210; // 3h 30m
+  const FEED_TARGET_ML = 800;  // 800 ml
+
+  let todayNaps = [];
+  let todayFeeds = [];
+
+  function formatMins(m) {
+    const hrs = Math.floor(m / 60);
+    const mins = m % 60;
+    return hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`;
+  }
+
+  function saveWakeTime() {
+    const time = document.getElementById("wakeTimeInput").value;
+    alert("Wake time updated: " + time);
+  }
+
+  function logNap() {
+    const start = document.getElementById("napStart").value;
+    const end = document.getElementById("napEnd").value;
+    if (!start || !end) return alert("Select both start and end time.");
+
+    const [sh, sm] = start.split(":").map(Number);
+    const [eh, em] = end.split(":").map(Number);
+    let dur = (eh * 60 + em) - (sh * 60 + sm);
+    if (dur < 0) dur += 1440;
+
+    todayNaps.push({ start, end, dur });
+    document.getElementById("napStart").value = "";
+    document.getElementById("napEnd").value = "";
+    renderNaps();
+  }
+
+  function renderNaps() {
+    const totalDone = todayNaps.reduce((acc, n) => acc + n.dur, 0);
+    const pending = Math.max(0, NAP_TARGET_MINS - totalDone);
+    const pct = Math.min(100, (totalDone / NAP_TARGET_MINS) * 100);
+
+    document.getElementById("napDoneText").textContent = formatMins(totalDone);
+    document.getElementById("napPendingText").textContent = pending === 0 ? "Target Complete" : `${formatMins(pending)} Pending`;
+    document.getElementById("napProgressBar").style.width = pct + "%";
+
+    const list = document.getElementById("napList");
+    list.innerHTML = todayNaps.map((n, i) => `
+      <div class="log-item">
+        <span>Nap ${i + 1}: ${n.start} – ${n.end}</span>
+        <b>${formatMins(n.dur)}</b>
+      </div>
+    `).join("");
+  }
+
+  function logFeed() {
+    const time = document.getElementById("feedTime").value;
+    const ml = Number(document.getElementById("feedMl").value);
+    if (!time || !ml) return alert("Enter time and amount in ml.");
+
+    todayFeeds.push({ time, ml });
+    document.getElementById("feedTime").value = "";
+    document.getElementById("feedMl").value = "";
+    renderFeeds();
+  }
+
+  function renderFeeds() {
+    const totalDone = todayFeeds.reduce((acc, f) => acc + f.ml, 0);
+    const pending = Math.max(0, FEED_TARGET_ML - totalDone);
+    const pct = Math.min(100, (totalDone / FEED_TARGET_ML) * 100);
+
+    document.getElementById("feedDoneText").textContent = `${totalDone} ml`;
+    document.getElementById("feedPendingText").textContent = pending === 0 ? "Target Complete" : `${pending} ml Pending`;
+    document.getElementById("feedProgressBar").style.width = pct + "%";
+
+    const list = document.getElementById("feedList");
+    list.innerHTML = todayFeeds.map((f, i) => `
+      <div class="log-item">
+        <span>Feed ${i + 1} (${f.time})</span>
+        <b>${f.ml} ml</b>
+      </div>
+    `).join("");
+  }
+
+  // Set default current time
+  const now = new Date();
+  const timeStr = String(now.getHours()).padStart(2, '0') + ":" + String(now.getMinutes()).padStart(2, '0');
+  document.getElementById("feedTime").value = timeStr;
+</script>
+
+</body>
+</html>
