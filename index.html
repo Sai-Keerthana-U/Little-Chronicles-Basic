@@ -113,13 +113,20 @@
   }
   button.cancel-btn { background: var(--border); color: var(--text); }
 
-  /* Progress Bars with Min Target Marker */
+  /* Clean Progress Bars (No Text Overlap) */
   .analytics-box {
     margin-top: 10px;
     padding-top: 10px;
     border-top: 1px dashed var(--border);
   }
-  .progress-header { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 6px; }
+  .progress-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    font-size: 12px; 
+    font-weight: 600; 
+    margin-bottom: 8px; 
+  }
   .progress-bar-bg { 
     width: 100%; 
     height: 10px; 
@@ -140,22 +147,11 @@
     border-radius: 2px;
     z-index: 2;
   }
-  .min-marker::after {
-    content: "Min";
-    position: absolute;
-    top: -14px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 8px;
-    font-weight: 700;
-    color: var(--muted);
-    text-transform: uppercase;
-  }
 
   .target-note {
     font-size: 11px;
     color: var(--muted);
-    margin-top: 8px;
+    margin-top: 6px;
     display: flex;
     justify-content: space-between;
     font-weight: 500;
@@ -163,10 +159,11 @@
 
   .status-badge {
     display: inline-block;
-    padding: 1px 5px;
+    padding: 1px 6px;
     border-radius: 4px;
     font-size: 10px;
     font-weight: 700;
+    margin-left: 4px;
   }
   .status-badge.met { background: #dcfce7; color: #166534; }
   .status-badge.pending { background: #fef3c7; color: #92400e; }
@@ -308,7 +305,7 @@
         <div class="progress-bar-fill fill-nap" id="napProgressBar"></div>
       </div>
       <div class="target-note">
-        <span>Min Goal: <b>2h 30m (71%)</b></span>
+        <span>Min Goal: <b>2h 30m</b> (Marked Line)</span>
         <span>Target Max: <b>3h 30m</b></span>
       </div>
     </div>
@@ -336,7 +333,7 @@
         <div class="progress-bar-fill fill-feed" id="feedProgressBar"></div>
       </div>
       <div class="target-note">
-        <span>Min Goal: <b>720 ml (75%)</b></span>
+        <span>Min Goal: <b>720 ml</b> (Marked Line)</span>
         <span>Target Max: <b>960 ml</b></span>
       </div>
     </div>
