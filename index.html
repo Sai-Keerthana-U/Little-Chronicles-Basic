@@ -20,7 +20,7 @@
     --feed: #10b981;
     --feed-bg: #ecfdf5;
     --danger: #ef4444;
-    --radius: 10px;
+    --radius: 12px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -30,7 +30,7 @@
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    padding: 8px;
+    padding: 12px;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -39,28 +39,28 @@
     max-width: 480px; 
     display: flex; 
     flex-direction: column; 
-    gap: 6px; 
+    gap: 10px; 
   }
 
-  /* Compact Top Bar */
-  .top-bar { display: flex; gap: 4px; }
+  /* Top Bar */
+  .top-bar { display: flex; gap: 6px; }
   .top-btn {
     flex: 1;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 5px 6px;
-    font-size: 11px;
+    border-radius: 8px;
+    padding: 7px 8px;
+    font-size: 11.5px;
     font-weight: 600;
     color: var(--text);
     cursor: pointer;
   }
   .date-input {
-    height: 26px;
+    height: 32px;
     border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 0 6px;
-    font-size: 11px;
+    border-radius: 8px;
+    padding: 0 8px;
+    font-size: 12px;
     font-weight: 600;
     background: var(--card);
     color: var(--text);
@@ -72,8 +72,8 @@
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 8px 10px;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    padding: 12px 14px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
   }
 
   .row-night { background: var(--night-bg); border-color: rgba(99, 102, 241, 0.2); }
@@ -83,33 +83,33 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
   }
   .row-header { 
-    font-size: 10px; 
+    font-size: 11px; 
     font-weight: 700; 
     text-transform: uppercase; 
-    letter-spacing: 0.3px; 
+    letter-spacing: 0.4px; 
     color: var(--muted); 
   }
 
   /* Sleep Summary Grid */
-  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 6px; }
-  .stat-value { font-size: 14px; font-weight: 800; color: var(--text); }
-  .stat-sub { font-size: 9.5px; color: var(--muted); }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .stat-value { font-size: 16px; font-weight: 800; color: var(--text); }
+  .stat-sub { font-size: 10.5px; color: var(--muted); margin-top: 1px; }
 
-  .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-  .field-label { display: block; font-size: 9.5px; font-weight: 600; color: var(--muted); margin-bottom: 2px; }
+  .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .field-label { display: block; font-size: 10.5px; font-weight: 600; color: var(--muted); margin-bottom: 3px; }
 
   /* Input Lines */
-  .input-group { display: flex; gap: 4px; }
+  .input-group { display: flex; gap: 6px; }
   input[type="time"], input[type="number"] {
     width: 100%;
-    height: 30px;
+    height: 36px;
     border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 0 6px;
-    font-size: 12px;
+    border-radius: 8px;
+    padding: 0 8px;
+    font-size: 13px;
     background: var(--card);
     color: var(--text);
     outline: none;
@@ -118,33 +118,33 @@
     background: var(--text);
     color: var(--bg);
     border: 0;
-    border-radius: 6px;
-    padding: 0 10px;
+    border-radius: 8px;
+    padding: 0 14px;
     font-weight: 700;
-    font-size: 11px;
+    font-size: 12px;
     cursor: pointer;
     white-space: nowrap;
   }
   button.cancel-btn { background: var(--border); color: var(--text); }
 
-  /* Micro Progress Bars */
-  .analytics-box { margin-top: 4px; }
+  /* Progress Bars */
+  .analytics-box { margin-top: 8px; padding-top: 6px; }
   .progress-header { 
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    font-size: 10.5px; 
+    font-size: 11.5px; 
     font-weight: 600; 
-    margin-bottom: 3px; 
+    margin-bottom: 6px; 
   }
   .progress-bar-bg { 
     width: 100%; 
-    height: 6px; 
+    height: 8px; 
     background: var(--border); 
-    border-radius: 3px; 
+    border-radius: 4px; 
     position: relative; 
   }
-  .progress-bar-fill { height: 100%; border-radius: 3px; width: 0%; transition: width 0.3s ease; }
+  .progress-bar-fill { height: 100%; border-radius: 4px; width: 0%; transition: width 0.3s ease; }
   .fill-nap { background: var(--nap); }
   .fill-feed { background: var(--feed); }
 
@@ -152,16 +152,16 @@
     position: absolute;
     top: -2px;
     bottom: -2px;
-    width: 2px;
+    width: 3px;
     background: #0f172a;
-    border-radius: 1px;
+    border-radius: 1.5px;
     z-index: 2;
   }
 
   .target-note {
-    font-size: 9.5px;
+    font-size: 10.5px;
     color: var(--muted);
-    margin-top: 3px;
+    margin-top: 6px;
     display: flex;
     justify-content: space-between;
     font-weight: 500;
@@ -169,42 +169,42 @@
 
   .status-badge {
     display: inline-block;
-    padding: 0 4px;
-    border-radius: 3px;
-    font-size: 9px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 10px;
     font-weight: 700;
-    margin-left: 2px;
+    margin-left: 4px;
   }
   .status-badge.met { background: #dcfce7; color: #166534; }
   .status-badge.pending { background: #fef3c7; color: #92400e; }
 
-  /* Scrollable Micro Lists */
+  /* Lists */
   .log-list { 
-    margin-top: 4px; 
+    margin-top: 8px; 
     display: flex; 
     flex-direction: column; 
-    gap: 3px; 
-    max-height: 52px; 
+    gap: 4px; 
+    max-height: 85px; 
     overflow-y: auto; 
   }
   .log-item { 
     display: flex; 
     justify-content: space-between; 
     align-items: center;
-    padding: 3px 6px; 
+    padding: 6px 8px; 
     background: var(--bg);
     border: 1px solid var(--border);
-    border-radius: 5px;
-    font-size: 10px;
+    border-radius: 6px;
+    font-size: 11px;
   }
-  .item-actions { display: flex; gap: 4px; }
+  .item-actions { display: flex; gap: 6px; }
   .action-btn {
     border: 0;
-    padding: 2px 4px;
-    font-size: 9.5px;
+    padding: 3px 6px;
+    font-size: 11px;
     font-weight: 700;
     cursor: pointer;
-    border-radius: 3px;
+    border-radius: 4px;
   }
   .edit-btn { background: var(--nap-bg); color: var(--nap); }
   .delete-btn { background: #fee2e2; color: var(--danger); }
@@ -222,28 +222,28 @@
   }
   .modal-overlay.show { display: flex; }
   .modal-card {
-    width: min(400px, 100%);
+    width: min(420px, 100%);
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 14px;
+    padding: 16px;
     max-height: 80vh;
     overflow-y: auto;
   }
-  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-  .modal-title { font-size: 13px; font-weight: 700; }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .modal-title { font-size: 14px; font-weight: 700; }
   .btn-close { background: transparent; border: 0; font-size: 14px; color: var(--muted); cursor: pointer; }
   
   .history-entry {
     border: 1px solid var(--border);
-    border-radius: 6px;
-    padding: 6px 8px;
+    border-radius: 8px;
+    padding: 8px 10px;
     margin-bottom: 6px;
     background: var(--bg);
     cursor: pointer;
-    font-size: 11px;
+    font-size: 11.5px;
   }
-  .history-date { font-weight: 700; color: var(--text); margin-bottom: 2px; display: flex; justify-content: space-between; }
+  .history-date { font-weight: 700; color: var(--text); margin-bottom: 3px; display: flex; justify-content: space-between; }
   .history-details { display: flex; justify-content: space-between; color: var(--muted); }
 </style>
 </head>
@@ -374,10 +374,10 @@
 </div>
 
 <script>
-  const NAP_MIN_MINS = 150;    // 2h 30m
-  const NAP_MAX_MINS = 210;    // 3h 30m
-  const FEED_MIN_ML = 720;     // 720 ml
-  const FEED_MAX_ML = 960;     // 960 ml
+  const NAP_MIN_MINS = 150;
+  const NAP_MAX_MINS = 210;
+  const FEED_MIN_ML = 720;
+  const FEED_MAX_ML = 960;
 
   var allData = JSON.parse(localStorage.getItem('babyTrackerAllData') || '{}');
   var currentDate = getTodayDateString();
