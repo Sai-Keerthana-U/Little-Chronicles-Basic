@@ -19,6 +19,7 @@
     --nap-bg: #f5f3ff;
     --feed: #10b981;
     --feed-bg: #ecfdf5;
+    --danger: #ef4444;
     --radius: 12px;
   }
 
@@ -70,6 +71,10 @@
     font-size: 12px;
     cursor: pointer;
   }
+  button.cancel-btn {
+    background: var(--border);
+    color: var(--text);
+  }
 
   .analytics-box {
     margin-top: 10px;
@@ -82,8 +87,28 @@
   .fill-nap { background: var(--nap); }
   .fill-feed { background: var(--feed); }
 
-  .log-list { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
-  .log-item { display: flex; justify-content: space-between; padding: 4px 0; color: var(--muted); }
+  .log-list { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
+  .log-item { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 6px 10px; 
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .item-actions { display: flex; gap: 6px; align-items: center; }
+  .action-btn {
+    background: none;
+    border: none;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .edit-btn { color: var(--nap); }
+  .delete-btn { color: var(--danger); }
 </style>
 </head>
 <body>
@@ -105,7 +130,6 @@
       </div>
     </div>
 
-    <!-- Direct inputs for yesterday's bedtime & naps -->
     <div class="input-grid">
       <div>
         <label class="field-label">Yesterday's Bedtime</label>
@@ -133,7 +157,8 @@
     <div class="input-group">
       <input type="time" id="napStart" placeholder="Start" />
       <input type="time" id="napEnd" placeholder="End" />
-      <button onclick="logNap()">Add</button>
+      <button id="napActionBtn" onclick="saveNap()">Add</button>
+      <button id="napCancelBtn" class="cancel-btn" style="display: none;" onclick="cancelNapEdit()">Cancel</button>
     </div>
 
     <div class="log-list" id="napList"></div>
@@ -174,11 +199,12 @@
 </div>
 
 <script>
-  const NAP_TARGET_MINS = 210; // 3h 30m target
-  const FEED_TARGET_ML = 800;  // 800 ml target
+  const NAP_TARGET_MINS = 210;
+  const FEED_TARGET_ML = 800;
 
   let todayNaps = JSON.parse(localStorage.getItem('todayNaps') || '[]');
   let todayFeeds = JSON.parse(localStorage.getItem('todayFeeds') || '[]');
+  let editingNapIndex = -1;
 
   function formatMins(m) {
     const hrs = Math.floor(m / 60);
@@ -186,7 +212,6 @@
     return hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`;
   }
 
-  // Calculates Last Night Sleep (Bedtime -> Wake) and Total Sleep (Night + Yesterday's Naps)
   function calculateOvernightSleep() {
     const bedtime = document.getElementById("yesterdayBedtime").value;
     const wake = document.getElementById("todayWakeTime").value;
@@ -196,7 +221,6 @@
       const [bh, bm] = bedtime.split(":").map(Number);
       const [wh, wm] = wake.split(":").map(Number);
 
-      // Calculate overnight duration crossing midnight
       let nightMins = (wh * 60 + wm) - (bh * 60 + bm);
       if (nightMins < 0) nightMins += 1440;
 
@@ -205,7 +229,6 @@
       document.getElementById("lastNightDisplay").textContent = formatMins(nightMins);
       document.getElementById("yesterdayTotalDisplay").textContent = formatMins(totalSleepMins);
 
-      // Save to localStorage
       localStorage.setItem('yesterdayBedtime', bedtime);
       localStorage.setItem('todayWakeTime', wake);
       localStorage.setItem('yesterdayNapMins', napMins);
@@ -220,7 +243,7 @@
     alert("Saved: Wake time is " + document.getElementById("todayWakeTime").value);
   }
 
-  function logNap() {
+  function saveNap() {
     const start = document.getElementById("napStart").value;
     const end = document.getElementById("napEnd").value;
     if (!start || !end) return alert("Select both start and end time.");
@@ -230,11 +253,47 @@
     let dur = (eh * 60 + em) - (sh * 60 + sm);
     if (dur < 0) dur += 1440;
 
-    todayNaps.push({ start, end, dur });
+    if (editingNapIndex > -1) {
+      todayNaps[editingNapIndex] = { start, end, dur };
+      editingNapIndex = -1;
+      document.getElementById("napActionBtn").textContent = "Add";
+      document.getElementById("napCancelBtn").style.display = "none";
+    } else {
+      todayNaps.push({ start, end, dur });
+    }
+
     localStorage.setItem('todayNaps', JSON.stringify(todayNaps));
     document.getElementById("napStart").value = "";
     document.getElementById("napEnd").value = "";
     renderNaps();
+  }
+
+  function editNap(index) {
+    editingNapIndex = index;
+    document.getElementById("napStart").value = todayNaps[index].start;
+    document.getElementById("napEnd").value = todayNaps[index].end;
+    document.getElementById("napActionBtn").textContent = "Update";
+    document.getElementById("napCancelBtn").style.display = "inline-block";
+    document.getElementById("napStart").focus();
+  }
+
+  function cancelNapEdit() {
+    editingNapIndex = -1;
+    document.getElementById("napStart").value = "";
+    document.getElementById("napEnd").value = "";
+    document.getElementById("napActionBtn").textContent = "Add";
+    document.getElementById("napCancelBtn").style.display = "none";
+  }
+
+  function deleteNap(index) {
+    if (confirm(`Delete Nap ${index + 1}?`)) {
+      todayNaps.splice(index, 1);
+      if (editingNapIndex === index) {
+        cancelNapEdit();
+      }
+      localStorage.setItem('todayNaps', JSON.stringify(todayNaps));
+      renderNaps();
+    }
   }
 
   function renderNaps() {
@@ -249,8 +308,11 @@
     const list = document.getElementById("napList");
     list.innerHTML = todayNaps.map((n, i) => `
       <div class="log-item">
-        <span>Nap ${i + 1}: ${n.start} – ${n.end}</span>
-        <b>${formatMins(n.dur)}</b>
+        <span><b>Nap ${i + 1}:</b> ${n.start} – ${n.end} (${formatMins(n.dur)})</span>
+        <div class="item-actions">
+          <button class="action-btn edit-btn" onclick="editNap(${i})">Edit</button>
+          <button class="action-btn delete-btn" onclick="deleteNap(${i})">Delete</button>
+        </div>
       </div>
     `).join("");
   }
@@ -279,13 +341,12 @@
     const list = document.getElementById("feedList");
     list.innerHTML = todayFeeds.map((f, i) => `
       <div class="log-item">
-        <span>Feed ${i + 1} (${f.time})</span>
+        <span><b>Feed ${i + 1}:</b> ${f.time}</span>
         <b>${f.ml} ml</b>
       </div>
     `).join("");
   }
 
-  // Load saved values or set default inputs
   document.getElementById("yesterdayBedtime").value = localStorage.getItem('yesterdayBedtime') || '22:30';
   document.getElementById("todayWakeTime").value = localStorage.getItem('todayWakeTime') || '08:45';
   document.getElementById("yesterdayNapMins").value = localStorage.getItem('yesterdayNapMins') || '180';
