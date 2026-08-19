@@ -165,7 +165,7 @@
     border-bottom: 1.5px dashed var(--border);
   }
 
-  /* Clear Tag Cards with Dedicated Edit & Delete Buttons */
+  /* Tag Container */
   .tag-container {
     display: flex;
     flex-wrap: wrap;
@@ -379,7 +379,6 @@
       </div>
     </div>
 
-    <!-- Nap Tags with Edit / Del buttons -->
     <div class="tag-container" id="napTagContainer"></div>
 
     <div class="analytics-box">
@@ -400,7 +399,6 @@
 
   <!-- 2. FEEDING INTAKE (FEED TAGS) -->
   <div class="tracker-row">
-    <!-- Feed Tags with Edit / Del buttons -->
     <div class="tag-container" id="feedTagContainer"></div>
 
     <div class="analytics-box">
@@ -614,11 +612,14 @@
   };
 
   window.deleteNap = function(index) {
-    allData[currentDate].naps.splice(index, 1);
-    if (editingNapIndex === index) cancelNapEdit();
-    else if (editingNapIndex > index) editingNapIndex--;
-    persistData();
-    renderNaps();
+    const nap = allData[currentDate].naps[index];
+    if (confirm(`Are you sure you want to delete Nap ${index + 1} (${nap.start}–${nap.end})?`)) {
+      allData[currentDate].naps.splice(index, 1);
+      if (editingNapIndex === index) cancelNapEdit();
+      else if (editingNapIndex > index) editingNapIndex--;
+      persistData();
+      renderNaps();
+    }
   };
 
   window.saveFeed = function() {
@@ -663,11 +664,14 @@
   };
 
   window.deleteFeed = function(index) {
-    allData[currentDate].feeds.splice(index, 1);
-    if (editingFeedIndex === index) cancelFeedEdit();
-    else if (editingFeedIndex > index) editingFeedIndex--;
-    persistData();
-    renderFeeds();
+    const feed = allData[currentDate].feeds[index];
+    if (confirm(`Are you sure you want to delete Feed ${index + 1} (${feed.time}, ${feed.ml}ml)?`)) {
+      allData[currentDate].feeds.splice(index, 1);
+      if (editingFeedIndex === index) cancelFeedEdit();
+      else if (editingFeedIndex > index) editingFeedIndex--;
+      persistData();
+      renderFeeds();
+    }
   };
 
   function renderNaps() {
