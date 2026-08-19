@@ -26,7 +26,6 @@
   body { background: var(--bg); color: var(--text); margin: 0; padding: 16px; display: flex; justify-content: center; }
   .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 12px; }
 
-  /* Row Cards */
   .tracker-row {
     background: var(--card);
     border: 1px solid var(--border);
@@ -37,18 +36,15 @@
 
   .row-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px; }
   
-  /* Row 1: Night Sleep & Yesterday's Total */
   .row-night { background: var(--night-bg); border-color: rgba(99, 102, 241, 0.2); }
   .row-night .row-header { color: var(--night); }
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .stat-value { font-size: 16px; font-weight: 700; color: var(--text); }
+  .stat-value { font-size: 18px; font-weight: 800; color: var(--text); }
   .stat-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-  /* Row 2: Wake Time */
   .row-wake { background: var(--wake-bg); border-color: rgba(245, 158, 11, 0.2); }
   .row-wake .row-header { color: var(--wake); }
 
-  /* Row 3 & 4: Interactive Input Forms */
   .input-group { display: flex; gap: 6px; margin-top: 6px; }
   input[type="time"], input[type="number"] {
     flex: 1;
@@ -72,7 +68,6 @@
     cursor: pointer;
   }
 
-  /* Analytics & Progress Bars */
   .analytics-box {
     margin-top: 10px;
     padding-top: 10px;
@@ -84,40 +79,56 @@
   .fill-nap { background: var(--nap); }
   .fill-feed { background: var(--feed); }
 
-  /* Lists */
   .log-list { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
   .log-item { display: flex; justify-content: space-between; padding: 4px 0; color: var(--muted); }
+  
+  details summary { font-size: 11px; font-weight: 600; color: var(--muted); cursor: pointer; margin-top: 8px; }
 </style>
 </head>
 <body>
 
 <div class="container">
 
-  <!-- ROW 1: LAST NIGHT SLEEP + YESTERDAY TOTAL SLEEP -->
+  <!-- ROW 1: REAL CALCULATED SLEEP SUMMARY -->
   <div class="tracker-row row-night">
     <div class="row-header">Yesterday's 24-Hr Sleep Summary</div>
     <div class="stat-grid">
       <div>
-        <div class="stat-value" id="lastNightDisplay">10h 15m</div>
+        <div class="stat-value" id="lastNightDisplay">0h 0m</div>
         <div class="stat-sub">Last Night Sleep</div>
       </div>
       <div>
-        <div class="stat-value" id="yesterdayTotalDisplay">13h 45m</div>
-        <div class="stat-sub">Total (Night + Day Naps)</div>
+        <div class="stat-value" id="yesterdayTotalDisplay">0h 0m</div>
+        <div class="stat-sub">Total (Night + Naps)</div>
       </div>
     </div>
+    
+    <!-- Optional: Set yesterday's bedtime & naps if not already saved -->
+    <details>
+      <summary>⚙️ Adjust Bedtime & Yesterday's Naps</summary>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px">
+        <div>
+          <span style="font-size:10px;color:var(--muted)">Last Night Bedtime</span>
+          <input type="time" id="lastBedtimeInput" value="22:30" onchange="calculateSleepSummary()"/>
+        </div>
+        <div>
+          <span style="font-size:10px;color:var(--muted)">Yesterday Naps (min)</span>
+          <input type="number" id="yesterdayNapsInput" value="210" placeholder="e.g. 210" onchange="calculateSleepSummary()"/>
+        </div>
+      </div>
+    </details>
   </div>
 
   <!-- ROW 2: MORNING WAKE TIME -->
   <div class="tracker-row row-wake">
     <div class="row-header">Today's Morning Wake-up Time</div>
     <div class="input-group">
-      <input type="time" id="wakeTimeInput" value="08:45" />
+      <input type="time" id="wakeTimeInput" value="08:45" onchange="calculateSleepSummary()"/>
       <button onclick="saveWakeTime()">Save</button>
     </div>
   </div>
 
-  <!-- ROW 3: NAP SECTION WITH DONE VS PENDING ANALYTICS -->
+  <!-- ROW 3: NAP SECTION -->
   <div class="tracker-row">
     <div class="row-header" style="color: var(--nap);">Daytime Naps</div>
     <div class="input-group">
@@ -126,10 +137,8 @@
       <button onclick="logNap()">Add</button>
     </div>
 
-    <!-- Nap List -->
     <div class="log-list" id="napList"></div>
 
-    <!-- Nap Analytics -->
     <div class="analytics-box">
       <div class="progress-header">
         <span>Naps Completed: <b id="napDoneText">0h 0m</b></span>
@@ -141,7 +150,7 @@
     </div>
   </div>
 
-  <!-- ROW 4: FEEDING SECTION WITH DONE VS PENDING ANALYTICS -->
+  <!-- ROW 4: FEEDING SECTION -->
   <div class="tracker-row">
     <div class="row-header" style="color: var(--feed);">Feeding Intake</div>
     <div class="input-group">
@@ -150,10 +159,8 @@
       <button onclick="logFeed()">Add</button>
     </div>
 
-    <!-- Feed List -->
     <div class="log-list" id="feedList"></div>
 
-    <!-- Feed Analytics -->
     <div class="analytics-box">
       <div class="progress-header">
         <span>Intake: <b id="feedDoneText">0 ml</b></span>
@@ -168,12 +175,11 @@
 </div>
 
 <script>
-  // Target Constants
-  const NAP_TARGET_MINS = 210; // 3h 30m
-  const FEED_TARGET_ML = 800;  // 800 ml
+  const NAP_TARGET_MINS = 210;
+  const FEED_TARGET_ML = 800;
 
-  let todayNaps = [];
-  let todayFeeds = [];
+  let todayNaps = JSON.parse(localStorage.getItem('todayNaps') || '[]');
+  let todayFeeds = JSON.parse(localStorage.getItem('todayFeeds') || '[]');
 
   function formatMins(m) {
     const hrs = Math.floor(m / 60);
@@ -181,9 +187,33 @@
     return hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`;
   }
 
+  function calculateSleepSummary() {
+    const bedtime = document.getElementById("lastBedtimeInput").value;
+    const wake = document.getElementById("wakeTimeInput").value;
+    const yNaps = Number(document.getElementById("yesterdayNapsInput").value) || 0;
+
+    if (bedtime && wake) {
+      const [bh, bm] = bedtime.split(":").map(Number);
+      const [wh, wm] = wake.split(":").map(Number);
+      
+      // Calculate overnight duration crossing midnight
+      let nightMins = (wh * 60 + wm) - (bh * 60 + bm);
+      if (nightMins < 0) nightMins += 1440;
+
+      const totalSleep = nightMins + yNaps;
+
+      document.getElementById("lastNightDisplay").textContent = formatMins(nightMins);
+      document.getElementById("yesterdayTotalDisplay").textContent = formatMins(totalSleep);
+
+      localStorage.setItem('lastBedtime', bedtime);
+      localStorage.setItem('wakeTime', wake);
+      localStorage.setItem('yesterdayNaps', yNaps);
+    }
+  }
+
   function saveWakeTime() {
-    const time = document.getElementById("wakeTimeInput").value;
-    alert("Wake time updated: " + time);
+    calculateSleepSummary();
+    alert("Saved wake time: " + document.getElementById("wakeTimeInput").value);
   }
 
   function logNap() {
@@ -197,6 +227,7 @@
     if (dur < 0) dur += 1440;
 
     todayNaps.push({ start, end, dur });
+    localStorage.setItem('todayNaps', JSON.stringify(todayNaps));
     document.getElementById("napStart").value = "";
     document.getElementById("napEnd").value = "";
     renderNaps();
@@ -226,6 +257,7 @@
     if (!time || !ml) return alert("Enter time and amount in ml.");
 
     todayFeeds.push({ time, ml });
+    localStorage.setItem('todayFeeds', JSON.stringify(todayFeeds));
     document.getElementById("feedTime").value = "";
     document.getElementById("feedMl").value = "";
     renderFeeds();
@@ -249,10 +281,17 @@
     `).join("");
   }
 
-  // Set default current time
+  // Initialize values from storage or defaults
+  document.getElementById("lastBedtimeInput").value = localStorage.getItem('lastBedtime') || '22:30';
+  document.getElementById("wakeTimeInput").value = localStorage.getItem('wakeTime') || '08:45';
+  document.getElementById("yesterdayNapsInput").value = localStorage.getItem('yesterdayNaps') || '210';
+
   const now = new Date();
-  const timeStr = String(now.getHours()).padStart(2, '0') + ":" + String(now.getMinutes()).padStart(2, '0');
-  document.getElementById("feedTime").value = timeStr;
+  document.getElementById("feedTime").value = String(now.getHours()).padStart(2, '0') + ":" + String(now.getMinutes()).padStart(2, '0');
+
+  calculateSleepSummary();
+  renderNaps();
+  renderFeeds();
 </script>
 
 </body>
