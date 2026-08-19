@@ -6,18 +6,23 @@
 <title>Baby Tracker</title>
 <style>
   :root {
-    --bg: #f8fafc;
+    --bg: #f5f3ff;
     --card: #ffffff;
-    --text: #0f172a;
+    --text: #1e1b4b;
     --muted: #64748b;
-    --border: #e2e8f0;
-    --sleep: #6366f1;
-    --sleep-bg: #eef2ff;
-    --nap: #8b5cf6;
-    --feed: #10b981;
-    --feed-bg: #ecfdf5;
+    --border: #e0e7ff;
+    --nap-color: #8b5cf6;
+    --nap-bg: #ede9fe;
+    --nap-grad: linear-gradient(135deg, #a78bfa, #8b5cf6);
+    --feed-color: #10b981;
+    --feed-bg: #d1fae5;
+    --feed-grad: linear-gradient(135deg, #34d399, #059669);
+    --sleep-color: #6366f1;
+    --sleep-bg: #e0e7ff;
+    --wake-color: #f59e0b;
+    --wake-bg: #fef3c7;
     --danger: #ef4444;
-    --radius: 12px;
+    --radius: 14px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
@@ -45,94 +50,132 @@
     flex: 1;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 7px 8px;
+    border-radius: 10px;
+    padding: 8px;
     font-size: 11.5px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--text);
     cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(99,102,241,0.06);
   }
+  .top-btn:active { transform: scale(0.96); }
   .date-input {
-    height: 32px;
+    height: 34px;
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 10px;
     padding: 0 8px;
     font-size: 12px;
-    font-weight: 600;
+    font-weight: 700;
     background: var(--card);
     color: var(--text);
     outline: none;
+    box-shadow: 0 2px 4px rgba(99,102,241,0.06);
   }
 
-  /* Cards */
+  /* Universal Card */
   .tracker-row {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 12px 14px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    box-shadow: 0 4px 12px rgba(99,102,241,0.05);
+    transition: transform 0.2s ease;
   }
 
-  .header-inline {
+  /* Unified Switch Input Box */
+  .unified-card {
+    background: linear-gradient(180deg, #ffffff 0%, #faf5ff 100%);
+    border: 1.5px solid #ddd6fe;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+
+  .type-switcher {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
+    background: #ede9fe;
+    padding: 3px;
+    border-radius: 10px;
+    gap: 4px;
+    margin-bottom: 10px;
   }
-  .row-header { 
-    font-size: 11px; 
-    font-weight: 700; 
-    text-transform: uppercase; 
-    letter-spacing: 0.4px; 
-    color: var(--muted); 
-  }
-
-  /* Sleep Combined Sub-Sections */
-  .sleep-summary-box {
-    background: var(--sleep-bg);
-    border: 1px solid rgba(99, 102, 241, 0.2);
+  .type-btn {
+    flex: 1;
+    border: 0;
+    background: transparent;
+    padding: 7px 0;
+    font-size: 12px;
+    font-weight: 700;
+    color: #6d28d9;
     border-radius: 8px;
-    padding: 8px 10px;
-    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
-  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 6px; }
-  .stat-value { font-size: 15px; font-weight: 800; color: var(--text); }
-  .stat-sub { font-size: 10px; color: var(--muted); margin-top: 1px; }
-
-  .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .field-label { display: block; font-size: 10px; font-weight: 600; color: var(--muted); margin-bottom: 3px; }
-
-  .wake-box {
-    margin-bottom: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px dashed var(--border);
+  .type-btn.active.nap-active {
+    background: var(--card);
+    color: var(--nap-color);
+    box-shadow: 0 2px 6px rgba(139,92,246,0.25);
+  }
+  .type-btn.active.feed-active {
+    background: var(--card);
+    color: var(--feed-color);
+    box-shadow: 0 2px 6px rgba(16,185,129,0.25);
   }
 
-  /* Input Lines */
+  .input-panel {
+    animation: slideUp 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
   .input-group { display: flex; gap: 6px; }
   input[type="time"], input[type="number"] {
     width: 100%;
-    height: 36px;
-    border: 1px solid var(--border);
+    height: 38px;
+    border: 1.5px solid var(--border);
     border-radius: 8px;
-    padding: 0 8px;
+    padding: 0 10px;
     font-size: 13px;
     background: var(--card);
     color: var(--text);
     outline: none;
+    font-weight: 600;
   }
+  input:focus { border-color: var(--nap-color); }
+
   button.action-submit {
-    background: var(--text);
-    color: var(--bg);
     border: 0;
     border-radius: 8px;
-    padding: 0 14px;
+    padding: 0 16px;
     font-weight: 700;
     font-size: 12px;
+    color: #fff;
     cursor: pointer;
     white-space: nowrap;
+    transition: all 0.2s ease;
   }
-  button.cancel-btn { background: var(--border); color: var(--text); }
+  .btn-nap { background: var(--nap-grad); box-shadow: 0 2px 8px rgba(139,92,246,0.3); }
+  .btn-feed { background: var(--feed-grad); box-shadow: 0 2px 8px rgba(16,185,129,0.3); }
+  button.action-submit:active { transform: scale(0.95); }
+  button.cancel-btn { background: #cbd5e1; color: var(--text); }
+
+  /* Sleep Summary Box */
+  .sleep-summary-box {
+    background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+    border: 1px solid #c7d2fe;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  .stat-value { font-size: 16px; font-weight: 800; color: #312e81; }
+  .stat-sub { font-size: 10px; font-weight: 600; color: #4338ca; margin-top: 1px; }
+
+  .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .field-label { display: block; font-size: 10px; font-weight: 700; color: var(--muted); margin-bottom: 3px; }
+
+  .wake-box {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1.5px dashed var(--border);
+  }
 
   /* Progress Bars */
   .analytics-box { margin-top: 8px; padding-top: 6px; }
@@ -141,57 +184,62 @@
     justify-content: space-between; 
     align-items: center; 
     font-size: 11.5px; 
-    font-weight: 600; 
+    font-weight: 700; 
     margin-bottom: 6px; 
   }
   .progress-bar-bg { 
     width: 100%; 
-    height: 8px; 
-    background: var(--border); 
-    border-radius: 4px; 
+    height: 9px; 
+    background: #e2e8f0; 
+    border-radius: 6px; 
     position: relative; 
+    overflow: hidden;
   }
-  .progress-bar-fill { height: 100%; border-radius: 4px; width: 0%; transition: width 0.3s ease; }
-  .fill-nap { background: var(--nap); }
-  .fill-feed { background: var(--feed); }
+  .progress-bar-fill { 
+    height: 100%; 
+    border-radius: 6px; 
+    width: 0%; 
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+  }
+  .fill-nap { background: var(--nap-grad); }
+  .fill-feed { background: var(--feed-grad); }
 
   .min-marker {
     position: absolute;
-    top: -2px;
-    bottom: -2px;
+    top: 0;
+    bottom: 0;
     width: 3px;
-    background: #0f172a;
-    border-radius: 1.5px;
+    background: #1e1b4b;
     z-index: 2;
   }
 
   .target-note {
-    font-size: 10.5px;
+    font-size: 10px;
     color: var(--muted);
-    margin-top: 6px;
+    margin-top: 5px;
     display: flex;
     justify-content: space-between;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   .status-badge {
     display: inline-block;
     padding: 1px 6px;
     border-radius: 4px;
-    font-size: 10px;
-    font-weight: 700;
+    font-size: 9.5px;
+    font-weight: 800;
     margin-left: 4px;
   }
-  .status-badge.met { background: #dcfce7; color: #166534; }
+  .status-badge.met { background: #d1fae5; color: #065f46; animation: popBadge 0.3s ease; }
   .status-badge.pending { background: #fef3c7; color: #92400e; }
 
-  /* Lists */
+  /* Log Lists */
   .log-list { 
     margin-top: 8px; 
     display: flex; 
     flex-direction: column; 
     gap: 4px; 
-    max-height: 85px; 
+    max-height: 80px; 
     overflow-y: auto; 
   }
   .log-item { 
@@ -201,8 +249,9 @@
     padding: 6px 8px; 
     background: var(--bg);
     border: 1px solid var(--border);
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 11px;
+    animation: fadeIn 0.2s ease;
   }
   .item-actions { display: flex; gap: 6px; }
   .action-btn {
@@ -211,16 +260,34 @@
     font-size: 11px;
     font-weight: 700;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 5px;
+    transition: transform 0.15s;
   }
-  .edit-btn { background: #f5f3ff; color: var(--nap); }
+  .action-btn:active { transform: scale(0.9); }
+  .edit-btn { background: #ede9fe; color: var(--nap-color); }
   .delete-btn { background: #fee2e2; color: var(--danger); }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes popBadge {
+    0% { transform: scale(0.8); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
 
   /* Modal */
   .modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(30, 27, 75, 0.4);
+    backdrop-filter: blur(2px);
     display: none;
     align-items: center;
     justify-content: center;
@@ -236,9 +303,10 @@
     padding: 16px;
     max-height: 80vh;
     overflow-y: auto;
+    animation: fadeIn 0.2s ease-out;
   }
   .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .modal-title { font-size: 14px; font-weight: 700; }
+  .modal-title { font-size: 14px; font-weight: 800; }
   .btn-close { background: transparent; border: 0; font-size: 14px; color: var(--muted); cursor: pointer; }
   
   .history-entry {
@@ -249,7 +317,9 @@
     background: var(--bg);
     cursor: pointer;
     font-size: 11.5px;
+    transition: transform 0.15s ease;
   }
+  .history-entry:hover { transform: translateY(-1px); }
   .history-date { font-weight: 700; color: var(--text); margin-bottom: 3px; display: flex; justify-content: space-between; }
   .history-details { display: flex; justify-content: space-between; color: var(--muted); }
 </style>
@@ -267,13 +337,36 @@
     <input type="file" id="importFileInput" accept=".json" style="display: none;" onchange="importJSON(event)" />
   </div>
 
-  <!-- 1. SLEEP (MERGED: YESTERDAY SUMMARY + MORNING WAKE + DAYTIME NAPS) -->
-  <div class="tracker-row">
-    <div class="header-inline">
-      <span class="row-header" style="color:var(--sleep)">1. Sleep</span>
+  <!-- SINGLE UNIFIED INPUT WINDOW FOR BOTH NAPS & FEEDS -->
+  <div class="tracker-row unified-card">
+    <div class="type-switcher">
+      <button type="button" class="type-btn active nap-active" id="tabNap" onclick="switchLogType('nap')">💤 Log Nap</button>
+      <button type="button" class="type-btn" id="tabFeed" onclick="switchLogType('feed')">🍼 Log Feed</button>
     </div>
-    
-    <!-- Yesterday's Summary Box -->
+
+    <!-- Nap Form -->
+    <div id="napInputPanel" class="input-panel">
+      <div class="input-group">
+        <input type="time" id="napStart" placeholder="Start" />
+        <input type="time" id="napEnd" placeholder="End" />
+        <button type="button" id="napActionBtn" class="action-submit btn-nap" onclick="saveNap()">Add Nap</button>
+        <button type="button" id="napCancelBtn" class="action-submit cancel-btn" style="display: none;" onclick="cancelNapEdit()">✕</button>
+      </div>
+    </div>
+
+    <!-- Feed Form -->
+    <div id="feedInputPanel" class="input-panel" style="display: none;">
+      <div class="input-group">
+        <input type="time" id="feedTime" style="flex:1" />
+        <input type="number" id="feedMl" placeholder="Amount (ml)" min="0" step="10" style="flex:1" />
+        <button type="button" id="feedActionBtn" class="action-submit btn-feed" onclick="saveFeed()">Add Feed</button>
+        <button type="button" id="feedCancelBtn" class="action-submit cancel-btn" style="display: none;" onclick="cancelFeedEdit()">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. SLEEP (SUMMARY + MORNING WAKE + DAYTIME NAPS) -->
+  <div class="tracker-row">
     <div class="sleep-summary-box">
       <div class="stat-grid">
         <div>
@@ -297,40 +390,29 @@
       </div>
     </div>
 
-    <!-- Morning Wake Input -->
     <div class="wake-box">
       <label class="field-label" style="margin-bottom:4px">Today's Morning Wake-up Time</label>
       <div class="input-group">
         <input type="time" id="todayWakeTime" onchange="onSleepInputsChange()" />
-        <button type="button" class="action-submit" onclick="saveWakeTime()">Save</button>
+        <button type="button" class="action-submit btn-nap" onclick="saveWakeTime()">Save</button>
       </div>
     </div>
 
-    <!-- Daytime Naps Input & List -->
     <div>
-      <label class="field-label" style="margin-bottom:4px">Daytime Naps</label>
-      <div class="input-group">
-        <input type="time" id="napStart" placeholder="Start" />
-        <input type="time" id="napEnd" placeholder="End" />
-        <button type="button" id="napActionBtn" class="action-submit" onclick="saveNap()">Add</button>
-        <button type="button" id="napCancelBtn" class="action-submit cancel-btn" style="display: none;" onclick="cancelNapEdit()">✕</button>
-      </div>
-
       <div class="log-list" id="napList"></div>
 
-      <!-- Nap Analytics -->
       <div class="analytics-box">
         <div class="progress-header">
-          <span>Done: <b id="napDoneText">0h 0m</b> <span id="napMinStatus" class="status-badge pending">Min Pending</span></span>
-          <span style="color: var(--nap);" id="napPendingText">3h 30m Pending</span>
+          <span>Naps: <b id="napDoneText">0h 0m</b> <span id="napMinStatus" class="status-badge pending">Min Pending</span></span>
+          <span style="color: var(--nap-color);" id="napPendingText">3h 30m Pending</span>
         </div>
         <div class="progress-bar-bg">
           <div class="min-marker" style="left: 71.4%;"></div>
           <div class="progress-bar-fill fill-nap" id="napProgressBar"></div>
         </div>
         <div class="target-note">
-          <span>Min: <b>2h 30m</b> (Line)</span>
-          <span>Max: <b>3h 30m</b></span>
+          <span>Min: <b>2h 30m</b></span>
+          <span>Target Max: <b>3h 30m</b></span>
         </div>
       </div>
     </div>
@@ -338,30 +420,20 @@
 
   <!-- 2. FEEDING INTAKE -->
   <div class="tracker-row">
-    <div class="header-inline">
-      <span class="row-header" style="color:var(--feed)">2. Feeding Intake</span>
-    </div>
-    <div class="input-group">
-      <input type="time" id="feedTime" style="flex:1" />
-      <input type="number" id="feedMl" placeholder="ml" min="0" step="10" style="flex:1" />
-      <button type="button" id="feedActionBtn" class="action-submit" onclick="saveFeed()">Add</button>
-      <button type="button" id="feedCancelBtn" class="action-submit cancel-btn" style="display: none;" onclick="cancelFeedEdit()">✕</button>
-    </div>
-
     <div class="log-list" id="feedList"></div>
 
     <div class="analytics-box">
       <div class="progress-header">
         <span>Intake: <b id="feedDoneText">0 ml</b> <span id="feedMinStatus" class="status-badge pending">Min Pending</span></span>
-        <span style="color: var(--feed);" id="feedPendingText">960 ml Pending</span>
+        <span style="color: var(--feed-color);" id="feedPendingText">960 ml Pending</span>
       </div>
       <div class="progress-bar-bg">
         <div class="min-marker" style="left: 75%;"></div>
         <div class="progress-bar-fill fill-feed" id="feedProgressBar"></div>
       </div>
       <div class="target-note">
-        <span>Min: <b>720 ml</b> (Line)</span>
-        <span>Max: <b>960 ml</b></span>
+        <span>Min: <b>720 ml</b></span>
+        <span>Target Max: <b>960 ml</b></span>
       </div>
     </div>
   </div>
@@ -389,6 +461,25 @@
   var currentDate = getTodayDateString();
   var editingNapIndex = -1;
   var editingFeedIndex = -1;
+
+  function switchLogType(type) {
+    const tabNap = document.getElementById("tabNap");
+    const tabFeed = document.getElementById("tabFeed");
+    const napPanel = document.getElementById("napInputPanel");
+    const feedPanel = document.getElementById("feedInputPanel");
+
+    if (type === 'nap') {
+      tabNap.className = "type-btn active nap-active";
+      tabFeed.className = "type-btn";
+      napPanel.style.display = "block";
+      feedPanel.style.display = "none";
+    } else {
+      tabFeed.className = "type-btn active feed-active";
+      tabNap.className = "type-btn";
+      feedPanel.style.display = "block";
+      napPanel.style.display = "none";
+    }
+  }
 
   function getTodayDateString() {
     const d = new Date();
@@ -510,7 +601,7 @@
     if (editingNapIndex > -1) {
       allData[currentDate].naps[editingNapIndex] = { start, end, dur };
       editingNapIndex = -1;
-      document.getElementById("napActionBtn").textContent = "Add";
+      document.getElementById("napActionBtn").textContent = "Add Nap";
       document.getElementById("napCancelBtn").style.display = "none";
     } else {
       allData[currentDate].naps.push({ start, end, dur });
@@ -523,6 +614,7 @@
   };
 
   window.editNap = function(index) {
+    switchLogType('nap');
     editingNapIndex = index;
     const nap = allData[currentDate].naps[index];
     document.getElementById("napStart").value = nap.start;
@@ -536,7 +628,7 @@
     editingNapIndex = -1;
     document.getElementById("napStart").value = "";
     document.getElementById("napEnd").value = "";
-    document.getElementById("napActionBtn").textContent = "Add";
+    document.getElementById("napActionBtn").textContent = "Add Nap";
     document.getElementById("napCancelBtn").style.display = "none";
   };
 
@@ -558,7 +650,7 @@
     if (editingFeedIndex > -1) {
       allData[currentDate].feeds[editingFeedIndex] = { time, ml };
       editingFeedIndex = -1;
-      document.getElementById("feedActionBtn").textContent = "Add";
+      document.getElementById("feedActionBtn").textContent = "Add Feed";
       document.getElementById("feedCancelBtn").style.display = "none";
     } else {
       allData[currentDate].feeds.push({ time, ml });
@@ -571,6 +663,7 @@
   };
 
   window.editFeed = function(index) {
+    switchLogType('feed');
     editingFeedIndex = index;
     const feed = allData[currentDate].feeds[index];
     document.getElementById("feedTime").value = feed.time;
@@ -584,7 +677,7 @@
     editingFeedIndex = -1;
     document.getElementById("feedTime").value = "";
     document.getElementById("feedMl").value = "";
-    document.getElementById("feedActionBtn").textContent = "Add";
+    document.getElementById("feedActionBtn").textContent = "Add Feed";
     document.getElementById("feedCancelBtn").style.display = "none";
   };
 
@@ -624,7 +717,7 @@
       item.className = "log-item";
       
       const span = document.createElement("span");
-      span.innerHTML = `<b>N${i + 1}:</b> ${n.start}–${n.end} (${formatMins(n.dur)})`;
+      span.innerHTML = `<b>💤 Nap ${i + 1}:</b> ${n.start}–${n.end} (${formatMins(n.dur)})`;
       
       const actions = document.createElement("div");
       actions.className = "item-actions";
@@ -677,7 +770,7 @@
       item.className = "log-item";
       
       const span = document.createElement("span");
-      span.innerHTML = `<b>F${i + 1}:</b> ${f.time} — <b>${f.ml}ml</b>`;
+      span.innerHTML = `<b>🍼 Feed ${i + 1}:</b> ${f.time} — <b>${f.ml}ml</b>`;
       
       const actions = document.createElement("div");
       actions.className = "item-actions";
@@ -717,7 +810,7 @@
           <div class="history-entry" onclick="selectDateFromHistory('${d}')">
             <div class="history-date">
               <span>${d}</span>
-              <span style="font-size:10px;color:var(--nap);">Open ➔</span>
+              <span style="font-size:10px;color:var(--nap-color);font-weight:700">Open ➔</span>
             </div>
             <div class="history-details">
               <span>Naps: <b>${formatMins(napTotal)}</b></span>
