@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>Baby Tracker</title>
 <style>
   :root {
@@ -20,121 +20,131 @@
     --feed: #10b981;
     --feed-bg: #ecfdf5;
     --danger: #ef4444;
-    --radius: 12px;
+    --radius: 10px;
   }
 
-  * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  body { background: var(--bg); color: var(--text); margin: 0; padding: 16px; display: flex; justify-content: center; }
-  .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 12px; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body { 
+    background: var(--bg); 
+    color: var(--text); 
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 8px;
+    -webkit-font-smoothing: antialiased;
+  }
 
-  /* Utility Header Buttons */
-  .top-bar { display: flex; justify-content: space-between; gap: 8px; }
+  .container { 
+    width: 100%; 
+    max-width: 480px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 6px; 
+  }
+
+  /* Compact Top Bar */
+  .top-bar { display: flex; gap: 4px; }
   .top-btn {
     flex: 1;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 10px;
-    font-size: 12px;
+    border-radius: 6px;
+    padding: 5px 6px;
+    font-size: 11px;
     font-weight: 600;
     color: var(--text);
     cursor: pointer;
-    text-align: center;
   }
-  .top-btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
-
-  /* Date Picker Row */
-  .date-row {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 10px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-  }
-  .date-label { font-size: 12px; font-weight: 700; color: var(--text); }
   .date-input {
-    height: 36px;
+    height: 26px;
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 0 10px;
-    font-size: 13px;
-    background: var(--bg);
+    border-radius: 6px;
+    padding: 0 6px;
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--card);
     color: var(--text);
     outline: none;
-    font-weight: 600;
   }
 
+  /* Row Cards */
   .tracker-row {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 14px 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    padding: 8px 10px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
   }
 
-  .row-header { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); margin-bottom: 8px; }
-  
   .row-night { background: var(--night-bg); border-color: rgba(99, 102, 241, 0.2); }
-  .row-night .row-header { color: var(--night); }
-  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-  .stat-value { font-size: 18px; font-weight: 800; color: var(--text); }
-  .stat-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
-
   .row-wake { background: var(--wake-bg); border-color: rgba(245, 158, 11, 0.2); }
-  .row-wake .row-header { color: var(--wake); }
 
-  .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .field-label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); margin-bottom: 4px; }
+  .header-inline {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .row-header { 
+    font-size: 10px; 
+    font-weight: 700; 
+    text-transform: uppercase; 
+    letter-spacing: 0.3px; 
+    color: var(--muted); 
+  }
 
-  .input-group { display: flex; gap: 6px; margin-top: 6px; }
+  /* Sleep Summary Grid */
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 6px; }
+  .stat-value { font-size: 14px; font-weight: 800; color: var(--text); }
+  .stat-sub { font-size: 9.5px; color: var(--muted); }
+
+  .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .field-label { display: block; font-size: 9.5px; font-weight: 600; color: var(--muted); margin-bottom: 2px; }
+
+  /* Input Lines */
+  .input-group { display: flex; gap: 4px; }
   input[type="time"], input[type="number"] {
     width: 100%;
-    height: 38px;
+    height: 30px;
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 0 10px;
-    font-size: 14px;
+    border-radius: 6px;
+    padding: 0 6px;
+    font-size: 12px;
     background: var(--card);
     color: var(--text);
     outline: none;
   }
-  button {
+  button.action-submit {
     background: var(--text);
     color: var(--bg);
     border: 0;
-    border-radius: 8px;
-    padding: 0 14px;
-    font-weight: 600;
-    font-size: 12px;
+    border-radius: 6px;
+    padding: 0 10px;
+    font-weight: 700;
+    font-size: 11px;
     cursor: pointer;
+    white-space: nowrap;
   }
   button.cancel-btn { background: var(--border); color: var(--text); }
 
-  /* Clean Progress Bars (No Text Overlap) */
-  .analytics-box {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px dashed var(--border);
-  }
+  /* Micro Progress Bars */
+  .analytics-box { margin-top: 4px; }
   .progress-header { 
     display: flex; 
     justify-content: space-between; 
-    align-items: center;
-    font-size: 12px; 
+    align-items: center; 
+    font-size: 10.5px; 
     font-weight: 600; 
-    margin-bottom: 8px; 
+    margin-bottom: 3px; 
   }
   .progress-bar-bg { 
     width: 100%; 
-    height: 10px; 
+    height: 6px; 
     background: var(--border); 
-    border-radius: 5px; 
-    position: relative;
+    border-radius: 3px; 
+    position: relative; 
   }
-  .progress-bar-fill { height: 100%; border-radius: 5px; width: 0%; transition: width 0.3s ease; }
+  .progress-bar-fill { height: 100%; border-radius: 3px; width: 0%; transition: width 0.3s ease; }
   .fill-nap { background: var(--nap); }
   .fill-feed { background: var(--feed); }
 
@@ -142,16 +152,16 @@
     position: absolute;
     top: -2px;
     bottom: -2px;
-    width: 3px;
+    width: 2px;
     background: #0f172a;
-    border-radius: 2px;
+    border-radius: 1px;
     z-index: 2;
   }
 
   .target-note {
-    font-size: 11px;
+    font-size: 9.5px;
     color: var(--muted);
-    margin-top: 6px;
+    margin-top: 3px;
     display: flex;
     justify-content: space-between;
     font-weight: 500;
@@ -159,38 +169,47 @@
 
   .status-badge {
     display: inline-block;
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-size: 10px;
+    padding: 0 4px;
+    border-radius: 3px;
+    font-size: 9px;
     font-weight: 700;
-    margin-left: 4px;
+    margin-left: 2px;
   }
   .status-badge.met { background: #dcfce7; color: #166534; }
   .status-badge.pending { background: #fef3c7; color: #92400e; }
 
-  .log-list { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
+  /* Scrollable Micro Lists */
+  .log-list { 
+    margin-top: 4px; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 3px; 
+    max-height: 52px; 
+    overflow-y: auto; 
+  }
   .log-item { 
     display: flex; 
     justify-content: space-between; 
     align-items: center;
-    padding: 8px 10px; 
+    padding: 3px 6px; 
     background: var(--bg);
     border: 1px solid var(--border);
-    border-radius: 8px;
+    border-radius: 5px;
+    font-size: 10px;
   }
-  .item-actions { display: flex; gap: 6px; align-items: center; }
+  .item-actions { display: flex; gap: 4px; }
   .action-btn {
-    border: 1px solid transparent;
-    padding: 4px 8px;
-    font-size: 11px;
+    border: 0;
+    padding: 2px 4px;
+    font-size: 9.5px;
     font-weight: 700;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: 3px;
   }
-  .edit-btn { background: var(--nap-bg); color: var(--nap); border-color: rgba(139, 92, 246, 0.2); }
-  .delete-btn { background: #fee2e2; color: var(--danger); border-color: rgba(239, 68, 68, 0.2); }
+  .edit-btn { background: var(--nap-bg); color: var(--nap); }
+  .delete-btn { background: #fee2e2; color: var(--danger); }
 
-  /* History Modal */
+  /* Modal */
   .modal-overlay {
     position: fixed;
     inset: 0;
@@ -203,53 +222,49 @@
   }
   .modal-overlay.show { display: flex; }
   .modal-card {
-    width: min(420px, 100%);
+    width: min(400px, 100%);
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 16px;
+    padding: 14px;
     max-height: 80vh;
     overflow-y: auto;
   }
-  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .modal-title { font-size: 14px; font-weight: 700; margin: 0; }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .modal-title { font-size: 13px; font-weight: 700; }
   .btn-close { background: transparent; border: 0; font-size: 14px; color: var(--muted); cursor: pointer; }
   
   .history-entry {
     border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 12px;
-    margin-bottom: 8px;
+    border-radius: 6px;
+    padding: 6px 8px;
+    margin-bottom: 6px;
     background: var(--bg);
     cursor: pointer;
-    transition: background 0.15s ease;
+    font-size: 11px;
   }
-  .history-entry:hover { background: var(--border); }
-  .history-date { font-weight: 700; font-size: 13px; color: var(--text); margin-bottom: 4px; display: flex; justify-content: space-between; }
-  .history-details { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
+  .history-date { font-weight: 700; color: var(--text); margin-bottom: 2px; display: flex; justify-content: space-between; }
+  .history-details { display: flex; justify-content: space-between; color: var(--muted); }
 </style>
 </head>
 <body>
 
 <div class="container">
 
-  <!-- TOP UTILITY BAR: HISTORY, BACKUP, IMPORT -->
+  <!-- TOP BAR & DATE -->
   <div class="top-bar">
+    <input type="date" id="selectedDateInput" class="date-input" style="flex:1.2" onchange="onDateChange()" />
     <button class="top-btn" onclick="openHistoryModal()">History</button>
-    <button class="top-btn" onclick="exportJSON()">Backup JSON</button>
-    <button class="top-btn" onclick="document.getElementById('importFileInput').click()">Import JSON</button>
+    <button class="top-btn" onclick="exportJSON()">Backup</button>
+    <button class="top-btn" onclick="document.getElementById('importFileInput').click()">Import</button>
     <input type="file" id="importFileInput" accept=".json" style="display: none;" onchange="importJSON(event)" />
   </div>
 
-  <!-- DATE SELECTOR -->
-  <div class="date-row">
-    <span class="date-label">Viewing Date:</span>
-    <input type="date" id="selectedDateInput" class="date-input" onchange="onDateChange()" />
-  </div>
-
-  <!-- ROW 1: YESTERDAY'S 24-HR SLEEP SUMMARY -->
+  <!-- 1. YESTERDAY'S SLEEP SUMMARY -->
   <div class="tracker-row row-night">
-    <div class="row-header">1. Yesterday's 24-Hr Sleep Summary</div>
+    <div class="header-inline">
+      <span class="row-header" style="color:var(--night)">1. Yesterday's Sleep Summary</span>
+    </div>
     
     <div class="stat-grid">
       <div>
@@ -258,46 +273,50 @@
       </div>
       <div>
         <div class="stat-value" id="yesterdayTotalDisplay">--</div>
-        <div class="stat-sub">Yesterday's Total Sleep</div>
+        <div class="stat-sub">Total (Night + Naps)</div>
       </div>
     </div>
 
     <div class="input-grid">
       <div>
-        <label class="field-label">Yesterday's Bedtime</label>
+        <label class="field-label">Yesterday Bedtime</label>
         <input type="time" id="yesterdayBedtime" onchange="onSleepInputsChange()" />
       </div>
       <div>
-        <label class="field-label">Yesterday's Naps (mins)</label>
-        <input type="number" id="yesterdayNapMins" placeholder="e.g. 180" onchange="onSleepInputsChange()" />
+        <label class="field-label">Yesterday Naps (min)</label>
+        <input type="number" id="yesterdayNapMins" placeholder="180" onchange="onSleepInputsChange()" />
       </div>
     </div>
   </div>
 
-  <!-- ROW 2: TODAY'S MORNING WAKE TIME -->
+  <!-- 2. WAKE TIME -->
   <div class="tracker-row row-wake">
-    <div class="row-header">2. Morning Wake-up Time</div>
+    <div class="header-inline">
+      <span class="row-header" style="color:var(--wake)">2. Morning Wake-up Time</span>
+    </div>
     <div class="input-group">
       <input type="time" id="todayWakeTime" onchange="onSleepInputsChange()" />
-      <button type="button" onclick="saveWakeTime()">Save</button>
+      <button type="button" class="action-submit" onclick="saveWakeTime()">Save</button>
     </div>
   </div>
 
-  <!-- ROW 3: DAYTIME NAPS & ANALYTICS -->
+  <!-- 3. DAYTIME NAPS -->
   <div class="tracker-row">
-    <div class="row-header" style="color: var(--nap);">3. Daytime Naps</div>
+    <div class="header-inline">
+      <span class="row-header" style="color:var(--nap)">3. Daytime Naps</span>
+    </div>
     <div class="input-group">
       <input type="time" id="napStart" placeholder="Start" />
       <input type="time" id="napEnd" placeholder="End" />
-      <button type="button" id="napActionBtn" onclick="saveNap()">Add</button>
-      <button type="button" id="napCancelBtn" class="cancel-btn" style="display: none;" onclick="cancelNapEdit()">Cancel</button>
+      <button type="button" id="napActionBtn" class="action-submit" onclick="saveNap()">Add</button>
+      <button type="button" id="napCancelBtn" class="action-submit cancel-btn" style="display: none;" onclick="cancelNapEdit()">✕</button>
     </div>
 
     <div class="log-list" id="napList"></div>
 
     <div class="analytics-box">
       <div class="progress-header">
-        <span>Naps Completed: <b id="napDoneText">0h 0m</b> <span id="napMinStatus" class="status-badge pending">Min Pending</span></span>
+        <span>Done: <b id="napDoneText">0h 0m</b> <span id="napMinStatus" class="status-badge pending">Min Pending</span></span>
         <span style="color: var(--nap);" id="napPendingText">3h 30m Pending</span>
       </div>
       <div class="progress-bar-bg">
@@ -305,20 +324,22 @@
         <div class="progress-bar-fill fill-nap" id="napProgressBar"></div>
       </div>
       <div class="target-note">
-        <span>Min Goal: <b>2h 30m</b> (Marked Line)</span>
-        <span>Target Max: <b>3h 30m</b></span>
+        <span>Min: <b>2h 30m</b> (Line)</span>
+        <span>Max: <b>3h 30m</b></span>
       </div>
     </div>
   </div>
 
-  <!-- ROW 4: FEEDING INTAKE & ANALYTICS -->
+  <!-- 4. FEEDING INTAKE -->
   <div class="tracker-row">
-    <div class="row-header" style="color: var(--feed);">4. Feeding Intake</div>
+    <div class="header-inline">
+      <span class="row-header" style="color:var(--feed)">4. Feeding Intake</span>
+    </div>
     <div class="input-group">
-      <input type="time" id="feedTime" />
-      <input type="number" id="feedMl" placeholder="Amount (ml)" min="0" step="10" />
-      <button type="button" id="feedActionBtn" onclick="saveFeed()">Add</button>
-      <button type="button" id="feedCancelBtn" class="cancel-btn" style="display: none;" onclick="cancelFeedEdit()">Cancel</button>
+      <input type="time" id="feedTime" style="flex:1" />
+      <input type="number" id="feedMl" placeholder="ml" min="0" step="10" style="flex:1" />
+      <button type="button" id="feedActionBtn" class="action-submit" onclick="saveFeed()">Add</button>
+      <button type="button" id="feedCancelBtn" class="action-submit cancel-btn" style="display: none;" onclick="cancelFeedEdit()">✕</button>
     </div>
 
     <div class="log-list" id="feedList"></div>
@@ -333,8 +354,8 @@
         <div class="progress-bar-fill fill-feed" id="feedProgressBar"></div>
       </div>
       <div class="target-note">
-        <span>Min Goal: <b>720 ml</b> (Marked Line)</span>
-        <span>Target Max: <b>960 ml</b></span>
+        <span>Min: <b>720 ml</b> (Line)</span>
+        <span>Max: <b>960 ml</b></span>
       </div>
     </div>
   </div>
@@ -465,10 +486,9 @@
 
   function saveWakeTime() {
     calculateOvernightSleep();
-    alert("Saved: Wake time is " + document.getElementById("todayWakeTime").value + " for " + currentDate);
+    alert("Saved: Wake time is " + document.getElementById("todayWakeTime").value);
   }
 
-  // --- NAP HANDLERS ---
   window.saveNap = function() {
     const start = document.getElementById("napStart").value;
     const end = document.getElementById("napEnd").value;
@@ -516,16 +536,12 @@
 
   window.deleteNap = function(index) {
     allData[currentDate].naps.splice(index, 1);
-    if (editingNapIndex === index) {
-      cancelNapEdit();
-    } else if (editingNapIndex > index) {
-      editingNapIndex--;
-    }
+    if (editingNapIndex === index) cancelNapEdit();
+    else if (editingNapIndex > index) editingNapIndex--;
     persistData();
     renderNaps();
   };
 
-  // --- FEED HANDLERS ---
   window.saveFeed = function() {
     const time = document.getElementById("feedTime").value;
     const ml = Number(document.getElementById("feedMl").value);
@@ -568,16 +584,12 @@
 
   window.deleteFeed = function(index) {
     allData[currentDate].feeds.splice(index, 1);
-    if (editingFeedIndex === index) {
-      cancelFeedEdit();
-    } else if (editingFeedIndex > index) {
-      editingFeedIndex--;
-    }
+    if (editingFeedIndex === index) cancelFeedEdit();
+    else if (editingFeedIndex > index) editingFeedIndex--;
     persistData();
     renderFeeds();
   };
 
-  // --- RENDER FUNCTIONS ---
   function renderNaps() {
     ensureDateRecord(currentDate);
     const naps = allData[currentDate].naps || [];
@@ -606,7 +618,7 @@
       item.className = "log-item";
       
       const span = document.createElement("span");
-      span.innerHTML = `<b>Nap ${i + 1}:</b> ${n.start} – ${n.end} (${formatMins(n.dur)})`;
+      span.innerHTML = `<b>N${i + 1}:</b> ${n.start}–${n.end} (${formatMins(n.dur)})`;
       
       const actions = document.createElement("div");
       actions.className = "item-actions";
@@ -614,13 +626,13 @@
       const editBtn = document.createElement("button");
       editBtn.type = "button";
       editBtn.className = "action-btn edit-btn";
-      editBtn.textContent = "Edit";
+      editBtn.textContent = "✎";
       editBtn.onclick = function() { window.editNap(i); };
       
       const delBtn = document.createElement("button");
       delBtn.type = "button";
       delBtn.className = "action-btn delete-btn";
-      delBtn.textContent = "Delete";
+      delBtn.textContent = "✕";
       delBtn.onclick = function() { window.deleteNap(i); };
       
       actions.appendChild(editBtn);
@@ -659,7 +671,7 @@
       item.className = "log-item";
       
       const span = document.createElement("span");
-      span.innerHTML = `<b>Feed ${i + 1}:</b> ${f.time} — <b>${f.ml} ml</b>`;
+      span.innerHTML = `<b>F${i + 1}:</b> ${f.time} — <b>${f.ml}ml</b>`;
       
       const actions = document.createElement("div");
       actions.className = "item-actions";
@@ -667,13 +679,13 @@
       const editBtn = document.createElement("button");
       editBtn.type = "button";
       editBtn.className = "action-btn edit-btn";
-      editBtn.textContent = "Edit";
+      editBtn.textContent = "✎";
       editBtn.onclick = function() { window.editFeed(i); };
       
       const delBtn = document.createElement("button");
       delBtn.type = "button";
       delBtn.className = "action-btn delete-btn";
-      delBtn.textContent = "Delete";
+      delBtn.textContent = "✕";
       delBtn.onclick = function() { window.deleteFeed(i); };
       
       actions.appendChild(editBtn);
@@ -684,13 +696,12 @@
     });
   }
 
-  // --- HISTORY MODAL ---
   function openHistoryModal() {
     const container = document.getElementById("historyListContainer");
     const dates = Object.keys(allData).sort().reverse();
     
     if (dates.length === 0) {
-      container.innerHTML = "<div style='color:var(--muted);font-size:12px;text-align:center;padding:12px;'>No history saved yet.</div>";
+      container.innerHTML = "<div style='color:var(--muted);font-size:11px;text-align:center;padding:10px;'>No history saved yet.</div>";
     } else {
       container.innerHTML = dates.map(d => {
         const item = allData[d];
@@ -700,11 +711,11 @@
           <div class="history-entry" onclick="selectDateFromHistory('${d}')">
             <div class="history-date">
               <span>${d}</span>
-              <span style="font-size:11px;color:var(--nap);font-weight:600">Open Date ➔</span>
+              <span style="font-size:10px;color:var(--nap);">Open ➔</span>
             </div>
             <div class="history-details">
-              <span>Total Naps: <b>${formatMins(napTotal)}</b></span>
-              <span>Total Feed: <b>${feedTotal} ml</b></span>
+              <span>Naps: <b>${formatMins(napTotal)}</b></span>
+              <span>Feed: <b>${feedTotal} ml</b></span>
             </div>
           </div>
         `;
@@ -722,13 +733,12 @@
     document.getElementById("historyModal").classList.remove("show");
   }
 
-  // --- JSON BACKUP & IMPORT ---
   function exportJSON() {
     const blob = new Blob([JSON.stringify(allData, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `baby_tracker_all_history_${getTodayDateString()}.json`;
+    a.download = `baby_tracker_backup_${getTodayDateString()}.json`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -745,32 +755,17 @@
           allData = data;
           persistData();
           loadDateData(currentDate);
-          alert("Backup imported successfully!");
-        } else {
-          alert("Invalid data structure.");
+          alert("Backup imported!");
         }
       } catch (err) {
-        alert("Invalid JSON file format.");
+        alert("Invalid file format.");
       }
     };
     reader.readAsText(file);
   }
 
-  // --- INIT ---
-  const legacyNaps = JSON.parse(localStorage.getItem('todayNaps') || 'null');
-  const legacyFeeds = JSON.parse(localStorage.getItem('todayFeeds') || 'null');
-  if (legacyNaps || legacyFeeds) {
-    ensureDateRecord(currentDate);
-    if (legacyNaps && allData[currentDate].naps.length === 0) allData[currentDate].naps = legacyNaps;
-    if (legacyFeeds && allData[currentDate].feeds.length === 0) allData[currentDate].feeds = legacyFeeds;
-    persistData();
-    localStorage.removeItem('todayNaps');
-    localStorage.removeItem('todayFeeds');
-  }
-
   const now = new Date();
   document.getElementById("feedTime").value = String(now.getHours()).padStart(2, '0') + ":" + String(now.getMinutes()).padStart(2, '0');
-
   loadDateData(currentDate);
 </script>
 
