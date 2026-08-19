@@ -92,23 +92,22 @@
     display: flex; 
     justify-content: space-between; 
     align-items: center;
-    padding: 6px 10px; 
+    padding: 8px 10px; 
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: 8px;
   }
   .item-actions { display: flex; gap: 6px; align-items: center; }
   .action-btn {
-    background: none;
-    border: none;
-    padding: 2px 6px;
+    border: 1px solid transparent;
+    padding: 4px 8px;
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
-    border-radius: 4px;
+    border-radius: 6px;
   }
-  .edit-btn { color: var(--nap); }
-  .delete-btn { color: var(--danger); }
+  .edit-btn { background: var(--nap-bg); color: var(--nap); border-color: rgba(139, 92, 246, 0.2); }
+  .delete-btn { background: #fee2e2; color: var(--danger); border-color: rgba(239, 68, 68, 0.2); }
 </style>
 </head>
 <body>
@@ -147,7 +146,7 @@
     <div class="row-header">2. Today's Morning Wake-up Time</div>
     <div class="input-group">
       <input type="time" id="todayWakeTime" onchange="calculateOvernightSleep()" />
-      <button onclick="saveWakeTime()">Save</button>
+      <button type="button" onclick="saveWakeTime()">Save</button>
     </div>
   </div>
 
@@ -157,8 +156,8 @@
     <div class="input-group">
       <input type="time" id="napStart" placeholder="Start" />
       <input type="time" id="napEnd" placeholder="End" />
-      <button id="napActionBtn" onclick="saveNap()">Add</button>
-      <button id="napCancelBtn" class="cancel-btn" style="display: none;" onclick="cancelNapEdit()">Cancel</button>
+      <button type="button" id="napActionBtn" onclick="saveNap()">Add</button>
+      <button type="button" id="napCancelBtn" class="cancel-btn" style="display: none;" onclick="cancelNapEdit()">Cancel</button>
     </div>
 
     <div class="log-list" id="napList"></div>
@@ -180,7 +179,8 @@
     <div class="input-group">
       <input type="time" id="feedTime" />
       <input type="number" id="feedMl" placeholder="Amount (ml)" min="0" step="10" />
-      <button onclick="logFeed()">Add</button>
+      <button type="button" id="feedActionBtn" onclick="saveFeed()">Add</button>
+      <button type="button" id="feedCancelBtn" class="cancel-btn" style="display: none;" onclick="cancelFeedEdit()">Cancel</button>
     </div>
 
     <div class="log-list" id="feedList"></div>
@@ -202,9 +202,10 @@
   const NAP_TARGET_MINS = 210;
   const FEED_TARGET_ML = 800;
 
-  let todayNaps = JSON.parse(localStorage.getItem('todayNaps') || '[]');
-  let todayFeeds = JSON.parse(localStorage.getItem('todayFeeds') || '[]');
-  let editingNapIndex = -1;
+  var todayNaps = JSON.parse(localStorage.getItem('todayNaps') || '[]');
+  var todayFeeds = JSON.parse(localStorage.getItem('todayFeeds') || '[]');
+  var editingNapIndex = -1;
+  var editingFeedIndex = -1;
 
   function formatMins(m) {
     const hrs = Math.floor(m / 60);
@@ -243,7 +244,8 @@
     alert("Saved: Wake time is " + document.getElementById("todayWakeTime").value);
   }
 
-  function saveNap() {
+  // --- NAP HANDLERS ---
+  window.saveNap = function() {
     const start = document.getElementById("napStart").value;
     const end = document.getElementById("napEnd").value;
     if (!start || !end) return alert("Select both start and end time.");
@@ -266,36 +268,86 @@
     document.getElementById("napStart").value = "";
     document.getElementById("napEnd").value = "";
     renderNaps();
-  }
+  };
 
-  function editNap(index) {
+  window.editNap = function(index) {
     editingNapIndex = index;
     document.getElementById("napStart").value = todayNaps[index].start;
     document.getElementById("napEnd").value = todayNaps[index].end;
     document.getElementById("napActionBtn").textContent = "Update";
     document.getElementById("napCancelBtn").style.display = "inline-block";
     document.getElementById("napStart").focus();
-  }
+  };
 
-  function cancelNapEdit() {
+  window.cancelNapEdit = function() {
     editingNapIndex = -1;
     document.getElementById("napStart").value = "";
     document.getElementById("napEnd").value = "";
     document.getElementById("napActionBtn").textContent = "Add";
     document.getElementById("napCancelBtn").style.display = "none";
-  }
+  };
 
-  function deleteNap(index) {
-    if (confirm(`Delete Nap ${index + 1}?`)) {
-      todayNaps.splice(index, 1);
-      if (editingNapIndex === index) {
-        cancelNapEdit();
-      }
-      localStorage.setItem('todayNaps', JSON.stringify(todayNaps));
-      renderNaps();
+  window.deleteNap = function(index) {
+    todayNaps.splice(index, 1);
+    if (editingNapIndex === index) {
+      cancelNapEdit();
+    } else if (editingNapIndex > index) {
+      editingNapIndex--;
     }
-  }
+    localStorage.setItem('todayNaps', JSON.stringify(todayNaps));
+    renderNaps();
+  };
 
+  // --- FEED HANDLERS ---
+  window.saveFeed = function() {
+    const time = document.getElementById("feedTime").value;
+    const ml = Number(document.getElementById("feedMl").value);
+    if (!time || !ml) return alert("Enter time and amount in ml.");
+
+    if (editingFeedIndex > -1) {
+      todayFeeds[editingFeedIndex] = { time, ml };
+      editingFeedIndex = -1;
+      document.getElementById("feedActionBtn").textContent = "Add";
+      document.getElementById("feedCancelBtn").style.display = "none";
+    } else {
+      todayFeeds.push({ time, ml });
+    }
+
+    localStorage.setItem('todayFeeds', JSON.stringify(todayFeeds));
+    document.getElementById("feedTime").value = "";
+    document.getElementById("feedMl").value = "";
+    renderFeeds();
+  };
+
+  window.editFeed = function(index) {
+    editingFeedIndex = index;
+    document.getElementById("feedTime").value = todayFeeds[index].time;
+    document.getElementById("feedMl").value = todayFeeds[index].ml;
+    document.getElementById("feedActionBtn").textContent = "Update";
+    document.getElementById("feedCancelBtn").style.display = "inline-block";
+    document.getElementById("feedTime").focus();
+  };
+
+  window.cancelFeedEdit = function() {
+    editingFeedIndex = -1;
+    document.getElementById("feedTime").value = "";
+    document.getElementById("feedMl").value = "";
+    document.getElementById("feedActionBtn").textContent = "Add";
+    document.getElementById("feedCancelBtn").style.display = "none";
+  };
+
+  window.deleteFeed = function(index) {
+    todayFeeds.splice(index, 1);
+    if (editingFeedIndex === index) {
+      cancelFeedEdit();
+    } else if (editingFeedIndex > index) {
+      editingFeedIndex--;
+    }
+    localStorage.setItem('todayFeeds', JSON.stringify(todayFeeds));
+    renderFeeds();
+  };
+
+  // --- RENDER FUNCTIONS ---
   function renderNaps() {
     const totalDone = todayNaps.reduce((acc, n) => acc + n.dur, 0);
     const pending = Math.max(0, NAP_TARGET_MINS - totalDone);
@@ -306,27 +358,36 @@
     document.getElementById("napProgressBar").style.width = pct + "%";
 
     const list = document.getElementById("napList");
-    list.innerHTML = todayNaps.map((n, i) => `
-      <div class="log-item">
-        <span><b>Nap ${i + 1}:</b> ${n.start} – ${n.end} (${formatMins(n.dur)})</span>
-        <div class="item-actions">
-          <button class="action-btn edit-btn" onclick="editNap(${i})">Edit</button>
-          <button class="action-btn delete-btn" onclick="deleteNap(${i})">Delete</button>
-        </div>
-      </div>
-    `).join("");
-  }
-
-  function logFeed() {
-    const time = document.getElementById("feedTime").value;
-    const ml = Number(document.getElementById("feedMl").value);
-    if (!time || !ml) return alert("Enter time and amount in ml.");
-
-    todayFeeds.push({ time, ml });
-    localStorage.setItem('todayFeeds', JSON.stringify(todayFeeds));
-    document.getElementById("feedTime").value = "";
-    document.getElementById("feedMl").value = "";
-    renderFeeds();
+    list.innerHTML = "";
+    
+    todayNaps.forEach((n, i) => {
+      const item = document.createElement("div");
+      item.className = "log-item";
+      
+      const span = document.createElement("span");
+      span.innerHTML = `<b>Nap ${i + 1}:</b> ${n.start} – ${n.end} (${formatMins(n.dur)})`;
+      
+      const actions = document.createElement("div");
+      actions.className = "item-actions";
+      
+      const editBtn = document.createElement("button");
+      editBtn.type = "button";
+      editBtn.className = "action-btn edit-btn";
+      editBtn.textContent = "Edit";
+      editBtn.onclick = function() { window.editNap(i); };
+      
+      const delBtn = document.createElement("button");
+      delBtn.type = "button";
+      delBtn.className = "action-btn delete-btn";
+      delBtn.textContent = "Delete";
+      delBtn.onclick = function() { window.deleteNap(i); };
+      
+      actions.appendChild(editBtn);
+      actions.appendChild(delBtn);
+      item.appendChild(span);
+      item.appendChild(actions);
+      list.appendChild(item);
+    });
   }
 
   function renderFeeds() {
@@ -339,14 +400,39 @@
     document.getElementById("feedProgressBar").style.width = pct + "%";
 
     const list = document.getElementById("feedList");
-    list.innerHTML = todayFeeds.map((f, i) => `
-      <div class="log-item">
-        <span><b>Feed ${i + 1}:</b> ${f.time}</span>
-        <b>${f.ml} ml</b>
-      </div>
-    `).join("");
+    list.innerHTML = "";
+    
+    todayFeeds.forEach((f, i) => {
+      const item = document.createElement("div");
+      item.className = "log-item";
+      
+      const span = document.createElement("span");
+      span.innerHTML = `<b>Feed ${i + 1}:</b> ${f.time} — <b>${f.ml} ml</b>`;
+      
+      const actions = document.createElement("div");
+      actions.className = "item-actions";
+      
+      const editBtn = document.createElement("button");
+      editBtn.type = "button";
+      editBtn.className = "action-btn edit-btn";
+      editBtn.textContent = "Edit";
+      editBtn.onclick = function() { window.editFeed(i); };
+      
+      const delBtn = document.createElement("button");
+      delBtn.type = "button";
+      delBtn.className = "action-btn delete-btn";
+      delBtn.textContent = "Delete";
+      delBtn.onclick = function() { window.deleteFeed(i); };
+      
+      actions.appendChild(editBtn);
+      actions.appendChild(delBtn);
+      item.appendChild(span);
+      item.appendChild(actions);
+      list.appendChild(item);
+    });
   }
 
+  // Init
   document.getElementById("yesterdayBedtime").value = localStorage.getItem('yesterdayBedtime') || '22:30';
   document.getElementById("todayWakeTime").value = localStorage.getItem('todayWakeTime') || '08:45';
   document.getElementById("yesterdayNapMins").value = localStorage.getItem('yesterdayNapMins') || '180';
