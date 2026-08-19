@@ -28,7 +28,7 @@
   .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 12px; }
 
   /* Utility Header Buttons */
-  .top-bar { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+  .top-bar { display: flex; justify-content: space-between; gap: 8px; }
   .top-btn {
     flex: 1;
     background: var(--card);
@@ -42,6 +42,30 @@
     text-align: center;
   }
   .top-btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+  /* Date Picker Row */
+  .date-row {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .date-label { font-size: 12px; font-weight: 700; color: var(--text); }
+  .date-input {
+    height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0 10px;
+    font-size: 13px;
+    background: var(--bg);
+    color: var(--text);
+    outline: none;
+    font-weight: 600;
+  }
 
   .tracker-row {
     background: var(--card);
@@ -153,8 +177,11 @@
     padding: 10px 12px;
     margin-bottom: 8px;
     background: var(--bg);
+    cursor: pointer;
+    transition: background 0.15s ease;
   }
-  .history-date { font-weight: 700; font-size: 13px; color: var(--text); margin-bottom: 4px; }
+  .history-entry:hover { background: var(--border); }
+  .history-date { font-weight: 700; font-size: 13px; color: var(--text); margin-bottom: 4px; display: flex; justify-content: space-between; }
   .history-details { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
 </style>
 </head>
@@ -168,6 +195,12 @@
     <button class="top-btn" onclick="exportJSON()">Backup JSON</button>
     <button class="top-btn" onclick="document.getElementById('importFileInput').click()">Import JSON</button>
     <input type="file" id="importFileInput" accept=".json" style="display: none;" onchange="importJSON(event)" />
+  </div>
+
+  <!-- DATE SELECTOR -->
+  <div class="date-row">
+    <span class="date-label">Viewing Date:</span>
+    <input type="date" id="selectedDateInput" class="date-input" onchange="onDateChange()" />
   </div>
 
   <!-- ROW 1: YESTERDAY'S 24-HR SLEEP SUMMARY -->
@@ -188,20 +221,20 @@
     <div class="input-grid">
       <div>
         <label class="field-label">Yesterday's Bedtime</label>
-        <input type="time" id="yesterdayBedtime" onchange="calculateOvernightSleep()" />
+        <input type="time" id="yesterdayBedtime" onchange="onSleepInputsChange()" />
       </div>
       <div>
         <label class="field-label">Yesterday's Naps (mins)</label>
-        <input type="number" id="yesterdayNapMins" placeholder="e.g. 180" onchange="calculateOvernightSleep()" />
+        <input type="number" id="yesterdayNapMins" placeholder="e.g. 180" onchange="onSleepInputsChange()" />
       </div>
     </div>
   </div>
 
   <!-- ROW 2: TODAY'S MORNING WAKE TIME -->
   <div class="tracker-row row-wake">
-    <div class="row-header">2. Today's Morning Wake-up Time</div>
+    <div class="row-header">2. Morning Wake-up Time</div>
     <div class="input-group">
-      <input type="time" id="todayWakeTime" onchange="calculateOvernightSleep()" />
+      <input type="time" id="todayWakeTime" onchange="onSleepInputsChange()" />
       <button type="button" onclick="saveWakeTime()">Save</button>
     </div>
   </div>
@@ -269,14 +302,50 @@
   const NAP_TARGET_MINS = 210;
   const FEED_TARGET_ML = 800;
 
-  var todayNaps = JSON.parse(localStorage.getItem('todayNaps') || '[]');
-  var todayFeeds = JSON.parse(localStorage.getItem('todayFeeds') || '[]');
-  var historyLogs = JSON.parse(localStorage.getItem('historyLogs') || '{}');
+  var allData = JSON.parse(localStorage.getItem('babyTrackerAllData') || '{}');
+  var currentDate = getTodayDateString();
   var editingNapIndex = -1;
   var editingFeedIndex = -1;
 
-  function getTodayKey() {
-    return new Date().toISOString().slice(0, 10);
+  function getTodayDateString() {
+    const d = new Date();
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  function getPreviousDateString(dateStr) {
+    const [y, m, d] = dateStr.split('-').map(Number);
+    const date = new Date(y, m - 1, d);
+    date.setDate(date.getDate() - 1);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  function ensureDateRecord(dateKey) {
+    if (!allData[dateKey]) {
+      // Auto-fetch yesterday's total naps if available
+      const prevDate = getPreviousDateString(dateKey);
+      let autoNapMins = 0;
+      if (allData[prevDate] && allData[prevDate].naps) {
+        autoNapMins = allData[prevDate].naps.reduce((acc, n) => acc + (n.dur || 0), 0);
+      }
+
+      allData[dateKey] = {
+        yesterdayBedtime: '22:30',
+        todayWakeTime: '08:45',
+        yesterdayNapMins: autoNapMins || 180,
+        naps: [],
+        feeds: []
+      };
+    }
+  }
+
+  function persistData() {
+    localStorage.setItem('babyTrackerAllData', JSON.stringify(allData));
   }
 
   function formatMins(m) {
@@ -285,21 +354,30 @@
     return hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`;
   }
 
-  function updateTodayHistory() {
-    const dateKey = getTodayKey();
-    const totalNapMins = todayNaps.reduce((acc, n) => acc + n.dur, 0);
-    const totalFeedMl = todayFeeds.reduce((acc, f) => acc + f.ml, 0);
+  function onDateChange() {
+    currentDate = document.getElementById("selectedDateInput").value;
+    if (!currentDate) currentDate = getTodayDateString();
+    cancelNapEdit();
+    cancelFeedEdit();
+    loadDateData(currentDate);
+  }
 
-    historyLogs[dateKey] = {
-      totalNapMins: totalNapMins,
-      totalFeedMl: totalFeedMl,
-      naps: todayNaps,
-      feeds: todayFeeds
-    };
-    localStorage.setItem('historyLogs', JSON.stringify(historyLogs));
+  function loadDateData(dateKey) {
+    ensureDateRecord(dateKey);
+    const record = allData[dateKey];
+
+    document.getElementById("selectedDateInput").value = dateKey;
+    document.getElementById("yesterdayBedtime").value = record.yesterdayBedtime || '22:30';
+    document.getElementById("todayWakeTime").value = record.todayWakeTime || '08:45';
+    document.getElementById("yesterdayNapMins").value = record.yesterdayNapMins !== undefined ? record.yesterdayNapMins : 180;
+
+    calculateOvernightSleep();
+    renderNaps();
+    renderFeeds();
   }
 
   function calculateOvernightSleep() {
+    ensureDateRecord(currentDate);
     const bedtime = document.getElementById("yesterdayBedtime").value;
     const wake = document.getElementById("todayWakeTime").value;
     const napMins = Number(document.getElementById("yesterdayNapMins").value) || 0;
@@ -316,18 +394,23 @@
       document.getElementById("lastNightDisplay").textContent = formatMins(nightMins);
       document.getElementById("yesterdayTotalDisplay").textContent = formatMins(totalSleepMins);
 
-      localStorage.setItem('yesterdayBedtime', bedtime);
-      localStorage.setItem('todayWakeTime', wake);
-      localStorage.setItem('yesterdayNapMins', napMins);
+      allData[currentDate].yesterdayBedtime = bedtime;
+      allData[currentDate].todayWakeTime = wake;
+      allData[currentDate].yesterdayNapMins = napMins;
+      persistData();
     } else {
       document.getElementById("lastNightDisplay").textContent = "--";
       document.getElementById("yesterdayTotalDisplay").textContent = "--";
     }
   }
 
+  function onSleepInputsChange() {
+    calculateOvernightSleep();
+  }
+
   function saveWakeTime() {
     calculateOvernightSleep();
-    alert("Saved wake time: " + document.getElementById("todayWakeTime").value);
+    alert("Saved: Wake time is " + document.getElementById("todayWakeTime").value + " for " + currentDate);
   }
 
   // --- NAP HANDLERS ---
@@ -341,26 +424,28 @@
     let dur = (eh * 60 + em) - (sh * 60 + sm);
     if (dur < 0) dur += 1440;
 
+    ensureDateRecord(currentDate);
+
     if (editingNapIndex > -1) {
-      todayNaps[editingNapIndex] = { start, end, dur };
+      allData[currentDate].naps[editingNapIndex] = { start, end, dur };
       editingNapIndex = -1;
       document.getElementById("napActionBtn").textContent = "Add";
       document.getElementById("napCancelBtn").style.display = "none";
     } else {
-      todayNaps.push({ start, end, dur });
+      allData[currentDate].naps.push({ start, end, dur });
     }
 
-    localStorage.setItem('todayNaps', JSON.stringify(todayNaps));
+    persistData();
     document.getElementById("napStart").value = "";
     document.getElementById("napEnd").value = "";
-    updateTodayHistory();
     renderNaps();
   };
 
   window.editNap = function(index) {
     editingNapIndex = index;
-    document.getElementById("napStart").value = todayNaps[index].start;
-    document.getElementById("napEnd").value = todayNaps[index].end;
+    const nap = allData[currentDate].naps[index];
+    document.getElementById("napStart").value = nap.start;
+    document.getElementById("napEnd").value = nap.end;
     document.getElementById("napActionBtn").textContent = "Update";
     document.getElementById("napCancelBtn").style.display = "inline-block";
     document.getElementById("napStart").focus();
@@ -375,14 +460,13 @@
   };
 
   window.deleteNap = function(index) {
-    todayNaps.splice(index, 1);
+    allData[currentDate].naps.splice(index, 1);
     if (editingNapIndex === index) {
       cancelNapEdit();
     } else if (editingNapIndex > index) {
       editingNapIndex--;
     }
-    localStorage.setItem('todayNaps', JSON.stringify(todayNaps));
-    updateTodayHistory();
+    persistData();
     renderNaps();
   };
 
@@ -392,26 +476,28 @@
     const ml = Number(document.getElementById("feedMl").value);
     if (!time || !ml) return alert("Enter time and amount in ml.");
 
+    ensureDateRecord(currentDate);
+
     if (editingFeedIndex > -1) {
-      todayFeeds[editingFeedIndex] = { time, ml };
+      allData[currentDate].feeds[editingFeedIndex] = { time, ml };
       editingFeedIndex = -1;
       document.getElementById("feedActionBtn").textContent = "Add";
       document.getElementById("feedCancelBtn").style.display = "none";
     } else {
-      todayFeeds.push({ time, ml });
+      allData[currentDate].feeds.push({ time, ml });
     }
 
-    localStorage.setItem('todayFeeds', JSON.stringify(todayFeeds));
+    persistData();
     document.getElementById("feedTime").value = "";
     document.getElementById("feedMl").value = "";
-    updateTodayHistory();
     renderFeeds();
   };
 
   window.editFeed = function(index) {
     editingFeedIndex = index;
-    document.getElementById("feedTime").value = todayFeeds[index].time;
-    document.getElementById("feedMl").value = todayFeeds[index].ml;
+    const feed = allData[currentDate].feeds[index];
+    document.getElementById("feedTime").value = feed.time;
+    document.getElementById("feedMl").value = feed.ml;
     document.getElementById("feedActionBtn").textContent = "Update";
     document.getElementById("feedCancelBtn").style.display = "inline-block";
     document.getElementById("feedTime").focus();
@@ -426,20 +512,21 @@
   };
 
   window.deleteFeed = function(index) {
-    todayFeeds.splice(index, 1);
+    allData[currentDate].feeds.splice(index, 1);
     if (editingFeedIndex === index) {
       cancelFeedEdit();
     } else if (editingFeedIndex > index) {
       editingFeedIndex--;
     }
-    localStorage.setItem('todayFeeds', JSON.stringify(todayFeeds));
-    updateTodayHistory();
+    persistData();
     renderFeeds();
   };
 
   // --- RENDER FUNCTIONS ---
   function renderNaps() {
-    const totalDone = todayNaps.reduce((acc, n) => acc + n.dur, 0);
+    ensureDateRecord(currentDate);
+    const naps = allData[currentDate].naps || [];
+    const totalDone = naps.reduce((acc, n) => acc + n.dur, 0);
     const pending = Math.max(0, NAP_TARGET_MINS - totalDone);
     const pct = Math.min(100, (totalDone / NAP_TARGET_MINS) * 100);
 
@@ -450,7 +537,7 @@
     const list = document.getElementById("napList");
     list.innerHTML = "";
     
-    todayNaps.forEach((n, i) => {
+    naps.forEach((n, i) => {
       const item = document.createElement("div");
       item.className = "log-item";
       
@@ -481,7 +568,9 @@
   }
 
   function renderFeeds() {
-    const totalDone = todayFeeds.reduce((acc, f) => acc + f.ml, 0);
+    ensureDateRecord(currentDate);
+    const feeds = allData[currentDate].feeds || [];
+    const totalDone = feeds.reduce((acc, f) => acc + f.ml, 0);
     const pending = Math.max(0, FEED_TARGET_ML - totalDone);
     const pct = Math.min(100, (totalDone / FEED_TARGET_ML) * 100);
 
@@ -492,7 +581,7 @@
     const list = document.getElementById("feedList");
     list.innerHTML = "";
     
-    todayFeeds.forEach((f, i) => {
+    feeds.forEach((f, i) => {
       const item = document.createElement("div");
       item.className = "log-item";
       
@@ -524,21 +613,25 @@
 
   // --- HISTORY MODAL ---
   function openHistoryModal() {
-    updateTodayHistory();
     const container = document.getElementById("historyListContainer");
-    const dates = Object.keys(historyLogs).sort().reverse();
+    const dates = Object.keys(allData).sort().reverse();
     
     if (dates.length === 0) {
       container.innerHTML = "<div style='color:var(--muted);font-size:12px;text-align:center;padding:12px;'>No history saved yet.</div>";
     } else {
       container.innerHTML = dates.map(d => {
-        const item = historyLogs[d];
+        const item = allData[d];
+        const napTotal = (item.naps || []).reduce((acc, n) => acc + (n.dur || 0), 0);
+        const feedTotal = (item.feeds || []).reduce((acc, f) => acc + (f.ml || 0), 0);
         return `
-          <div class="history-entry">
-            <div class="history-date">${d}</div>
+          <div class="history-entry" onclick="selectDateFromHistory('${d}')">
+            <div class="history-date">
+              <span>${d}</span>
+              <span style="font-size:11px;color:var(--nap);font-weight:600">Open Date ➔</span>
+            </div>
             <div class="history-details">
-              <span>Total Naps: <b>${formatMins(item.totalNapMins || 0)}</b></span>
-              <span>Total Feed: <b>${item.totalFeedMl || 0} ml</b></span>
+              <span>Total Naps: <b>${formatMins(napTotal)}</b></span>
+              <span>Total Feed: <b>${feedTotal} ml</b></span>
             </div>
           </div>
         `;
@@ -547,27 +640,22 @@
     document.getElementById("historyModal").classList.add("show");
   }
 
+  function selectDateFromHistory(dateStr) {
+    closeHistoryModal();
+    loadDateData(dateStr);
+  }
+
   function closeHistoryModal() {
     document.getElementById("historyModal").classList.remove("show");
   }
 
   // --- JSON BACKUP & IMPORT ---
   function exportJSON() {
-    updateTodayHistory();
-    const data = {
-      yesterdayBedtime: localStorage.getItem('yesterdayBedtime') || '',
-      todayWakeTime: localStorage.getItem('todayWakeTime') || '',
-      yesterdayNapMins: localStorage.getItem('yesterdayNapMins') || '',
-      todayNaps: todayNaps,
-      todayFeeds: todayFeeds,
-      historyLogs: historyLogs
-    };
-
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const blob = new Blob([JSON.stringify(allData, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `baby_tracker_backup_${getTodayKey()}.json`;
+    a.download = `baby_tracker_all_history_${getTodayDateString()}.json`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -580,35 +668,14 @@
     reader.onload = function(e) {
       try {
         const data = JSON.parse(e.target.result);
-        if (data.todayNaps) {
-          todayNaps = data.todayNaps;
-          localStorage.setItem('todayNaps', JSON.stringify(todayNaps));
+        if (typeof data === 'object' && data !== null) {
+          allData = data;
+          persistData();
+          loadDateData(currentDate);
+          alert("Backup imported successfully!");
+        } else {
+          alert("Invalid data structure.");
         }
-        if (data.todayFeeds) {
-          todayFeeds = data.todayFeeds;
-          localStorage.setItem('todayFeeds', JSON.stringify(todayFeeds));
-        }
-        if (data.historyLogs) {
-          historyLogs = data.historyLogs;
-          localStorage.setItem('historyLogs', JSON.stringify(historyLogs));
-        }
-        if (data.yesterdayBedtime) {
-          document.getElementById("yesterdayBedtime").value = data.yesterdayBedtime;
-          localStorage.setItem('yesterdayBedtime', data.yesterdayBedtime);
-        }
-        if (data.todayWakeTime) {
-          document.getElementById("todayWakeTime").value = data.todayWakeTime;
-          localStorage.setItem('todayWakeTime', data.todayWakeTime);
-        }
-        if (data.yesterdayNapMins) {
-          document.getElementById("yesterdayNapMins").value = data.yesterdayNapMins;
-          localStorage.setItem('yesterdayNapMins', data.yesterdayNapMins);
-        }
-
-        calculateOvernightSleep();
-        renderNaps();
-        renderFeeds();
-        alert("Backup imported successfully!");
       } catch (err) {
         alert("Invalid JSON file format.");
       }
@@ -617,17 +684,22 @@
   }
 
   // --- INIT ---
-  document.getElementById("yesterdayBedtime").value = localStorage.getItem('yesterdayBedtime') || '22:30';
-  document.getElementById("todayWakeTime").value = localStorage.getItem('todayWakeTime') || '08:45';
-  document.getElementById("yesterdayNapMins").value = localStorage.getItem('yesterdayNapMins') || '180';
+  // Migrate legacy data if exists
+  const legacyNaps = JSON.parse(localStorage.getItem('todayNaps') || 'null');
+  const legacyFeeds = JSON.parse(localStorage.getItem('todayFeeds') || 'null');
+  if (legacyNaps || legacyFeeds) {
+    ensureDateRecord(currentDate);
+    if (legacyNaps && allData[currentDate].naps.length === 0) allData[currentDate].naps = legacyNaps;
+    if (legacyFeeds && allData[currentDate].feeds.length === 0) allData[currentDate].feeds = legacyFeeds;
+    persistData();
+    localStorage.removeItem('todayNaps');
+    localStorage.removeItem('todayFeeds');
+  }
 
   const now = new Date();
   document.getElementById("feedTime").value = String(now.getHours()).padStart(2, '0') + ":" + String(now.getMinutes()).padStart(2, '0');
 
-  calculateOvernightSleep();
-  renderNaps();
-  renderFeeds();
-  updateTodayHistory();
+  loadDateData(currentDate);
 </script>
 
 </body>
