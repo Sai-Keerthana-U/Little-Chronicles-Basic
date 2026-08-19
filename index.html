@@ -124,6 +124,15 @@
   .fill-nap { background: var(--nap); }
   .fill-feed { background: var(--feed); }
 
+  .target-note {
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 500;
+  }
+
   .log-list { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
   .log-item { 
     display: flex; 
@@ -259,6 +268,10 @@
       <div class="progress-bar-bg">
         <div class="progress-bar-fill fill-nap" id="napProgressBar"></div>
       </div>
+      <div class="target-note">
+        <span>Target Range: <b>2h 30m – 3h 30m</b></span>
+        <span>Ideal: <b>~3h 30m</b></span>
+      </div>
     </div>
   </div>
 
@@ -282,6 +295,10 @@
       <div class="progress-bar-bg">
         <div class="progress-bar-fill fill-feed" id="feedProgressBar"></div>
       </div>
+      <div class="target-note">
+        <span>Target Range: <b>720 – 960 ml</b></span>
+        <span>Standard: <b>800 ml</b></span>
+      </div>
     </div>
   </div>
 
@@ -299,8 +316,8 @@
 </div>
 
 <script>
-  const NAP_TARGET_MINS = 210;
-  const FEED_TARGET_ML = 800;
+  const NAP_TARGET_MINS = 210; // 3h 30m (Max Target)
+  const FEED_TARGET_ML = 800;  // 800 ml (Standard Target)
 
   var allData = JSON.parse(localStorage.getItem('babyTrackerAllData') || '{}');
   var currentDate = getTodayDateString();
@@ -327,7 +344,6 @@
 
   function ensureDateRecord(dateKey) {
     if (!allData[dateKey]) {
-      // Auto-fetch yesterday's total naps if available
       const prevDate = getPreviousDateString(dateKey);
       let autoNapMins = 0;
       if (allData[prevDate] && allData[prevDate].naps) {
@@ -531,7 +547,7 @@
     const pct = Math.min(100, (totalDone / NAP_TARGET_MINS) * 100);
 
     document.getElementById("napDoneText").textContent = formatMins(totalDone);
-    document.getElementById("napPendingText").textContent = pending === 0 ? "Target Complete" : `${formatMins(pending)} Pending`;
+    document.getElementById("napPendingText").textContent = pending === 0 ? "Target Met" : `${formatMins(pending)} Pending`;
     document.getElementById("napProgressBar").style.width = pct + "%";
 
     const list = document.getElementById("napList");
@@ -575,7 +591,7 @@
     const pct = Math.min(100, (totalDone / FEED_TARGET_ML) * 100);
 
     document.getElementById("feedDoneText").textContent = `${totalDone} ml`;
-    document.getElementById("feedPendingText").textContent = pending === 0 ? "Target Complete" : `${pending} ml Pending`;
+    document.getElementById("feedPendingText").textContent = pending === 0 ? "Target Met" : `${pending} ml Pending`;
     document.getElementById("feedProgressBar").style.width = pct + "%";
 
     const list = document.getElementById("feedList");
@@ -684,7 +700,6 @@
   }
 
   // --- INIT ---
-  // Migrate legacy data if exists
   const legacyNaps = JSON.parse(localStorage.getItem('todayNaps') || 'null');
   const legacyFeeds = JSON.parse(localStorage.getItem('todayFeeds') || 'null');
   if (legacyNaps || legacyFeeds) {
