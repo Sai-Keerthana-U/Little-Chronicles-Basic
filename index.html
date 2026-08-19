@@ -50,20 +50,19 @@
     flex: 1;
     background: var(--card);
     border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 8px;
+    border-radius: 8px;
+    padding: 7px 8px;
     font-size: 11.5px;
     font-weight: 700;
     color: var(--text);
     cursor: pointer;
-    transition: all 0.2s ease;
     box-shadow: 0 2px 4px rgba(99,102,241,0.06);
   }
   .top-btn:active { transform: scale(0.96); }
   .date-input {
-    height: 34px;
+    height: 32px;
     border: 1px solid var(--border);
-    border-radius: 10px;
+    border-radius: 8px;
     padding: 0 8px;
     font-size: 12px;
     font-weight: 700;
@@ -73,21 +72,18 @@
     box-shadow: 0 2px 4px rgba(99,102,241,0.06);
   }
 
-  /* Universal Card */
+  /* Card */
   .tracker-row {
     background: var(--card);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 12px 14px;
     box-shadow: 0 4px 12px rgba(99,102,241,0.05);
-    transition: transform 0.2s ease;
   }
 
-  /* Unified Switch Input Box */
   .unified-card {
     background: linear-gradient(180deg, #ffffff 0%, #faf5ff 100%);
     border: 1.5px solid #ddd6fe;
-    animation: fadeIn 0.3s ease-in-out;
   }
 
   .type-switcher {
@@ -108,7 +104,6 @@
     color: #6d28d9;
     border-radius: 8px;
     cursor: pointer;
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .type-btn.active.nap-active {
     background: var(--card);
@@ -121,42 +116,35 @@
     box-shadow: 0 2px 6px rgba(16,185,129,0.25);
   }
 
-  .input-panel {
-    animation: slideUp 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
   .input-group { display: flex; gap: 6px; }
   input[type="time"], input[type="number"] {
     width: 100%;
-    height: 38px;
+    height: 36px;
     border: 1.5px solid var(--border);
     border-radius: 8px;
-    padding: 0 10px;
+    padding: 0 8px;
     font-size: 13px;
     background: var(--card);
     color: var(--text);
     outline: none;
     font-weight: 600;
   }
-  input:focus { border-color: var(--nap-color); }
 
   button.action-submit {
     border: 0;
     border-radius: 8px;
-    padding: 0 16px;
+    padding: 0 14px;
     font-weight: 700;
     font-size: 12px;
     color: #fff;
     cursor: pointer;
     white-space: nowrap;
-    transition: all 0.2s ease;
   }
   .btn-nap { background: var(--nap-grad); box-shadow: 0 2px 8px rgba(139,92,246,0.3); }
   .btn-feed { background: var(--feed-grad); box-shadow: 0 2px 8px rgba(16,185,129,0.3); }
-  button.action-submit:active { transform: scale(0.95); }
   button.cancel-btn { background: #cbd5e1; color: var(--text); }
 
-  /* Sleep Summary Box */
+  /* Sleep Summary */
   .sleep-summary-box {
     background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
     border: 1px solid #c7d2fe;
@@ -166,7 +154,7 @@
   }
   .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
   .stat-value { font-size: 16px; font-weight: 800; color: #312e81; }
-  .stat-sub { font-size: 10px; font-weight: 600; color: #4338ca; margin-top: 1px; }
+  .stat-sub { font-size: 10px; font-weight: 600; color: #4338ca; }
 
   .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .field-label { display: block; font-size: 10px; font-weight: 700; color: var(--muted); margin-bottom: 3px; }
@@ -177,8 +165,51 @@
     border-bottom: 1.5px dashed var(--border);
   }
 
+  /* Chip / Pill Badges (No Scroll Grid) */
+  .chip-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+    align-items: center;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .chip:hover { transform: scale(1.03); }
+  .chip-nap {
+    background: #ede9fe;
+    color: var(--nap-color);
+    border: 1px solid #ddd6fe;
+  }
+  .chip-feed {
+    background: #d1fae5;
+    color: var(--feed-color);
+    border: 1px solid #a7f3d0;
+  }
+  .chip-close {
+    font-size: 12px;
+    line-height: 1;
+    color: var(--muted);
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .chip-close:hover { color: var(--danger); background: #fee2e2; }
+
   /* Progress Bars */
-  .analytics-box { margin-top: 8px; padding-top: 6px; }
+  .analytics-box { margin-top: 4px; }
   .progress-header { 
     display: flex; 
     justify-content: space-between; 
@@ -189,17 +220,17 @@
   }
   .progress-bar-bg { 
     width: 100%; 
-    height: 9px; 
+    height: 8px; 
     background: #e2e8f0; 
-    border-radius: 6px; 
+    border-radius: 4px; 
     position: relative; 
     overflow: hidden;
   }
   .progress-bar-fill { 
     height: 100%; 
-    border-radius: 6px; 
+    border-radius: 4px; 
     width: 0%; 
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+    transition: width 0.4s ease; 
   }
   .fill-nap { background: var(--nap-grad); }
   .fill-feed { background: var(--feed-grad); }
@@ -230,57 +261,8 @@
     font-weight: 800;
     margin-left: 4px;
   }
-  .status-badge.met { background: #d1fae5; color: #065f46; animation: popBadge 0.3s ease; }
+  .status-badge.met { background: #d1fae5; color: #065f46; }
   .status-badge.pending { background: #fef3c7; color: #92400e; }
-
-  /* Log Lists */
-  .log-list { 
-    margin-top: 8px; 
-    display: flex; 
-    flex-direction: column; 
-    gap: 4px; 
-    max-height: 80px; 
-    overflow-y: auto; 
-  }
-  .log-item { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    padding: 6px 8px; 
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 11px;
-    animation: fadeIn 0.2s ease;
-  }
-  .item-actions { display: flex; gap: 6px; }
-  .action-btn {
-    border: 0;
-    padding: 3px 6px;
-    font-size: 11px;
-    font-weight: 700;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: transform 0.15s;
-  }
-  .action-btn:active { transform: scale(0.9); }
-  .edit-btn { background: #ede9fe; color: var(--nap-color); }
-  .delete-btn { background: #fee2e2; color: var(--danger); }
-
-  /* Animations */
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(4px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes popBadge {
-    0% { transform: scale(0.8); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-  }
 
   /* Modal */
   .modal-overlay {
@@ -303,7 +285,6 @@
     padding: 16px;
     max-height: 80vh;
     overflow-y: auto;
-    animation: fadeIn 0.2s ease-out;
   }
   .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
   .modal-title { font-size: 14px; font-weight: 800; }
@@ -317,9 +298,7 @@
     background: var(--bg);
     cursor: pointer;
     font-size: 11.5px;
-    transition: transform 0.15s ease;
   }
-  .history-entry:hover { transform: translateY(-1px); }
   .history-date { font-weight: 700; color: var(--text); margin-bottom: 3px; display: flex; justify-content: space-between; }
   .history-details { display: flex; justify-content: space-between; color: var(--muted); }
 </style>
@@ -337,7 +316,7 @@
     <input type="file" id="importFileInput" accept=".json" style="display: none;" onchange="importJSON(event)" />
   </div>
 
-  <!-- SINGLE UNIFIED INPUT WINDOW FOR BOTH NAPS & FEEDS -->
+  <!-- SINGLE INPUT WINDOW -->
   <div class="tracker-row unified-card">
     <div class="type-switcher">
       <button type="button" class="type-btn active nap-active" id="tabNap" onclick="switchLogType('nap')">💤 Log Nap</button>
@@ -345,7 +324,7 @@
     </div>
 
     <!-- Nap Form -->
-    <div id="napInputPanel" class="input-panel">
+    <div id="napInputPanel">
       <div class="input-group">
         <input type="time" id="napStart" placeholder="Start" />
         <input type="time" id="napEnd" placeholder="End" />
@@ -355,17 +334,17 @@
     </div>
 
     <!-- Feed Form -->
-    <div id="feedInputPanel" class="input-panel" style="display: none;">
+    <div id="feedInputPanel" style="display: none;">
       <div class="input-group">
         <input type="time" id="feedTime" style="flex:1" />
-        <input type="number" id="feedMl" placeholder="Amount (ml)" min="0" step="10" style="flex:1" />
+        <input type="number" id="feedMl" placeholder="ml" min="0" step="10" style="flex:1" />
         <button type="button" id="feedActionBtn" class="action-submit btn-feed" onclick="saveFeed()">Add Feed</button>
         <button type="button" id="feedCancelBtn" class="action-submit cancel-btn" style="display: none;" onclick="cancelFeedEdit()">✕</button>
       </div>
     </div>
   </div>
 
-  <!-- 1. SLEEP (SUMMARY + MORNING WAKE + DAYTIME NAPS) -->
+  <!-- 1. SLEEP (SUMMARY + MORNING WAKE + NAP CHIPS) -->
   <div class="tracker-row">
     <div class="sleep-summary-box">
       <div class="stat-grid">
@@ -398,29 +377,29 @@
       </div>
     </div>
 
-    <div>
-      <div class="log-list" id="napList"></div>
+    <!-- Wrap Chips for Naps -->
+    <div class="chip-grid" id="napChipContainer"></div>
 
-      <div class="analytics-box">
-        <div class="progress-header">
-          <span>Naps: <b id="napDoneText">0h 0m</b> <span id="napMinStatus" class="status-badge pending">Min Pending</span></span>
-          <span style="color: var(--nap-color);" id="napPendingText">3h 30m Pending</span>
-        </div>
-        <div class="progress-bar-bg">
-          <div class="min-marker" style="left: 71.4%;"></div>
-          <div class="progress-bar-fill fill-nap" id="napProgressBar"></div>
-        </div>
-        <div class="target-note">
-          <span>Min: <b>2h 30m</b></span>
-          <span>Target Max: <b>3h 30m</b></span>
-        </div>
+    <div class="analytics-box">
+      <div class="progress-header">
+        <span>Naps: <b id="napDoneText">0h 0m</b> <span id="napMinStatus" class="status-badge pending">Min Pending</span></span>
+        <span style="color: var(--nap-color);" id="napPendingText">3h 30m Pending</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="min-marker" style="left: 71.4%;"></div>
+        <div class="progress-bar-fill fill-nap" id="napProgressBar"></div>
+      </div>
+      <div class="target-note">
+        <span>Min: <b>2h 30m</b></span>
+        <span>Target Max: <b>3h 30m</b></span>
       </div>
     </div>
   </div>
 
-  <!-- 2. FEEDING INTAKE -->
+  <!-- 2. FEEDING INTAKE (FEED CHIPS) -->
   <div class="tracker-row">
-    <div class="log-list" id="feedList"></div>
+    <!-- Wrap Chips for Feeds -->
+    <div class="chip-grid" id="feedChipContainer"></div>
 
     <div class="analytics-box">
       <div class="progress-header">
@@ -632,7 +611,8 @@
     document.getElementById("napCancelBtn").style.display = "none";
   };
 
-  window.deleteNap = function(index) {
+  window.deleteNap = function(index, e) {
+    if (e) e.stopPropagation();
     allData[currentDate].naps.splice(index, 1);
     if (editingNapIndex === index) cancelNapEdit();
     else if (editingNapIndex > index) editingNapIndex--;
@@ -681,7 +661,8 @@
     document.getElementById("feedCancelBtn").style.display = "none";
   };
 
-  window.deleteFeed = function(index) {
+  window.deleteFeed = function(index, e) {
+    if (e) e.stopPropagation();
     allData[currentDate].feeds.splice(index, 1);
     if (editingFeedIndex === index) cancelFeedEdit();
     else if (editingFeedIndex > index) editingFeedIndex--;
@@ -709,36 +690,20 @@
       minBadge.className = "status-badge pending";
     }
 
-    const list = document.getElementById("napList");
-    list.innerHTML = "";
+    const container = document.getElementById("napChipContainer");
+    container.innerHTML = "";
     
     naps.forEach((n, i) => {
-      const item = document.createElement("div");
-      item.className = "log-item";
-      
-      const span = document.createElement("span");
-      span.innerHTML = `<b>💤 Nap ${i + 1}:</b> ${n.start}–${n.end} (${formatMins(n.dur)})`;
-      
-      const actions = document.createElement("div");
-      actions.className = "item-actions";
-      
-      const editBtn = document.createElement("button");
-      editBtn.type = "button";
-      editBtn.className = "action-btn edit-btn";
-      editBtn.textContent = "✎";
-      editBtn.onclick = function() { window.editNap(i); };
-      
-      const delBtn = document.createElement("button");
-      delBtn.type = "button";
-      delBtn.className = "action-btn delete-btn";
-      delBtn.textContent = "✕";
-      delBtn.onclick = function() { window.deleteNap(i); };
-      
-      actions.appendChild(editBtn);
-      actions.appendChild(delBtn);
-      item.appendChild(span);
-      item.appendChild(actions);
-      list.appendChild(item);
+      const chip = document.createElement("div");
+      chip.className = "chip chip-nap";
+      chip.title = "Click to Edit";
+      chip.onclick = function() { window.editNap(i); };
+
+      chip.innerHTML = `
+        <span>💤 N${i+1} (${n.start}–${n.end}) <b>${formatMins(n.dur)}</b></span>
+        <span class="chip-close" onclick="window.deleteNap(${i}, event)">✕</span>
+      `;
+      container.appendChild(chip);
     });
   }
 
@@ -762,36 +727,20 @@
       minBadge.className = "status-badge pending";
     }
 
-    const list = document.getElementById("feedList");
-    list.innerHTML = "";
+    const container = document.getElementById("feedChipContainer");
+    container.innerHTML = "";
     
     feeds.forEach((f, i) => {
-      const item = document.createElement("div");
-      item.className = "log-item";
-      
-      const span = document.createElement("span");
-      span.innerHTML = `<b>🍼 Feed ${i + 1}:</b> ${f.time} — <b>${f.ml}ml</b>`;
-      
-      const actions = document.createElement("div");
-      actions.className = "item-actions";
-      
-      const editBtn = document.createElement("button");
-      editBtn.type = "button";
-      editBtn.className = "action-btn edit-btn";
-      editBtn.textContent = "✎";
-      editBtn.onclick = function() { window.editFeed(i); };
-      
-      const delBtn = document.createElement("button");
-      delBtn.type = "button";
-      delBtn.className = "action-btn delete-btn";
-      delBtn.textContent = "✕";
-      delBtn.onclick = function() { window.deleteFeed(i); };
-      
-      actions.appendChild(editBtn);
-      actions.appendChild(delBtn);
-      item.appendChild(span);
-      item.appendChild(actions);
-      list.appendChild(item);
+      const chip = document.createElement("div");
+      chip.className = "chip chip-feed";
+      chip.title = "Click to Edit";
+      chip.onclick = function() { window.editFeed(i); };
+
+      chip.innerHTML = `
+        <span>🍼 F${i+1} (${f.time}) <b>${f.ml}ml</b></span>
+        <span class="chip-close" onclick="window.deleteFeed(${i}, event)">✕</span>
+      `;
+      container.appendChild(chip);
     });
   }
 
