@@ -27,6 +27,22 @@
   body { background: var(--bg); color: var(--text); margin: 0; padding: 16px; display: flex; justify-content: center; }
   .container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 12px; }
 
+  /* Utility Header Buttons */
+  .top-bar { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+  .top-btn {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    text-align: center;
+  }
+  .top-btn.primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+
   .tracker-row {
     background: var(--card);
     border: 1px solid var(--border);
@@ -71,10 +87,7 @@
     font-size: 12px;
     cursor: pointer;
   }
-  button.cancel-btn {
-    background: var(--border);
-    color: var(--text);
-  }
+  button.cancel-btn { background: var(--border); color: var(--text); }
 
   .analytics-box {
     margin-top: 10px;
@@ -108,11 +121,54 @@
   }
   .edit-btn { background: var(--nap-bg); color: var(--nap); border-color: rgba(139, 92, 246, 0.2); }
   .delete-btn { background: #fee2e2; color: var(--danger); border-color: rgba(239, 68, 68, 0.2); }
+
+  /* History Modal */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    z-index: 50;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal-card {
+    width: min(420px, 100%);
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+  .modal-title { font-size: 14px; font-weight: 700; margin: 0; }
+  .btn-close { background: transparent; border: 0; font-size: 14px; color: var(--muted); cursor: pointer; }
+  
+  .history-entry {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background: var(--bg);
+  }
+  .history-date { font-weight: 700; font-size: 13px; color: var(--text); margin-bottom: 4px; }
+  .history-details { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); }
 </style>
 </head>
 <body>
 
 <div class="container">
+
+  <!-- TOP UTILITY BAR: HISTORY, BACKUP, IMPORT -->
+  <div class="top-bar">
+    <button class="top-btn" onclick="openHistoryModal()">History</button>
+    <button class="top-btn" onclick="exportJSON()">Backup JSON</button>
+    <button class="top-btn" onclick="document.getElementById('importFileInput').click()">Import JSON</button>
+    <input type="file" id="importFileInput" accept=".json" style="display: none;" onchange="importJSON(event)" />
+  </div>
 
   <!-- ROW 1: YESTERDAY'S 24-HR SLEEP SUMMARY -->
   <div class="tracker-row row-night">
@@ -198,19 +254,49 @@
 
 </div>
 
+<!-- HISTORY MODAL -->
+<div class="modal-overlay" id="historyModal" onclick="if(event.target===this)closeHistoryModal()">
+  <div class="modal-card">
+    <div class="modal-header">
+      <span class="modal-title">History Logs</span>
+      <button class="btn-close" onclick="closeHistoryModal()">✕</button>
+    </div>
+    <div id="historyListContainer"></div>
+  </div>
+</div>
+
 <script>
   const NAP_TARGET_MINS = 210;
   const FEED_TARGET_ML = 800;
 
   var todayNaps = JSON.parse(localStorage.getItem('todayNaps') || '[]');
   var todayFeeds = JSON.parse(localStorage.getItem('todayFeeds') || '[]');
+  var historyLogs = JSON.parse(localStorage.getItem('historyLogs') || '{}');
   var editingNapIndex = -1;
   var editingFeedIndex = -1;
+
+  function getTodayKey() {
+    return new Date().toISOString().slice(0, 10);
+  }
 
   function formatMins(m) {
     const hrs = Math.floor(m / 60);
     const mins = m % 60;
     return hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`;
+  }
+
+  function updateTodayHistory() {
+    const dateKey = getTodayKey();
+    const totalNapMins = todayNaps.reduce((acc, n) => acc + n.dur, 0);
+    const totalFeedMl = todayFeeds.reduce((acc, f) => acc + f.ml, 0);
+
+    historyLogs[dateKey] = {
+      totalNapMins: totalNapMins,
+      totalFeedMl: totalFeedMl,
+      naps: todayNaps,
+      feeds: todayFeeds
+    };
+    localStorage.setItem('historyLogs', JSON.stringify(historyLogs));
   }
 
   function calculateOvernightSleep() {
@@ -241,7 +327,7 @@
 
   function saveWakeTime() {
     calculateOvernightSleep();
-    alert("Saved: Wake time is " + document.getElementById("todayWakeTime").value);
+    alert("Saved wake time: " + document.getElementById("todayWakeTime").value);
   }
 
   // --- NAP HANDLERS ---
@@ -267,6 +353,7 @@
     localStorage.setItem('todayNaps', JSON.stringify(todayNaps));
     document.getElementById("napStart").value = "";
     document.getElementById("napEnd").value = "";
+    updateTodayHistory();
     renderNaps();
   };
 
@@ -295,6 +382,7 @@
       editingNapIndex--;
     }
     localStorage.setItem('todayNaps', JSON.stringify(todayNaps));
+    updateTodayHistory();
     renderNaps();
   };
 
@@ -316,6 +404,7 @@
     localStorage.setItem('todayFeeds', JSON.stringify(todayFeeds));
     document.getElementById("feedTime").value = "";
     document.getElementById("feedMl").value = "";
+    updateTodayHistory();
     renderFeeds();
   };
 
@@ -344,6 +433,7 @@
       editingFeedIndex--;
     }
     localStorage.setItem('todayFeeds', JSON.stringify(todayFeeds));
+    updateTodayHistory();
     renderFeeds();
   };
 
@@ -432,7 +522,101 @@
     });
   }
 
-  // Init
+  // --- HISTORY MODAL ---
+  function openHistoryModal() {
+    updateTodayHistory();
+    const container = document.getElementById("historyListContainer");
+    const dates = Object.keys(historyLogs).sort().reverse();
+    
+    if (dates.length === 0) {
+      container.innerHTML = "<div style='color:var(--muted);font-size:12px;text-align:center;padding:12px;'>No history saved yet.</div>";
+    } else {
+      container.innerHTML = dates.map(d => {
+        const item = historyLogs[d];
+        return `
+          <div class="history-entry">
+            <div class="history-date">${d}</div>
+            <div class="history-details">
+              <span>Total Naps: <b>${formatMins(item.totalNapMins || 0)}</b></span>
+              <span>Total Feed: <b>${item.totalFeedMl || 0} ml</b></span>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+    document.getElementById("historyModal").classList.add("show");
+  }
+
+  function closeHistoryModal() {
+    document.getElementById("historyModal").classList.remove("show");
+  }
+
+  // --- JSON BACKUP & IMPORT ---
+  function exportJSON() {
+    updateTodayHistory();
+    const data = {
+      yesterdayBedtime: localStorage.getItem('yesterdayBedtime') || '',
+      todayWakeTime: localStorage.getItem('todayWakeTime') || '',
+      yesterdayNapMins: localStorage.getItem('yesterdayNapMins') || '',
+      todayNaps: todayNaps,
+      todayFeeds: todayFeeds,
+      historyLogs: historyLogs
+    };
+
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `baby_tracker_backup_${getTodayKey()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importJSON(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (data.todayNaps) {
+          todayNaps = data.todayNaps;
+          localStorage.setItem('todayNaps', JSON.stringify(todayNaps));
+        }
+        if (data.todayFeeds) {
+          todayFeeds = data.todayFeeds;
+          localStorage.setItem('todayFeeds', JSON.stringify(todayFeeds));
+        }
+        if (data.historyLogs) {
+          historyLogs = data.historyLogs;
+          localStorage.setItem('historyLogs', JSON.stringify(historyLogs));
+        }
+        if (data.yesterdayBedtime) {
+          document.getElementById("yesterdayBedtime").value = data.yesterdayBedtime;
+          localStorage.setItem('yesterdayBedtime', data.yesterdayBedtime);
+        }
+        if (data.todayWakeTime) {
+          document.getElementById("todayWakeTime").value = data.todayWakeTime;
+          localStorage.setItem('todayWakeTime', data.todayWakeTime);
+        }
+        if (data.yesterdayNapMins) {
+          document.getElementById("yesterdayNapMins").value = data.yesterdayNapMins;
+          localStorage.setItem('yesterdayNapMins', data.yesterdayNapMins);
+        }
+
+        calculateOvernightSleep();
+        renderNaps();
+        renderFeeds();
+        alert("Backup imported successfully!");
+      } catch (err) {
+        alert("Invalid JSON file format.");
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  // --- INIT ---
   document.getElementById("yesterdayBedtime").value = localStorage.getItem('yesterdayBedtime') || '22:30';
   document.getElementById("todayWakeTime").value = localStorage.getItem('todayWakeTime') || '08:45';
   document.getElementById("yesterdayNapMins").value = localStorage.getItem('yesterdayNapMins') || '180';
@@ -443,6 +627,7 @@
   calculateOvernightSleep();
   renderNaps();
   renderFeeds();
+  updateTodayHistory();
 </script>
 
 </body>
