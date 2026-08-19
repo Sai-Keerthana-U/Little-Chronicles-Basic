@@ -113,25 +113,63 @@
   }
   button.cancel-btn { background: var(--border); color: var(--text); }
 
+  /* Progress Bars with Min Target Marker */
   .analytics-box {
     margin-top: 10px;
     padding-top: 10px;
     border-top: 1px dashed var(--border);
   }
   .progress-header { display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 6px; }
-  .progress-bar-bg { width: 100%; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
-  .progress-bar-fill { height: 100%; border-radius: 4px; width: 0%; transition: width 0.3s ease; }
+  .progress-bar-bg { 
+    width: 100%; 
+    height: 10px; 
+    background: var(--border); 
+    border-radius: 5px; 
+    position: relative;
+  }
+  .progress-bar-fill { height: 100%; border-radius: 5px; width: 0%; transition: width 0.3s ease; }
   .fill-nap { background: var(--nap); }
   .fill-feed { background: var(--feed); }
+
+  .min-marker {
+    position: absolute;
+    top: -2px;
+    bottom: -2px;
+    width: 3px;
+    background: #0f172a;
+    border-radius: 2px;
+    z-index: 2;
+  }
+  .min-marker::after {
+    content: "Min";
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    font-weight: 700;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
 
   .target-note {
     font-size: 11px;
     color: var(--muted);
-    margin-top: 6px;
+    margin-top: 8px;
     display: flex;
     justify-content: space-between;
     font-weight: 500;
   }
+
+  .status-badge {
+    display: inline-block;
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .status-badge.met { background: #dcfce7; color: #166534; }
+  .status-badge.pending { background: #fef3c7; color: #92400e; }
 
   .log-list { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
   .log-item { 
@@ -262,15 +300,16 @@
 
     <div class="analytics-box">
       <div class="progress-header">
-        <span>Naps Completed: <b id="napDoneText">0h 0m</b></span>
+        <span>Naps Completed: <b id="napDoneText">0h 0m</b> <span id="napMinStatus" class="status-badge pending">Min Pending</span></span>
         <span style="color: var(--nap);" id="napPendingText">3h 30m Pending</span>
       </div>
       <div class="progress-bar-bg">
+        <div class="min-marker" style="left: 71.4%;"></div>
         <div class="progress-bar-fill fill-nap" id="napProgressBar"></div>
       </div>
       <div class="target-note">
-        <span>Target Range: <b>2h 30m – 3h 30m</b></span>
-        <span>Ideal: <b>~3h 30m</b></span>
+        <span>Min Goal: <b>2h 30m (71%)</b></span>
+        <span>Target Max: <b>3h 30m</b></span>
       </div>
     </div>
   </div>
@@ -289,15 +328,16 @@
 
     <div class="analytics-box">
       <div class="progress-header">
-        <span>Intake: <b id="feedDoneText">0 ml</b></span>
-        <span style="color: var(--feed);" id="feedPendingText">800 ml Pending</span>
+        <span>Intake: <b id="feedDoneText">0 ml</b> <span id="feedMinStatus" class="status-badge pending">Min Pending</span></span>
+        <span style="color: var(--feed);" id="feedPendingText">960 ml Pending</span>
       </div>
       <div class="progress-bar-bg">
+        <div class="min-marker" style="left: 75%;"></div>
         <div class="progress-bar-fill fill-feed" id="feedProgressBar"></div>
       </div>
       <div class="target-note">
-        <span>Target Range: <b>720 – 960 ml</b></span>
-        <span>Standard: <b>800 ml</b></span>
+        <span>Min Goal: <b>720 ml (75%)</b></span>
+        <span>Target Max: <b>960 ml</b></span>
       </div>
     </div>
   </div>
@@ -316,8 +356,10 @@
 </div>
 
 <script>
-  const NAP_TARGET_MINS = 210; // 3h 30m (Max Target)
-  const FEED_TARGET_ML = 800;  // 800 ml (Standard Target)
+  const NAP_MIN_MINS = 150;    // 2h 30m
+  const NAP_MAX_MINS = 210;    // 3h 30m
+  const FEED_MIN_ML = 720;     // 720 ml
+  const FEED_MAX_ML = 960;     // 960 ml
 
   var allData = JSON.parse(localStorage.getItem('babyTrackerAllData') || '{}');
   var currentDate = getTodayDateString();
@@ -543,12 +585,21 @@
     ensureDateRecord(currentDate);
     const naps = allData[currentDate].naps || [];
     const totalDone = naps.reduce((acc, n) => acc + n.dur, 0);
-    const pending = Math.max(0, NAP_TARGET_MINS - totalDone);
-    const pct = Math.min(100, (totalDone / NAP_TARGET_MINS) * 100);
+    const pending = Math.max(0, NAP_MAX_MINS - totalDone);
+    const pct = Math.min(100, (totalDone / NAP_MAX_MINS) * 100);
 
     document.getElementById("napDoneText").textContent = formatMins(totalDone);
     document.getElementById("napPendingText").textContent = pending === 0 ? "Target Met" : `${formatMins(pending)} Pending`;
     document.getElementById("napProgressBar").style.width = pct + "%";
+
+    const minBadge = document.getElementById("napMinStatus");
+    if (totalDone >= NAP_MIN_MINS) {
+      minBadge.textContent = "Min Met";
+      minBadge.className = "status-badge met";
+    } else {
+      minBadge.textContent = "Min Pending";
+      minBadge.className = "status-badge pending";
+    }
 
     const list = document.getElementById("napList");
     list.innerHTML = "";
@@ -587,12 +638,21 @@
     ensureDateRecord(currentDate);
     const feeds = allData[currentDate].feeds || [];
     const totalDone = feeds.reduce((acc, f) => acc + f.ml, 0);
-    const pending = Math.max(0, FEED_TARGET_ML - totalDone);
-    const pct = Math.min(100, (totalDone / FEED_TARGET_ML) * 100);
+    const pending = Math.max(0, FEED_MAX_ML - totalDone);
+    const pct = Math.min(100, (totalDone / FEED_MAX_ML) * 100);
 
     document.getElementById("feedDoneText").textContent = `${totalDone} ml`;
     document.getElementById("feedPendingText").textContent = pending === 0 ? "Target Met" : `${pending} ml Pending`;
     document.getElementById("feedProgressBar").style.width = pct + "%";
+
+    const minBadge = document.getElementById("feedMinStatus");
+    if (totalDone >= FEED_MIN_ML) {
+      minBadge.textContent = "Min Met";
+      minBadge.className = "status-badge met";
+    } else {
+      minBadge.textContent = "Min Pending";
+      minBadge.className = "status-badge pending";
+    }
 
     const list = document.getElementById("feedList");
     list.innerHTML = "";
