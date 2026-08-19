@@ -11,12 +11,9 @@
     --text: #0f172a;
     --muted: #64748b;
     --border: #e2e8f0;
-    --night: #6366f1;
-    --night-bg: #eef2ff;
-    --wake: #f59e0b;
-    --wake-bg: #fffbeb;
+    --sleep: #6366f1;
+    --sleep-bg: #eef2ff;
     --nap: #8b5cf6;
-    --nap-bg: #f5f3ff;
     --feed: #10b981;
     --feed-bg: #ecfdf5;
     --danger: #ef4444;
@@ -67,7 +64,7 @@
     outline: none;
   }
 
-  /* Row Cards */
+  /* Cards */
   .tracker-row {
     background: var(--card);
     border: 1px solid var(--border);
@@ -75,9 +72,6 @@
     padding: 12px 14px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.02);
   }
-
-  .row-night { background: var(--night-bg); border-color: rgba(99, 102, 241, 0.2); }
-  .row-wake { background: var(--wake-bg); border-color: rgba(245, 158, 11, 0.2); }
 
   .header-inline {
     display: flex;
@@ -93,13 +87,26 @@
     color: var(--muted); 
   }
 
-  /* Sleep Summary Grid */
-  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-  .stat-value { font-size: 16px; font-weight: 800; color: var(--text); }
-  .stat-sub { font-size: 10.5px; color: var(--muted); margin-top: 1px; }
+  /* Sleep Combined Sub-Sections */
+  .sleep-summary-box {
+    background: var(--sleep-bg);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+  }
+  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 6px; }
+  .stat-value { font-size: 15px; font-weight: 800; color: var(--text); }
+  .stat-sub { font-size: 10px; color: var(--muted); margin-top: 1px; }
 
   .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .field-label { display: block; font-size: 10.5px; font-weight: 600; color: var(--muted); margin-bottom: 3px; }
+  .field-label { display: block; font-size: 10px; font-weight: 600; color: var(--muted); margin-bottom: 3px; }
+
+  .wake-box {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--border);
+  }
 
   /* Input Lines */
   .input-group { display: flex; gap: 6px; }
@@ -206,7 +213,7 @@
     cursor: pointer;
     border-radius: 4px;
   }
-  .edit-btn { background: var(--nap-bg); color: var(--nap); }
+  .edit-btn { background: #f5f3ff; color: var(--nap); }
   .delete-btn { background: #fee2e2; color: var(--danger); }
 
   /* Modal */
@@ -260,80 +267,79 @@
     <input type="file" id="importFileInput" accept=".json" style="display: none;" onchange="importJSON(event)" />
   </div>
 
-  <!-- 1. YESTERDAY'S SLEEP SUMMARY -->
-  <div class="tracker-row row-night">
+  <!-- 1. SLEEP (MERGED: YESTERDAY SUMMARY + MORNING WAKE + DAYTIME NAPS) -->
+  <div class="tracker-row">
     <div class="header-inline">
-      <span class="row-header" style="color:var(--night)">1. Yesterday's Sleep Summary</span>
+      <span class="row-header" style="color:var(--sleep)">1. Sleep</span>
     </div>
     
-    <div class="stat-grid">
-      <div>
-        <div class="stat-value" id="lastNightDisplay">--</div>
-        <div class="stat-sub">Last Night Sleep</div>
+    <!-- Yesterday's Summary Box -->
+    <div class="sleep-summary-box">
+      <div class="stat-grid">
+        <div>
+          <div class="stat-value" id="lastNightDisplay">--</div>
+          <div class="stat-sub">Last Night Sleep</div>
+        </div>
+        <div>
+          <div class="stat-value" id="yesterdayTotalDisplay">--</div>
+          <div class="stat-sub">Total (Night + Naps)</div>
+        </div>
       </div>
-      <div>
-        <div class="stat-value" id="yesterdayTotalDisplay">--</div>
-        <div class="stat-sub">Total (Night + Naps)</div>
+      <div class="input-grid">
+        <div>
+          <label class="field-label">Yesterday Bedtime</label>
+          <input type="time" id="yesterdayBedtime" onchange="onSleepInputsChange()" />
+        </div>
+        <div>
+          <label class="field-label">Yesterday Naps (min)</label>
+          <input type="number" id="yesterdayNapMins" placeholder="180" onchange="onSleepInputsChange()" />
+        </div>
       </div>
     </div>
 
-    <div class="input-grid">
-      <div>
-        <label class="field-label">Yesterday Bedtime</label>
-        <input type="time" id="yesterdayBedtime" onchange="onSleepInputsChange()" />
+    <!-- Morning Wake Input -->
+    <div class="wake-box">
+      <label class="field-label" style="margin-bottom:4px">Today's Morning Wake-up Time</label>
+      <div class="input-group">
+        <input type="time" id="todayWakeTime" onchange="onSleepInputsChange()" />
+        <button type="button" class="action-submit" onclick="saveWakeTime()">Save</button>
       </div>
-      <div>
-        <label class="field-label">Yesterday Naps (min)</label>
-        <input type="number" id="yesterdayNapMins" placeholder="180" onchange="onSleepInputsChange()" />
+    </div>
+
+    <!-- Daytime Naps Input & List -->
+    <div>
+      <label class="field-label" style="margin-bottom:4px">Daytime Naps</label>
+      <div class="input-group">
+        <input type="time" id="napStart" placeholder="Start" />
+        <input type="time" id="napEnd" placeholder="End" />
+        <button type="button" id="napActionBtn" class="action-submit" onclick="saveNap()">Add</button>
+        <button type="button" id="napCancelBtn" class="action-submit cancel-btn" style="display: none;" onclick="cancelNapEdit()">✕</button>
+      </div>
+
+      <div class="log-list" id="napList"></div>
+
+      <!-- Nap Analytics -->
+      <div class="analytics-box">
+        <div class="progress-header">
+          <span>Done: <b id="napDoneText">0h 0m</b> <span id="napMinStatus" class="status-badge pending">Min Pending</span></span>
+          <span style="color: var(--nap);" id="napPendingText">3h 30m Pending</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="min-marker" style="left: 71.4%;"></div>
+          <div class="progress-bar-fill fill-nap" id="napProgressBar"></div>
+        </div>
+        <div class="target-note">
+          <span>Min: <b>2h 30m</b> (Line)</span>
+          <span>Max: <b>3h 30m</b></span>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- 2. WAKE TIME -->
-  <div class="tracker-row row-wake">
-    <div class="header-inline">
-      <span class="row-header" style="color:var(--wake)">2. Morning Wake-up Time</span>
-    </div>
-    <div class="input-group">
-      <input type="time" id="todayWakeTime" onchange="onSleepInputsChange()" />
-      <button type="button" class="action-submit" onclick="saveWakeTime()">Save</button>
-    </div>
-  </div>
-
-  <!-- 3. DAYTIME NAPS -->
+  <!-- 2. FEEDING INTAKE -->
   <div class="tracker-row">
     <div class="header-inline">
-      <span class="row-header" style="color:var(--nap)">3. Daytime Naps</span>
-    </div>
-    <div class="input-group">
-      <input type="time" id="napStart" placeholder="Start" />
-      <input type="time" id="napEnd" placeholder="End" />
-      <button type="button" id="napActionBtn" class="action-submit" onclick="saveNap()">Add</button>
-      <button type="button" id="napCancelBtn" class="action-submit cancel-btn" style="display: none;" onclick="cancelNapEdit()">✕</button>
-    </div>
-
-    <div class="log-list" id="napList"></div>
-
-    <div class="analytics-box">
-      <div class="progress-header">
-        <span>Done: <b id="napDoneText">0h 0m</b> <span id="napMinStatus" class="status-badge pending">Min Pending</span></span>
-        <span style="color: var(--nap);" id="napPendingText">3h 30m Pending</span>
-      </div>
-      <div class="progress-bar-bg">
-        <div class="min-marker" style="left: 71.4%;"></div>
-        <div class="progress-bar-fill fill-nap" id="napProgressBar"></div>
-      </div>
-      <div class="target-note">
-        <span>Min: <b>2h 30m</b> (Line)</span>
-        <span>Max: <b>3h 30m</b></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- 4. FEEDING INTAKE -->
-  <div class="tracker-row">
-    <div class="header-inline">
-      <span class="row-header" style="color:var(--feed)">4. Feeding Intake</span>
+      <span class="row-header" style="color:var(--feed)">2. Feeding Intake</span>
     </div>
     <div class="input-group">
       <input type="time" id="feedTime" style="flex:1" />
