@@ -346,7 +346,7 @@
     </div>
   </div>
 
-  <!-- 1. SLEEP (SUMMARY + MORNING WAKE + NAP TAGS) -->
+  <!-- 1. SLEEP (SUMMARY + MORNING WAKE + CHRONOLOGICAL NAP TAGS) -->
   <div class="tracker-row">
     <div class="sleep-summary-box">
       <div class="stat-grid">
@@ -397,7 +397,7 @@
     </div>
   </div>
 
-  <!-- 2. FEEDING INTAKE (FEED TAGS) -->
+  <!-- 2. FEEDING INTAKE (CHRONOLOGICAL FEED TAGS) -->
   <div class="tracker-row">
     <div class="tag-container" id="feedTagContainer"></div>
 
@@ -506,6 +506,16 @@
     return hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`;
   }
 
+  function sortEntriesByTime(dateKey) {
+    ensureDateRecord(dateKey);
+    if (allData[dateKey].naps) {
+      allData[dateKey].naps.sort((a, b) => (a.start || "").localeCompare(b.start || ""));
+    }
+    if (allData[dateKey].feeds) {
+      allData[dateKey].feeds.sort((a, b) => (a.time || "").localeCompare(b.time || ""));
+    }
+  }
+
   function onDateChange() {
     currentDate = document.getElementById("selectedDateInput").value;
     if (!currentDate) currentDate = getTodayDateString();
@@ -516,6 +526,7 @@
 
   function loadDateData(dateKey) {
     ensureDateRecord(dateKey);
+    sortEntriesByTime(dateKey);
     const record = allData[dateKey];
 
     document.getElementById("selectedDateInput").value = dateKey;
@@ -586,6 +597,7 @@
       allData[currentDate].naps.push({ start, end, dur });
     }
 
+    sortEntriesByTime(currentDate);
     persistData();
     document.getElementById("napStart").value = "";
     document.getElementById("napEnd").value = "";
@@ -613,7 +625,7 @@
 
   window.deleteNap = function(index) {
     const nap = allData[currentDate].naps[index];
-    if (confirm(`Are you sure you want to delete Nap ${index + 1} (${nap.start}–${nap.end})?`)) {
+    if (confirm(`Are you sure you want to delete Nap (${nap.start}–${nap.end})?`)) {
       allData[currentDate].naps.splice(index, 1);
       if (editingNapIndex === index) cancelNapEdit();
       else if (editingNapIndex > index) editingNapIndex--;
@@ -638,6 +650,7 @@
       allData[currentDate].feeds.push({ time, ml });
     }
 
+    sortEntriesByTime(currentDate);
     persistData();
     document.getElementById("feedTime").value = "";
     document.getElementById("feedMl").value = "";
@@ -665,7 +678,7 @@
 
   window.deleteFeed = function(index) {
     const feed = allData[currentDate].feeds[index];
-    if (confirm(`Are you sure you want to delete Feed ${index + 1} (${feed.time}, ${feed.ml}ml)?`)) {
+    if (confirm(`Are you sure you want to delete Feed (${feed.time}, ${feed.ml}ml)?`)) {
       allData[currentDate].feeds.splice(index, 1);
       if (editingFeedIndex === index) cancelFeedEdit();
       else if (editingFeedIndex > index) editingFeedIndex--;
