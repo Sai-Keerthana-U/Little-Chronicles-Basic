@@ -159,12 +159,6 @@
   .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
   .field-label { display: block; font-size: 10px; font-weight: 700; color: var(--muted); margin-bottom: 2px; }
 
-  .wake-box {
-    margin-bottom: 8px;
-    padding-bottom: 8px;
-    border-bottom: 1.5px dashed var(--border);
-  }
-
   /* Tag Container */
   .tag-container {
     display: flex;
@@ -318,35 +312,7 @@
     <input type="file" id="importFileInput" accept=".json" style="display: none;" onchange="importJSON(event)" />
   </div>
 
-  <!-- SINGLE UNIFIED INPUT WINDOW -->
-  <div class="tracker-row unified-card">
-    <div class="type-switcher">
-      <button type="button" class="type-btn active nap-active" id="tabNap" onclick="switchLogType('nap')">💤 Log Nap</button>
-      <button type="button" class="type-btn" id="tabFeed" onclick="switchLogType('feed')">🍼 Log Feed</button>
-    </div>
-
-    <!-- Nap Form -->
-    <div id="napInputPanel">
-      <div class="input-group">
-        <input type="time" id="napStart" placeholder="Start" />
-        <input type="time" id="napEnd" placeholder="End" />
-        <button type="button" id="napActionBtn" class="action-submit btn-nap" onclick="saveNap()">Add Nap</button>
-        <button type="button" id="napCancelBtn" class="action-submit cancel-btn" style="display: none;" onclick="cancelNapEdit()">✕</button>
-      </div>
-    </div>
-
-    <!-- Feed Form -->
-    <div id="feedInputPanel" style="display: none;">
-      <div class="input-group">
-        <input type="time" id="feedTime" style="flex:1" />
-        <input type="number" id="feedMl" placeholder="ml" min="0" step="10" style="flex:1" />
-        <button type="button" id="feedActionBtn" class="action-submit btn-feed" onclick="saveFeed()">Add Feed</button>
-        <button type="button" id="feedCancelBtn" class="action-submit cancel-btn" style="display: none;" onclick="cancelFeedEdit()">✕</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 1. SLEEP (SUMMARY + MORNING WAKE + CHRONOLOGICAL NAP TAGS) -->
+  <!-- 1. LONG SLEEP (SUMMARY + MORNING WAKE) -->
   <div class="tracker-row">
     <div class="sleep-summary-box">
       <div class="stat-grid">
@@ -378,7 +344,38 @@
         <button type="button" class="action-submit btn-nap" onclick="saveWakeTime()">Save</button>
       </div>
     </div>
+  </div>
 
+  <!-- SINGLE UNIFIED INPUT WINDOW (NAP / FEED LOGS) -->
+  <div class="tracker-row unified-card">
+    <div class="type-switcher">
+      <button type="button" class="type-btn active nap-active" id="tabNap" onclick="switchLogType('nap')">💤 Log Nap</button>
+      <button type="button" class="type-btn" id="tabFeed" onclick="switchLogType('feed')">🍼 Log Feed</button>
+    </div>
+
+    <!-- Nap Form -->
+    <div id="napInputPanel">
+      <div class="input-group">
+        <input type="time" id="napStart" placeholder="Start" />
+        <input type="time" id="napEnd" placeholder="End" />
+        <button type="button" id="napActionBtn" class="action-submit btn-nap" onclick="saveNap()">Add Nap</button>
+        <button type="button" id="napCancelBtn" class="action-submit cancel-btn" style="display: none;" onclick="cancelNapEdit()">✕</button>
+      </div>
+    </div>
+
+    <!-- Feed Form -->
+    <div id="feedInputPanel" style="display: none;">
+      <div class="input-group">
+        <input type="time" id="feedTime" style="flex:1" />
+        <input type="number" id="feedMl" placeholder="ml" min="0" step="10" style="flex:1" />
+        <button type="button" id="feedActionBtn" class="action-submit btn-feed" onclick="saveFeed()">Add Feed</button>
+        <button type="button" id="feedCancelBtn" class="action-submit cancel-btn" style="display: none;" onclick="cancelFeedEdit()">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. NAP TRACKING (CHRONOLOGICAL NAP TAGS & ANALYTICS) -->
+  <div class="tracker-row">
     <div class="tag-container" id="napTagContainer"></div>
 
     <div class="analytics-box">
@@ -397,7 +394,7 @@
     </div>
   </div>
 
-  <!-- 2. FEEDING INTAKE (CHRONOLOGICAL FEED TAGS) -->
+  <!-- 3. FEEDING INTAKE (CHRONOLOGICAL FEED TAGS) -->
   <div class="tracker-row">
     <div class="tag-container" id="feedTagContainer"></div>
 
