@@ -122,6 +122,7 @@
             color: var(--text-muted);
             outline: none;
             padding: 0;
+            position: relative;
         }
 
         .theme-toggle-btn:active {
@@ -131,6 +132,17 @@
         .theme-icon {
             width: 16px;
             height: 16px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 10px;
+            height: 10px;
+            background-color: #E53935;
+            border-radius: 50%;
+            border: 2px solid var(--bg-color);
         }
 
         .profile-switcher {
@@ -864,6 +876,7 @@
             <div class="header-actions">
                 <button class="theme-toggle-btn" onclick="openDriveSettingsModal()" title="Drive Backup & Restore">
                     ⚙️
+                    <span id="backupBadge" class="notification-badge" style="display: none;"></span>
                 </button>
 
                 <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle Theme">
@@ -1586,6 +1599,31 @@
         }
 
         // ----------------------------------------------------
+        // BACKUP REMINDER LOGIC
+        // ----------------------------------------------------
+        function checkBackupReminder() {
+            const badge = document.getElementById('backupBadge');
+            if (!badge) return;
+
+            const lastBackupStr = localStorage.getItem('lc_last_backup_time');
+            // 3 days in milliseconds
+            const threeDays = 3 * 24 * 60 * 60 * 1000; 
+            
+            if (!lastBackupStr || (Date.now() - parseInt(lastBackupStr)) > threeDays) {
+                badge.style.display = 'block'; // Show red dot
+            } else {
+                badge.style.display = 'none'; // Hide red dot
+            }
+        }
+
+        function markBackupComplete() {
+            try {
+                localStorage.setItem('lc_last_backup_time', Date.now().toString());
+            } catch(e) {}
+            checkBackupReminder();
+        }
+
+        // ----------------------------------------------------
         // DIRECT GOOGLE DRIVE BACKUP & RESTORE
         // ----------------------------------------------------
         function openDriveSettingsModal() {
@@ -1611,54 +1649,44 @@
             };
         }
 
-        // --- THE UPDATED EXPORT FUNCTION ---
         async function saveDirectToGoogleDrive() {
             const payload = getFullPayload();
             const jsonString = JSON.stringify(payload, null, 2);
             const statusEl = document.getElementById('syncStatus');
-            
-            // I changed the name completely so we know when the old cache is cleared!
             const fileName = 'LittleChronicles-Data.txt';
 
             try {
                 const file = new File([jsonString], fileName, { type: 'text/plain' });
 
-                // Check 1: Does the browser support the Share feature at all?
                 if (!navigator.canShare) {
-                    alert("Browser doesn't support Native Share. Falling back to download.");
                     triggerDownload(jsonString, fileName);
                     return;
                 }
 
-                // Check 2: Does the browser block this specific file type?
                 if (!navigator.canShare({ files: [file] })) {
-                    alert("Browser blocked sharing text files. Falling back to download.");
                     triggerDownload(jsonString, fileName);
                     return;
                 }
 
-                // Success! Trigger the Native Share Sheet
                 await navigator.share({
                     title: 'Little Chronicles Backup',
                     text: 'Select Google Drive to save your backup.',
                     files: [file]
                 });
                 
-                statusEl.innerText = '✓ Opened Share Sheet successfully!';
+                statusEl.innerText = '✓ Shared to Drive successfully!';
                 statusEl.style.color = '#2E7D32';
+                markBackupComplete(); // Register successful backup
 
             } catch (err) {
-                // User simply closed the share sheet
                 if (err.name === 'AbortError') {
                     statusEl.innerText = 'Share cancelled.';
                     return;
                 }
-                alert("Share failed: " + err.message + ". Falling back to download.");
                 triggerDownload(jsonString, fileName);
             }
         }
 
-        // The fallback download mechanism
         function triggerDownload(content, fName) {
             const blob = new Blob([content], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
@@ -1672,6 +1700,7 @@
             
             document.getElementById('syncStatus').innerText = '✓ Downloaded file to device.';
             document.getElementById('syncStatus').style.color = '#2E7D32';
+            markBackupComplete(); // Register successful backup
         }
 
         function handleRestoreFile(input) {
@@ -1698,6 +1727,7 @@
 
                     statusEl.innerText = '✓ Data restored successfully!';
                     statusEl.style.color = '#2E7D32';
+                    markBackupComplete(); // Reset backup timer after a fresh restore
 
                     updateDashboardCounts();
                     renderStickyNotes();
@@ -1750,6 +1780,7 @@
                 setTheme('light');
             }
             updateDashboardCounts();
+            checkBackupReminder(); // Check timer on load
         });
     </script>
 </body>
