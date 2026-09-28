@@ -182,7 +182,7 @@
             display: block;
         }
 
-        /* Compact 2-Column Grid */
+        /* Bento Grid */
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -263,6 +263,62 @@
             font-weight: 500;
             color: var(--text-muted);
             margin-top: 3px;
+        }
+
+        /* Space-Saving Micro Split Tile */
+        .split-card-wrapper {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .micro-card {
+            background: var(--surface-card);
+            border-radius: var(--radius-outer);
+            border: var(--card-border);
+            box-shadow: var(--card-shadow);
+            padding: 12px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            min-height: 110px;
+        }
+
+        .micro-card:active {
+            transform: scale(0.94);
+        }
+
+        .micro-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-inner);
+            background: var(--primary-soft);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .micro-heading {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.2px;
+            line-height: 1.2;
+        }
+
+        .micro-subtitle {
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-top: 4px;
         }
 
         /* Modals */
@@ -951,31 +1007,20 @@
                     </div>
                 </div>
 
-                <!-- 4. Sticky Notes Tile (NEW DEDICATED) -->
-                <div class="compact-card" onclick="openSpecificNotesView('notes')">
-                    <div class="card-top">
-                        <div class="icon-badge">📝</div>
-                        <div class="card-arrow">
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                        </div>
+                <!-- 4. Notes & To-Do Split Tile (Saves a full row!) -->
+                <div class="split-card-wrapper">
+                    <!-- Left Mini Card: Notes -->
+                    <div class="micro-card" onclick="openSpecificNotesView('notes')">
+                        <div class="micro-icon">📝</div>
+                        <div class="micro-heading">Notes</div>
+                        <div class="micro-subtitle" id="stickyCount">0 notes</div>
                     </div>
-                    <div class="card-bottom">
-                        <h3 class="card-heading">Sticky Notes</h3>
-                        <p class="card-subtitle" id="stickyCount">0 notes</p>
-                    </div>
-                </div>
-
-                <!-- 5. To-Do List Tile (NEW DEDICATED) -->
-                <div class="compact-card" onclick="openSpecificNotesView('todo')">
-                    <div class="card-top">
-                        <div class="icon-badge">✅</div>
-                        <div class="card-arrow">
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                        </div>
-                    </div>
-                    <div class="card-bottom">
-                        <h3 class="card-heading">To-Do List</h3>
-                        <p class="card-subtitle" id="todoCount">0 pending</p>
+                    
+                    <!-- Right Mini Card: Tasks -->
+                    <div class="micro-card" onclick="openSpecificNotesView('todo')">
+                        <div class="micro-icon">✅</div>
+                        <div class="micro-heading">To-Do</div>
+                        <div class="micro-subtitle" id="todoCount">0 pending</div>
                     </div>
                 </div>
 
@@ -1248,7 +1293,7 @@
             const tc = document.getElementById('todoCount');
             if (tc) {
                 const pending = todoList.filter(t => !t.completed).length;
-                tc.innerText = pending + (pending === 1 ? ' pending task' : ' pending tasks');
+                tc.innerText = pending + (pending === 1 ? ' pending' : ' pending');
             }
         }
 
@@ -1504,7 +1549,7 @@
                     container.appendChild(noteEl);
                 });
             }
-            updateDashboardCounts(); // Ensure front page counter is always accurate
+            updateDashboardCounts(); 
         }
 
         function addNewStickyNote() {
@@ -1600,7 +1645,7 @@
                     container.appendChild(itemEl);
                 });
             }
-            updateDashboardCounts(); // Ensure front page counter is always accurate
+            updateDashboardCounts(); 
         }
 
         function addTodoItem() {
@@ -1643,13 +1688,12 @@
             if (!badge) return;
 
             const lastBackupStr = localStorage.getItem('lc_last_backup_time');
-            // 3 days in milliseconds
             const threeDays = 3 * 24 * 60 * 60 * 1000; 
             
             if (!lastBackupStr || (Date.now() - parseInt(lastBackupStr)) > threeDays) {
-                badge.style.display = 'block'; // Show red dot
+                badge.style.display = 'block'; 
             } else {
-                badge.style.display = 'none'; // Hide red dot
+                badge.style.display = 'none'; 
             }
         }
 
@@ -1713,7 +1757,7 @@
                 
                 statusEl.innerText = '✓ Shared to Drive successfully!';
                 statusEl.style.color = '#2E7D32';
-                markBackupComplete();
+                markBackupComplete(); 
 
             } catch (err) {
                 if (err.name === 'AbortError') {
@@ -1737,7 +1781,7 @@
             
             document.getElementById('syncStatus').innerText = '✓ Downloaded file to device.';
             document.getElementById('syncStatus').style.color = '#2E7D32';
-            markBackupComplete();
+            markBackupComplete(); 
         }
 
         function handleRestoreFile(input) {
@@ -1758,7 +1802,7 @@
                         saveTodoList();
                     }
                     if (data.userEbooks) userEbooks = data.userEbooks;
-                    if (data.userAudiobooks) userAudiobooks = data.userAudiobooks;
+                    if (data.userAudiobooks) userAudiobooks = userAudiobooks;
                     if (data.userTools) userTools = data.userTools;
                     saveLinksToStorage();
 
