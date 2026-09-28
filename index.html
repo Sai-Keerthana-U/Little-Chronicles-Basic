@@ -1086,7 +1086,7 @@
                     ☁️ Upload / Save to Google Drive
                 </button>
 
-                <input type="file" id="restoreFileInput" accept=".json,application/json,text/plain" style="display:none;" onchange="handleRestoreFile(this)">
+                <input type="file" id="restoreFileInput" accept=".txt,.json,application/json,text/plain" style="display:none;" onchange="handleRestoreFile(this)">
                 
                 <button class="modal-save-btn" style="background:var(--surface-subtle); color:var(--text-main); border:var(--card-border);" onclick="document.getElementById('restoreFileInput').click()">
                     📥 Restore from Drive / Device
@@ -1615,10 +1615,11 @@
             const payload = getFullPayload();
             const jsonString = JSON.stringify(payload, null, 2);
             const statusEl = document.getElementById('syncStatus');
-            const fileName = 'little-chronicles-backup.json';
+            
+            // USING .TXT SO ANDROID CHROME ALLOWS THE SHARE SHEET
+            const fileName = 'little-chronicles-backup.txt';
 
             try {
-                // Changed MIME type to 'text/plain' to force Android share sheet
                 const file = new File([jsonString], fileName, { type: 'text/plain' });
 
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
