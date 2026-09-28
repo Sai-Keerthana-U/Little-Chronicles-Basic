@@ -1611,45 +1611,67 @@
             };
         }
 
+        // --- THE UPDATED EXPORT FUNCTION ---
         async function saveDirectToGoogleDrive() {
             const payload = getFullPayload();
             const jsonString = JSON.stringify(payload, null, 2);
             const statusEl = document.getElementById('syncStatus');
             
-            // USING .TXT SO ANDROID CHROME ALLOWS THE SHARE SHEET
-            const fileName = 'little-chronicles-backup.txt';
+            // I changed the name completely so we know when the old cache is cleared!
+            const fileName = 'LittleChronicles-Data.txt';
 
             try {
                 const file = new File([jsonString], fileName, { type: 'text/plain' });
 
-                if (navigator.canShare && navigator.canShare({ files: [file] })) {
-                    await navigator.share({
-                        title: 'Little Chronicles Backup',
-                        text: 'Save directly to your Google Drive',
-                        files: [file]
-                    });
-                    statusEl.innerText = '✓ Shared to Drive successfully!';
-                    statusEl.style.color = '#2E7D32';
+                // Check 1: Does the browser support the Share feature at all?
+                if (!navigator.canShare) {
+                    alert("Browser doesn't support Native Share. Falling back to download.");
+                    triggerDownload(jsonString, fileName);
                     return;
                 }
-            } catch (err) {
-                if (err.name === 'AbortError') return;
-                console.warn('Share API failed, falling back to download:', err);
-            }
 
-            // Fallback for browsers that do not support navigator.share with files
-            const blob = new Blob([jsonString], { type: 'text/plain' });
+                // Check 2: Does the browser block this specific file type?
+                if (!navigator.canShare({ files: [file] })) {
+                    alert("Browser blocked sharing text files. Falling back to download.");
+                    triggerDownload(jsonString, fileName);
+                    return;
+                }
+
+                // Success! Trigger the Native Share Sheet
+                await navigator.share({
+                    title: 'Little Chronicles Backup',
+                    text: 'Select Google Drive to save your backup.',
+                    files: [file]
+                });
+                
+                statusEl.innerText = '✓ Opened Share Sheet successfully!';
+                statusEl.style.color = '#2E7D32';
+
+            } catch (err) {
+                // User simply closed the share sheet
+                if (err.name === 'AbortError') {
+                    statusEl.innerText = 'Share cancelled.';
+                    return;
+                }
+                alert("Share failed: " + err.message + ". Falling back to download.");
+                triggerDownload(jsonString, fileName);
+            }
+        }
+
+        // The fallback download mechanism
+        function triggerDownload(content, fName) {
+            const blob = new Blob([content], { type: 'text/plain' });
             const url = URL.createObjectURL(blob);
             const dlAnchor = document.createElement('a');
             dlAnchor.href = url;
-            dlAnchor.download = fileName;
+            dlAnchor.download = fName;
             document.body.appendChild(dlAnchor);
             dlAnchor.click();
             document.body.removeChild(dlAnchor);
             URL.revokeObjectURL(url);
-
-            statusEl.innerText = '✓ Backup created! Check Downloads or save prompt.';
-            statusEl.style.color = '#2E7D32';
+            
+            document.getElementById('syncStatus').innerText = '✓ Downloaded file to device.';
+            document.getElementById('syncStatus').style.color = '#2E7D32';
         }
 
         function handleRestoreFile(input) {
