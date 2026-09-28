@@ -1,837 +1,1732 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>Baby Tracker</title>
-<style>
-  :root {
-    --bg: #f5f3ff;
-    --card: #ffffff;
-    --text: #1e1b4b;
-    --muted: #64748b;
-    --border: #e0e7ff;
-    --nap-color: #8b5cf6;
-    --nap-bg: #ede9fe;
-    --nap-grad: linear-gradient(135deg, #a78bfa, #8b5cf6);
-    --feed-color: #10b981;
-    --feed-bg: #d1fae5;
-    --feed-grad: linear-gradient(135deg, #34d399, #059669);
-    --sleep-color: #6366f1;
-    --sleep-bg: #e0e7ff;
-    --wake-color: #f59e0b;
-    --wake-bg: #fef3c7;
-    --danger: #ef4444;
-    --radius: 14px;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Little Chronicles</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Light Mode */
+            --bg-color: #F8F5F0;
+            --surface-card: #FFFFFF;
+            --surface-subtle: #F2EFE9;
+            --primary: #945D4C;
+            --primary-soft: #F5ECE8;
+            --text-main: #2D2725;
+            --text-muted: #827874;
+            --card-shadow: 0 4px 16px -2px rgba(45, 39, 37, 0.05), 0 2px 4px -1px rgba(45, 39, 37, 0.03);
+            --card-border: 1px solid rgba(45, 39, 37, 0.06);
+            --radius-outer: 18px;
+            --radius-inner: 12px;
 
-  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-  body { 
-    background: var(--bg); 
-    color: var(--text); 
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    padding: 10px;
-    -webkit-font-smoothing: antialiased;
-  }
+            /* Sticky Notes Palette (Light) */
+            --sticky-yellow: #FFF7B2;
+            --sticky-yellow-bar: #F3E792;
+            --sticky-green: #D7F9D0;
+            --sticky-green-bar: #BBEBB2;
+            --sticky-pink: #FFD4E5;
+            --sticky-pink-bar: #F3B5CD;
+            --sticky-blue: #D0E9FF;
+            --sticky-blue-bar: #B2D7F9;
+            --sticky-purple: #E8D9FF;
+            --sticky-purple-bar: #D1BAF5;
+            --sticky-text: #2B2625;
+        }
 
-  .container { 
-    width: 100%; 
-    max-width: 480px; 
-    display: flex; 
-    flex-direction: column; 
-    gap: 8px; 
-  }
+        /* Dark Mode */
+        [data-theme="dark"] {
+            --bg-color: #161514;
+            --surface-card: #201E1D;
+            --surface-subtle: #2B2826;
+            --primary: #D49785;
+            --primary-soft: #382823;
+            --text-main: #F4EFEB;
+            --text-muted: #9E938E;
+            --card-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.3);
+            --card-border: 1px solid rgba(255, 255, 255, 0.06);
 
-  /* Top Bar */
-  .top-bar { display: flex; gap: 6px; }
-  .top-btn {
-    flex: 1;
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 7px 8px;
-    font-size: 11.5px;
-    font-weight: 700;
-    color: var(--text);
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(99,102,241,0.06);
-  }
-  .top-btn:active { transform: scale(0.96); }
-  .date-input {
-    height: 32px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 0 8px;
-    font-size: 12px;
-    font-weight: 700;
-    background: var(--card);
-    color: var(--text);
-    outline: none;
-    box-shadow: 0 2px 4px rgba(99,102,241,0.06);
-  }
+            /* Sticky Notes Palette (Dark) */
+            --sticky-yellow: #3D3A20;
+            --sticky-yellow-bar: #4D4929;
+            --sticky-green: #233827;
+            --sticky-green-bar: #2D4732;
+            --sticky-pink: #3D222F;
+            --sticky-pink-bar: #4F2C3D;
+            --sticky-blue: #1D3145;
+            --sticky-blue-bar: #26405A;
+            --sticky-purple: #322547;
+            --sticky-purple-bar: #42315E;
+            --sticky-text: #F3EFE9;
+        }
 
-  /* Cards */
-  .tracker-row {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 10px 12px;
-    box-shadow: 0 4px 12px rgba(99,102,241,0.05);
-  }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+        }
 
-  .unified-card {
-    background: linear-gradient(180deg, #ffffff 0%, #faf5ff 100%);
-    border: 1.5px solid #ddd6fe;
-  }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px 16px 36px;
+        }
 
-  .type-switcher {
-    display: flex;
-    background: #ede9fe;
-    padding: 3px;
-    border-radius: 10px;
-    gap: 4px;
-    margin-bottom: 8px;
-  }
-  .type-btn {
-    flex: 1;
-    border: 0;
-    background: transparent;
-    padding: 6px 0;
-    font-size: 12px;
-    font-weight: 700;
-    color: #6d28d9;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-  .type-btn.active.nap-active {
-    background: var(--card);
-    color: var(--nap-color);
-    box-shadow: 0 2px 6px rgba(139,92,246,0.25);
-  }
-  .type-btn.active.feed-active {
-    background: var(--card);
-    color: var(--feed-color);
-    box-shadow: 0 2px 6px rgba(16,185,129,0.25);
-  }
+        .dashboard-container {
+            width: 100%;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
 
-  .input-group { display: flex; gap: 6px; }
-  input[type="time"], input[type="number"] {
-    width: 100%;
-    height: 34px;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    padding: 0 8px;
-    font-size: 13px;
-    background: var(--card);
-    color: var(--text);
-    outline: none;
-    font-weight: 600;
-  }
+        /* Top Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2px;
+        }
 
-  button.action-submit {
-    border: 0;
-    border-radius: 8px;
-    padding: 0 14px;
-    font-weight: 700;
-    font-size: 12px;
-    color: #fff;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-  .btn-nap { background: var(--nap-grad); box-shadow: 0 2px 8px rgba(139,92,246,0.3); }
-  .btn-feed { background: var(--feed-grad); box-shadow: 0 2px 8px rgba(16,185,129,0.3); }
-  button.cancel-btn { background: #cbd5e1; color: var(--text); }
+        .app-title {
+            font-size: 19px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+            color: var(--text-main);
+        }
 
-  /* Sleep Summary */
-  .sleep-summary-box {
-    background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
-    border: 1px solid #c7d2fe;
-    border-radius: 10px;
-    padding: 8px 10px;
-    margin-bottom: 8px;
-  }
-  .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 6px; }
-  .stat-value { font-size: 15px; font-weight: 800; color: #312e81; }
-  .stat-sub { font-size: 10px; font-weight: 600; color: #4338ca; }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
 
-  .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .field-label { display: block; font-size: 10px; font-weight: 700; color: var(--muted); margin-bottom: 2px; }
+        .theme-toggle-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            width: 34px;
+            height: 34px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-muted);
+            outline: none;
+            padding: 0;
+        }
 
-  /* Tag Container */
-  .tag-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 6px;
-  }
-  .entry-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 8px;
-    border-radius: 8px;
-    font-size: 11px;
-    font-weight: 700;
-  }
-  .tag-nap {
-    background: #ede9fe;
-    color: var(--nap-color);
-    border: 1px solid #ddd6fe;
-  }
-  .tag-feed {
-    background: #d1fae5;
-    color: var(--feed-color);
-    border: 1px solid #a7f3d0;
-  }
+        .theme-toggle-btn:active {
+            transform: scale(0.92);
+        }
 
-  .tag-actions {
-    display: inline-flex;
-    gap: 3px;
-    margin-left: 2px;
-  }
-  .mini-btn {
-    border: 0;
-    padding: 2px 5px;
-    font-size: 9.5px;
-    font-weight: 700;
-    cursor: pointer;
-    border-radius: 4px;
-    line-height: 1.2;
-  }
-  .mini-edit { background: #ffffff; color: #6d28d9; border: 1px solid #ddd6fe; }
-  .mini-del { background: #fee2e2; color: var(--danger); border: 1px solid #fecaca; }
-  .mini-btn:hover { transform: scale(1.05); }
+        .theme-icon {
+            width: 16px;
+            height: 16px;
+        }
 
-  /* Progress Bars */
-  .analytics-box { margin-top: 4px; }
-  .progress-header { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    font-size: 11px; 
-    font-weight: 700; 
-    margin-bottom: 5px; 
-  }
-  .progress-bar-bg { 
-    width: 100%; 
-    height: 8px; 
-    background: #e2e8f0; 
-    border-radius: 4px; 
-    position: relative; 
-    overflow: hidden;
-  }
-  .progress-bar-fill { 
-    height: 100%; 
-    border-radius: 4px; 
-    width: 0%; 
-    transition: width 0.4s ease; 
-  }
-  .fill-nap { background: var(--nap-grad); }
-  .fill-feed { background: var(--feed-grad); }
+        .profile-switcher {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 3px;
+            display: flex;
+            gap: 2px;
+        }
 
-  .min-marker {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: #1e1b4b;
-    z-index: 2;
-  }
+        .switch-btn {
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 5px 14px;
+            border-radius: 999px;
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
 
-  .target-note {
-    font-size: 10px;
-    color: var(--muted);
-    margin-top: 4px;
-    display: flex;
-    justify-content: space-between;
-    font-weight: 600;
-  }
+        .switch-btn.active {
+            background: var(--surface-card);
+            color: var(--primary);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
 
-  .status-badge {
-    display: inline-block;
-    padding: 1px 5px;
-    border-radius: 4px;
-    font-size: 9px;
-    font-weight: 800;
-    margin-left: 3px;
-  }
-  .status-badge.met { background: #d1fae5; color: #065f46; }
-  .status-badge.pending { background: #fef3c7; color: #92400e; }
+        .view-content {
+            display: none;
+        }
 
-  /* Modal */
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(30, 27, 75, 0.4);
-    backdrop-filter: blur(2px);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 16px;
-    z-index: 50;
-  }
-  .modal-overlay.show { display: flex; }
-  .modal-card {
-    width: min(420px, 100%);
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .modal-title { font-size: 14px; font-weight: 800; }
-  .btn-close { background: transparent; border: 0; font-size: 14px; color: var(--muted); cursor: pointer; }
-  
-  .history-entry {
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 10px;
-    margin-bottom: 6px;
-    background: var(--bg);
-    cursor: pointer;
-    font-size: 11.5px;
-  }
-  .history-date { font-weight: 700; color: var(--text); margin-bottom: 3px; display: flex; justify-content: space-between; }
-  .history-details { display: flex; justify-content: space-between; color: var(--muted); }
-</style>
+        .view-content.active-view {
+            display: block;
+        }
+
+        /* Compact 2-Column Grid */
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .compact-card {
+            background: var(--surface-card);
+            border-radius: var(--radius-outer);
+            border: var(--card-border);
+            box-shadow: var(--card-shadow);
+            padding: 14px 14px 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 110px;
+            position: relative;
+            user-select: none;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .compact-card:active {
+            transform: scale(0.97);
+        }
+
+        .card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .icon-badge {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-inner);
+            background: var(--primary-soft);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .icon-badge img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+        }
+
+        .card-arrow {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--surface-subtle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+
+        .card-bottom {
+            margin-top: 12px;
+        }
+
+        .card-heading {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.2px;
+            line-height: 1.25;
+        }
+
+        .card-subtitle {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        /* Modals */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .drawer-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer-sheet {
+            background: var(--surface-card);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 420px;
+            max-height: 80vh;
+            padding: 20px 18px 24px;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+            overflow-y: auto;
+            transform: scale(0.92);
+            transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            border: var(--card-border);
+        }
+
+        .drawer-overlay.open .drawer-sheet {
+            transform: scale(1);
+        }
+
+        .drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .drawer-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .drawer-title {
+            font-size: 16.5px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .drawer-close-btn {
+            background: var(--surface-subtle);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .drawer-links-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .resource-pill {
+            background: var(--surface-subtle);
+            color: var(--text-main);
+            padding: 9px 14px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 12.5px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+
+        .resource-pill:active {
+            background: var(--primary-soft);
+            color: var(--primary);
+            border-color: rgba(148, 93, 76, 0.2);
+            transform: scale(0.96);
+        }
+
+        .manage-pill-btn {
+            background: var(--primary-soft);
+            color: var(--primary);
+            border: 1px dashed var(--primary);
+            padding: 9px 14px;
+            border-radius: 12px;
+            font-size: 12.5px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .arrow-up-right {
+            font-size: 10px;
+            opacity: 0.6;
+        }
+
+        /* PDF Viewer Frame */
+        .pdf-view-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .pdf-controls-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .pdf-action-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            padding: 8px 14px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .pdf-action-btn.primary {
+            background: var(--primary);
+            color: #FFFFFF;
+            border: none;
+        }
+
+        .pdf-viewer-frame {
+            width: 100%;
+            height: 72vh;
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+            background: #FFFFFF;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pdf-viewer-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .pdf-placeholder-msg {
+            color: var(--text-muted);
+            font-size: 13px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Notes & To-Do */
+        .notes-view-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .back-nav-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 7px 12px;
+            color: var(--text-main);
+            font-size: 12.5px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .add-note-btn {
+            background: var(--primary);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 999px;
+            padding: 7px 14px;
+            font-size: 12.5px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(148, 93, 76, 0.2);
+            outline: none;
+        }
+
+        .hub-tabs {
+            display: flex;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 3px;
+            margin-bottom: 14px;
+            gap: 4px;
+        }
+
+        .hub-tab-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 7px 0;
+            border-radius: 999px;
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .hub-tab-btn.active {
+            background: var(--surface-card);
+            color: var(--primary);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .sticky-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .ms-sticky-note {
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-height: 165px;
+            position: relative;
+        }
+
+        .ms-sticky-topbar {
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 7px;
+        }
+
+        .note-time-stamp {
+            font-size: 9px;
+            font-weight: 600;
+            opacity: 0.7;
+            color: var(--sticky-text);
+        }
+
+        .note-actions {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .note-btn {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            opacity: 0.55;
+            font-size: 12px;
+            line-height: 1;
+            padding: 2px;
+            color: var(--sticky-text);
+            border-radius: 3px;
+        }
+
+        .ms-sticky-body {
+            padding: 8px 10px 6px;
+            flex: 1;
+            font-size: 12.5px;
+            line-height: 1.4;
+            color: var(--sticky-text);
+            outline: none;
+            word-break: break-word;
+            white-space: pre-wrap;
+            font-family: inherit;
+        }
+
+        .ms-sticky-toolbar {
+            display: flex;
+            align-items: center;
+            padding: 4px 6px 5px;
+            gap: 4px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            opacity: 0.85;
+        }
+
+        .format-btn {
+            background: transparent;
+            border: none;
+            color: var(--sticky-text);
+            font-size: 11.5px;
+            cursor: pointer;
+            padding: 2px 5px;
+            border-radius: 3px;
+            line-height: 1;
+            opacity: 0.65;
+            user-select: none;
+        }
+
+        .format-btn.bold { font-weight: 800; }
+        .format-btn.italic { font-style: italic; }
+        .format-btn.strike { text-decoration: line-through; }
+
+        .color-yellow { background-color: var(--sticky-yellow); }
+        .color-yellow .ms-sticky-topbar { background-color: var(--sticky-yellow-bar); }
+        .color-green { background-color: var(--sticky-green); }
+        .color-green .ms-sticky-topbar { background-color: var(--sticky-green-bar); }
+        .color-pink { background-color: var(--sticky-pink); }
+        .color-pink .ms-sticky-topbar { background-color: var(--sticky-pink-bar); }
+        .color-blue { background-color: var(--sticky-blue); }
+        .color-blue .ms-sticky-topbar { background-color: var(--sticky-blue-bar); }
+        .color-purple { background-color: var(--sticky-purple); }
+        .color-purple .ms-sticky-topbar { background-color: var(--sticky-purple-bar); }
+
+        /* To-Do Styles */
+        .todo-input-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .todo-input {
+            flex: 1;
+            background: var(--surface-card);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            padding: 10px 14px;
+            font-size: 13.5px;
+            font-family: inherit;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .todo-add-btn {
+            background: var(--primary);
+            color: #FFFFFF;
+            border: none;
+            border-radius: var(--radius-inner);
+            padding: 0 16px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .todo-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .todo-item {
+            background: var(--surface-card);
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+            box-shadow: var(--card-shadow);
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .todo-item-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .todo-checkbox {
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
+            border: 2px solid var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .todo-item.completed .todo-checkbox {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #FFFFFF;
+        }
+
+        .todo-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .todo-text {
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+            opacity: 0.45;
+        }
+
+        .todo-timestamp {
+            font-size: 9.5px;
+            color: var(--text-muted);
+        }
+
+        .todo-del-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 15px;
+            cursor: pointer;
+            padding: 3px;
+            opacity: 0.6;
+        }
+
+        /* Modal Sheets */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-sheet {
+            background: var(--surface-card);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 420px;
+            max-height: 85vh;
+            padding: 20px 18px 24px;
+            overflow-y: auto;
+            transform: scale(0.92);
+            transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            border: var(--card-border);
+            box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+        }
+
+        .modal-overlay.open .modal-sheet {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 16.5px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: var(--surface-subtle);
+            padding: 14px;
+            border-radius: var(--radius-inner);
+        }
+
+        .modal-input, .modal-select {
+            background: var(--surface-card);
+            border: var(--card-border);
+            border-radius: 8px;
+            padding: 9px 12px;
+            font-family: inherit;
+            font-size: 12.5px;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .modal-save-btn {
+            background: var(--primary);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .existing-links-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .existing-link-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 9px 12px;
+            background: var(--surface-subtle);
+            border-radius: 8px;
+            font-size: 12.5px;
+        }
+
+        .existing-link-name {
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        .existing-link-del {
+            background: transparent;
+            border: none;
+            color: #E53935;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Adhu Space */
+        .empty-placeholder {
+            background: var(--surface-card);
+            border-radius: var(--radius-outer);
+            border: 1.5px dashed rgba(130, 120, 116, 0.25);
+            padding: 60px 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 10px;
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
+    <div class="dashboard-container">
+        
+        <!-- Header -->
+        <header>
+            <div class="app-title">Little Chronicles</div>
+            
+            <div class="header-actions">
+                <button class="theme-toggle-btn" onclick="openDriveSettingsModal()" title="Drive Backup & Restore">
+                    ⚙️
+                </button>
 
-  <!-- TOP BAR & DATE -->
-  <div class="top-bar">
-    <input type="date" id="selectedDateInput" class="date-input" style="flex:1.2" onchange="onDateChange()" />
-    <button class="top-btn" onclick="openHistoryModal()">History</button>
-    <button class="top-btn" onclick="exportJSON()">Backup</button>
-    <button class="top-btn" onclick="document.getElementById('importFileInput').click()">Import</button>
-    <input type="file" id="importFileInput" accept=".json" style="display: none;" onchange="importJSON(event)" />
-  </div>
+                <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle Theme">
+                    <svg id="moonIcon" class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sunIcon" class="theme-icon" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
 
-  <!-- 1. LONG SLEEP (SUMMARY + MORNING WAKE) -->
-  <div class="tracker-row">
-    <div class="sleep-summary-box">
-      <div class="stat-grid">
-        <div>
-          <div class="stat-value" id="lastNightDisplay">--</div>
-          <div class="stat-sub">Last Night Sleep</div>
-        </div>
-        <div>
-          <div class="stat-value" id="yesterdayTotalDisplay">--</div>
-          <div class="stat-sub">Total (Night + Naps)</div>
-        </div>
-      </div>
-      <div class="input-grid">
-        <div>
-          <label class="field-label">Yesterday Bedtime</label>
-          <input type="time" id="yesterdayBedtime" onchange="onSleepInputsChange()" />
-        </div>
-        <div>
-          <label class="field-label">Yesterday Naps (min)</label>
-          <input type="number" id="yesterdayNapMins" placeholder="180" onchange="onSleepInputsChange()" />
-        </div>
-      </div>
-    </div>
-
-    <div class="wake-box">
-      <label class="field-label" style="margin-bottom:3px">Today's Morning Wake-up Time</label>
-      <div class="input-group">
-        <input type="time" id="todayWakeTime" onchange="onSleepInputsChange()" />
-        <button type="button" class="action-submit btn-nap" onclick="saveWakeTime()">Save</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- SINGLE UNIFIED INPUT WINDOW (NAP / FEED LOGS) -->
-  <div class="tracker-row unified-card">
-    <div class="type-switcher">
-      <button type="button" class="type-btn active nap-active" id="tabNap" onclick="switchLogType('nap')">💤 Log Nap</button>
-      <button type="button" class="type-btn" id="tabFeed" onclick="switchLogType('feed')">🍼 Log Feed</button>
-    </div>
-
-    <!-- Nap Form -->
-    <div id="napInputPanel">
-      <div class="input-group">
-        <input type="time" id="napStart" placeholder="Start" />
-        <input type="time" id="napEnd" placeholder="End" />
-        <button type="button" id="napActionBtn" class="action-submit btn-nap" onclick="saveNap()">Add Nap</button>
-        <button type="button" id="napCancelBtn" class="action-submit cancel-btn" style="display: none;" onclick="cancelNapEdit()">✕</button>
-      </div>
-    </div>
-
-    <!-- Feed Form -->
-    <div id="feedInputPanel" style="display: none;">
-      <div class="input-group">
-        <input type="time" id="feedTime" style="flex:1" />
-        <input type="number" id="feedMl" placeholder="ml" min="0" step="10" style="flex:1" />
-        <button type="button" id="feedActionBtn" class="action-submit btn-feed" onclick="saveFeed()">Add Feed</button>
-        <button type="button" id="feedCancelBtn" class="action-submit cancel-btn" style="display: none;" onclick="cancelFeedEdit()">✕</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 2. NAP TRACKING (CHRONOLOGICAL NAP TAGS & ANALYTICS) -->
-  <div class="tracker-row">
-    <div class="tag-container" id="napTagContainer"></div>
-
-    <div class="analytics-box">
-      <div class="progress-header">
-        <span>Naps: <b id="napDoneText">0h 0m</b> <span id="napMinStatus" class="status-badge pending">Min Pending</span></span>
-        <span style="color: var(--nap-color);" id="napPendingText">3h 30m Pending</span>
-      </div>
-      <div class="progress-bar-bg">
-        <div class="min-marker" style="left: 71.4%;"></div>
-        <div class="progress-bar-fill fill-nap" id="napProgressBar"></div>
-      </div>
-      <div class="target-note">
-        <span>Min: <b>2h 30m</b></span>
-        <span>Target Max: <b>3h 30m</b></span>
-      </div>
-    </div>
-  </div>
-
-  <!-- 3. FEEDING INTAKE (CHRONOLOGICAL FEED TAGS) -->
-  <div class="tracker-row">
-    <div class="tag-container" id="feedTagContainer"></div>
-
-    <div class="analytics-box">
-      <div class="progress-header">
-        <span>Intake: <b id="feedDoneText">0 ml</b> <span id="feedMinStatus" class="status-badge pending">Min Pending</span></span>
-        <span style="color: var(--feed-color);" id="feedPendingText">960 ml Pending</span>
-      </div>
-      <div class="progress-bar-bg">
-        <div class="min-marker" style="left: 75%;"></div>
-        <div class="progress-bar-fill fill-feed" id="feedProgressBar"></div>
-      </div>
-      <div class="target-note">
-        <span>Min: <b>720 ml</b></span>
-        <span>Target Max: <b>960 ml</b></span>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<!-- HISTORY MODAL -->
-<div class="modal-overlay" id="historyModal" onclick="if(event.target===this)closeHistoryModal()">
-  <div class="modal-card">
-    <div class="modal-header">
-      <span class="modal-title">History Logs</span>
-      <button class="btn-close" onclick="closeHistoryModal()">✕</button>
-    </div>
-    <div id="historyListContainer"></div>
-  </div>
-</div>
-
-<script>
-  const NAP_MIN_MINS = 150;
-  const NAP_MAX_MINS = 210;
-  const FEED_MIN_ML = 720;
-  const FEED_MAX_ML = 960;
-
-  var allData = JSON.parse(localStorage.getItem('babyTrackerAllData') || '{}');
-  var currentDate = getTodayDateString();
-  var editingNapIndex = -1;
-  var editingFeedIndex = -1;
-
-  function switchLogType(type) {
-    const tabNap = document.getElementById("tabNap");
-    const tabFeed = document.getElementById("tabFeed");
-    const napPanel = document.getElementById("napInputPanel");
-    const feedPanel = document.getElementById("feedInputPanel");
-
-    if (type === 'nap') {
-      tabNap.className = "type-btn active nap-active";
-      tabFeed.className = "type-btn";
-      napPanel.style.display = "block";
-      feedPanel.style.display = "none";
-    } else {
-      tabFeed.className = "type-btn active feed-active";
-      tabNap.className = "type-btn";
-      feedPanel.style.display = "block";
-      napPanel.style.display = "none";
-    }
-  }
-
-  function getTodayDateString() {
-    const d = new Date();
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-  function getPreviousDateString(dateStr) {
-    const [y, m, d] = dateStr.split('-').map(Number);
-    const date = new Date(y, m - 1, d);
-    date.setDate(date.getDate() - 1);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
-  function ensureDateRecord(dateKey) {
-    if (!allData[dateKey]) {
-      const prevDate = getPreviousDateString(dateKey);
-      let autoNapMins = 0;
-      if (allData[prevDate] && allData[prevDate].naps) {
-        autoNapMins = allData[prevDate].naps.reduce((acc, n) => acc + (n.dur || 0), 0);
-      }
-
-      allData[dateKey] = {
-        yesterdayBedtime: '22:30',
-        todayWakeTime: '08:45',
-        yesterdayNapMins: autoNapMins || 180,
-        naps: [],
-        feeds: []
-      };
-    }
-  }
-
-  function persistData() {
-    localStorage.setItem('babyTrackerAllData', JSON.stringify(allData));
-  }
-
-  function formatMins(m) {
-    const hrs = Math.floor(m / 60);
-    const mins = m % 60;
-    return hrs > 0 ? `${hrs}h ${mins}m` : `${mins}m`;
-  }
-
-  function sortEntriesByTime(dateKey) {
-    ensureDateRecord(dateKey);
-    if (allData[dateKey].naps) {
-      allData[dateKey].naps.sort((a, b) => (a.start || "").localeCompare(b.start || ""));
-    }
-    if (allData[dateKey].feeds) {
-      allData[dateKey].feeds.sort((a, b) => (a.time || "").localeCompare(b.time || ""));
-    }
-  }
-
-  function onDateChange() {
-    currentDate = document.getElementById("selectedDateInput").value;
-    if (!currentDate) currentDate = getTodayDateString();
-    cancelNapEdit();
-    cancelFeedEdit();
-    loadDateData(currentDate);
-  }
-
-  function loadDateData(dateKey) {
-    ensureDateRecord(dateKey);
-    sortEntriesByTime(dateKey);
-    const record = allData[dateKey];
-
-    document.getElementById("selectedDateInput").value = dateKey;
-    document.getElementById("yesterdayBedtime").value = record.yesterdayBedtime || '22:30';
-    document.getElementById("todayWakeTime").value = record.todayWakeTime || '08:45';
-    document.getElementById("yesterdayNapMins").value = record.yesterdayNapMins !== undefined ? record.yesterdayNapMins : 180;
-
-    calculateOvernightSleep();
-    renderNaps();
-    renderFeeds();
-  }
-
-  function calculateOvernightSleep() {
-    ensureDateRecord(currentDate);
-    const bedtime = document.getElementById("yesterdayBedtime").value;
-    const wake = document.getElementById("todayWakeTime").value;
-    const napMins = Number(document.getElementById("yesterdayNapMins").value) || 0;
-
-    if (bedtime && wake) {
-      const [bh, bm] = bedtime.split(":").map(Number);
-      const [wh, wm] = wake.split(":").map(Number);
-
-      let nightMins = (wh * 60 + wm) - (bh * 60 + bm);
-      if (nightMins < 0) nightMins += 1440;
-
-      const totalSleepMins = nightMins + napMins;
-
-      document.getElementById("lastNightDisplay").textContent = formatMins(nightMins);
-      document.getElementById("yesterdayTotalDisplay").textContent = formatMins(totalSleepMins);
-
-      allData[currentDate].yesterdayBedtime = bedtime;
-      allData[currentDate].todayWakeTime = wake;
-      allData[currentDate].yesterdayNapMins = napMins;
-      persistData();
-    } else {
-      document.getElementById("lastNightDisplay").textContent = "--";
-      document.getElementById("yesterdayTotalDisplay").textContent = "--";
-    }
-  }
-
-  function onSleepInputsChange() {
-    calculateOvernightSleep();
-  }
-
-  function saveWakeTime() {
-    calculateOvernightSleep();
-    alert("Saved: Wake time is " + document.getElementById("todayWakeTime").value);
-  }
-
-  window.saveNap = function() {
-    const start = document.getElementById("napStart").value;
-    const end = document.getElementById("napEnd").value;
-    if (!start || !end) return alert("Select both start and end time.");
-
-    const [sh, sm] = start.split(":").map(Number);
-    const [eh, em] = end.split(":").map(Number);
-    let dur = (eh * 60 + em) - (sh * 60 + sm);
-    if (dur < 0) dur += 1440;
-
-    ensureDateRecord(currentDate);
-
-    if (editingNapIndex > -1) {
-      allData[currentDate].naps[editingNapIndex] = { start, end, dur };
-      editingNapIndex = -1;
-      document.getElementById("napActionBtn").textContent = "Add Nap";
-      document.getElementById("napCancelBtn").style.display = "none";
-    } else {
-      allData[currentDate].naps.push({ start, end, dur });
-    }
-
-    sortEntriesByTime(currentDate);
-    persistData();
-    document.getElementById("napStart").value = "";
-    document.getElementById("napEnd").value = "";
-    renderNaps();
-  };
-
-  window.editNap = function(index) {
-    switchLogType('nap');
-    editingNapIndex = index;
-    const nap = allData[currentDate].naps[index];
-    document.getElementById("napStart").value = nap.start;
-    document.getElementById("napEnd").value = nap.end;
-    document.getElementById("napActionBtn").textContent = "Update";
-    document.getElementById("napCancelBtn").style.display = "inline-block";
-    document.getElementById("napStart").focus();
-  };
-
-  window.cancelNapEdit = function() {
-    editingNapIndex = -1;
-    document.getElementById("napStart").value = "";
-    document.getElementById("napEnd").value = "";
-    document.getElementById("napActionBtn").textContent = "Add Nap";
-    document.getElementById("napCancelBtn").style.display = "none";
-  };
-
-  window.deleteNap = function(index) {
-    const nap = allData[currentDate].naps[index];
-    if (confirm(`Are you sure you want to delete Nap (${nap.start}–${nap.end})?`)) {
-      allData[currentDate].naps.splice(index, 1);
-      if (editingNapIndex === index) cancelNapEdit();
-      else if (editingNapIndex > index) editingNapIndex--;
-      persistData();
-      renderNaps();
-    }
-  };
-
-  window.saveFeed = function() {
-    const time = document.getElementById("feedTime").value;
-    const ml = Number(document.getElementById("feedMl").value);
-    if (!time || !ml) return alert("Enter time and amount in ml.");
-
-    ensureDateRecord(currentDate);
-
-    if (editingFeedIndex > -1) {
-      allData[currentDate].feeds[editingFeedIndex] = { time, ml };
-      editingFeedIndex = -1;
-      document.getElementById("feedActionBtn").textContent = "Add Feed";
-      document.getElementById("feedCancelBtn").style.display = "none";
-    } else {
-      allData[currentDate].feeds.push({ time, ml });
-    }
-
-    sortEntriesByTime(currentDate);
-    persistData();
-    document.getElementById("feedTime").value = "";
-    document.getElementById("feedMl").value = "";
-    renderFeeds();
-  };
-
-  window.editFeed = function(index) {
-    switchLogType('feed');
-    editingFeedIndex = index;
-    const feed = allData[currentDate].feeds[index];
-    document.getElementById("feedTime").value = feed.time;
-    document.getElementById("feedMl").value = feed.ml;
-    document.getElementById("feedActionBtn").textContent = "Update";
-    document.getElementById("feedCancelBtn").style.display = "inline-block";
-    document.getElementById("feedTime").focus();
-  };
-
-  window.cancelFeedEdit = function() {
-    editingFeedIndex = -1;
-    document.getElementById("feedTime").value = "";
-    document.getElementById("feedMl").value = "";
-    document.getElementById("feedActionBtn").textContent = "Add Feed";
-    document.getElementById("feedCancelBtn").style.display = "none";
-  };
-
-  window.deleteFeed = function(index) {
-    const feed = allData[currentDate].feeds[index];
-    if (confirm(`Are you sure you want to delete Feed (${feed.time}, ${feed.ml}ml)?`)) {
-      allData[currentDate].feeds.splice(index, 1);
-      if (editingFeedIndex === index) cancelFeedEdit();
-      else if (editingFeedIndex > index) editingFeedIndex--;
-      persistData();
-      renderFeeds();
-    }
-  };
-
-  function renderNaps() {
-    ensureDateRecord(currentDate);
-    const naps = allData[currentDate].naps || [];
-    const totalDone = naps.reduce((acc, n) => acc + n.dur, 0);
-    const pending = Math.max(0, NAP_MAX_MINS - totalDone);
-    const pct = Math.min(100, (totalDone / NAP_MAX_MINS) * 100);
-
-    document.getElementById("napDoneText").textContent = formatMins(totalDone);
-    document.getElementById("napPendingText").textContent = pending === 0 ? "Target Met" : `${formatMins(pending)} Pending`;
-    document.getElementById("napProgressBar").style.width = pct + "%";
-
-    const minBadge = document.getElementById("napMinStatus");
-    if (totalDone >= NAP_MIN_MINS) {
-      minBadge.textContent = "Min Met";
-      minBadge.className = "status-badge met";
-    } else {
-      minBadge.textContent = "Min Pending";
-      minBadge.className = "status-badge pending";
-    }
-
-    const container = document.getElementById("napTagContainer");
-    container.innerHTML = "";
-    
-    naps.forEach((n, i) => {
-      const tag = document.createElement("div");
-      tag.className = "entry-tag tag-nap";
-
-      tag.innerHTML = `
-        <span>💤 N${i+1}: ${n.start}–${n.end} (<b>${formatMins(n.dur)}</b>)</span>
-        <div class="tag-actions">
-          <button type="button" class="mini-btn mini-edit" onclick="window.editNap(${i})">Edit</button>
-          <button type="button" class="mini-btn mini-del" onclick="window.deleteNap(${i})">Del</button>
-        </div>
-      `;
-      container.appendChild(tag);
-    });
-  }
-
-  function renderFeeds() {
-    ensureDateRecord(currentDate);
-    const feeds = allData[currentDate].feeds || [];
-    const totalDone = feeds.reduce((acc, f) => acc + f.ml, 0);
-    const pending = Math.max(0, FEED_MAX_ML - totalDone);
-    const pct = Math.min(100, (totalDone / FEED_MAX_ML) * 100);
-
-    document.getElementById("feedDoneText").textContent = `${totalDone} ml`;
-    document.getElementById("feedPendingText").textContent = pending === 0 ? "Target Met" : `${pending} ml Pending`;
-    document.getElementById("feedProgressBar").style.width = pct + "%";
-
-    const minBadge = document.getElementById("feedMinStatus");
-    if (totalDone >= FEED_MIN_ML) {
-      minBadge.textContent = "Min Met";
-      minBadge.className = "status-badge met";
-    } else {
-      minBadge.textContent = "Min Pending";
-      minBadge.className = "status-badge pending";
-    }
-
-    const container = document.getElementById("feedTagContainer");
-    container.innerHTML = "";
-    
-    feeds.forEach((f, i) => {
-      const tag = document.createElement("div");
-      tag.className = "entry-tag tag-feed";
-
-      tag.innerHTML = `
-        <span>🍼 F${i+1}: ${f.time} — <b>${f.ml}ml</b></span>
-        <div class="tag-actions">
-          <button type="button" class="mini-btn mini-edit" onclick="window.editFeed(${i})">Edit</button>
-          <button type="button" class="mini-btn mini-del" onclick="window.deleteFeed(${i})">Del</button>
-        </div>
-      `;
-      container.appendChild(tag);
-    });
-  }
-
-  function openHistoryModal() {
-    const container = document.getElementById("historyListContainer");
-    const dates = Object.keys(allData).sort().reverse();
-    
-    if (dates.length === 0) {
-      container.innerHTML = "<div style='color:var(--muted);font-size:11px;text-align:center;padding:10px;'>No history saved yet.</div>";
-    } else {
-      container.innerHTML = dates.map(d => {
-        const item = allData[d];
-        const napTotal = (item.naps || []).reduce((acc, n) => acc + (n.dur || 0), 0);
-        const feedTotal = (item.feeds || []).reduce((acc, f) => acc + (f.ml || 0), 0);
-        return `
-          <div class="history-entry" onclick="selectDateFromHistory('${d}')">
-            <div class="history-date">
-              <span>${d}</span>
-              <span style="font-size:10px;color:var(--nap-color);font-weight:700">Open ➔</span>
+                <div class="profile-switcher" id="profileSwitcher">
+                    <button class="switch-btn active" onclick="switchProfile(this, 'kee')">Kee</button>
+                    <button class="switch-btn" onclick="switchProfile(this, 'adhu')">Adhu</button>
+                </div>
             </div>
-            <div class="history-details">
-              <span>Naps: <b>${formatMins(napTotal)}</b></span>
-              <span>Feed: <b>${feedTotal} ml</b></span>
+        </header>
+
+        <!-- KEE DASHBOARD (COMPACT 2-COLUMN GRID) -->
+        <main id="view-kee" class="view-content active-view">
+            <div class="bento-grid">
+
+                <!-- 1. eBooks Tile -->
+                <div class="compact-card" onclick="openResourceDrawer('ebooks')">
+                    <div class="card-top">
+                        <div class="icon-badge">🌐</div>
+                        <div class="card-arrow">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </div>
+                    <div class="card-bottom">
+                        <h3 class="card-heading">eBooks Vault</h3>
+                        <p class="card-subtitle" id="ebookCount">5 resources</p>
+                    </div>
+                </div>
+
+                <!-- 2. Audiobook Tile -->
+                <div class="compact-card" onclick="openResourceDrawer('audiobooks')">
+                    <div class="card-top">
+                        <div class="icon-badge">🎧</div>
+                        <div class="card-arrow">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </div>
+                    <div class="card-bottom">
+                        <h3 class="card-heading">Audiobook Stash</h3>
+                        <p class="card-subtitle" id="audioCount">5 resources</p>
+                    </div>
+                </div>
+
+                <!-- 3. Tools & Converters Tile -->
+                <div class="compact-card" onclick="openResourceDrawer('tools')">
+                    <div class="card-top">
+                        <div class="icon-badge">
+                            <img src="epub2pdf.png" onerror="this.onerror=null; this.parentElement.innerHTML='⚡';" alt="Tools">
+                        </div>
+                        <div class="card-arrow">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </div>
+                    <div class="card-bottom">
+                        <h3 class="card-heading">Tools & Converters</h3>
+                        <p class="card-subtitle" id="toolsCount">4 tools</p>
+                    </div>
+                </div>
+
+                <!-- 4. Notes & Tasks Tile -->
+                <div class="compact-card" onclick="openNotesView()">
+                    <div class="card-top">
+                        <div class="icon-badge">📝</div>
+                        <div class="card-arrow">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </div>
+                    <div class="card-bottom">
+                        <h3 class="card-heading">Notes & Tasks</h3>
+                        <p class="card-subtitle" id="notesCount">Sticky notes & to-do</p>
+                    </div>
+                </div>
+
             </div>
-          </div>
-        `;
-      }).join("");
-    }
-    document.getElementById("historyModal").classList.add("show");
-  }
+        </main>
 
-  function selectDateFromHistory(dateStr) {
-    closeHistoryModal();
-    loadDateData(dateStr);
-  }
+        <!-- IN-APP PDF VIEWER VIEW -->
+        <main id="view-pdf" class="view-content">
+            <div class="pdf-view-header">
+                <button class="back-nav-btn" onclick="closePdfView()">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    Dashboard
+                </button>
+                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">PDF Viewer</div>
+            </div>
 
-  function closeHistoryModal() {
-    document.getElementById("historyModal").classList.remove("show");
-  }
+            <div class="pdf-controls-bar">
+                <input type="file" id="pdfFileInput" accept="application/pdf" style="display:none;" onchange="loadPdfFromFile(this)">
+                <button class="pdf-action-btn primary" onclick="document.getElementById('pdfFileInput').click()">
+                    📁 Open from Drive / Device
+                </button>
+                <a href="https://drive.google.com" target="_blank" rel="noopener noreferrer" class="pdf-action-btn">
+                    ☁️ Google Drive ↗
+                </a>
+            </div>
 
-  function exportJSON() {
-    const blob = new Blob([JSON.stringify(allData, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `baby_tracker_backup_${getTodayDateString()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
+            <div class="pdf-viewer-frame">
+                <iframe id="pdfFrame" src="about:blank" style="display:none;"></iframe>
+                <div class="pdf-placeholder-msg" id="pdfPlaceholder">
+                    Select a PDF from your Google Drive or phone storage to view it here.
+                </div>
+            </div>
+        </main>
 
-  function importJSON(event) {
-    const file = event.target.files[0];
-    if (!file) return;
+        <!-- NOTES & TO-DO VIEW -->
+        <main id="view-notes" class="view-content">
+            <div class="notes-view-header">
+                <button class="back-nav-btn" onclick="closeNotesView()">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    Dashboard
+                </button>
+                <button class="add-note-btn" id="hubActionBtn" onclick="handleHubAction()">
+                    <span>+</span> New Note
+                </button>
+            </div>
 
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      try {
-        const data = JSON.parse(e.target.result);
-        if (typeof data === 'object' && data !== null) {
-          allData = data;
-          persistData();
-          loadDateData(currentDate);
-          alert("Backup imported!");
+            <div class="hub-tabs">
+                <button class="hub-tab-btn active" id="tabNotesBtn" onclick="switchHubTab('notes')">
+                    📝 Sticky Notes
+                </button>
+                <button class="hub-tab-btn" id="tabTodoBtn" onclick="switchHubTab('todo')">
+                    ✅ To-Do List
+                </button>
+            </div>
+
+            <div id="panelNotes">
+                <div class="sticky-grid" id="stickyNotesContainer"></div>
+            </div>
+
+            <div id="panelTodo" style="display: none;">
+                <div class="todo-input-bar">
+                    <input type="text" id="todoInput" class="todo-input" placeholder="Add a new task..." onkeypress="if(event.key==='Enter') addTodoItem()">
+                    <button class="todo-add-btn" onclick="addTodoItem()">Add</button>
+                </div>
+                <div class="todo-list" id="todoContainer"></div>
+            </div>
+        </main>
+
+        <!-- ADHU VIEW -->
+        <main id="view-adhu" class="view-content">
+            <div class="empty-placeholder">
+                <div style="font-size: 26px;">🌱</div>
+                <h3 style="font-size: 15px; font-weight: 700;">Adhu's Space</h3>
+                <p style="font-size: 12px; color: var(--text-muted); max-width: 200px;">Nothing added here yet.</p>
+            </div>
+        </main>
+
+    </div>
+
+    <!-- CENTERED POPUP MODAL FOR CATEGORY RESOURCES -->
+    <div class="drawer-overlay" id="resourceDrawer" onclick="closeResourceDrawer(event)">
+        <div class="drawer-sheet" onclick="event.stopPropagation()">
+            <div class="drawer-header">
+                <div class="drawer-title-group">
+                    <span id="drawerIcon" style="font-size: 20px;">🌐</span>
+                    <h3 class="drawer-title" id="drawerTitle">eBooks Vault</h3>
+                </div>
+                <button class="drawer-close-btn" onclick="closeResourceDrawer()">✕</button>
+            </div>
+
+            <div class="drawer-links-wrap" id="drawerLinksContainer"></div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD / MANAGE USER LINKS -->
+    <div class="modal-overlay" id="linkModal" onclick="closeLinkModal(event)">
+        <div class="modal-sheet" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title">Manage Links</h3>
+                <button class="drawer-close-btn" onclick="closeLinkModal()">✕</button>
+            </div>
+
+            <div class="modal-form">
+                <select id="modalCategory" class="modal-select">
+                    <option value="ebooks">eBooks Vault (🌐)</option>
+                    <option value="audiobooks">Audiobook Stash (🎧)</option>
+                    <option value="tools">Tools & Converters (⚡)</option>
+                </select>
+                <input type="text" id="modalLinkName" class="modal-input" placeholder="Site Name (e.g. YouTube to MP3)">
+                <input type="url" id="modalLinkUrl" class="modal-input" placeholder="URL (https://...)">
+                <button class="modal-save-btn" onclick="saveNewUserLink()">+ Add Resource</button>
+            </div>
+
+            <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+                Current Links (Tap ✕ to remove)
+            </div>
+            <div class="existing-links-list" id="modalExistingLinks"></div>
+        </div>
+    </div>
+
+    <!-- MODAL: DIRECT GOOGLE DRIVE BACKUP & RESTORE -->
+    <div class="modal-overlay" id="driveModal" onclick="closeDriveSettingsModal(event)">
+        <div class="modal-sheet" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title">Google Drive Backup</h3>
+                <button class="drawer-close-btn" onclick="closeDriveSettingsModal()">✕</button>
+            </div>
+
+            <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.45; margin: 0;">
+                Export your notes, to-dos, and links directly to Google Drive. Tap below and choose <strong>Google Drive</strong> from the save sheet.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
+                <button class="modal-save-btn" style="background:#2E7D32;" onclick="saveDirectToGoogleDrive()">
+                    ☁️ Upload / Save to Google Drive
+                </button>
+
+                <input type="file" id="restoreFileInput" accept=".json,application/json" style="display:none;" onchange="handleRestoreFile(this)">
+                
+                <button class="modal-save-btn" style="background:var(--surface-subtle); color:var(--text-main); border:var(--card-border);" onclick="document.getElementById('restoreFileInput').click()">
+                    📥 Restore from Drive / Device
+                </button>
+            </div>
+
+            <div id="syncStatus" style="font-size: 12px; text-align: center; color: var(--text-muted); font-weight: 600; min-height: 16px;"></div>
+        </div>
+    </div>
+
+    <script>
+        function switchProfile(button, profileKey) {
+            document.querySelectorAll('.switch-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active-view'));
+            const targetView = document.getElementById('view-' + profileKey);
+            if (targetView) targetView.classList.add('active-view');
         }
-      } catch (err) {
-        alert("Invalid file format.");
-      }
-    };
-    reader.readAsText(file);
-  }
 
-  const now = new Date();
-  document.getElementById("feedTime").value = String(now.getHours()).padStart(2, '0') + ":" + String(now.getMinutes()).padStart(2, '0');
-  loadDateData(currentDate);
-</script>
+        function openNotesView() {
+            document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active-view'));
+            document.getElementById('view-notes').classList.add('active-view');
+            document.getElementById('profileSwitcher').style.visibility = 'hidden';
+            renderStickyNotes();
+            renderTodoList();
+        }
 
+        function closeNotesView() {
+            document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active-view'));
+            document.getElementById('view-kee').classList.add('active-view');
+            document.getElementById('profileSwitcher').style.visibility = 'visible';
+            updateDashboardCounts();
+        }
+
+        function openPdfView() {
+            closeResourceDrawer();
+            document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active-view'));
+            document.getElementById('view-pdf').classList.add('active-view');
+            document.getElementById('profileSwitcher').style.visibility = 'hidden';
+        }
+
+        function closePdfView() {
+            document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active-view'));
+            document.getElementById('view-kee').classList.add('active-view');
+            document.getElementById('profileSwitcher').style.visibility = 'visible';
+        }
+
+        function loadPdfFromFile(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const fileUrl = URL.createObjectURL(file);
+                const frame = document.getElementById('pdfFrame');
+                const placeholder = document.getElementById('pdfPlaceholder');
+
+                frame.src = fileUrl;
+                frame.style.display = 'block';
+                placeholder.style.display = 'none';
+            }
+        }
+
+        // ----------------------------------------------------
+        // RESOURCES DATA & MODAL LOGIC
+        // ----------------------------------------------------
+        const defaultEbooks = [
+            { id: '1', name: 'FMHY Reading', url: 'https://fmhy.net/reading' },
+            { id: '2', name: 'Open Culture', url: 'https://www.openculture.com/free_ebooks' },
+            { id: '3', name: 'Lit2Go', url: 'https://etc.usf.edu/lit2go/' },
+            { id: '4', name: 'ZipComic', url: 'https://www.zipcomic.com/' },
+            { id: '5', name: 'Loyal Books', url: 'https://www.loyalbooks.com/' }
+        ];
+
+        const defaultAudiobooks = [
+            { id: 'a1', name: 'FMHY Audiobooks', url: 'https://fmhy.net/readingpiracyguide#audiobooks' },
+            { id: 'a2', name: '99Audiobooks', url: 'https://99audiobooks.com/' },
+            { id: 'a3', name: 'FindAudiobook', url: 'https://findaudiobook.com/' },
+            { id: 'a4', name: 'Open Culture', url: 'https://www.openculture.com/freeaudiobooks' },
+            { id: 'a5', name: 'Free Classic', url: 'https://freeclassicaudiobooks.com/' }
+        ];
+
+        const defaultTools = [
+            { id: 't0', name: '📖 PDF Reader', action: 'openPdfView' },
+            { id: 't1', name: 'ePub → PDF', url: 'https://cloudconvert.com/epub-to-pdf' },
+            { id: 't2', name: 'Reel Downloader', url: 'https://fastdl.app/en5IW' },
+            { id: 't3', name: 'YouTube to MP3', url: 'https://y2mate.gs/' }
+        ];
+
+        let userEbooks = defaultEbooks;
+        let userAudiobooks = defaultAudiobooks;
+        let userTools = defaultTools;
+
+        try {
+            const se = localStorage.getItem('lc_user_ebooks');
+            if (se) userEbooks = JSON.parse(se);
+            const sa = localStorage.getItem('lc_user_audiobooks');
+            if (sa) userAudiobooks = JSON.parse(sa);
+            const st = localStorage.getItem('lc_user_tools');
+            if (st) userTools = JSON.parse(st);
+        } catch (e) {
+            console.error(e);
+        }
+
+        function saveLinksToStorage() {
+            try {
+                localStorage.setItem('lc_user_ebooks', JSON.stringify(userEbooks));
+                localStorage.setItem('lc_user_audiobooks', JSON.stringify(userAudiobooks));
+                localStorage.setItem('lc_user_tools', JSON.stringify(userTools));
+            } catch (e) {
+                console.error(e);
+            }
+            updateDashboardCounts();
+        }
+
+        function updateDashboardCounts() {
+            const eb = document.getElementById('ebookCount');
+            if (eb) eb.innerText = userEbooks.length + ' resources';
+            const au = document.getElementById('audioCount');
+            if (au) au.innerText = userAudiobooks.length + ' resources';
+            const to = document.getElementById('toolsCount');
+            if (to) to.innerText = userTools.length + ' tools';
+        }
+
+        let currentActiveCategory = 'ebooks';
+
+        function openResourceDrawer(category) {
+            currentActiveCategory = category;
+            const drawer = document.getElementById('resourceDrawer');
+            const title = document.getElementById('drawerTitle');
+            const icon = document.getElementById('drawerIcon');
+            const container = document.getElementById('drawerLinksContainer');
+
+            container.innerHTML = '';
+            let linksList = [];
+
+            if (category === 'ebooks') {
+                title.innerText = 'eBooks Vault';
+                icon.innerText = '🌐';
+                linksList = userEbooks;
+            } else if (category === 'audiobooks') {
+                title.innerText = 'Audiobook Stash';
+                icon.innerText = '🎧';
+                linksList = userAudiobooks;
+            } else {
+                title.innerText = 'Tools & Converters';
+                icon.innerText = '⚡';
+                linksList = userTools;
+            }
+
+            linksList.forEach(link => {
+                if (link.action === 'openPdfView') {
+                    const btn = document.createElement('div');
+                    btn.className = 'resource-pill';
+                    btn.innerHTML = link.name;
+                    btn.onclick = openPdfView;
+                    container.appendChild(btn);
+                } else {
+                    const a = document.createElement('a');
+                    a.href = link.url;
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    a.className = 'resource-pill';
+                    a.innerHTML = link.name + ' <span class="arrow-up-right">↗</span>';
+                    container.appendChild(a);
+                }
+            });
+
+            const addBtn = document.createElement('button');
+            addBtn.className = 'manage-pill-btn';
+            addBtn.innerHTML = '<span>+</span> Add / Manage';
+            addBtn.onclick = () => {
+                closeResourceDrawer();
+                openLinkModal(category);
+            };
+            container.appendChild(addBtn);
+
+            drawer.classList.add('open');
+        }
+
+        function closeResourceDrawer(e) {
+            if (!e || e.target.id === 'resourceDrawer' || e.target.classList.contains('drawer-close-btn')) {
+                document.getElementById('resourceDrawer').classList.remove('open');
+            }
+        }
+
+        function openLinkModal(preselectCategory) {
+            document.getElementById('modalCategory').value = preselectCategory || 'ebooks';
+            document.getElementById('modalLinkName').value = '';
+            document.getElementById('modalLinkUrl').value = '';
+            document.getElementById('linkModal').classList.add('open');
+            renderExistingModalLinks();
+        }
+
+        function closeLinkModal(e) {
+            if (!e || e.target.id === 'linkModal' || e.target.classList.contains('drawer-close-btn')) {
+                document.getElementById('linkModal').classList.remove('open');
+                openResourceDrawer(currentActiveCategory);
+            }
+        }
+
+        function renderExistingModalLinks() {
+            const container = document.getElementById('modalExistingLinks');
+            container.innerHTML = '';
+
+            const allLinks = [
+                ...userEbooks.map(l => ({ ...l, type: 'eBook' })),
+                ...userAudiobooks.map(l => ({ ...l, type: 'Audio' })),
+                ...userTools.filter(l => !l.action).map(l => ({ ...l, type: 'Tool' }))
+            ];
+
+            allLinks.forEach(link => {
+                const row = document.createElement('div');
+                row.className = 'existing-link-row';
+                row.innerHTML = `
+                    <span class="existing-link-name">
+                        <small style="opacity:0.6;font-size:10px;">[${link.type}]</small> 
+                        ${link.name}
+                    </span>
+                    <button class="existing-link-del" onclick="deleteUserLink('${link.id}', '${link.type}')">✕</button>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function saveNewUserLink() {
+            const cat = document.getElementById('modalCategory').value;
+            const name = document.getElementById('modalLinkName').value.trim();
+            let url = document.getElementById('modalLinkUrl').value.trim();
+
+            if (!name || !url) {
+                alert('Please enter both a name and a link URL.');
+                return;
+            }
+
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+
+            const newLink = { id: Date.now().toString(), name, url };
+
+            if (cat === 'ebooks') userEbooks.push(newLink);
+            else if (cat === 'audiobooks') userAudiobooks.push(newLink);
+            else userTools.push(newLink);
+
+            saveLinksToStorage();
+            renderExistingModalLinks();
+
+            document.getElementById('modalLinkName').value = '';
+            document.getElementById('modalLinkUrl').value = '';
+        }
+
+        function deleteUserLink(id, type) {
+            if (type === 'eBook') userEbooks = userEbooks.filter(l => l.id !== id);
+            else if (type === 'Audio') userAudiobooks = userAudiobooks.filter(l => l.id !== id);
+            else userTools = userTools.filter(l => l.id !== id);
+
+            saveLinksToStorage();
+            renderExistingModalLinks();
+        }
+
+        // ----------------------------------------------------
+        // HUB TAB SWITCHER (STICKY NOTES VS TO-DO)
+        // ----------------------------------------------------
+        let currentHubTab = 'notes';
+
+        function switchHubTab(tab) {
+            currentHubTab = tab;
+            const tabNotesBtn = document.getElementById('tabNotesBtn');
+            const tabTodoBtn = document.getElementById('tabTodoBtn');
+            const panelNotes = document.getElementById('panelNotes');
+            const panelTodo = document.getElementById('panelTodo');
+            const hubActionBtn = document.getElementById('hubActionBtn');
+
+            if (tab === 'notes') {
+                tabNotesBtn.classList.add('active');
+                tabTodoBtn.classList.remove('active');
+                panelNotes.style.display = 'block';
+                panelTodo.style.display = 'none';
+                hubActionBtn.innerHTML = '<span>+</span> New Note';
+                renderStickyNotes();
+            } else {
+                tabTodoBtn.classList.add('active');
+                tabNotesBtn.classList.remove('active');
+                panelNotes.style.display = 'none';
+                panelTodo.style.display = 'block';
+                hubActionBtn.innerHTML = '<span>+</span> Focus Input';
+                renderTodoList();
+            }
+        }
+
+        function handleHubAction() {
+            if (currentHubTab === 'notes') addNewStickyNote();
+            else document.getElementById('todoInput').focus();
+        }
+
+        // ----------------------------------------------------
+        // STICKY NOTES LOGIC
+        // ----------------------------------------------------
+        const NOTE_COLORS = ['yellow', 'green', 'pink', 'blue', 'purple'];
+
+        function getFormattedTimestamp() {
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            return dateStr + ', ' + timeStr;
+        }
+
+        let stickyNotes = [
+            {
+                id: '1',
+                text: 'Curate new sensory board ideas and touch-and-feel book list.',
+                color: 'yellow',
+                timestamp: 'Sep 26, 10:30 AM'
+            }
+        ];
+
+        try {
+            const sn = localStorage.getItem('lc_sticky_notes');
+            if (sn) stickyNotes = JSON.parse(sn);
+        } catch (e) {
+            console.error(e);
+        }
+
+        function saveStickyNotes() {
+            try {
+                localStorage.setItem('lc_sticky_notes', JSON.stringify(stickyNotes));
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function formatDoc(command) {
+            document.execCommand(command, false, null);
+        }
+
+        function renderStickyNotes() {
+            const container = document.getElementById('stickyNotesContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (stickyNotes.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: span 2; text-align: center; color: var(--text-muted); padding: 30px 0; font-size: 12.5px;">
+                        No sticky notes yet. Click <strong>+ New Note</strong>!
+                    </div>
+                `;
+                return;
+            }
+
+            stickyNotes.forEach(note => {
+                const noteEl = document.createElement('div');
+                noteEl.className = 'ms-sticky-note color-' + note.color;
+                noteEl.innerHTML = `
+                    <div class="ms-sticky-topbar">
+                        <span class="note-time-stamp">${note.timestamp || ''}</span>
+                        <div class="note-actions">
+                            <button class="note-btn" title="Color" onclick="cycleColor('${note.id}')">🎨</button>
+                            <button class="note-btn" title="Delete" onclick="deleteStickyNote('${note.id}')">✕</button>
+                        </div>
+                    </div>
+                    <div class="ms-sticky-body" id="note-body-${note.id}" contenteditable="true" oninput="updateNoteText('${note.id}', this)">${note.text}</div>
+                    <div class="ms-sticky-toolbar">
+                        <button class="format-btn bold" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('bold');">B</button>
+                        <button class="format-btn italic" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('italic');">I</button>
+                        <button class="format-btn strike" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('strikeThrough');">S</button>
+                    </div>
+                `;
+                container.appendChild(noteEl);
+            });
+        }
+
+        function addNewStickyNote() {
+            const randomColor = NOTE_COLORS[Math.floor(Math.random() * NOTE_COLORS.length)];
+            const newNote = {
+                id: Date.now().toString(),
+                text: '',
+                color: randomColor,
+                timestamp: getFormattedTimestamp()
+            };
+
+            stickyNotes.unshift(newNote);
+            saveStickyNotes();
+            renderStickyNotes();
+
+            setTimeout(() => {
+                const firstNoteBody = document.querySelector('.ms-sticky-body');
+                if (firstNoteBody) firstNoteBody.focus();
+            }, 50);
+        }
+
+        function updateNoteText(id, element) {
+            const note = stickyNotes.find(n => n.id === id);
+            if (note) {
+                note.text = element.innerHTML;
+                saveStickyNotes();
+            }
+        }
+
+        function cycleColor(id) {
+            const note = stickyNotes.find(n => n.id === id);
+            if (note) {
+                const currentIndex = NOTE_COLORS.indexOf(note.color);
+                note.color = NOTE_COLORS[(currentIndex + 1) % NOTE_COLORS.length];
+                saveStickyNotes();
+                renderStickyNotes();
+            }
+        }
+
+        function deleteStickyNote(id) {
+            stickyNotes = stickyNotes.filter(n => n.id !== id);
+            saveStickyNotes();
+            renderStickyNotes();
+        }
+
+        // ----------------------------------------------------
+        // TO-DO LOGIC
+        // ----------------------------------------------------
+        let todoList = [
+            { id: '1', text: 'Inspect pre-loved board books condition', completed: false, timestamp: 'Sep 26, 01:40 AM' }
+        ];
+
+        try {
+            const td = localStorage.getItem('lc_todo_list');
+            if (td) todoList = JSON.parse(td);
+        } catch (e) {
+            console.error(e);
+        }
+
+        function saveTodoList() {
+            try {
+                localStorage.setItem('lc_todo_list', JSON.stringify(todoList));
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function renderTodoList() {
+            const container = document.getElementById('todoContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (todoList.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; color: var(--text-muted); padding: 30px 0; font-size: 12.5px;">
+                        All clear! Type a task above to add it.
+                    </div>
+                `;
+                return;
+            }
+
+            todoList.forEach(item => {
+                const itemEl = document.createElement('div');
+                itemEl.className = 'todo-item ' + (item.completed ? 'completed' : '');
+                itemEl.innerHTML = `
+                    <div class="todo-item-left" onclick="toggleTodoItem('${item.id}')">
+                        <div class="todo-checkbox">${item.completed ? '✓' : ''}</div>
+                        <div class="todo-content">
+                            <span class="todo-text">${item.text}</span>
+                            <span class="todo-timestamp">${item.timestamp || ''}</span>
+                        </div>
+                    </div>
+                    <button class="todo-del-btn" onclick="deleteTodoItem('${item.id}')">✕</button>
+                `;
+                container.appendChild(itemEl);
+            });
+        }
+
+        function addTodoItem() {
+            const input = document.getElementById('todoInput');
+            const val = input.value.trim();
+            if (!val) return;
+
+            todoList.unshift({
+                id: Date.now().toString(),
+                text: val,
+                completed: false,
+                timestamp: getFormattedTimestamp()
+            });
+
+            saveTodoList();
+            renderTodoList();
+            input.value = '';
+        }
+
+        function toggleTodoItem(id) {
+            const item = todoList.find(t => t.id === id);
+            if (item) {
+                item.completed = !item.completed;
+                saveTodoList();
+                renderTodoList();
+            }
+        }
+
+        function deleteTodoItem(id) {
+            todoList = todoList.filter(t => t.id !== id);
+            saveTodoList();
+            renderTodoList();
+        }
+
+        // ----------------------------------------------------
+        // DIRECT GOOGLE DRIVE BACKUP & RESTORE
+        // ----------------------------------------------------
+        function openDriveSettingsModal() {
+            document.getElementById('syncStatus').innerText = '';
+            document.getElementById('driveModal').classList.add('open');
+        }
+
+        function closeDriveSettingsModal(e) {
+            if (!e || e.target.id === 'driveModal' || e.target.classList.contains('drawer-close-btn')) {
+                document.getElementById('driveModal').classList.remove('open');
+            }
+        }
+
+        function getFullPayload() {
+            return {
+                app: 'Little Chronicles',
+                lastUpdated: new Date().toISOString(),
+                stickyNotes: stickyNotes,
+                todoList: todoList,
+                userEbooks: userEbooks,
+                userAudiobooks: userAudiobooks,
+                userTools: userTools
+            };
+        }
+
+        async function saveDirectToGoogleDrive() {
+            const payload = getFullPayload();
+            const jsonString = JSON.stringify(payload, null, 2);
+            const statusEl = document.getElementById('syncStatus');
+            const fileName = 'little-chronicles-backup.json';
+
+            try {
+                const file = new File([jsonString], fileName, { type: 'application/json' });
+
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    await navigator.share({
+                        title: 'Little Chronicles Backup',
+                        text: 'Save directly to your Google Drive',
+                        files: [file]
+                    });
+                    statusEl.innerText = '✓ Shared to Drive successfully!';
+                    statusEl.style.color = '#2E7D32';
+                    return;
+                }
+            } catch (err) {
+                if (err.name === 'AbortError') return;
+                console.warn('Share API failed, falling back to download:', err);
+            }
+
+            // Fallback for browsers that do not support navigator.share with files
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const dlAnchor = document.createElement('a');
+            dlAnchor.href = url;
+            dlAnchor.download = fileName;
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            document.body.removeChild(dlAnchor);
+            URL.revokeObjectURL(url);
+
+            statusEl.innerText = '✓ Backup created! Check Downloads or save prompt.';
+            statusEl.style.color = '#2E7D32';
+        }
+
+        function handleRestoreFile(input) {
+            const file = input.files[0];
+            const statusEl = document.getElementById('syncStatus');
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.stickyNotes) {
+                        stickyNotes = data.stickyNotes;
+                        saveStickyNotes();
+                    }
+                    if (data.todoList) {
+                        todoList = data.todoList;
+                        saveTodoList();
+                    }
+                    if (data.userEbooks) userEbooks = data.userEbooks;
+                    if (data.userAudiobooks) userAudiobooks = data.userAudiobooks;
+                    if (data.userTools) userTools = data.userTools;
+                    saveLinksToStorage();
+
+                    statusEl.innerText = '✓ Data restored successfully!';
+                    statusEl.style.color = '#2E7D32';
+
+                    updateDashboardCounts();
+                    renderStickyNotes();
+                    renderTodoList();
+                } catch (err) {
+                    statusEl.innerText = 'Error: Invalid backup file format.';
+                    statusEl.style.color = '#E53935';
+                }
+            };
+            reader.readAsText(file);
+            input.value = '';
+        }
+
+        // ----------------------------------------------------
+        // THEME TOGGLE
+        // ----------------------------------------------------
+        const moonIcon = document.getElementById('moonIcon');
+        const sunIcon = document.getElementById('sunIcon');
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            try {
+                localStorage.setItem('lc_theme', theme);
+            } catch (e) {}
+            if (theme === 'dark') {
+                if (moonIcon) moonIcon.style.display = 'none';
+                if (sunIcon) sunIcon.style.display = 'block';
+            } else {
+                if (moonIcon) moonIcon.style.display = 'block';
+                if (sunIcon) sunIcon.style.display = 'none';
+            }
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const savedTheme = localStorage.getItem('lc_theme');
+                if (savedTheme) {
+                    setTheme(savedTheme);
+                } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    setTheme('dark');
+                } else {
+                    setTheme('light');
+                }
+            } catch (e) {
+                setTheme('light');
+            }
+            updateDashboardCounts();
+        });
+    </script>
 </body>
 </html>
