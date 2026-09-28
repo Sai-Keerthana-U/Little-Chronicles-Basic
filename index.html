@@ -903,7 +903,7 @@
             </div>
         </header>
 
-        <!-- KEE DASHBOARD (COMPACT 2-COLUMN GRID) -->
+        <!-- KEE DASHBOARD -->
         <main id="view-kee" class="view-content active-view">
             <div class="bento-grid">
 
@@ -951,8 +951,8 @@
                     </div>
                 </div>
 
-                <!-- 4. Notes & Tasks Tile -->
-                <div class="compact-card" onclick="openNotesView()">
+                <!-- 4. Sticky Notes Tile (NEW DEDICATED) -->
+                <div class="compact-card" onclick="openSpecificNotesView('notes')">
                     <div class="card-top">
                         <div class="icon-badge">📝</div>
                         <div class="card-arrow">
@@ -960,8 +960,22 @@
                         </div>
                     </div>
                     <div class="card-bottom">
-                        <h3 class="card-heading">Notes & Tasks</h3>
-                        <p class="card-subtitle" id="notesCount">Sticky notes & to-do</p>
+                        <h3 class="card-heading">Sticky Notes</h3>
+                        <p class="card-subtitle" id="stickyCount">0 notes</p>
+                    </div>
+                </div>
+
+                <!-- 5. To-Do List Tile (NEW DEDICATED) -->
+                <div class="compact-card" onclick="openSpecificNotesView('todo')">
+                    <div class="card-top">
+                        <div class="icon-badge">✅</div>
+                        <div class="card-arrow">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                        </div>
+                    </div>
+                    <div class="card-bottom">
+                        <h3 class="card-heading">To-Do List</h3>
+                        <p class="card-subtitle" id="todoCount">0 pending</p>
                     </div>
                 </div>
 
@@ -1120,12 +1134,16 @@
             if (targetView) targetView.classList.add('active-view');
         }
 
-        function openNotesView() {
+        // --- NEW SHORTCUT LOGIC ---
+        function openSpecificNotesView(tab) {
             document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active-view'));
             document.getElementById('view-notes').classList.add('active-view');
             document.getElementById('profileSwitcher').style.visibility = 'hidden';
             renderStickyNotes();
             renderTodoList();
+            
+            // Instantly jump to the correct tab based on which tile was clicked
+            switchHubTab(tab);
         }
 
         function closeNotesView() {
@@ -1213,6 +1231,7 @@
             updateDashboardCounts();
         }
 
+        // --- UPDATED COUNTERS LOGIC ---
         function updateDashboardCounts() {
             const eb = document.getElementById('ebookCount');
             if (eb) eb.innerText = userEbooks.length + ' resources';
@@ -1220,6 +1239,17 @@
             if (au) au.innerText = userAudiobooks.length + ' resources';
             const to = document.getElementById('toolsCount');
             if (to) to.innerText = userTools.length + ' tools';
+
+            // New Sticky Notes Counter
+            const sc = document.getElementById('stickyCount');
+            if (sc) sc.innerText = stickyNotes.length + (stickyNotes.length === 1 ? ' note' : ' notes');
+
+            // New To-Do Counter (Only counts tasks not yet checked off)
+            const tc = document.getElementById('todoCount');
+            if (tc) {
+                const pending = todoList.filter(t => !t.completed).length;
+                tc.innerText = pending + (pending === 1 ? ' pending task' : ' pending tasks');
+            }
         }
 
         let currentActiveCategory = 'ebooks';
@@ -1378,14 +1408,21 @@
                 panelNotes.style.display = 'block';
                 panelTodo.style.display = 'none';
                 hubActionBtn.innerHTML = '<span>+</span> New Note';
-                renderStickyNotes();
+                // Delay focus slightly so the view has time to render
+                setTimeout(() => {
+                    const firstNoteBody = document.querySelector('.ms-sticky-body');
+                    if (firstNoteBody && stickyNotes.length > 0) firstNoteBody.focus();
+                }, 50);
             } else {
                 tabTodoBtn.classList.add('active');
                 tabNotesBtn.classList.remove('active');
                 panelNotes.style.display = 'none';
                 panelTodo.style.display = 'block';
                 hubActionBtn.innerHTML = '<span>+</span> Focus Input';
-                renderTodoList();
+                setTimeout(() => {
+                    const todoInput = document.getElementById('todoInput');
+                    if (todoInput) todoInput.focus();
+                }, 50);
             }
         }
 
@@ -1445,29 +1482,29 @@
                         No sticky notes yet. Click <strong>+ New Note</strong>!
                     </div>
                 `;
-                return;
-            }
-
-            stickyNotes.forEach(note => {
-                const noteEl = document.createElement('div');
-                noteEl.className = 'ms-sticky-note color-' + note.color;
-                noteEl.innerHTML = `
-                    <div class="ms-sticky-topbar">
-                        <span class="note-time-stamp">${note.timestamp || ''}</span>
-                        <div class="note-actions">
-                            <button class="note-btn" title="Color" onclick="cycleColor('${note.id}')">🎨</button>
-                            <button class="note-btn" title="Delete" onclick="deleteStickyNote('${note.id}')">✕</button>
+            } else {
+                stickyNotes.forEach(note => {
+                    const noteEl = document.createElement('div');
+                    noteEl.className = 'ms-sticky-note color-' + note.color;
+                    noteEl.innerHTML = `
+                        <div class="ms-sticky-topbar">
+                            <span class="note-time-stamp">${note.timestamp || ''}</span>
+                            <div class="note-actions">
+                                <button class="note-btn" title="Color" onclick="cycleColor('${note.id}')">🎨</button>
+                                <button class="note-btn" title="Delete" onclick="deleteStickyNote('${note.id}')">✕</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="ms-sticky-body" id="note-body-${note.id}" contenteditable="true" oninput="updateNoteText('${note.id}', this)">${note.text}</div>
-                    <div class="ms-sticky-toolbar">
-                        <button class="format-btn bold" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('bold');">B</button>
-                        <button class="format-btn italic" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('italic');">I</button>
-                        <button class="format-btn strike" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('strikeThrough');">S</button>
-                    </div>
-                `;
-                container.appendChild(noteEl);
-            });
+                        <div class="ms-sticky-body" id="note-body-${note.id}" contenteditable="true" oninput="updateNoteText('${note.id}', this)">${note.text}</div>
+                        <div class="ms-sticky-toolbar">
+                            <button class="format-btn bold" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('bold');">B</button>
+                            <button class="format-btn italic" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('italic');">I</button>
+                            <button class="format-btn strike" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('strikeThrough');">S</button>
+                        </div>
+                    `;
+                    container.appendChild(noteEl);
+                });
+            }
+            updateDashboardCounts(); // Ensure front page counter is always accurate
         }
 
         function addNewStickyNote() {
@@ -1546,24 +1583,24 @@
                         All clear! Type a task above to add it.
                     </div>
                 `;
-                return;
-            }
-
-            todoList.forEach(item => {
-                const itemEl = document.createElement('div');
-                itemEl.className = 'todo-item ' + (item.completed ? 'completed' : '');
-                itemEl.innerHTML = `
-                    <div class="todo-item-left" onclick="toggleTodoItem('${item.id}')">
-                        <div class="todo-checkbox">${item.completed ? '✓' : ''}</div>
-                        <div class="todo-content">
-                            <span class="todo-text">${item.text}</span>
-                            <span class="todo-timestamp">${item.timestamp || ''}</span>
+            } else {
+                todoList.forEach(item => {
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'todo-item ' + (item.completed ? 'completed' : '');
+                    itemEl.innerHTML = `
+                        <div class="todo-item-left" onclick="toggleTodoItem('${item.id}')">
+                            <div class="todo-checkbox">${item.completed ? '✓' : ''}</div>
+                            <div class="todo-content">
+                                <span class="todo-text">${item.text}</span>
+                                <span class="todo-timestamp">${item.timestamp || ''}</span>
+                            </div>
                         </div>
-                    </div>
-                    <button class="todo-del-btn" onclick="deleteTodoItem('${item.id}')">✕</button>
-                `;
-                container.appendChild(itemEl);
-            });
+                        <button class="todo-del-btn" onclick="deleteTodoItem('${item.id}')">✕</button>
+                    `;
+                    container.appendChild(itemEl);
+                });
+            }
+            updateDashboardCounts(); // Ensure front page counter is always accurate
         }
 
         function addTodoItem() {
@@ -1676,7 +1713,7 @@
                 
                 statusEl.innerText = '✓ Shared to Drive successfully!';
                 statusEl.style.color = '#2E7D32';
-                markBackupComplete(); // Register successful backup
+                markBackupComplete();
 
             } catch (err) {
                 if (err.name === 'AbortError') {
@@ -1700,7 +1737,7 @@
             
             document.getElementById('syncStatus').innerText = '✓ Downloaded file to device.';
             document.getElementById('syncStatus').style.color = '#2E7D32';
-            markBackupComplete(); // Register successful backup
+            markBackupComplete();
         }
 
         function handleRestoreFile(input) {
@@ -1727,7 +1764,7 @@
 
                     statusEl.innerText = '✓ Data restored successfully!';
                     statusEl.style.color = '#2E7D32';
-                    markBackupComplete(); // Reset backup timer after a fresh restore
+                    markBackupComplete(); 
 
                     updateDashboardCounts();
                     renderStickyNotes();
@@ -1780,7 +1817,7 @@
                 setTheme('light');
             }
             updateDashboardCounts();
-            checkBackupReminder(); // Check timer on load
+            checkBackupReminder(); 
         });
     </script>
 </body>
