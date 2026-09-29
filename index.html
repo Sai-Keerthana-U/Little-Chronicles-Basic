@@ -1095,7 +1095,7 @@
                     <h2 style="font-size: 16.5px; font-weight: 700; color: var(--text-main);">📚 Books Wishlist</h2>
                     
                     <div class="wishlist-format-toolbar">
-                        <button class="wishlist-format-btn" onmousedown="openInsertLinkPrompt(event)" title="Add Hyperlink">🔗</button>
+                        <button class="wishlist-format-btn" onmousedown="openWishlistLinkModal(event)" title="Add Hyperlink">🔗</button>
                         <button class="wishlist-format-btn bold" onmousedown="applyWishlistFormat(event, 'bold')" title="Bold">B</button>
                         <button class="wishlist-format-btn italic" onmousedown="applyWishlistFormat(event, 'italic')" title="Italic">I</button>
                         <button class="wishlist-format-btn strike" onmousedown="applyWishlistFormat(event, 'strikeThrough')" title="Strikethrough">S</button>
@@ -1106,12 +1106,28 @@
                     class="wishlist-editor-sheet" 
                     id="adhuWishlistEditor" 
                     contenteditable="true" 
-                    placeholder="Type book titles, authors, or click 🔗 to add book links with custom names..."
+                    placeholder="Type book titles, authors, or tap 🔗 to add links..."
                     oninput="saveAdhuWishlistPage()"
                 ></div>
             </div>
         </main>
 
+    </div>
+
+    <!-- MODAL: ADD HYPERLINK TO WISHLIST (COMBINED URL & NAME) -->
+    <div class="modal-overlay" id="wishlistLinkModal" onclick="closeWishlistLinkModal(event)">
+        <div class="modal-sheet" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title">Insert Hyperlink</h3>
+                <button class="drawer-close-btn" onclick="closeWishlistLinkModal()">✕</button>
+            </div>
+
+            <div class="modal-form">
+                <input type="url" id="wlLinkUrl" class="modal-input" placeholder="URL (e.g. Amazon or BookChor link)">
+                <input type="text" id="wlLinkName" class="modal-input" placeholder="NAME (e.g. Bizzy Bear: Pizza Chef)">
+                <button class="modal-save-btn" onclick="insertCustomHyperlink()">Add Link</button>
+            </div>
+        </div>
     </div>
 
     <!-- CENTERED POPUP MODAL FOR CATEGORY RESOURCES -->
@@ -1688,14 +1704,43 @@
         }
 
         // ----------------------------------------------------
-        // ADHU'S BOOKS WISHLIST (FULL-PAGE EDITOR LOGIC)
+        // ADHU'S BOOKS WISHLIST (FULL-PAGE NOTEBOOK & MODAL)
         // ----------------------------------------------------
+        let savedRange = null;
+
+        function saveEditorSelection() {
+            const sel = window.getSelection();
+            if (sel.getRangeAt && sel.rangeCount) {
+                savedRange = sel.getRangeAt(0);
+            }
+        }
+
+        function restoreEditorSelection() {
+            if (savedRange) {
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(savedRange);
+            }
+        }
+
         function loadAdhuWishlistPage() {
             const editor = document.getElementById('adhuWishlistEditor');
             if (!editor) return;
             const savedContent = localStorage.getItem('lc_adhu_wishlist_content');
             if (savedContent) {
                 editor.innerHTML = savedContent;
+            }
+
+            // Click listener: guarantees that tapping a link redirects
+            editor.removeEventListener('click', handleWishlistLinkClick);
+            editor.addEventListener('click', handleWishlistLinkClick);
+        }
+
+        function handleWishlistLinkClick(e) {
+            const target = e.target.closest('a');
+            if (target && target.href) {
+                e.preventDefault();
+                window.open(target.href, '_blank', 'noopener,noreferrer');
             }
         }
 
@@ -1717,24 +1762,44 @@
             saveAdhuWishlistPage();
         }
 
-        function openInsertLinkPrompt(e) {
+        function openWishlistLinkModal(e) {
             e.preventDefault();
-            const editor = document.getElementById('adhuWishlistEditor');
-            editor.focus();
+            saveEditorSelection();
+            
+            document.getElementById('wlLinkUrl').value = '';
+            document.getElementById('wlLinkName').value = '';
+            document.getElementById('wishlistLinkModal').classList.add('open');
+            setTimeout(() => document.getElementById('wlLinkUrl').focus(), 100);
+        }
 
-            const url = prompt("Enter book link URL (e.g. Amazon or BookChor):");
-            if (!url || !url.trim()) return;
+        function closeWishlistLinkModal(e) {
+            if (!e || e.target.id === 'wishlistLinkModal' || e.target.classList.contains('drawer-close-btn')) {
+                document.getElementById('wishlistLinkModal').classList.remove('open');
+            }
+        }
 
-            let formattedUrl = url.trim();
-            if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
-                formattedUrl = 'https://' + formattedUrl;
+        function insertCustomHyperlink() {
+            let url = document.getElementById('wlLinkUrl').value.trim();
+            const name = document.getElementById('wlLinkName').value.trim();
+
+            if (!url) {
+                alert('Please enter a URL.');
+                return;
             }
 
-            const selection = window.getSelection().toString();
-            const displayName = prompt("Enter book title or display name:", selection || "Book Link");
-            if (!displayName || !displayName.trim()) return;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
 
-            const linkHTML = `<a href="${formattedUrl}" target="_blank" rel="noopener noreferrer">${displayName.trim()}</a>&nbsp;`;
+            const displayName = name || url;
+
+            closeWishlistLinkModal();
+
+            const editor = document.getElementById('adhuWishlistEditor');
+            editor.focus();
+            restoreEditorSelection();
+
+            const linkHTML = `<a href="${url}" target="_blank" rel="noopener noreferrer">${displayName}</a>&nbsp;`;
             document.execCommand('insertHTML', false, linkHTML);
             saveAdhuWishlistPage();
         }
