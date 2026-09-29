@@ -841,7 +841,7 @@
         }
 
         /* ----------------------------------------------------
-           ADHU'S BOOKS WISHLIST (RICH-TEXT CHECKLIST CANVAS)
+           ADHU'S BOOKS WISHLIST (PERFECT BASELINE ALIGNMENT)
            ---------------------------------------------------- */
         .wishlist-page-container {
             background: var(--surface-card);
@@ -936,26 +936,33 @@
             transform: scale(0.92);
         }
 
-        /* Individual Checklist Blocks */
+        /* Checklist Block Baseline Typography */
         .wl-block {
             display: flex;
             align-items: flex-start;
-            gap: 10px;
-            padding: 6px 0;
+            gap: 12px;
+            padding: 4px 0;
         }
         
         .wl-block .todo-checkbox {
-            margin-top: 2px;
+            width: 18px;
+            height: 18px;
+            margin-top: 3px; /* Exact optical alignment with the 22px text line-height */
+            flex-shrink: 0;
+            box-sizing: border-box;
         }
 
         .wl-block-editor {
             flex: 1;
             outline: none;
             font-size: 14.5px;
-            line-height: 1.5;
+            line-height: 22px; /* Stable vertical cadence */
+            min-height: 22px;
             color: var(--text-main);
             word-break: break-word;
             white-space: pre-wrap;
+            padding: 0;
+            margin: 0;
         }
 
         .wl-block-editor ul {
@@ -964,7 +971,7 @@
         }
 
         .wl-block-editor li {
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .wl-block-editor a {
@@ -977,9 +984,10 @@
         .wl-block-editor[placeholder]:empty:before {
             content: attr(placeholder);
             color: var(--text-muted);
-            opacity: 0.5;
+            opacity: 0.45;
             pointer-events: none;
             display: block;
+            line-height: 22px;
         }
     </style>
 </head>
@@ -1772,7 +1780,7 @@
         }
 
         // ----------------------------------------------------
-        // ADHU'S BOOKS WISHLIST (RICH-TEXT CHECKLIST BLOCKS)
+        // ADHU'S BOOKS WISHLIST (STABLE BASELINE CHECKLIST)
         // ----------------------------------------------------
         const WL_SHEET_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
         let currentWlColor = 'default';
@@ -1845,39 +1853,70 @@
             });
         }
 
-        // Handles Enter to create a new line with checkbox, and Backspace to delete empty line
+        // Handles Enter to split or spawn new row with its own checkbox
         function handleBlockKeyDown(e, blockId, index) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
+                
+                const sel = window.getSelection();
+                let remainingHtml = '';
+                
+                if (sel.rangeCount > 0) {
+                    const range = sel.getRangeAt(0);
+                    const currentEl = document.getElementById('wl-block-' + blockId);
+                    
+                    // Split content at cursor
+                    const postRange = range.cloneRange();
+                    postRange.selectNodeContents(currentEl);
+                    postRange.setStart(range.endContainer, range.endOffset);
+                    
+                    const frag = postRange.extractContents();
+                    const temp = document.createElement('div');
+                    temp.appendChild(frag);
+                    remainingHtml = temp.innerHTML;
+                }
+
                 syncAllAdhuBlocks();
 
-                const newBlock = { id: Date.now().toString(), html: '', checked: false };
-                // Insert immediately following current block
+                const newBlock = { 
+                    id: Date.now().toString(), 
+                    html: remainingHtml || '', 
+                    checked: false 
+                };
+
                 adhuBlocks.splice(index + 1, 0, newBlock);
                 saveAdhuBlocks();
                 renderAdhuBlocks();
 
                 setTimeout(() => {
                     const nextEl = document.getElementById('wl-block-' + newBlock.id);
-                    if (nextEl) nextEl.focus();
+                    if (nextEl) {
+                        nextEl.focus();
+                        const r = document.createRange();
+                        const s = window.getSelection();
+                        r.setStart(nextEl, 0);
+                        r.collapse(true);
+                        s.removeAllRanges();
+                        s.addRange(r);
+                    }
                 }, 30);
+
             } else if (e.key === 'Backspace') {
                 const currentEl = document.getElementById('wl-block-' + blockId);
-                // If the block is empty and we have more than one row, remove this line
-                if (currentEl && (currentEl.innerText.trim() === '' || currentEl.innerHTML === '<br>') && adhuBlocks.length > 1) {
+                const isBlank = !currentEl || currentEl.innerText.trim() === '' || currentEl.innerHTML === '<br>';
+                
+                if (isBlank && adhuBlocks.length > 1) {
                     e.preventDefault();
                     adhuBlocks = adhuBlocks.filter(b => b.id !== blockId);
                     saveAdhuBlocks();
                     renderAdhuBlocks();
 
-                    // Focus previous block if available
                     const prevIndex = Math.max(0, index - 1);
                     const prevId = adhuBlocks[prevIndex].id;
                     setTimeout(() => {
                         const prevEl = document.getElementById('wl-block-' + prevId);
                         if (prevEl) {
                             prevEl.focus();
-                            // Place cursor at the end of the line
                             const range = document.createRange();
                             const sel = window.getSelection();
                             range.selectNodeContents(prevEl);
