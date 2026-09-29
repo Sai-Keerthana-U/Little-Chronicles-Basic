@@ -839,7 +839,7 @@
         }
 
         /* ----------------------------------------------------
-           ADHU'S BOOKS WISHLIST (FULL-PAGE CLEAN CANVAS)
+           ADHU'S BOOKS WISHLIST (FULL-PAGE CLEAN CANVAS & COLOR PALETTE)
            ---------------------------------------------------- */
         .wishlist-page-container {
             background: var(--surface-card);
@@ -851,7 +851,16 @@
             flex-direction: column;
             gap: 12px;
             min-height: 65vh;
+            transition: background-color 0.25s ease;
         }
+
+        /* Wishlist Background Themes (Light & Dark variants) */
+        .wl-color-default { background: var(--surface-card); }
+        .wl-color-yellow { background: var(--sticky-yellow); }
+        .wl-color-green { background: var(--sticky-green); }
+        .wl-color-pink { background: var(--sticky-pink); }
+        .wl-color-blue { background: var(--sticky-blue); }
+        .wl-color-purple { background: var(--sticky-purple); }
 
         .wishlist-page-header {
             display: flex;
@@ -859,16 +868,23 @@
             justify-content: space-between;
             padding-bottom: 12px;
             border-bottom: var(--card-border);
+            gap: 8px;
+        }
+
+        .wishlist-header-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .wishlist-format-toolbar {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             background: var(--surface-subtle);
             border: var(--card-border);
             border-radius: 999px;
-            padding: 3px 8px;
+            padding: 3px 6px;
         }
 
         .wishlist-format-btn {
@@ -896,6 +912,28 @@
         .wishlist-format-btn.italic { font-style: italic; font-family: serif; }
         .wishlist-format-btn.strike { text-decoration: line-through; }
 
+        .wishlist-clear-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 13px;
+            outline: none;
+            padding: 0;
+            opacity: 0.8;
+        }
+
+        .wishlist-clear-btn:active {
+            opacity: 1;
+            transform: scale(0.92);
+        }
+
         .wishlist-editor-sheet {
             flex: 1;
             outline: none;
@@ -905,6 +943,15 @@
             font-family: inherit;
             word-break: break-word;
             white-space: pre-wrap;
+        }
+
+        .wishlist-editor-sheet ul {
+            padding-left: 20px;
+            margin: 4px 0;
+        }
+
+        .wishlist-editor-sheet li {
+            margin-bottom: 4px;
         }
 
         .wishlist-editor-sheet a {
@@ -1090,15 +1137,23 @@
 
         <!-- ADHU VIEW (FULL-PAGE BOOKS WISHLIST NOTEBOOK) -->
         <main id="view-adhu" class="view-content">
-            <div class="wishlist-page-container">
+            <div class="wishlist-page-container" id="adhuWishlistContainer">
                 <div class="wishlist-page-header">
                     <h2 style="font-size: 16.5px; font-weight: 700; color: var(--text-main);">📚 Books Wishlist</h2>
                     
-                    <div class="wishlist-format-toolbar">
-                        <button class="wishlist-format-btn" onmousedown="openWishlistLinkModal(event)" title="Add Hyperlink">🔗</button>
-                        <button class="wishlist-format-btn bold" onmousedown="applyWishlistFormat(event, 'bold')" title="Bold">B</button>
-                        <button class="wishlist-format-btn italic" onmousedown="applyWishlistFormat(event, 'italic')" title="Italic">I</button>
-                        <button class="wishlist-format-btn strike" onmousedown="applyWishlistFormat(event, 'strikeThrough')" title="Strikethrough">S</button>
+                    <div class="wishlist-header-right">
+                        <div class="wishlist-format-toolbar">
+                            <button class="wishlist-format-btn" onmousedown="openWishlistLinkModal(event)" title="Add Hyperlink">🔗</button>
+                            <button class="wishlist-format-btn" onmousedown="applyWishlistFormat(event, 'insertUnorderedList')" title="Bullet Points">• List</button>
+                            <button class="wishlist-format-btn bold" onmousedown="applyWishlistFormat(event, 'bold')" title="Bold">B</button>
+                            <button class="wishlist-format-btn italic" onmousedown="applyWishlistFormat(event, 'italic')" title="Italic">I</button>
+                            <button class="wishlist-format-btn strike" onmousedown="applyWishlistFormat(event, 'strikeThrough')" title="Strikethrough">S</button>
+                            <button class="wishlist-format-btn" onmousedown="cycleWishlistColor(event)" title="Cycle Color Theme">🎨</button>
+                        </div>
+
+                        <button class="wishlist-clear-btn" onclick="clearAdhuWishlistOneClick()" title="Clear All Text">
+                            🗑️
+                        </button>
                     </div>
                 </div>
 
@@ -1704,8 +1759,11 @@
         }
 
         // ----------------------------------------------------
-        // ADHU'S BOOKS WISHLIST (FULL-PAGE NOTEBOOK & MODAL)
+        // ADHU'S BOOKS WISHLIST (CANVAS, COLOR PALETTE & ACTIONS)
         // ----------------------------------------------------
+        const WL_SHEET_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
+        let currentWlColor = 'default';
+
         let savedRange = null;
 
         function saveEditorSelection() {
@@ -1726,12 +1784,18 @@
         function loadAdhuWishlistPage() {
             const editor = document.getElementById('adhuWishlistEditor');
             if (!editor) return;
+
             const savedContent = localStorage.getItem('lc_adhu_wishlist_content');
             if (savedContent) {
                 editor.innerHTML = savedContent;
             }
 
-            // Click listener: guarantees that tapping a link redirects
+            // Restore canvas background color
+            const savedColor = localStorage.getItem('lc_adhu_wishlist_color');
+            if (savedColor && WL_SHEET_COLORS.includes(savedColor)) {
+                applySheetColorClass(savedColor);
+            }
+
             editor.removeEventListener('click', handleWishlistLinkClick);
             editor.addEventListener('click', handleWishlistLinkClick);
         }
@@ -1760,6 +1824,36 @@
             editor.focus();
             document.execCommand(command, false, null);
             saveAdhuWishlistPage();
+        }
+
+        function cycleWishlistColor(e) {
+            e.preventDefault();
+            const curIdx = WL_SHEET_COLORS.indexOf(currentWlColor);
+            const nextColor = WL_SHEET_COLORS[(curIdx + 1) % WL_SHEET_COLORS.length];
+            applySheetColorClass(nextColor);
+            try {
+                localStorage.setItem('lc_adhu_wishlist_color', nextColor);
+            } catch (err) {}
+        }
+
+        function applySheetColorClass(colorName) {
+            currentWlColor = colorName;
+            const container = document.getElementById('adhuWishlistContainer');
+            if (!container) return;
+            
+            WL_SHEET_COLORS.forEach(c => container.classList.remove('wl-color-' + c));
+            container.classList.add('wl-color-' + colorName);
+        }
+
+        function clearAdhuWishlistOneClick() {
+            const editor = document.getElementById('adhuWishlistEditor');
+            if (!editor || !editor.innerText.trim()) return;
+
+            if (confirm("Are you sure you want to clear the entire wishlist?")) {
+                editor.innerHTML = '';
+                saveAdhuWishlistPage();
+                editor.focus();
+            }
         }
 
         function openWishlistLinkModal(e) {
@@ -1851,7 +1945,8 @@
                 userEbooks: userEbooks,
                 userAudiobooks: userAudiobooks,
                 userTools: userTools,
-                adhuWishlistContent: localStorage.getItem('lc_adhu_wishlist_content') || ''
+                adhuWishlistContent: localStorage.getItem('lc_adhu_wishlist_content') || '',
+                adhuWishlistColor: localStorage.getItem('lc_adhu_wishlist_color') || 'default'
             };
         }
 
@@ -1932,8 +2027,11 @@
                     
                     if (data.adhuWishlistContent !== undefined) {
                         localStorage.setItem('lc_adhu_wishlist_content', data.adhuWishlistContent);
-                        loadAdhuWishlistPage();
                     }
+                    if (data.adhuWishlistColor) {
+                        localStorage.setItem('lc_adhu_wishlist_color', data.adhuWishlistColor);
+                    }
+                    loadAdhuWishlistPage();
 
                     saveLinksToStorage();
 
