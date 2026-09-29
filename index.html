@@ -839,223 +839,87 @@
         }
 
         /* ----------------------------------------------------
-           ADHU'S BOOKS WISHLIST (CLEAN BOOKSHELF)
+           ADHU'S BOOKS WISHLIST (FULL-PAGE CLEAN CANVAS)
            ---------------------------------------------------- */
-        .wishlist-toolbar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            margin-bottom: 14px;
-        }
-
-        .view-mode-toggle {
-            display: flex;
-            background: var(--surface-subtle);
-            border: var(--card-border);
-            border-radius: 999px;
-            padding: 2px;
-        }
-
-        .view-mode-btn {
-            background: transparent;
-            border: none;
-            outline: none;
-            padding: 6px 12px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-muted);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .view-mode-btn.active {
-            background: var(--surface-card);
-            color: var(--primary);
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-        }
-
-        /* Container: Grid Layout */
-        .books-container.grid-layout {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-
-        .books-container.grid-layout .book-card {
+        .wishlist-page-container {
             background: var(--surface-card);
             border-radius: var(--radius-outer);
             border: var(--card-border);
             box-shadow: var(--card-shadow);
-            padding: 12px;
+            padding: 18px 16px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            position: relative;
-        }
-
-        .books-container.grid-layout .book-cover-wrap {
-            width: 100%;
-            height: 160px;
-            background: var(--surface-subtle);
-            border-radius: var(--radius-inner);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .books-container.grid-layout .book-cover-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .books-container.grid-layout .book-meta {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            flex: 1;
-        }
-
-        .books-container.grid-layout .book-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text-main);
-            line-height: 1.3;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .books-container.grid-layout .book-author {
-            font-size: 11px;
-            color: var(--text-muted);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* Container: List Layout */
-        .books-container.list-layout {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .books-container.list-layout .book-card {
-            background: var(--surface-card);
-            border-radius: var(--radius-inner);
-            border: var(--card-border);
-            box-shadow: var(--card-shadow);
-            padding: 10px 12px;
-            display: flex;
-            align-items: center;
             gap: 12px;
-            position: relative;
+            min-height: 65vh;
         }
 
-        .books-container.list-layout .book-cover-wrap {
-            width: 50px;
-            height: 70px;
-            background: var(--surface-subtle);
-            border-radius: 6px;
-            overflow: hidden;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .books-container.list-layout .book-cover-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .books-container.list-layout .book-meta {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            flex: 1;
-            min-width: 0;
-        }
-
-        .books-container.list-layout .book-title {
-            font-size: 13.5px;
-            font-weight: 700;
-            color: var(--text-main);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .books-container.list-layout .book-author {
-            font-size: 11.5px;
-            color: var(--text-muted);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .book-actions-bar {
+        .wishlist-page-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-top: auto;
-            padding-top: 4px;
+            padding-bottom: 12px;
+            border-bottom: var(--card-border);
         }
 
-        .book-link-btn {
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--primary);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            background: var(--primary-soft);
-            padding: 4px 8px;
-            border-radius: 6px;
-        }
-
-        .book-delete-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 14px;
-            cursor: pointer;
-            padding: 4px;
-            opacity: 0.6;
-        }
-
-        .book-search-result {
+        .wishlist-format-toolbar {
             display: flex;
             align-items: center;
-            gap: 10px;
-            padding: 8px;
-            background: var(--surface-card);
-            border-radius: 8px;
+            gap: 4px;
+            background: var(--surface-subtle);
             border: var(--card-border);
+            border-radius: 999px;
+            padding: 3px 8px;
+        }
+
+        .wishlist-format-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 13px;
+            font-weight: 700;
             cursor: pointer;
-            margin-bottom: 6px;
+            padding: 4px 7px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.75;
+            line-height: 1;
         }
 
-        .book-search-result:active {
-            background: var(--surface-subtle);
+        .wishlist-format-btn:active {
+            opacity: 1;
+            background: var(--surface-card);
         }
 
-        .book-search-thumb {
-            width: 40px;
-            height: 55px;
-            object-fit: cover;
-            border-radius: 4px;
-            background: var(--surface-subtle);
-            flex-shrink: 0;
+        .wishlist-format-btn.bold { font-weight: 800; }
+        .wishlist-format-btn.italic { font-style: italic; font-family: serif; }
+        .wishlist-format-btn.strike { text-decoration: line-through; }
+
+        .wishlist-editor-sheet {
+            flex: 1;
+            outline: none;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-main);
+            font-family: inherit;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        .wishlist-editor-sheet a {
+            color: var(--primary);
+            text-decoration: underline;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .wishlist-editor-sheet[placeholder]:empty:before {
+            content: attr(placeholder);
+            color: var(--text-muted);
+            opacity: 0.6;
+            pointer-events: none;
+            display: block;
         }
     </style>
 </head>
@@ -1224,51 +1088,30 @@
             </div>
         </main>
 
-        <!-- ADHU VIEW (BOOKS WISHLIST WITH GRID/LIST TOGGLE) -->
+        <!-- ADHU VIEW (FULL-PAGE BOOKS WISHLIST NOTEBOOK) -->
         <main id="view-adhu" class="view-content">
-            <div class="wishlist-toolbar">
-                <h2 style="font-size: 16.5px; font-weight: 700; color: var(--text-main);">📚 Books Wishlist</h2>
-                
-                <div style="display: flex; gap: 8px; align-items: center;">
-                    <div class="view-mode-toggle">
-                        <button class="view-mode-btn active" id="btnModeGrid" onclick="setBooksViewMode('grid')">
-                            ▦ Grid
-                        </button>
-                        <button class="view-mode-btn" id="btnModeList" onclick="setBooksViewMode('list')">
-                            ☰ List
-                        </button>
+            <div class="wishlist-page-container">
+                <div class="wishlist-page-header">
+                    <h2 style="font-size: 16.5px; font-weight: 700; color: var(--text-main);">📚 Books Wishlist</h2>
+                    
+                    <div class="wishlist-format-toolbar">
+                        <button class="wishlist-format-btn" onmousedown="openInsertLinkPrompt(event)" title="Add Hyperlink">🔗</button>
+                        <button class="wishlist-format-btn bold" onmousedown="applyWishlistFormat(event, 'bold')" title="Bold">B</button>
+                        <button class="wishlist-format-btn italic" onmousedown="applyWishlistFormat(event, 'italic')" title="Italic">I</button>
+                        <button class="wishlist-format-btn strike" onmousedown="applyWishlistFormat(event, 'strikeThrough')" title="Strikethrough">S</button>
                     </div>
-
-                    <button class="add-note-btn" onclick="openBookSearchModal()">
-                        <span>+</span> Add Book
-                    </button>
                 </div>
-            </div>
-            
-            <div class="books-container grid-layout" id="adhuBooksContainer">
-                <!-- Book Cards Inject Here -->
+
+                <div 
+                    class="wishlist-editor-sheet" 
+                    id="adhuWishlistEditor" 
+                    contenteditable="true" 
+                    placeholder="Type book titles, authors, or click 🔗 to add book links with custom names..."
+                    oninput="saveAdhuWishlistPage()"
+                ></div>
             </div>
         </main>
 
-    </div>
-
-    <!-- MODAL: GOOGLE BOOKS SEARCH & ADD -->
-    <div class="modal-overlay" id="bookSearchModal" onclick="closeBookSearchModal(event)">
-        <div class="modal-sheet" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <h3 class="modal-title">Search & Add Book</h3>
-                <button class="drawer-close-btn" onclick="closeBookSearchModal()">✕</button>
-            </div>
-
-            <div class="modal-form">
-                <input type="text" id="bookSearchInput" class="modal-input" placeholder="Enter title, author, or ISBN..." onkeypress="if(event.key==='Enter') searchGoogleBooks()">
-                <button class="modal-save-btn" onclick="searchGoogleBooks()">🔍 Search</button>
-                
-                <input type="url" id="bookPurchaseLinkInput" class="modal-input" placeholder="Purchase Link (Amazon / Store - optional)">
-            </div>
-
-            <div id="bookSearchResultsContainer" style="max-height: 260px; overflow-y: auto;"></div>
-        </div>
     </div>
 
     <!-- CENTERED POPUP MODAL FOR CATEGORY RESOURCES -->
@@ -1845,235 +1688,55 @@
         }
 
         // ----------------------------------------------------
-        // ADHU'S BOOKS WISHLIST (GOOGLE BOOKS + OPEN LIBRARY API)
+        // ADHU'S BOOKS WISHLIST (FULL-PAGE EDITOR LOGIC)
         // ----------------------------------------------------
-        let adhuBooks = [];
-        let booksViewMode = 'grid'; // 'grid' or 'list'
-
-        try {
-            const ab = localStorage.getItem('lc_adhu_books');
-            if (ab) adhuBooks = JSON.parse(ab);
-            const bm = localStorage.getItem('lc_books_view_mode');
-            if (bm) booksViewMode = bm;
-        } catch (e) {
-            console.error(e);
+        function loadAdhuWishlistPage() {
+            const editor = document.getElementById('adhuWishlistEditor');
+            if (!editor) return;
+            const savedContent = localStorage.getItem('lc_adhu_wishlist_content');
+            if (savedContent) {
+                editor.innerHTML = savedContent;
+            }
         }
 
-        function saveAdhuBooks() {
+        function saveAdhuWishlistPage() {
+            const editor = document.getElementById('adhuWishlistEditor');
+            if (!editor) return;
             try {
-                localStorage.setItem('lc_adhu_books', JSON.stringify(adhuBooks));
+                localStorage.setItem('lc_adhu_wishlist_content', editor.innerHTML);
             } catch (e) {
                 console.error(e);
             }
         }
 
-        function setBooksViewMode(mode) {
-            booksViewMode = mode;
-            try {
-                localStorage.setItem('lc_books_view_mode', mode);
-            } catch (e) {}
-            
-            const btnGrid = document.getElementById('btnModeGrid');
-            const btnList = document.getElementById('btnModeList');
-            const container = document.getElementById('adhuBooksContainer');
+        function applyWishlistFormat(e, command) {
+            e.preventDefault();
+            const editor = document.getElementById('adhuWishlistEditor');
+            editor.focus();
+            document.execCommand(command, false, null);
+            saveAdhuWishlistPage();
+        }
 
-            if (mode === 'grid') {
-                btnGrid.classList.add('active');
-                btnList.classList.remove('active');
-                container.className = 'books-container grid-layout';
-            } else {
-                btnList.classList.add('active');
-                btnGrid.classList.remove('active');
-                container.className = 'books-container list-layout';
+        function openInsertLinkPrompt(e) {
+            e.preventDefault();
+            const editor = document.getElementById('adhuWishlistEditor');
+            editor.focus();
+
+            const url = prompt("Enter book link URL (e.g. Amazon or BookChor):");
+            if (!url || !url.trim()) return;
+
+            let formattedUrl = url.trim();
+            if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
+                formattedUrl = 'https://' + formattedUrl;
             }
 
-            renderAdhuBooks();
-        }
+            const selection = window.getSelection().toString();
+            const displayName = prompt("Enter book title or display name:", selection || "Book Link");
+            if (!displayName || !displayName.trim()) return;
 
-        function renderAdhuBooks() {
-            const container = document.getElementById('adhuBooksContainer');
-            if (!container) return;
-            container.innerHTML = '';
-
-            if (adhuBooks.length === 0) {
-                container.innerHTML = `
-                    <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 45px 0; font-size: 13px;">
-                        Your book wishlist is empty.<br>Tap <strong>+ Add Book</strong> to search and curate!
-                    </div>
-                `;
-                return;
-            }
-
-            adhuBooks.forEach(book => {
-                const card = document.createElement('div');
-                card.className = 'book-card';
-
-                const coverSrc = book.thumbnail || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="80" viewBox="0 0 60 80"><rect width="60" height="80" fill="%23E2DCD5"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="20">📖</text></svg>';
-
-                let purchaseBtn = '';
-                if (book.purchaseUrl) {
-                    purchaseBtn = `
-                        <a href="${book.purchaseUrl}" target="_blank" rel="noopener noreferrer" class="book-link-btn">
-                            🛒 Shop Link ↗
-                        </a>
-                    `;
-                }
-
-                card.innerHTML = `
-                    <div class="book-cover-wrap">
-                        <img src="${coverSrc}" class="book-cover-img" alt="${book.title}" loading="lazy">
-                    </div>
-                    <div class="book-meta">
-                        <div class="book-title" title="${book.title}">${book.title}</div>
-                        <div class="book-author">${book.author || 'Unknown Author'}</div>
-                    </div>
-                    <div class="book-actions-bar">
-                        ${purchaseBtn}
-                        <button class="book-delete-btn" onclick="deleteAdhuBook('${book.id}')" title="Delete">✕</button>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        function openBookSearchModal() {
-            document.getElementById('bookSearchInput').value = '';
-            document.getElementById('bookPurchaseLinkInput').value = '';
-            document.getElementById('bookSearchResultsContainer').innerHTML = '';
-            document.getElementById('bookSearchModal').classList.add('open');
-            setTimeout(() => document.getElementById('bookSearchInput').focus(), 100);
-        }
-
-        function closeBookSearchModal(e) {
-            if (!e || e.target.id === 'bookSearchModal' || e.target.classList.contains('drawer-close-btn')) {
-                document.getElementById('bookSearchModal').classList.remove('open');
-            }
-        }
-
-        async function searchGoogleBooks() {
-            let query = document.getElementById('bookSearchInput').value.trim();
-            const purchaseLinkInput = document.getElementById('bookPurchaseLinkInput').value.trim();
-            const resultsContainer = document.getElementById('bookSearchResultsContainer');
-            
-            // Auto-detect ISBN from Amazon URL if pasted into search box
-            if (query.includes('amazon.') || query.includes('/dp/') || query.includes('/gp/')) {
-                const match = query.match(/(?:dp|gp\/product|\/d)\/([A-Z0-9]{10})/i);
-                if (match && match[1]) {
-                    document.getElementById('bookPurchaseLinkInput').value = query;
-                    query = match[1];
-                    document.getElementById('bookSearchInput').value = query;
-                }
-            } else if (purchaseLinkInput && !query) {
-                const match = purchaseLinkInput.match(/(?:dp|gp\/product|\/d)\/([A-Z0-9]{10})/i);
-                if (match && match[1]) {
-                    query = match[1];
-                    document.getElementById('bookSearchInput').value = query;
-                }
-            }
-
-            if (!query) return;
-
-            resultsContainer.innerHTML = '<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:12px;">Searching catalog...</div>';
-
-            const cleanIsbn = query.replace(/[^0-9X]/gi, '');
-            const isIsbn = cleanIsbn.length === 10 || cleanIsbn.length === 13;
-
-            try {
-                // Step 1: Try Google Books with ISBN / Title
-                let gQuery = isIsbn ? `isbn:${cleanIsbn}` : encodeURIComponent(query);
-                let response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${gQuery}&maxResults=5`);
-                let data = await response.json();
-
-                if ((!data.items || data.items.length === 0) && isIsbn) {
-                    response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${cleanIsbn}&maxResults=5`);
-                    data = await response.json();
-                }
-
-                resultsContainer.innerHTML = '';
-
-                if (data.items && data.items.length > 0) {
-                    data.items.forEach(item => {
-                        const info = item.volumeInfo;
-                        const title = info.title || 'Untitled';
-                        const authors = info.authors ? info.authors.join(', ') : 'Unknown Author';
-                        let thumb = '';
-                        if (info.imageLinks) {
-                            thumb = (info.imageLinks.thumbnail || info.imageLinks.smallThumbnail || '').replace('http://', 'https://');
-                        }
-                        appendSearchResult(title, authors, thumb);
-                    });
-                    return;
-                }
-
-                // Step 2: Fallback to Open Library if Google Books returns nothing
-                if (isIsbn) {
-                    const olRes = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${cleanIsbn}&format=json&jscmd=data`);
-                    const olData = await olRes.json();
-                    const bookKey = `ISBN:${cleanIsbn}`;
-
-                    if (olData[bookKey]) {
-                        const b = olData[bookKey];
-                        const title = b.title || 'Untitled';
-                        const authors = b.authors ? b.authors.map(a => a.name).join(', ') : 'Unknown Author';
-                        let thumb = '';
-                        if (b.cover) {
-                            thumb = b.cover.medium || b.cover.large || b.cover.small || '';
-                        }
-                        appendSearchResult(title, authors, thumb);
-                        return;
-                    }
-                }
-
-                resultsContainer.innerHTML = '<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:12px;">No books found. Try searching by book title instead.</div>';
-
-            } catch (err) {
-                console.error(err);
-                resultsContainer.innerHTML = '<div style="font-size:12px; color:#E53935; text-align:center; padding:12px;">Failed to fetch books. Check network connection.</div>';
-            }
-        }
-
-        function appendSearchResult(title, authors, thumb) {
-            const resultsContainer = document.getElementById('bookSearchResultsContainer');
-            const row = document.createElement('div');
-            row.className = 'book-search-result';
-            row.onclick = () => selectBookToAdd(title, authors, thumb);
-
-            row.innerHTML = `
-                <img src="${thumb || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'55\'><rect width=\'40\' height=\'55\' fill=\'%23ddd\'/></svg>'}" class="book-search-thumb" alt="cover">
-                <div style="flex:1; min-width:0;">
-                    <div style="font-size:12.5px; font-weight:700; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${title}</div>
-                    <div style="font-size:11px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${authors}</div>
-                </div>
-                <div style="font-size:12px; color:var(--primary); font-weight:700;">+ Add</div>
-            `;
-            resultsContainer.appendChild(row);
-        }
-
-        function selectBookToAdd(title, author, thumbnail) {
-            let purchaseUrl = document.getElementById('bookPurchaseLinkInput').value.trim();
-            if (purchaseUrl && !purchaseUrl.startsWith('http://') && !purchaseUrl.startsWith('https://')) {
-                purchaseUrl = 'https://' + purchaseUrl;
-            }
-
-            const newBook = {
-                id: 'bk_' + Date.now().toString(),
-                title,
-                author,
-                thumbnail,
-                purchaseUrl,
-                timestamp: getFormattedTimestamp()
-            };
-
-            adhuBooks.unshift(newBook);
-            saveAdhuBooks();
-            renderAdhuBooks();
-            closeBookSearchModal();
-        }
-
-        function deleteAdhuBook(id) {
-            adhuBooks = adhuBooks.filter(b => b.id !== id);
-            saveAdhuBooks();
-            renderAdhuBooks();
+            const linkHTML = `<a href="${formattedUrl}" target="_blank" rel="noopener noreferrer">${displayName.trim()}</a>&nbsp;`;
+            document.execCommand('insertHTML', false, linkHTML);
+            saveAdhuWishlistPage();
         }
 
         // ----------------------------------------------------
@@ -2123,7 +1786,7 @@
                 userEbooks: userEbooks,
                 userAudiobooks: userAudiobooks,
                 userTools: userTools,
-                adhuBooks: adhuBooks
+                adhuWishlistContent: localStorage.getItem('lc_adhu_wishlist_content') || ''
             };
         }
 
@@ -2202,9 +1865,9 @@
                     if (data.userAudiobooks) userAudiobooks = data.userAudiobooks;
                     if (data.userTools) userTools = data.userTools;
                     
-                    if (data.adhuBooks) {
-                        adhuBooks = data.adhuBooks;
-                        saveAdhuBooks();
+                    if (data.adhuWishlistContent !== undefined) {
+                        localStorage.setItem('lc_adhu_wishlist_content', data.adhuWishlistContent);
+                        loadAdhuWishlistPage();
                     }
 
                     saveLinksToStorage();
@@ -2216,7 +1879,6 @@
                     updateDashboardCounts();
                     renderStickyNotes();
                     renderTodoList();
-                    renderAdhuBooks();
                 } catch (err) {
                     statusEl.innerText = 'Error: Invalid backup file format.';
                     statusEl.style.color = '#E53935';
@@ -2265,7 +1927,7 @@
                 setTheme('light');
             }
             updateDashboardCounts();
-            setBooksViewMode(booksViewMode);
+            loadAdhuWishlistPage();
             checkBackupReminder(); 
         });
     </script>
