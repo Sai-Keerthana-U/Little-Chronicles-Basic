@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Little Chronicles</title>
+    <title>The Motherboard</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     
@@ -642,6 +642,15 @@
             font-family: inherit;
         }
 
+        /* Make placeholder text visible when editor is empty */
+        .ms-sticky-body[placeholder]:empty:before {
+            content: attr(placeholder);
+            color: var(--sticky-text);
+            opacity: 0.4;
+            pointer-events: none;
+            display: block;
+        }
+
         .ms-sticky-toolbar {
             display: flex;
             align-items: center;
@@ -905,20 +914,6 @@
             cursor: pointer;
             font-size: 14px;
         }
-
-        /* Adhu Space */
-        .empty-placeholder {
-            background: var(--surface-card);
-            border-radius: var(--radius-outer);
-            border: 1.5px dashed rgba(130, 120, 116, 0.25);
-            padding: 60px 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            gap: 10px;
-        }
     </style>
 </head>
 <body>
@@ -927,7 +922,7 @@
         
         <!-- Header -->
         <header>
-            <div class="app-title">Little Chronicles</div>
+            <div class="app-title">The Motherboard</div>
             
             <div class="header-actions">
                 <button class="theme-toggle-btn" onclick="openDriveSettingsModal()" title="Drive Backup & Restore">
@@ -1007,7 +1002,7 @@
                     </div>
                 </div>
 
-                <!-- 4. Notes & To-Do Split Tile (Saves a full row!) -->
+                <!-- 4. Notes & To-Do Split Tile -->
                 <div class="split-card-wrapper">
                     <!-- Left Mini Card: Notes -->
                     <div class="micro-card" onclick="openSpecificNotesView('notes')">
@@ -1089,12 +1084,17 @@
             </div>
         </main>
 
-        <!-- ADHU VIEW -->
+        <!-- ADHU VIEW (BOOKS WISHLIST) -->
         <main id="view-adhu" class="view-content">
-            <div class="empty-placeholder">
-                <div style="font-size: 26px;">🌱</div>
-                <h3 style="font-size: 15px; font-weight: 700;">Adhu's Space</h3>
-                <p style="font-size: 12px; color: var(--text-muted); max-width: 200px;">Nothing added here yet.</p>
+            <div class="notes-view-header">
+                <h2 style="font-size: 16.5px; font-weight: 700; color: var(--text-main);">📚 Books Wishlist</h2>
+                <button class="add-note-btn" onclick="addAdhuWishlistItem()">
+                    <span>+</span> Add Book
+                </button>
+            </div>
+            
+            <div class="sticky-grid" id="adhuWishlistContainer">
+                <!-- Book Cards Inject Here -->
             </div>
         </main>
 
@@ -1150,7 +1150,7 @@
             </div>
 
             <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.45; margin: 0;">
-                Export your notes, to-dos, and links directly to Google Drive. Tap below and choose <strong>Google Drive</strong> from the save sheet.
+                Export your notes, to-dos, links, and wishlists directly to Google Drive. Tap below and choose <strong>Google Drive</strong> from the save sheet.
             </p>
 
             <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
@@ -1179,15 +1179,12 @@
             if (targetView) targetView.classList.add('active-view');
         }
 
-        // --- NEW SHORTCUT LOGIC ---
         function openSpecificNotesView(tab) {
             document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active-view'));
             document.getElementById('view-notes').classList.add('active-view');
             document.getElementById('profileSwitcher').style.visibility = 'hidden';
             renderStickyNotes();
             renderTodoList();
-            
-            // Instantly jump to the correct tab based on which tile was clicked
             switchHubTab(tab);
         }
 
@@ -1276,7 +1273,6 @@
             updateDashboardCounts();
         }
 
-        // --- UPDATED COUNTERS LOGIC ---
         function updateDashboardCounts() {
             const eb = document.getElementById('ebookCount');
             if (eb) eb.innerText = userEbooks.length + ' resources';
@@ -1285,11 +1281,9 @@
             const to = document.getElementById('toolsCount');
             if (to) to.innerText = userTools.length + ' tools';
 
-            // New Sticky Notes Counter
             const sc = document.getElementById('stickyCount');
             if (sc) sc.innerText = stickyNotes.length + (stickyNotes.length === 1 ? ' note' : ' notes');
 
-            // New To-Do Counter (Only counts tasks not yet checked off)
             const tc = document.getElementById('todoCount');
             if (tc) {
                 const pending = todoList.filter(t => !t.completed).length;
@@ -1453,7 +1447,6 @@
                 panelNotes.style.display = 'block';
                 panelTodo.style.display = 'none';
                 hubActionBtn.innerHTML = '<span>+</span> New Note';
-                // Delay focus slightly so the view has time to render
                 setTimeout(() => {
                     const firstNoteBody = document.querySelector('.ms-sticky-body');
                     if (firstNoteBody && stickyNotes.length > 0) firstNoteBody.focus();
@@ -1512,8 +1505,8 @@
             }
         }
 
-        function formatDoc(command) {
-            document.execCommand(command, false, null);
+        function formatDoc(command, value=null) {
+            document.execCommand(command, false, value);
         }
 
         function renderStickyNotes() {
@@ -1539,7 +1532,7 @@
                                 <button class="note-btn" title="Delete" onclick="deleteStickyNote('${note.id}')">✕</button>
                             </div>
                         </div>
-                        <div class="ms-sticky-body" id="note-body-${note.id}" contenteditable="true" oninput="updateNoteText('${note.id}', this)">${note.text}</div>
+                        <div class="ms-sticky-body" id="note-body-${note.id}" contenteditable="true" oninput="updateNoteText('${note.id}', this)" placeholder="Type note here...">${note.text}</div>
                         <div class="ms-sticky-toolbar">
                             <button class="format-btn bold" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('bold');">B</button>
                             <button class="format-btn italic" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('italic');">I</button>
@@ -1681,6 +1674,150 @@
         }
 
         // ----------------------------------------------------
+        // ADHU BOOKS WISHLIST LOGIC
+        // ----------------------------------------------------
+        let adhuWishlist = [];
+
+        try {
+            const aw = localStorage.getItem('lc_adhu_wishlist');
+            if (aw) adhuWishlist = JSON.parse(aw);
+        } catch (e) {
+            console.error(e);
+        }
+
+        function saveAdhuWishlist() {
+            try {
+                localStorage.setItem('lc_adhu_wishlist', JSON.stringify(adhuWishlist));
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function renderAdhuWishlist() {
+            const container = document.getElementById('adhuWishlistContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (adhuWishlist.length === 0) {
+                container.innerHTML = `
+                    <div style="grid-column: span 2; text-align: center; color: var(--text-muted); padding: 40px 0; font-size: 13px;">
+                        Wishlist is empty. Tap <strong>+ Add Book</strong> to start curating!
+                    </div>
+                `;
+                return;
+            }
+
+            adhuWishlist.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'ms-sticky-note';
+                el.style.background = 'var(--surface-card)';
+                el.style.border = '1px solid rgba(0,0,0,0.06)';
+
+                // If a link is attached, render the clickable button bar
+                let attachedLinkHTML = '';
+                if (item.linkUrl) {
+                    attachedLinkHTML = `
+                        <div style="padding: 7px 10px; background: var(--surface-subtle); border-top: 1px solid rgba(0,0,0,0.04); border-bottom: 1px solid rgba(0,0,0,0.04);">
+                            <a href="${item.linkUrl}" target="_blank" style="font-size: 11.5px; font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 5px;">
+                                🔗 ${item.linkName || 'View Link'}
+                            </a>
+                        </div>
+                    `;
+                }
+
+                el.innerHTML = `
+                    <div class="ms-sticky-topbar" style="background: var(--surface-subtle);">
+                        <span class="note-time-stamp">${item.timestamp || ''}</span>
+                        <div class="note-actions">
+                            <button class="note-btn" title="Add/Edit Attached Link" onclick="editAdhuLink('${item.id}')" style="opacity:0.8; font-size: 13px;">🔗</button>
+                            <button class="note-btn" title="Delete Book" onclick="deleteAdhuWishlist('${item.id}')">✕</button>
+                        </div>
+                    </div>
+                    <div class="ms-sticky-body" id="adhu-body-${item.id}" contenteditable="true" oninput="updateAdhuText('${item.id}', this)" placeholder="Add book details or notes...">${item.text}</div>
+                    ${attachedLinkHTML}
+                    <div class="ms-sticky-toolbar">
+                        <button class="format-btn bold" onmousedown="formatAdhuDoc(event, '${item.id}', 'bold')">B</button>
+                        <button class="format-btn italic" onmousedown="formatAdhuDoc(event, '${item.id}', 'italic')">I</button>
+                        <button class="format-btn strike" onmousedown="formatAdhuDoc(event, '${item.id}', 'strikeThrough')">S</button>
+                        <button class="format-btn" style="opacity: 0.8;" onmousedown="formatAdhuDoc(event, '${item.id}', 'backColor', '#FFE082')" title="Highlight">🖍️</button>
+                    </div>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        function addAdhuWishlistItem() {
+            const newItem = {
+                id: 'aw_' + Date.now().toString(),
+                text: '',
+                linkUrl: '',
+                linkName: '',
+                timestamp: getFormattedTimestamp()
+            };
+            adhuWishlist.unshift(newItem);
+            saveAdhuWishlist();
+            renderAdhuWishlist();
+
+            setTimeout(() => {
+                const body = document.getElementById('adhu-body-' + newItem.id);
+                if (body) body.focus();
+            }, 50);
+        }
+
+        function updateAdhuText(id, element) {
+            const item = adhuWishlist.find(w => w.id === id);
+            if (item) {
+                item.text = element.innerHTML;
+                saveAdhuWishlist();
+            }
+        }
+
+        function deleteAdhuWishlist(id) {
+            adhuWishlist = adhuWishlist.filter(w => w.id !== id);
+            saveAdhuWishlist();
+            renderAdhuWishlist();
+        }
+
+        // Handles applying styles without losing focus on the content box
+        function formatAdhuDoc(e, id, command, value=null) {
+            e.preventDefault(); 
+            const el = document.getElementById('adhu-body-' + id);
+            el.focus();
+            document.execCommand(command, false, value);
+            updateAdhuText(id, el);
+        }
+
+        // Handles attaching messy URLs nicely
+        function editAdhuLink(id) {
+            const item = adhuWishlist.find(w => w.id === id);
+            if (!item) return;
+
+            const currentUrl = item.linkUrl || '';
+            const currentName = item.linkName || 'View Book';
+
+            const newUrl = prompt("Enter hyperlink (e.g., long Instagram or Amazon link).\nLeave blank to remove it:", currentUrl);
+            
+            if (newUrl === null) return; // User pressed Cancel
+
+            if (newUrl.trim() === '') {
+                // Clear the link completely
+                item.linkUrl = '';
+                item.linkName = '';
+            } else {
+                let formattedUrl = newUrl.trim();
+                if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
+                    formattedUrl = 'https://' + formattedUrl;
+                }
+                const newName = prompt("Enter a short name to hide the messy link:", currentName);
+                item.linkUrl = formattedUrl;
+                item.linkName = newName || 'View Link';
+            }
+            
+            saveAdhuWishlist();
+            renderAdhuWishlist();
+        }
+
+        // ----------------------------------------------------
         // BACKUP REMINDER LOGIC
         // ----------------------------------------------------
         function checkBackupReminder() {
@@ -1720,13 +1857,14 @@
 
         function getFullPayload() {
             return {
-                app: 'Little Chronicles',
+                app: 'The Motherboard',
                 lastUpdated: new Date().toISOString(),
                 stickyNotes: stickyNotes,
                 todoList: todoList,
                 userEbooks: userEbooks,
                 userAudiobooks: userAudiobooks,
-                userTools: userTools
+                userTools: userTools,
+                adhuWishlist: adhuWishlist // Ensures the new wishlist is backed up safely!
             };
         }
 
@@ -1734,7 +1872,7 @@
             const payload = getFullPayload();
             const jsonString = JSON.stringify(payload, null, 2);
             const statusEl = document.getElementById('syncStatus');
-            const fileName = 'LittleChronicles-Data.txt';
+            const fileName = 'TheMotherboard-Data.txt';
 
             try {
                 const file = new File([jsonString], fileName, { type: 'text/plain' });
@@ -1750,7 +1888,7 @@
                 }
 
                 await navigator.share({
-                    title: 'Little Chronicles Backup',
+                    title: 'The Motherboard Backup',
                     text: 'Select Google Drive to save your backup.',
                     files: [file]
                 });
@@ -1802,8 +1940,14 @@
                         saveTodoList();
                     }
                     if (data.userEbooks) userEbooks = data.userEbooks;
-                    if (data.userAudiobooks) userAudiobooks = userAudiobooks;
+                    if (data.userAudiobooks) userAudiobooks = data.userAudiobooks;
                     if (data.userTools) userTools = data.userTools;
+                    
+                    if (data.adhuWishlist) {
+                        adhuWishlist = data.adhuWishlist;
+                        saveAdhuWishlist();
+                    }
+
                     saveLinksToStorage();
 
                     statusEl.innerText = '✓ Data restored successfully!';
@@ -1813,6 +1957,7 @@
                     updateDashboardCounts();
                     renderStickyNotes();
                     renderTodoList();
+                    renderAdhuWishlist();
                 } catch (err) {
                     statusEl.innerText = 'Error: Invalid backup file format.';
                     statusEl.style.color = '#E53935';
@@ -1861,6 +2006,7 @@
                 setTheme('light');
             }
             updateDashboardCounts();
+            renderAdhuWishlist(); // Render wishlist on startup
             checkBackupReminder(); 
         });
     </script>
