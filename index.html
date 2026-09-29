@@ -182,7 +182,7 @@
             display: block;
         }
 
-        /* Bento Grid */
+        /* Bento Grid (Kee Dashboard) */
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -841,42 +841,127 @@
         }
 
         /* ----------------------------------------------------
-           ADHU'S BOOKS WISHLIST (STABLE FLUSH BASELINE)
+           ADHU'S ACCORDION / DROPDOWN FEATURE STACK
            ---------------------------------------------------- */
-        .wishlist-page-container {
+        .adhu-features-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Dropdown Feature Card */
+        .adhu-dropdown-card {
             background: var(--surface-card);
             border-radius: var(--radius-outer);
             border: var(--card-border);
             box-shadow: var(--card-shadow);
-            padding: 18px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            min-height: 65vh;
-            transition: background-color 0.25s ease;
+            overflow: hidden;
+            transition: background-color 0.25s ease, box-shadow 0.2s ease;
         }
 
-        /* Wishlist Background Themes */
-        .wl-color-default { background: var(--surface-card); }
-        .wl-color-yellow { background: var(--sticky-yellow); }
-        .wl-color-green { background: var(--sticky-green); }
-        .wl-color-pink { background: var(--sticky-pink); }
-        .wl-color-blue { background: var(--sticky-blue); }
-        .wl-color-purple { background: var(--sticky-purple); }
+        /* Wishlist Background Themes (Applied when open) */
+        .adhu-dropdown-card.wl-color-default { background: var(--surface-card); }
+        .adhu-dropdown-card.wl-color-yellow { background: var(--sticky-yellow); }
+        .adhu-dropdown-card.wl-color-green { background: var(--sticky-green); }
+        .adhu-dropdown-card.wl-color-pink { background: var(--sticky-pink); }
+        .adhu-dropdown-card.wl-color-blue { background: var(--sticky-blue); }
+        .adhu-dropdown-card.wl-color-purple { background: var(--sticky-purple); }
 
-        .wishlist-page-header {
+        /* Clickable Header Bar */
+        .adhu-dropdown-header {
+            padding: 14px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding-bottom: 12px;
-            border-bottom: var(--card-border);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .adhu-dropdown-header:active {
+            opacity: 0.9;
+        }
+
+        .adhu-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .adhu-feature-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-inner);
+            background: var(--primary-soft);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            line-height: 1;
+        }
+
+        .adhu-feature-titles {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .adhu-feature-title {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.2px;
+        }
+
+        .adhu-feature-sub {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .adhu-header-right {
+            display: flex;
+            align-items: center;
             gap: 8px;
         }
 
-        .wishlist-header-right {
+        .adhu-chevron {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--surface-subtle);
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 10px;
+            transition: transform 0.25s ease;
+        }
+
+        .adhu-dropdown-card.open .adhu-chevron {
+            transform: rotate(180deg);
+        }
+
+        /* Collapsible Body */
+        .adhu-dropdown-body {
+            display: none;
+            padding: 0 16px 16px;
+            flex-direction: column;
+            gap: 12px;
+            border-top: var(--card-border);
+        }
+
+        .adhu-dropdown-card.open .adhu-dropdown-body {
+            display: flex;
+        }
+
+        /* In-Card Toolbar */
+        .adhu-card-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 12px;
+            gap: 8px;
         }
 
         .wishlist-format-toolbar {
@@ -936,7 +1021,7 @@
             transform: scale(0.92);
         }
 
-        /* Baseline Typography - Checkbox & Text Aligned Flush */
+        /* Checklist Block Baseline Typography */
         .wl-block {
             display: flex;
             align-items: flex-start;
@@ -963,7 +1048,7 @@
             padding: 0;
             margin: 0;
             text-align: left;
-            white-space: normal; /* Disables artificial whitespace padding */
+            white-space: normal;
         }
 
         .wl-block-editor ul {
@@ -1157,35 +1242,54 @@
             </div>
         </main>
 
-        <!-- ADHU VIEW (RICH CHECKLIST NOTEBOOK) -->
+        <!-- ADHU DASHBOARD (FEATURE STACK WITH EXPANDABLE DROPDOWNS) -->
         <main id="view-adhu" class="view-content">
-            <div class="wishlist-page-container" id="adhuWishlistContainer">
-                <div class="wishlist-page-header">
-                    <h2 style="font-size: 16.5px; font-weight: 700; color: var(--text-main);">📚 Books Wishlist</h2>
-                    
-                    <div class="wishlist-header-right">
-                        <div class="wishlist-format-toolbar">
-                            <button class="wishlist-format-btn" onmousedown="openWishlistLinkModal(event)" title="Add Hyperlink">🔗</button>
-                            <button class="wishlist-format-btn" onmousedown="applyWishlistFormat(event, 'insertUnorderedList')" title="Bullet Points">•</button>
-                            <button class="wishlist-format-btn bold" onmousedown="applyWishlistFormat(event, 'bold')" title="Bold">B</button>
-                            <button class="wishlist-format-btn italic" onmousedown="applyWishlistFormat(event, 'italic')" title="Italic">I</button>
-                            <button class="wishlist-format-btn strike" onmousedown="applyWishlistFormat(event, 'strikeThrough')" title="Strikethrough">S</button>
-                            <button class="wishlist-format-btn" onmousedown="cycleWishlistColor(event)" title="Cycle Background Color">🎨</button>
+            <div class="adhu-features-stack">
+                
+                <!-- FEATURE 1: BOOKS WISHLIST (EXPANDABLE DROPDOWN) -->
+                <div class="adhu-dropdown-card open" id="adhuWishlistCard">
+                    <!-- Dropdown Toggle Header -->
+                    <div class="adhu-dropdown-header" onclick="toggleAdhuWishlistDropdown()">
+                        <div class="adhu-header-left">
+                            <div class="adhu-feature-icon">📚</div>
+                            <div class="adhu-feature-titles">
+                                <span class="adhu-feature-title">Books Wishlist</span>
+                                <span class="adhu-feature-sub" id="adhuWishlistSub">0 books</span>
+                            </div>
+                        </div>
+                        <div class="adhu-header-right">
+                            <div class="adhu-chevron">▼</div>
+                        </div>
+                    </div>
+
+                    <!-- Collapsible Checklist Body -->
+                    <div class="adhu-dropdown-body">
+                        <div class="adhu-card-toolbar">
+                            <div class="wishlist-format-toolbar">
+                                <button class="wishlist-format-btn" onmousedown="openWishlistLinkModal(event)" title="Add Hyperlink">🔗</button>
+                                <button class="wishlist-format-btn" onmousedown="applyWishlistFormat(event, 'insertUnorderedList')" title="Bullet Points">•</button>
+                                <button class="wishlist-format-btn bold" onmousedown="applyWishlistFormat(event, 'bold')" title="Bold">B</button>
+                                <button class="wishlist-format-btn italic" onmousedown="applyWishlistFormat(event, 'italic')" title="Italic">I</button>
+                                <button class="wishlist-format-btn strike" onmousedown="applyWishlistFormat(event, 'strikeThrough')" title="Strikethrough">S</button>
+                                <button class="wishlist-format-btn" onmousedown="cycleWishlistColor(event)" title="Cycle Card Color">🎨</button>
+                            </div>
+
+                            <button class="wishlist-clear-btn" onclick="deleteCheckedAdhuItems()" title="Delete Selected Items">
+                                🗑️
+                            </button>
                         </div>
 
-                        <button class="wishlist-clear-btn" onclick="deleteCheckedAdhuItems()" title="Delete Selected Items">
-                            🗑️
+                        <!-- Checklist Rows -->
+                        <div id="adhuBlocksContainer" style="display:flex; flex-direction:column; gap:4px;"></div>
+
+                        <button class="add-note-btn" style="width: 100%; margin-top: 6px;" onclick="addAdhuBlock()">
+                            <span>+</span> Add New Line
                         </button>
                     </div>
                 </div>
 
-                <div id="adhuBlocksContainer" style="flex: 1; overflow-y: auto; padding-bottom: 20px;">
-                    <!-- Blocks injected here via JS -->
-                </div>
+                <!-- Ready space for future features (milestones, sensory logs, etc.) -->
 
-                <button class="add-note-btn" style="width: 100%;" onclick="addAdhuBlock()">
-                    <span>+</span> Add New Line
-                </button>
             </div>
         </main>
 
@@ -1781,7 +1885,7 @@
         }
 
         // ----------------------------------------------------
-        // ADHU'S BOOKS WISHLIST (CLEAN FLUSH BASELINE LOGIC)
+        // ADHU'S BOOKS WISHLIST (ACCORDION & FLUSH CHECKLIST)
         // ----------------------------------------------------
         const WL_SHEET_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
         let currentWlColor = 'default';
@@ -1792,9 +1896,25 @@
         function cleanHtmlContent(raw) {
             if (!raw) return '';
             let s = raw.trim();
-            // Remove lingering leading spaces/breaks from earlier template literals
             s = s.replace(/^(\s*<br\s*\/?>|\s*&nbsp;|\s+)+/gi, '');
             return s;
+        }
+
+        function toggleAdhuWishlistDropdown() {
+            const card = document.getElementById('adhuWishlistCard');
+            if (card) {
+                card.classList.toggle('open');
+                try {
+                    localStorage.setItem('lc_adhu_dropdown_open', card.classList.contains('open'));
+                } catch(e) {}
+            }
+        }
+
+        function updateWishlistSubtitle() {
+            const sub = document.getElementById('adhuWishlistSub');
+            if (!sub) return;
+            const count = adhuBlocks.filter(b => b.html && b.html.trim() !== '').length;
+            sub.innerText = count + (count === 1 ? ' item' : ' items');
         }
 
         function loadAdhuWishlistPage() {
@@ -1802,7 +1922,6 @@
                 const storedBlocks = localStorage.getItem('lc_adhu_blocks');
                 if (storedBlocks) {
                     adhuBlocks = JSON.parse(storedBlocks);
-                    // Sanitize any existing items that had leading spaces saved
                     adhuBlocks.forEach(b => {
                         b.html = cleanHtmlContent(b.html);
                     });
@@ -1823,7 +1942,15 @@
                 applySheetColorClass(savedColor);
             }
 
+            const isDropdownOpen = localStorage.getItem('lc_adhu_dropdown_open');
+            const card = document.getElementById('adhuWishlistCard');
+            if (card && isDropdownOpen !== null) {
+                if (isDropdownOpen === 'false') card.classList.remove('open');
+                else card.classList.add('open');
+            }
+
             renderAdhuBlocks();
+            updateWishlistSubtitle();
 
             const container = document.getElementById('adhuBlocksContainer');
             if (container) {
@@ -1836,6 +1963,7 @@
             try {
                 localStorage.setItem('lc_adhu_blocks', JSON.stringify(adhuBlocks));
             } catch (e) {}
+            updateWishlistSubtitle();
         }
 
         function syncAllAdhuBlocks() {
@@ -1854,10 +1982,11 @@
             adhuBlocks.forEach((block, index) => {
                 const el = document.createElement('div');
                 el.className = 'wl-block ' + (block.checked ? 'checked' : '');
-                // The editor div must be on a single continuous HTML line to avoid whitespace injection
+                // Continuous HTML string to prevent newline whitespace rendering
                 el.innerHTML = '<div class="todo-checkbox" style="border-color: var(--text-muted); ' + (block.checked ? 'background: var(--primary); border-color: var(--primary); color: #fff;' : '') + '" onclick="toggleAdhuBlockCheck(\'' + block.id + '\')">' + (block.checked ? '✓' : '') + '</div><div class="wl-block-editor" id="wl-block-' + block.id + '" contenteditable="true" oninput="updateAdhuBlockHtml(\'' + block.id + '\')" onkeydown="handleBlockKeyDown(event, \'' + block.id + '\', ' + index + ')" placeholder="Type book or note...">' + (block.html || '') + '</div>';
                 container.appendChild(el);
             });
+            updateWishlistSubtitle();
         }
 
         function handleBlockKeyDown(e, blockId, index) {
@@ -2001,11 +2130,11 @@
 
         function applySheetColorClass(colorName) {
             currentWlColor = colorName;
-            const container = document.getElementById('adhuWishlistContainer');
-            if (!container) return;
+            const card = document.getElementById('adhuWishlistCard');
+            if (!card) return;
             
-            WL_SHEET_COLORS.forEach(c => container.classList.remove('wl-color-' + c));
-            container.classList.add('wl-color-' + colorName);
+            WL_SHEET_COLORS.forEach(c => card.classList.remove('wl-color-' + c));
+            card.classList.add('wl-color-' + colorName);
         }
 
         function openWishlistLinkModal(e) {
