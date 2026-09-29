@@ -856,7 +856,7 @@
             transition: background-color 0.25s ease;
         }
 
-        /* Wishlist Background Themes (Light & Dark variants) */
+        /* Wishlist Background Themes */
         .wl-color-default { background: var(--surface-card); }
         .wl-color-yellow { background: var(--sticky-yellow); }
         .wl-color-green { background: var(--sticky-green); }
@@ -945,7 +945,7 @@
         }
         
         .wl-block .todo-checkbox {
-            margin-top: 2px; /* Align checkbox with first line of text */
+            margin-top: 2px;
         }
 
         .wl-block-editor {
@@ -1786,7 +1786,6 @@
                 if (storedBlocks) {
                     adhuBlocks = JSON.parse(storedBlocks);
                 } else {
-                    // Safe Migration from old single-page HTML
                     const oldContent = localStorage.getItem('lc_adhu_wishlist_content');
                     if (oldContent && oldContent.trim() !== '') {
                         adhuBlocks = [{ id: Date.now().toString(), html: oldContent, checked: false }];
@@ -1798,7 +1797,6 @@
                 adhuBlocks = [{ id: Date.now().toString(), html: '', checked: false }];
             }
 
-            // Restore canvas background color
             const savedColor = localStorage.getItem('lc_adhu_wishlist_color');
             if (savedColor && WL_SHEET_COLORS.includes(savedColor)) {
                 applySheetColorClass(savedColor);
@@ -1806,7 +1804,6 @@
 
             renderAdhuBlocks();
 
-            // Link Click Interceptor
             const container = document.getElementById('adhuBlocksContainer');
             if (container) {
                 container.removeEventListener('click', handleWishlistLinkClick);
@@ -1833,19 +1830,64 @@
             if (!container) return;
             container.innerHTML = '';
 
-            adhuBlocks.forEach(block => {
+            adhuBlocks.forEach((block, index) => {
                 const el = document.createElement('div');
                 el.className = 'wl-block ' + (block.checked ? 'checked' : '');
                 el.innerHTML = `
                     <div class="todo-checkbox" style="border-color: var(--text-muted); ${block.checked ? 'background: var(--primary); border-color: var(--primary); color: #fff;' : ''}" onclick="toggleAdhuBlockCheck('${block.id}')">
                         ${block.checked ? '✓' : ''}
                     </div>
-                    <div class="wl-block-editor" id="wl-block-${block.id}" contenteditable="true" oninput="updateAdhuBlockHtml('${block.id}')" placeholder="Type here...">
+                    <div class="wl-block-editor" id="wl-block-${block.id}" contenteditable="true" oninput="updateAdhuBlockHtml('${block.id}')" onkeydown="handleBlockKeyDown(event, '${block.id}', ${index})" placeholder="Type book or note...">
                         ${block.html || ''}
                     </div>
                 `;
                 container.appendChild(el);
             });
+        }
+
+        // Handles Enter to create a new line with checkbox, and Backspace to delete empty line
+        function handleBlockKeyDown(e, blockId, index) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                syncAllAdhuBlocks();
+
+                const newBlock = { id: Date.now().toString(), html: '', checked: false };
+                // Insert immediately following current block
+                adhuBlocks.splice(index + 1, 0, newBlock);
+                saveAdhuBlocks();
+                renderAdhuBlocks();
+
+                setTimeout(() => {
+                    const nextEl = document.getElementById('wl-block-' + newBlock.id);
+                    if (nextEl) nextEl.focus();
+                }, 30);
+            } else if (e.key === 'Backspace') {
+                const currentEl = document.getElementById('wl-block-' + blockId);
+                // If the block is empty and we have more than one row, remove this line
+                if (currentEl && (currentEl.innerText.trim() === '' || currentEl.innerHTML === '<br>') && adhuBlocks.length > 1) {
+                    e.preventDefault();
+                    adhuBlocks = adhuBlocks.filter(b => b.id !== blockId);
+                    saveAdhuBlocks();
+                    renderAdhuBlocks();
+
+                    // Focus previous block if available
+                    const prevIndex = Math.max(0, index - 1);
+                    const prevId = adhuBlocks[prevIndex].id;
+                    setTimeout(() => {
+                        const prevEl = document.getElementById('wl-block-' + prevId);
+                        if (prevEl) {
+                            prevEl.focus();
+                            // Place cursor at the end of the line
+                            const range = document.createRange();
+                            const sel = window.getSelection();
+                            range.selectNodeContents(prevEl);
+                            range.collapse(false);
+                            sel.removeAllRanges();
+                            sel.addRange(range);
+                        }
+                    }, 30);
+                }
+            }
         }
 
         function updateAdhuBlockHtml(id) {
@@ -1858,7 +1900,7 @@
         }
 
         function toggleAdhuBlockCheck(id) {
-            syncAllAdhuBlocks(); // save any text currently typed before re-rendering
+            syncAllAdhuBlocks();
             const block = adhuBlocks.find(b => b.id === id);
             if (block) {
                 block.checked = !block.checked;
@@ -2105,7 +2147,6 @@
                         adhuBlocks = data.adhuBlocks;
                         saveAdhuBlocks();
                     } else if (data.adhuWishlistContent !== undefined) {
-                        // Migration on restore if old backup is used
                         adhuBlocks = [{ id: Date.now().toString(), html: data.adhuWishlistContent, checked: false }];
                         saveAdhuBlocks();
                     }
