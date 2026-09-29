@@ -841,7 +841,7 @@
         }
 
         /* ----------------------------------------------------
-           ADHU'S BOOKS WISHLIST (PERFECT BASELINE ALIGNMENT)
+           ADHU'S BOOKS WISHLIST (STABLE FLUSH BASELINE)
            ---------------------------------------------------- */
         .wishlist-page-container {
             background: var(--surface-card);
@@ -936,18 +936,18 @@
             transform: scale(0.92);
         }
 
-        /* Checklist Block Baseline Typography */
+        /* Baseline Typography - Checkbox & Text Aligned Flush */
         .wl-block {
             display: flex;
             align-items: flex-start;
-            gap: 12px;
-            padding: 4px 0;
+            gap: 10px;
+            padding: 5px 0;
         }
         
         .wl-block .todo-checkbox {
             width: 18px;
             height: 18px;
-            margin-top: 3px; /* Exact optical alignment with the 22px text line-height */
+            margin-top: 2px;
             flex-shrink: 0;
             box-sizing: border-box;
         }
@@ -956,13 +956,14 @@
             flex: 1;
             outline: none;
             font-size: 14.5px;
-            line-height: 22px; /* Stable vertical cadence */
+            line-height: 22px;
             min-height: 22px;
             color: var(--text-main);
             word-break: break-word;
-            white-space: pre-wrap;
             padding: 0;
             margin: 0;
+            text-align: left;
+            white-space: normal; /* Disables artificial whitespace padding */
         }
 
         .wl-block-editor ul {
@@ -1780,7 +1781,7 @@
         }
 
         // ----------------------------------------------------
-        // ADHU'S BOOKS WISHLIST (STABLE BASELINE CHECKLIST)
+        // ADHU'S BOOKS WISHLIST (CLEAN FLUSH BASELINE LOGIC)
         // ----------------------------------------------------
         const WL_SHEET_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
         let currentWlColor = 'default';
@@ -1788,15 +1789,27 @@
 
         let adhuBlocks = [];
 
+        function cleanHtmlContent(raw) {
+            if (!raw) return '';
+            let s = raw.trim();
+            // Remove lingering leading spaces/breaks from earlier template literals
+            s = s.replace(/^(\s*<br\s*\/?>|\s*&nbsp;|\s+)+/gi, '');
+            return s;
+        }
+
         function loadAdhuWishlistPage() {
             try {
                 const storedBlocks = localStorage.getItem('lc_adhu_blocks');
                 if (storedBlocks) {
                     adhuBlocks = JSON.parse(storedBlocks);
+                    // Sanitize any existing items that had leading spaces saved
+                    adhuBlocks.forEach(b => {
+                        b.html = cleanHtmlContent(b.html);
+                    });
                 } else {
                     const oldContent = localStorage.getItem('lc_adhu_wishlist_content');
                     if (oldContent && oldContent.trim() !== '') {
-                        adhuBlocks = [{ id: Date.now().toString(), html: oldContent, checked: false }];
+                        adhuBlocks = [{ id: Date.now().toString(), html: cleanHtmlContent(oldContent), checked: false }];
                     } else {
                         adhuBlocks = [{ id: Date.now().toString(), html: '', checked: false }];
                     }
@@ -1828,7 +1841,7 @@
         function syncAllAdhuBlocks() {
             adhuBlocks.forEach(b => {
                 const el = document.getElementById('wl-block-' + b.id);
-                if (el) b.html = el.innerHTML;
+                if (el) b.html = cleanHtmlContent(el.innerHTML);
             });
             saveAdhuBlocks();
         }
@@ -1841,19 +1854,12 @@
             adhuBlocks.forEach((block, index) => {
                 const el = document.createElement('div');
                 el.className = 'wl-block ' + (block.checked ? 'checked' : '');
-                el.innerHTML = `
-                    <div class="todo-checkbox" style="border-color: var(--text-muted); ${block.checked ? 'background: var(--primary); border-color: var(--primary); color: #fff;' : ''}" onclick="toggleAdhuBlockCheck('${block.id}')">
-                        ${block.checked ? '✓' : ''}
-                    </div>
-                    <div class="wl-block-editor" id="wl-block-${block.id}" contenteditable="true" oninput="updateAdhuBlockHtml('${block.id}')" onkeydown="handleBlockKeyDown(event, '${block.id}', ${index})" placeholder="Type book or note...">
-                        ${block.html || ''}
-                    </div>
-                `;
+                // The editor div must be on a single continuous HTML line to avoid whitespace injection
+                el.innerHTML = '<div class="todo-checkbox" style="border-color: var(--text-muted); ' + (block.checked ? 'background: var(--primary); border-color: var(--primary); color: #fff;' : '') + '" onclick="toggleAdhuBlockCheck(\'' + block.id + '\')">' + (block.checked ? '✓' : '') + '</div><div class="wl-block-editor" id="wl-block-' + block.id + '" contenteditable="true" oninput="updateAdhuBlockHtml(\'' + block.id + '\')" onkeydown="handleBlockKeyDown(event, \'' + block.id + '\', ' + index + ')" placeholder="Type book or note...">' + (block.html || '') + '</div>';
                 container.appendChild(el);
             });
         }
 
-        // Handles Enter to split or spawn new row with its own checkbox
         function handleBlockKeyDown(e, blockId, index) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -1861,19 +1867,20 @@
                 const sel = window.getSelection();
                 let remainingHtml = '';
                 
-                if (sel.rangeCount > 0) {
+                if (sel && sel.rangeCount > 0) {
                     const range = sel.getRangeAt(0);
                     const currentEl = document.getElementById('wl-block-' + blockId);
                     
-                    // Split content at cursor
-                    const postRange = range.cloneRange();
-                    postRange.selectNodeContents(currentEl);
-                    postRange.setStart(range.endContainer, range.endOffset);
-                    
-                    const frag = postRange.extractContents();
-                    const temp = document.createElement('div');
-                    temp.appendChild(frag);
-                    remainingHtml = temp.innerHTML;
+                    if (currentEl) {
+                        const postRange = range.cloneRange();
+                        postRange.selectNodeContents(currentEl);
+                        postRange.setStart(range.endContainer, range.endOffset);
+                        
+                        const frag = postRange.extractContents();
+                        const temp = document.createElement('div');
+                        temp.appendChild(frag);
+                        remainingHtml = cleanHtmlContent(temp.innerHTML);
+                    }
                 }
 
                 syncAllAdhuBlocks();
@@ -1933,7 +1940,7 @@
             const block = adhuBlocks.find(b => b.id === id);
             const el = document.getElementById('wl-block-' + id);
             if (block && el) {
-                block.html = el.innerHTML;
+                block.html = cleanHtmlContent(el.innerHTML);
                 saveAdhuBlocks();
             }
         }
@@ -2004,7 +2011,7 @@
         function openWishlistLinkModal(e) {
             e.preventDefault();
             const sel = window.getSelection();
-            if (sel.getRangeAt && sel.rangeCount) {
+            if (sel && sel.getRangeAt && sel.rangeCount) {
                 savedRange = sel.getRangeAt(0);
             }
             
@@ -2184,9 +2191,12 @@
                     
                     if (data.adhuBlocks) {
                         adhuBlocks = data.adhuBlocks;
+                        adhuBlocks.forEach(b => {
+                            b.html = cleanHtmlContent(b.html);
+                        });
                         saveAdhuBlocks();
                     } else if (data.adhuWishlistContent !== undefined) {
-                        adhuBlocks = [{ id: Date.now().toString(), html: data.adhuWishlistContent, checked: false }];
+                        adhuBlocks = [{ id: Date.now().toString(), html: cleanHtmlContent(data.adhuWishlistContent), checked: false }];
                         saveAdhuBlocks();
                     }
 
