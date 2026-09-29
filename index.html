@@ -496,7 +496,7 @@
             padding: 20px;
         }
 
-        /* Notes & To-Do */
+        /* Notes & To-Do Header and Toolbar */
         .notes-view-header {
             display: flex;
             align-items: center;
@@ -517,6 +517,31 @@
             gap: 5px;
             cursor: pointer;
             outline: none;
+        }
+
+        .notes-actions-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sort-notes-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 7px 11px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            outline: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .sort-notes-btn:active {
+            transform: scale(0.94);
         }
 
         .add-note-btn {
@@ -576,6 +601,7 @@
             gap: 10px;
         }
 
+        /* Minimizable Sticky Note */
         .ms-sticky-note {
             border-radius: 8px;
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
@@ -584,10 +610,20 @@
             overflow: hidden;
             min-height: 165px;
             position: relative;
+            transition: min-height 0.2s ease;
+        }
+
+        .ms-sticky-note.minimized {
+            min-height: unset;
+        }
+
+        .ms-sticky-note.minimized .ms-sticky-body,
+        .ms-sticky-note.minimized .ms-sticky-toolbar {
+            display: none;
         }
 
         .ms-sticky-topbar {
-            height: 26px;
+            height: 28px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -604,19 +640,26 @@
         .note-actions {
             display: flex;
             align-items: center;
-            gap: 2px;
+            gap: 3px;
         }
 
         .note-btn {
             background: transparent;
             border: none;
             cursor: pointer;
-            opacity: 0.55;
+            opacity: 0.6;
             font-size: 12px;
             line-height: 1;
             padding: 2px;
             color: var(--sticky-text);
             border-radius: 3px;
+        }
+
+        .note-btn.toggle-minimize {
+            font-size: 14px;
+            font-weight: 800;
+            line-height: 0.8;
+            padding: 2px 4px;
         }
 
         .ms-sticky-body {
@@ -849,7 +892,6 @@
             gap: 12px;
         }
 
-        /* Dropdown Feature Card */
         .adhu-dropdown-card {
             background: var(--surface-card);
             border-radius: var(--radius-outer);
@@ -859,7 +901,6 @@
             transition: background-color 0.25s ease, box-shadow 0.2s ease;
         }
 
-        /* Wishlist Background Themes (Applied when open) */
         .adhu-dropdown-card.wl-color-default { background: var(--surface-card); }
         .adhu-dropdown-card.wl-color-yellow { background: var(--sticky-yellow); }
         .adhu-dropdown-card.wl-color-green { background: var(--sticky-green); }
@@ -867,7 +908,6 @@
         .adhu-dropdown-card.wl-color-blue { background: var(--sticky-blue); }
         .adhu-dropdown-card.wl-color-purple { background: var(--sticky-purple); }
 
-        /* Clickable Header Bar */
         .adhu-dropdown-header {
             padding: 14px 16px;
             display: flex;
@@ -942,7 +982,6 @@
             transform: rotate(180deg);
         }
 
-        /* Collapsible Body */
         .adhu-dropdown-body {
             display: none;
             padding: 0 16px 16px;
@@ -955,7 +994,6 @@
             display: flex;
         }
 
-        /* In-Card Toolbar */
         .adhu-card-toolbar {
             display: flex;
             align-items: center;
@@ -967,7 +1005,7 @@
         .wishlist-format-toolbar {
             display: flex;
             align-items: center;
-            gap: 3px;
+            gap: 4px;
             background: var(--surface-subtle);
             border: var(--card-border);
             border-radius: 999px;
@@ -993,6 +1031,16 @@
         .wishlist-format-btn:active {
             opacity: 1;
             background: var(--surface-card);
+        }
+
+        /* Extra Prominent Link Button */
+        .wishlist-format-btn.btn-large-link {
+            font-size: 16px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: var(--surface-card);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            opacity: 1;
         }
 
         .wishlist-format-btn.bold { font-weight: 800; }
@@ -1215,9 +1263,15 @@
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                     Dashboard
                 </button>
-                <button class="add-note-btn" id="hubActionBtn" onclick="handleHubAction()">
-                    <span>+</span> New Note
-                </button>
+
+                <div class="notes-actions-group">
+                    <button class="sort-notes-btn" id="sortNotesBtn" onclick="toggleStickySort()" title="Sort by Date">
+                        ⇅ Date <span id="sortDirectionIndicator">↓</span>
+                    </button>
+                    <button class="add-note-btn" id="hubActionBtn" onclick="handleHubAction()">
+                        <span>+</span> New Note
+                    </button>
+                </div>
             </div>
 
             <div class="hub-tabs">
@@ -1266,7 +1320,7 @@
                     <div class="adhu-dropdown-body">
                         <div class="adhu-card-toolbar">
                             <div class="wishlist-format-toolbar">
-                                <button class="wishlist-format-btn" onmousedown="openWishlistLinkModal(event)" title="Add Hyperlink">🔗</button>
+                                <button class="wishlist-format-btn btn-large-link" onmousedown="openWishlistLinkModal(event)" title="Add Hyperlink">🔗</button>
                                 <button class="wishlist-format-btn" onmousedown="applyWishlistFormat(event, 'insertUnorderedList')" title="Bullet Points">•</button>
                                 <button class="wishlist-format-btn bold" onmousedown="applyWishlistFormat(event, 'bold')" title="Bold">B</button>
                                 <button class="wishlist-format-btn italic" onmousedown="applyWishlistFormat(event, 'italic')" title="Italic">I</button>
@@ -1288,7 +1342,7 @@
                     </div>
                 </div>
 
-                <!-- Ready space for future features (milestones, sensory logs, etc.) -->
+                <!-- Ready space for future features -->
 
             </div>
         </main>
@@ -1651,6 +1705,7 @@
             const panelNotes = document.getElementById('panelNotes');
             const panelTodo = document.getElementById('panelTodo');
             const hubActionBtn = document.getElementById('hubActionBtn');
+            const sortNotesBtn = document.getElementById('sortNotesBtn');
 
             if (tab === 'notes') {
                 tabNotesBtn.classList.add('active');
@@ -1658,6 +1713,7 @@
                 panelNotes.style.display = 'block';
                 panelTodo.style.display = 'none';
                 hubActionBtn.innerHTML = '<span>+</span> New Note';
+                if (sortNotesBtn) sortNotesBtn.style.display = 'inline-flex';
                 setTimeout(() => {
                     const firstNoteBody = document.querySelector('.ms-sticky-body');
                     if (firstNoteBody && stickyNotes.length > 0) firstNoteBody.focus();
@@ -1668,6 +1724,7 @@
                 panelNotes.style.display = 'none';
                 panelTodo.style.display = 'block';
                 hubActionBtn.innerHTML = '<span>+</span> Focus Input';
+                if (sortNotesBtn) sortNotesBtn.style.display = 'none';
                 setTimeout(() => {
                     const todoInput = document.getElementById('todoInput');
                     if (todoInput) todoInput.focus();
@@ -1681,9 +1738,10 @@
         }
 
         // ----------------------------------------------------
-        // STICKY NOTES LOGIC
+        // STICKY NOTES LOGIC (SORTABLE & MINIMIZABLE)
         // ----------------------------------------------------
         const NOTE_COLORS = ['yellow', 'green', 'pink', 'blue', 'purple'];
+        let stickySortAsc = false; // false = newest first, true = oldest first
 
         function getFormattedTimestamp() {
             const now = new Date();
@@ -1697,13 +1755,17 @@
                 id: '1',
                 text: 'Curate new sensory board ideas and touch-and-feel book list.',
                 color: 'yellow',
-                timestamp: 'Sep 26, 10:30 AM'
+                timestamp: 'Sep 26, 10:30 AM',
+                createdAt: 1727326800000,
+                minimized: false
             }
         ];
 
         try {
             const sn = localStorage.getItem('lc_sticky_notes');
             if (sn) stickyNotes = JSON.parse(sn);
+            const sa = localStorage.getItem('lc_sticky_sort_asc');
+            if (sa !== null) stickySortAsc = (sa === 'true');
         } catch (e) {
             console.error(e);
         }
@@ -1720,10 +1782,34 @@
             document.execCommand(command, false, null);
         }
 
+        function toggleStickySort() {
+            stickySortAsc = !stickySortAsc;
+            try {
+                localStorage.setItem('lc_sticky_sort_asc', stickySortAsc);
+            } catch(e) {}
+            
+            const indicator = document.getElementById('sortDirectionIndicator');
+            if (indicator) indicator.innerText = stickySortAsc ? '↑' : '↓';
+            
+            renderStickyNotes();
+        }
+
+        function toggleMinimizeNote(id) {
+            const note = stickyNotes.find(n => n.id === id);
+            if (note) {
+                note.minimized = !note.minimized;
+                saveStickyNotes();
+                renderStickyNotes();
+            }
+        }
+
         function renderStickyNotes() {
             const container = document.getElementById('stickyNotesContainer');
             if (!container) return;
             container.innerHTML = '';
+
+            const indicator = document.getElementById('sortDirectionIndicator');
+            if (indicator) indicator.innerText = stickySortAsc ? '↑' : '↓';
 
             if (stickyNotes.length === 0) {
                 container.innerHTML = `
@@ -1731,28 +1817,40 @@
                         No sticky notes yet. Click <strong>+ New Note</strong>!
                     </div>
                 `;
-            } else {
-                stickyNotes.forEach(note => {
-                    const noteEl = document.createElement('div');
-                    noteEl.className = 'ms-sticky-note color-' + note.color;
-                    noteEl.innerHTML = `
-                        <div class="ms-sticky-topbar">
-                            <span class="note-time-stamp">${note.timestamp || ''}</span>
-                            <div class="note-actions">
-                                <button class="note-btn" title="Color" onclick="cycleColor('${note.id}')">🎨</button>
-                                <button class="note-btn" title="Delete" onclick="deleteStickyNote('${note.id}')">✕</button>
-                            </div>
-                        </div>
-                        <div class="ms-sticky-body" id="note-body-${note.id}" contenteditable="true" oninput="updateNoteText('${note.id}', this)">${note.text}</div>
-                        <div class="ms-sticky-toolbar">
-                            <button class="format-btn bold" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('bold');">B</button>
-                            <button class="format-btn italic" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('italic');">I</button>
-                            <button class="format-btn strike" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('strikeThrough');">S</button>
-                        </div>
-                    `;
-                    container.appendChild(noteEl);
-                });
+                updateDashboardCounts();
+                return;
             }
+
+            // Create a sorted view copy without mutating original array
+            const sortedList = [...stickyNotes].sort((a, b) => {
+                const timeA = a.createdAt || parseInt(a.id) || 0;
+                const timeB = b.createdAt || parseInt(b.id) || 0;
+                return stickySortAsc ? (timeA - timeB) : (timeB - timeA);
+            });
+
+            sortedList.forEach(note => {
+                const noteEl = document.createElement('div');
+                const isMinimized = !!note.minimized;
+                noteEl.className = 'ms-sticky-note color-' + note.color + (isMinimized ? ' minimized' : '');
+                noteEl.innerHTML = `
+                    <div class="ms-sticky-topbar">
+                        <span class="note-time-stamp">${note.timestamp || ''}</span>
+                        <div class="note-actions">
+                            <button class="note-btn toggle-minimize" title="${isMinimized ? 'Expand' : 'Minimize'}" onclick="toggleMinimizeNote('${note.id}')">${isMinimized ? '＋' : '—'}</button>
+                            <button class="note-btn" title="Color" onclick="cycleColor('${note.id}')">🎨</button>
+                            <button class="note-btn" title="Delete" onclick="deleteStickyNote('${note.id}')">✕</button>
+                        </div>
+                    </div>
+                    <div class="ms-sticky-body" id="note-body-${note.id}" contenteditable="true" oninput="updateNoteText('${note.id}', this)">${note.text}</div>
+                    <div class="ms-sticky-toolbar">
+                        <button class="format-btn bold" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('bold');">B</button>
+                        <button class="format-btn italic" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('italic');">I</button>
+                        <button class="format-btn strike" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('strikeThrough');">S</button>
+                    </div>
+                `;
+                container.appendChild(noteEl);
+            });
+
             updateDashboardCounts(); 
         }
 
@@ -1762,7 +1860,9 @@
                 id: Date.now().toString(),
                 text: '',
                 color: randomColor,
-                timestamp: getFormattedTimestamp()
+                timestamp: getFormattedTimestamp(),
+                createdAt: Date.now(),
+                minimized: false
             };
 
             stickyNotes.unshift(newNote);
@@ -1982,7 +2082,6 @@
             adhuBlocks.forEach((block, index) => {
                 const el = document.createElement('div');
                 el.className = 'wl-block ' + (block.checked ? 'checked' : '');
-                // Continuous HTML string to prevent newline whitespace rendering
                 el.innerHTML = '<div class="todo-checkbox" style="border-color: var(--text-muted); ' + (block.checked ? 'background: var(--primary); border-color: var(--primary); color: #fff;' : '') + '" onclick="toggleAdhuBlockCheck(\'' + block.id + '\')">' + (block.checked ? '✓' : '') + '</div><div class="wl-block-editor" id="wl-block-' + block.id + '" contenteditable="true" oninput="updateAdhuBlockHtml(\'' + block.id + '\')" onkeydown="handleBlockKeyDown(event, \'' + block.id + '\', ' + index + ')" placeholder="Type book or note...">' + (block.html || '') + '</div>';
                 container.appendChild(el);
             });
@@ -2239,7 +2338,8 @@
                 userAudiobooks: userAudiobooks,
                 userTools: userTools,
                 adhuBlocks: adhuBlocks,
-                adhuWishlistColor: localStorage.getItem('lc_adhu_wishlist_color') || 'default'
+                adhuWishlistColor: localStorage.getItem('lc_adhu_wishlist_color') || 'default',
+                stickySortAsc: stickySortAsc
             };
         }
 
@@ -2331,6 +2431,10 @@
 
                     if (data.adhuWishlistColor) {
                         localStorage.setItem('lc_adhu_wishlist_color', data.adhuWishlistColor);
+                    }
+
+                    if (data.stickySortAsc !== undefined) {
+                        stickySortAsc = data.stickySortAsc;
                     }
                     
                     loadAdhuWishlistPage();
