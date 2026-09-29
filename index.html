@@ -533,6 +533,7 @@
             cursor: pointer;
             box-shadow: 0 4px 10px rgba(148, 93, 76, 0.2);
             outline: none;
+            justify-content: center;
         }
 
         .hub-tabs {
@@ -733,6 +734,7 @@
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
+            cursor: pointer;
         }
 
         .todo-item.completed .todo-checkbox {
@@ -839,7 +841,7 @@
         }
 
         /* ----------------------------------------------------
-           ADHU'S BOOKS WISHLIST (FULL-PAGE CLEAN CANVAS & COLOR PALETTE)
+           ADHU'S BOOKS WISHLIST (RICH-TEXT CHECKLIST CANVAS)
            ---------------------------------------------------- */
         .wishlist-page-container {
             background: var(--surface-card);
@@ -921,7 +923,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--text-muted);
+            color: #E53935;
             cursor: pointer;
             font-size: 13px;
             outline: none;
@@ -934,37 +936,48 @@
             transform: scale(0.92);
         }
 
-        .wishlist-editor-sheet {
+        /* Individual Checklist Blocks */
+        .wl-block {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 6px 0;
+        }
+        
+        .wl-block .todo-checkbox {
+            margin-top: 2px; /* Align checkbox with first line of text */
+        }
+
+        .wl-block-editor {
             flex: 1;
             outline: none;
-            font-size: 14px;
-            line-height: 1.6;
+            font-size: 14.5px;
+            line-height: 1.5;
             color: var(--text-main);
-            font-family: inherit;
             word-break: break-word;
             white-space: pre-wrap;
         }
 
-        .wishlist-editor-sheet ul {
+        .wl-block-editor ul {
             padding-left: 20px;
             margin: 4px 0;
         }
 
-        .wishlist-editor-sheet li {
+        .wl-block-editor li {
             margin-bottom: 4px;
         }
 
-        .wishlist-editor-sheet a {
+        .wl-block-editor a {
             color: var(--primary);
             text-decoration: underline;
             font-weight: 600;
             cursor: pointer;
         }
 
-        .wishlist-editor-sheet[placeholder]:empty:before {
+        .wl-block-editor[placeholder]:empty:before {
             content: attr(placeholder);
             color: var(--text-muted);
-            opacity: 0.6;
+            opacity: 0.5;
             pointer-events: none;
             display: block;
         }
@@ -1135,7 +1148,7 @@
             </div>
         </main>
 
-        <!-- ADHU VIEW (FULL-PAGE BOOKS WISHLIST NOTEBOOK) -->
+        <!-- ADHU VIEW (RICH CHECKLIST NOTEBOOK) -->
         <main id="view-adhu" class="view-content">
             <div class="wishlist-page-container" id="adhuWishlistContainer">
                 <div class="wishlist-page-header">
@@ -1144,26 +1157,26 @@
                     <div class="wishlist-header-right">
                         <div class="wishlist-format-toolbar">
                             <button class="wishlist-format-btn" onmousedown="openWishlistLinkModal(event)" title="Add Hyperlink">🔗</button>
-                            <button class="wishlist-format-btn" onmousedown="applyWishlistFormat(event, 'insertUnorderedList')" title="Bullet Points">• List</button>
+                            <button class="wishlist-format-btn" onmousedown="applyWishlistFormat(event, 'insertUnorderedList')" title="Bullet Points">•</button>
                             <button class="wishlist-format-btn bold" onmousedown="applyWishlistFormat(event, 'bold')" title="Bold">B</button>
                             <button class="wishlist-format-btn italic" onmousedown="applyWishlistFormat(event, 'italic')" title="Italic">I</button>
                             <button class="wishlist-format-btn strike" onmousedown="applyWishlistFormat(event, 'strikeThrough')" title="Strikethrough">S</button>
-                            <button class="wishlist-format-btn" onmousedown="cycleWishlistColor(event)" title="Cycle Color Theme">🎨</button>
+                            <button class="wishlist-format-btn" onmousedown="cycleWishlistColor(event)" title="Cycle Background Color">🎨</button>
                         </div>
 
-                        <button class="wishlist-clear-btn" onclick="clearAdhuWishlistOneClick()" title="Clear All Text">
+                        <button class="wishlist-clear-btn" onclick="deleteCheckedAdhuItems()" title="Delete Selected Items">
                             🗑️
                         </button>
                     </div>
                 </div>
 
-                <div 
-                    class="wishlist-editor-sheet" 
-                    id="adhuWishlistEditor" 
-                    contenteditable="true" 
-                    placeholder="Type book titles, authors, or tap 🔗 to add links..."
-                    oninput="saveAdhuWishlistPage()"
-                ></div>
+                <div id="adhuBlocksContainer" style="flex: 1; overflow-y: auto; padding-bottom: 20px;">
+                    <!-- Blocks injected here via JS -->
+                </div>
+
+                <button class="add-note-btn" style="width: 100%;" onclick="addAdhuBlock()">
+                    <span>+</span> Add New Line
+                </button>
             </div>
         </main>
 
@@ -1759,35 +1772,30 @@
         }
 
         // ----------------------------------------------------
-        // ADHU'S BOOKS WISHLIST (CANVAS, COLOR PALETTE & ACTIONS)
+        // ADHU'S BOOKS WISHLIST (RICH-TEXT CHECKLIST BLOCKS)
         // ----------------------------------------------------
         const WL_SHEET_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
         let currentWlColor = 'default';
-
         let savedRange = null;
 
-        function saveEditorSelection() {
-            const sel = window.getSelection();
-            if (sel.getRangeAt && sel.rangeCount) {
-                savedRange = sel.getRangeAt(0);
-            }
-        }
-
-        function restoreEditorSelection() {
-            if (savedRange) {
-                const sel = window.getSelection();
-                sel.removeAllRanges();
-                sel.addRange(savedRange);
-            }
-        }
+        let adhuBlocks = [];
 
         function loadAdhuWishlistPage() {
-            const editor = document.getElementById('adhuWishlistEditor');
-            if (!editor) return;
-
-            const savedContent = localStorage.getItem('lc_adhu_wishlist_content');
-            if (savedContent) {
-                editor.innerHTML = savedContent;
+            try {
+                const storedBlocks = localStorage.getItem('lc_adhu_blocks');
+                if (storedBlocks) {
+                    adhuBlocks = JSON.parse(storedBlocks);
+                } else {
+                    // Safe Migration from old single-page HTML
+                    const oldContent = localStorage.getItem('lc_adhu_wishlist_content');
+                    if (oldContent && oldContent.trim() !== '') {
+                        adhuBlocks = [{ id: Date.now().toString(), html: oldContent, checked: false }];
+                    } else {
+                        adhuBlocks = [{ id: Date.now().toString(), html: '', checked: false }];
+                    }
+                }
+            } catch(e) {
+                adhuBlocks = [{ id: Date.now().toString(), html: '', checked: false }];
             }
 
             // Restore canvas background color
@@ -1796,34 +1804,101 @@
                 applySheetColorClass(savedColor);
             }
 
-            editor.removeEventListener('click', handleWishlistLinkClick);
-            editor.addEventListener('click', handleWishlistLinkClick);
-        }
+            renderAdhuBlocks();
 
-        function handleWishlistLinkClick(e) {
-            const target = e.target.closest('a');
-            if (target && target.href) {
-                e.preventDefault();
-                window.open(target.href, '_blank', 'noopener,noreferrer');
+            // Link Click Interceptor
+            const container = document.getElementById('adhuBlocksContainer');
+            if (container) {
+                container.removeEventListener('click', handleWishlistLinkClick);
+                container.addEventListener('click', handleWishlistLinkClick);
             }
         }
 
-        function saveAdhuWishlistPage() {
-            const editor = document.getElementById('adhuWishlistEditor');
-            if (!editor) return;
+        function saveAdhuBlocks() {
             try {
-                localStorage.setItem('lc_adhu_wishlist_content', editor.innerHTML);
-            } catch (e) {
-                console.error(e);
+                localStorage.setItem('lc_adhu_blocks', JSON.stringify(adhuBlocks));
+            } catch (e) {}
+        }
+
+        function syncAllAdhuBlocks() {
+            adhuBlocks.forEach(b => {
+                const el = document.getElementById('wl-block-' + b.id);
+                if (el) b.html = el.innerHTML;
+            });
+            saveAdhuBlocks();
+        }
+
+        function renderAdhuBlocks() {
+            const container = document.getElementById('adhuBlocksContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            adhuBlocks.forEach(block => {
+                const el = document.createElement('div');
+                el.className = 'wl-block ' + (block.checked ? 'checked' : '');
+                el.innerHTML = `
+                    <div class="todo-checkbox" style="border-color: var(--text-muted); ${block.checked ? 'background: var(--primary); border-color: var(--primary); color: #fff;' : ''}" onclick="toggleAdhuBlockCheck('${block.id}')">
+                        ${block.checked ? '✓' : ''}
+                    </div>
+                    <div class="wl-block-editor" id="wl-block-${block.id}" contenteditable="true" oninput="updateAdhuBlockHtml('${block.id}')" placeholder="Type here...">
+                        ${block.html || ''}
+                    </div>
+                `;
+                container.appendChild(el);
+            });
+        }
+
+        function updateAdhuBlockHtml(id) {
+            const block = adhuBlocks.find(b => b.id === id);
+            const el = document.getElementById('wl-block-' + id);
+            if (block && el) {
+                block.html = el.innerHTML;
+                saveAdhuBlocks();
+            }
+        }
+
+        function toggleAdhuBlockCheck(id) {
+            syncAllAdhuBlocks(); // save any text currently typed before re-rendering
+            const block = adhuBlocks.find(b => b.id === id);
+            if (block) {
+                block.checked = !block.checked;
+                saveAdhuBlocks();
+                renderAdhuBlocks();
+            }
+        }
+
+        function addAdhuBlock() {
+            syncAllAdhuBlocks();
+            const newId = Date.now().toString();
+            adhuBlocks.push({ id: newId, html: '', checked: false });
+            saveAdhuBlocks();
+            renderAdhuBlocks();
+            setTimeout(() => {
+                const el = document.getElementById('wl-block-' + newId);
+                if (el) el.focus();
+            }, 50);
+        }
+
+        function deleteCheckedAdhuItems() {
+            const hasChecked = adhuBlocks.some(b => b.checked);
+            if (!hasChecked) {
+                alert("Check the box next to an item to delete it.");
+                return;
+            }
+            if (confirm("Delete selected items?")) {
+                adhuBlocks = adhuBlocks.filter(b => !b.checked);
+                if (adhuBlocks.length === 0) {
+                    adhuBlocks = [{ id: Date.now().toString(), html: '', checked: false }];
+                }
+                saveAdhuBlocks();
+                renderAdhuBlocks();
             }
         }
 
         function applyWishlistFormat(e, command) {
             e.preventDefault();
-            const editor = document.getElementById('adhuWishlistEditor');
-            editor.focus();
             document.execCommand(command, false, null);
-            saveAdhuWishlistPage();
+            syncAllAdhuBlocks();
         }
 
         function cycleWishlistColor(e) {
@@ -1845,20 +1920,12 @@
             container.classList.add('wl-color-' + colorName);
         }
 
-        function clearAdhuWishlistOneClick() {
-            const editor = document.getElementById('adhuWishlistEditor');
-            if (!editor || !editor.innerText.trim()) return;
-
-            if (confirm("Are you sure you want to clear the entire wishlist?")) {
-                editor.innerHTML = '';
-                saveAdhuWishlistPage();
-                editor.focus();
-            }
-        }
-
         function openWishlistLinkModal(e) {
             e.preventDefault();
-            saveEditorSelection();
+            const sel = window.getSelection();
+            if (sel.getRangeAt && sel.rangeCount) {
+                savedRange = sel.getRangeAt(0);
+            }
             
             document.getElementById('wlLinkUrl').value = '';
             document.getElementById('wlLinkName').value = '';
@@ -1886,16 +1953,25 @@
             }
 
             const displayName = name || url;
-
             closeWishlistLinkModal();
 
-            const editor = document.getElementById('adhuWishlistEditor');
-            editor.focus();
-            restoreEditorSelection();
+            if (savedRange) {
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(savedRange);
+            }
 
             const linkHTML = `<a href="${url}" target="_blank" rel="noopener noreferrer">${displayName}</a>&nbsp;`;
             document.execCommand('insertHTML', false, linkHTML);
-            saveAdhuWishlistPage();
+            syncAllAdhuBlocks();
+        }
+
+        function handleWishlistLinkClick(e) {
+            const target = e.target.closest('a');
+            if (target && target.href) {
+                e.preventDefault();
+                window.open(target.href, '_blank', 'noopener,noreferrer');
+            }
         }
 
         // ----------------------------------------------------
@@ -1945,7 +2021,7 @@
                 userEbooks: userEbooks,
                 userAudiobooks: userAudiobooks,
                 userTools: userTools,
-                adhuWishlistContent: localStorage.getItem('lc_adhu_wishlist_content') || '',
+                adhuBlocks: adhuBlocks,
                 adhuWishlistColor: localStorage.getItem('lc_adhu_wishlist_color') || 'default'
             };
         }
@@ -2025,14 +2101,20 @@
                     if (data.userAudiobooks) userAudiobooks = data.userAudiobooks;
                     if (data.userTools) userTools = data.userTools;
                     
-                    if (data.adhuWishlistContent !== undefined) {
-                        localStorage.setItem('lc_adhu_wishlist_content', data.adhuWishlistContent);
+                    if (data.adhuBlocks) {
+                        adhuBlocks = data.adhuBlocks;
+                        saveAdhuBlocks();
+                    } else if (data.adhuWishlistContent !== undefined) {
+                        // Migration on restore if old backup is used
+                        adhuBlocks = [{ id: Date.now().toString(), html: data.adhuWishlistContent, checked: false }];
+                        saveAdhuBlocks();
                     }
+
                     if (data.adhuWishlistColor) {
                         localStorage.setItem('lc_adhu_wishlist_color', data.adhuWishlistColor);
                     }
+                    
                     loadAdhuWishlistPage();
-
                     saveLinksToStorage();
 
                     statusEl.innerText = '✓ Data restored successfully!';
