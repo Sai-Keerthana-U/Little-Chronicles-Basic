@@ -884,15 +884,15 @@
         }
 
         /* ----------------------------------------------------
-           ADHU'S ACCORDION / DROPDOWN FEATURE STACK
+           COMMON ACCORDION / DROPDOWN STYLING
            ---------------------------------------------------- */
-        .adhu-features-stack {
+        .features-stack {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
 
-        .adhu-dropdown-card {
+        .dropdown-feature-card {
             background: var(--surface-card);
             border-radius: var(--radius-outer);
             border: var(--card-border);
@@ -901,14 +901,7 @@
             transition: background-color 0.25s ease, box-shadow 0.2s ease;
         }
 
-        .adhu-dropdown-card.wl-color-default { background: var(--surface-card); }
-        .adhu-dropdown-card.wl-color-yellow { background: var(--sticky-yellow); }
-        .adhu-dropdown-card.wl-color-green { background: var(--sticky-green); }
-        .adhu-dropdown-card.wl-color-pink { background: var(--sticky-pink); }
-        .adhu-dropdown-card.wl-color-blue { background: var(--sticky-blue); }
-        .adhu-dropdown-card.wl-color-purple { background: var(--sticky-purple); }
-
-        .adhu-dropdown-header {
+        .dropdown-feature-header {
             padding: 14px 16px;
             display: flex;
             align-items: center;
@@ -917,17 +910,17 @@
             user-select: none;
         }
 
-        .adhu-dropdown-header:active {
+        .dropdown-feature-header:active {
             opacity: 0.9;
         }
 
-        .adhu-header-left {
+        .feature-header-left {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .adhu-feature-icon {
+        .feature-icon-badge {
             width: 38px;
             height: 38px;
             border-radius: var(--radius-inner);
@@ -940,32 +933,26 @@
             line-height: 1;
         }
 
-        .adhu-feature-titles {
+        .feature-titles-group {
             display: flex;
             flex-direction: column;
         }
 
-        .adhu-feature-title {
+        .feature-main-title {
             font-size: 14.5px;
             font-weight: 700;
             color: var(--text-main);
             letter-spacing: -0.2px;
         }
 
-        .adhu-feature-sub {
+        .feature-sub-title {
             font-size: 11px;
             font-weight: 500;
             color: var(--text-muted);
             margin-top: 2px;
         }
 
-        .adhu-header-right {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .adhu-chevron {
+        .feature-chevron {
             width: 26px;
             height: 26px;
             border-radius: 50%;
@@ -978,11 +965,11 @@
             transition: transform 0.25s ease;
         }
 
-        .adhu-dropdown-card.open .adhu-chevron {
+        .dropdown-feature-card.open .feature-chevron {
             transform: rotate(180deg);
         }
 
-        .adhu-dropdown-body {
+        .dropdown-feature-body {
             display: none;
             padding: 0 16px 16px;
             flex-direction: column;
@@ -990,9 +977,132 @@
             border-top: var(--card-border);
         }
 
-        .adhu-dropdown-card.open .adhu-dropdown-body {
+        .dropdown-feature-card.open .dropdown-feature-body {
             display: flex;
         }
+
+        /* ----------------------------------------------------
+           KEE: BOOKS OVERVIEW (TITLE ACCORDIONS + CONTEXTUAL TOOLBAR)
+           ---------------------------------------------------- */
+        .book-overview-item {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-overview-header {
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            cursor: pointer;
+            background: rgba(0,0,0,0.02);
+            user-select: none;
+        }
+
+        .book-overview-title-input {
+            flex: 1;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            background: transparent;
+            border: none;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .book-overview-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .book-overview-del-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 14px;
+            cursor: pointer;
+            opacity: 0.6;
+            padding: 2px;
+        }
+
+        .book-overview-chevron {
+            font-size: 9px;
+            color: var(--text-muted);
+            transition: transform 0.2s ease;
+        }
+
+        .book-overview-item.expanded .book-overview-chevron {
+            transform: rotate(180deg);
+        }
+
+        .book-overview-body-wrap {
+            display: none;
+            flex-direction: column;
+            padding: 10px 14px 14px;
+            border-top: var(--card-border);
+            background: var(--surface-card);
+        }
+
+        .book-overview-item.expanded .book-overview-body-wrap {
+            display: flex;
+        }
+
+        /* Contextual Floating Toolbar for Active Editing */
+        .context-toolbar {
+            display: none;
+            align-items: center;
+            gap: 3px;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 3px 6px;
+            width: fit-content;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .context-toolbar.visible {
+            display: inline-flex;
+        }
+
+        .book-overview-editor {
+            outline: none;
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: var(--text-main);
+            min-height: 60px;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        .book-overview-editor[placeholder]:empty:before {
+            content: attr(placeholder);
+            color: var(--text-muted);
+            opacity: 0.5;
+            pointer-events: none;
+            display: block;
+        }
+
+        .book-overview-editor ul {
+            padding-left: 20px;
+            margin: 4px 0;
+        }
+
+        /* ----------------------------------------------------
+           ADHU: BOOKS WISHLIST CHECKLIST
+           ---------------------------------------------------- */
+        .adhu-dropdown-card.wl-color-default { background: var(--surface-card); }
+        .adhu-dropdown-card.wl-color-yellow { background: var(--sticky-yellow); }
+        .adhu-dropdown-card.wl-color-green { background: var(--sticky-green); }
+        .adhu-dropdown-card.wl-color-pink { background: var(--sticky-pink); }
+        .adhu-dropdown-card.wl-color-blue { background: var(--sticky-blue); }
+        .adhu-dropdown-card.wl-color-purple { background: var(--sticky-purple); }
 
         .adhu-card-toolbar {
             display: flex;
@@ -1033,7 +1143,6 @@
             background: var(--surface-card);
         }
 
-        /* Extra Prominent Link Button */
         .wishlist-format-btn.btn-large-link {
             font-size: 16px;
             padding: 4px 10px;
@@ -1069,7 +1178,6 @@
             transform: scale(0.92);
         }
 
-        /* Checklist Block Baseline Typography */
         .wl-block {
             display: flex;
             align-items: flex-start;
@@ -1165,63 +1273,90 @@
 
         <!-- KEE DASHBOARD -->
         <main id="view-kee" class="view-content active-view">
-            <div class="bento-grid">
-
-                <!-- 1. eBooks Tile -->
-                <div class="compact-card" onclick="openResourceDrawer('ebooks')">
-                    <div class="card-top">
-                        <div class="icon-badge">🌐</div>
-                        <div class="card-arrow">
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+                
+                <!-- 2x2 Bento Grid -->
+                <div class="bento-grid">
+                    <!-- 1. eBooks Tile -->
+                    <div class="compact-card" onclick="openResourceDrawer('ebooks')">
+                        <div class="card-top">
+                            <div class="icon-badge">🌐</div>
+                            <div class="card-arrow">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </div>
+                        <div class="card-bottom">
+                            <h3 class="card-heading">eBooks Vault</h3>
+                            <p class="card-subtitle" id="ebookCount">5 resources</p>
                         </div>
                     </div>
-                    <div class="card-bottom">
-                        <h3 class="card-heading">eBooks Vault</h3>
-                        <p class="card-subtitle" id="ebookCount">5 resources</p>
+
+                    <!-- 2. Audiobook Tile -->
+                    <div class="compact-card" onclick="openResourceDrawer('audiobooks')">
+                        <div class="card-top">
+                            <div class="icon-badge">🎧</div>
+                            <div class="card-arrow">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </div>
+                        <div class="card-bottom">
+                            <h3 class="card-heading">Audiobook Stash</h3>
+                            <p class="card-subtitle" id="audioCount">5 resources</p>
+                        </div>
+                    </div>
+
+                    <!-- 3. Tools & Converters Tile -->
+                    <div class="compact-card" onclick="openResourceDrawer('tools')">
+                        <div class="card-top">
+                            <div class="icon-badge">
+                                <img src="epub2pdf.png" onerror="this.onerror=null; this.parentElement.innerHTML='⚡';" alt="Tools">
+                            </div>
+                            <div class="card-arrow">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </div>
+                        <div class="card-bottom">
+                            <h3 class="card-heading">Tools & Converters</h3>
+                            <p class="card-subtitle" id="toolsCount">4 tools</p>
+                        </div>
+                    </div>
+
+                    <!-- 4. Notes & To-Do Split Tile -->
+                    <div class="split-card-wrapper">
+                        <div class="micro-card" onclick="openSpecificNotesView('notes')">
+                            <div class="micro-icon">📝</div>
+                            <div class="micro-heading">Notes</div>
+                            <div class="micro-subtitle" id="stickyCount">0 notes</div>
+                        </div>
+                        <div class="micro-card" onclick="openSpecificNotesView('todo')">
+                            <div class="micro-icon">✅</div>
+                            <div class="micro-heading">To-Do</div>
+                            <div class="micro-subtitle" id="todoCount">0 pending</div>
+                        </div>
                     </div>
                 </div>
 
-                <!-- 2. Audiobook Tile -->
-                <div class="compact-card" onclick="openResourceDrawer('audiobooks')">
-                    <div class="card-top">
-                        <div class="icon-badge">🎧</div>
-                        <div class="card-arrow">
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                <!-- FEATURE: BOOKS OVERVIEW ACCORDION (KEE) -->
+                <div class="dropdown-feature-card open" id="keeBooksOverviewCard">
+                    <!-- Dropdown Toggle Header -->
+                    <div class="dropdown-feature-header" onclick="toggleKeeBooksOverviewDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">📖</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Books Overview</span>
+                                <span class="feature-sub-title" id="keeBooksOverviewSub">0 overviews</span>
+                            </div>
                         </div>
+                        <div class="feature-chevron">▼</div>
                     </div>
-                    <div class="card-bottom">
-                        <h3 class="card-heading">Audiobook Stash</h3>
-                        <p class="card-subtitle" id="audioCount">5 resources</p>
-                    </div>
-                </div>
 
-                <!-- 3. Tools & Converters Tile -->
-                <div class="compact-card" onclick="openResourceDrawer('tools')">
-                    <div class="card-top">
-                        <div class="icon-badge">
-                            <img src="epub2pdf.png" onerror="this.onerror=null; this.parentElement.innerHTML='⚡';" alt="Tools">
-                        </div>
-                        <div class="card-arrow">
-                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                        </div>
-                    </div>
-                    <div class="card-bottom">
-                        <h3 class="card-heading">Tools & Converters</h3>
-                        <p class="card-subtitle" id="toolsCount">4 tools</p>
-                    </div>
-                </div>
+                    <!-- Collapsible Body with Book Titles -->
+                    <div class="dropdown-feature-body">
+                        <div id="keeBooksOverviewContainer" style="display: flex; flex-direction: column; gap: 8px; padding-top: 12px;"></div>
 
-                <!-- 4. Notes & To-Do Split Tile -->
-                <div class="split-card-wrapper">
-                    <div class="micro-card" onclick="openSpecificNotesView('notes')">
-                        <div class="micro-icon">📝</div>
-                        <div class="micro-heading">Notes</div>
-                        <div class="micro-subtitle" id="stickyCount">0 notes</div>
-                    </div>
-                    <div class="micro-card" onclick="openSpecificNotesView('todo')">
-                        <div class="micro-icon">✅</div>
-                        <div class="micro-heading">To-Do</div>
-                        <div class="micro-subtitle" id="todoCount">0 pending</div>
+                        <button class="add-note-btn" style="width: 100%; margin-top: 4px;" onclick="addKeeBookOverview()">
+                            <span>+</span> Add Book Overview
+                        </button>
                     </div>
                 </div>
 
@@ -1298,26 +1433,24 @@
 
         <!-- ADHU DASHBOARD (FEATURE STACK WITH EXPANDABLE DROPDOWNS) -->
         <main id="view-adhu" class="view-content">
-            <div class="adhu-features-stack">
+            <div class="features-stack">
                 
                 <!-- FEATURE 1: BOOKS WISHLIST (EXPANDABLE DROPDOWN) -->
-                <div class="adhu-dropdown-card open" id="adhuWishlistCard">
+                <div class="dropdown-feature-card adhu-dropdown-card open" id="adhuWishlistCard">
                     <!-- Dropdown Toggle Header -->
-                    <div class="adhu-dropdown-header" onclick="toggleAdhuWishlistDropdown()">
-                        <div class="adhu-header-left">
-                            <div class="adhu-feature-icon">📚</div>
-                            <div class="adhu-feature-titles">
-                                <span class="adhu-feature-title">Books Wishlist</span>
-                                <span class="adhu-feature-sub" id="adhuWishlistSub">0 books</span>
+                    <div class="dropdown-feature-header" onclick="toggleAdhuWishlistDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">📚</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Books Wishlist</span>
+                                <span class="feature-sub-title" id="adhuWishlistSub">0 books</span>
                             </div>
                         </div>
-                        <div class="adhu-header-right">
-                            <div class="adhu-chevron">▼</div>
-                        </div>
+                        <div class="feature-chevron">▼</div>
                     </div>
 
                     <!-- Collapsible Checklist Body -->
-                    <div class="adhu-dropdown-body">
+                    <div class="dropdown-feature-body">
                         <div class="adhu-card-toolbar">
                             <div class="wishlist-format-toolbar">
                                 <button class="wishlist-format-btn btn-large-link" onmousedown="openWishlistLinkModal(event)" title="Add Hyperlink">🔗</button>
@@ -1341,8 +1474,6 @@
                         </button>
                     </div>
                 </div>
-
-                <!-- Ready space for future features -->
 
             </div>
         </main>
@@ -1415,7 +1546,7 @@
             </div>
 
             <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.45; margin: 0;">
-                Export your notes, to-dos, links, and books wishlist directly to Google Drive.
+                Export your notes, to-dos, links, books overview, and wishlist directly to Google Drive.
             </p>
 
             <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
@@ -1741,7 +1872,7 @@
         // STICKY NOTES LOGIC (SORTABLE & MINIMIZABLE)
         // ----------------------------------------------------
         const NOTE_COLORS = ['yellow', 'green', 'pink', 'blue', 'purple'];
-        let stickySortAsc = false; // false = newest first, true = oldest first
+        let stickySortAsc = false;
 
         function getFormattedTimestamp() {
             const now = new Date();
@@ -1821,7 +1952,6 @@
                 return;
             }
 
-            // Create a sorted view copy without mutating original array
             const sortedList = [...stickyNotes].sort((a, b) => {
                 const timeA = a.createdAt || parseInt(a.id) || 0;
                 const timeB = b.createdAt || parseInt(b.id) || 0;
@@ -1982,6 +2112,184 @@
             todoList = todoList.filter(t => t.id !== id);
             saveTodoList();
             renderTodoList();
+        }
+
+        // ----------------------------------------------------
+        // KEE: BOOKS OVERVIEW (ACCORDION WITH CONTEXTUAL TOOLBAR)
+        // ----------------------------------------------------
+        let keeBookOverviews = [];
+
+        function loadKeeBookOverviews() {
+            try {
+                const stored = localStorage.getItem('lc_kee_book_overviews');
+                if (stored) {
+                    keeBookOverviews = JSON.parse(stored);
+                } else {
+                    keeBookOverviews = [
+                        {
+                            id: 'bo_1',
+                            title: 'Fourth Wing — Notes & Overview',
+                            content: 'Dragons, signet abilities, and military academy strategy.',
+                            expanded: false
+                        }
+                    ];
+                }
+            } catch(e) {
+                keeBookOverviews = [];
+            }
+
+            const isDropdownOpen = localStorage.getItem('lc_kee_bo_dropdown_open');
+            const card = document.getElementById('keeBooksOverviewCard');
+            if (card && isDropdownOpen !== null) {
+                if (isDropdownOpen === 'false') card.classList.remove('open');
+                else card.classList.add('open');
+            }
+
+            renderKeeBookOverviews();
+        }
+
+        function saveKeeBookOverviews() {
+            try {
+                localStorage.setItem('lc_kee_book_overviews', JSON.stringify(keeBookOverviews));
+            } catch (e) {}
+            updateKeeBookOverviewSub();
+        }
+
+        function toggleKeeBooksOverviewDropdown() {
+            const card = document.getElementById('keeBooksOverviewCard');
+            if (card) {
+                card.classList.toggle('open');
+                try {
+                    localStorage.setItem('lc_kee_bo_dropdown_open', card.classList.contains('open'));
+                } catch(e) {}
+            }
+        }
+
+        function updateKeeBookOverviewSub() {
+            const sub = document.getElementById('keeBooksOverviewSub');
+            if (!sub) return;
+            const len = keeBookOverviews.length;
+            sub.innerText = len + (len === 1 ? ' book' : ' books');
+        }
+
+        function renderKeeBookOverviews() {
+            const container = document.getElementById('keeBooksOverviewContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (keeBookOverviews.length === 0) {
+                container.innerHTML = '<div style="text-align:center; font-size:12px; color:var(--text-muted); padding:10px 0;">No book overviews yet. Click "+ Add Book Overview" below.</div>';
+                updateKeeBookOverviewSub();
+                return;
+            }
+
+            keeBookOverviews.forEach(item => {
+                const row = document.createElement('div');
+                row.className = 'book-overview-item' + (item.expanded ? ' expanded' : '');
+                row.id = 'bo-item-' + item.id;
+
+                row.innerHTML = `
+                    <div class="book-overview-header" onclick="toggleBookOverviewItem(event, '${item.id}')">
+                        <input type="text" class="book-overview-title-input" value="${item.title || 'Untitled Book'}" placeholder="Enter Book Title..." onclick="event.stopPropagation()" oninput="updateBookOverviewTitle('${item.id}', this.value)">
+                        <div class="book-overview-actions">
+                            <button class="book-overview-del-btn" onclick="event.stopPropagation(); deleteBookOverviewItem('${item.id}')" title="Delete">✕</button>
+                            <span class="book-overview-chevron">▼</span>
+                        </div>
+                    </div>
+                    <div class="book-overview-body-wrap">
+                        <!-- Contextual Formatting Toolbar: visible only when editing -->
+                        <div class="context-toolbar" id="bo-toolbar-${item.id}">
+                            <button class="wishlist-format-btn bold" onmousedown="applyOverviewFormat(event, '${item.id}', 'bold')">B</button>
+                            <button class="wishlist-format-btn italic" onmousedown="applyOverviewFormat(event, '${item.id}', 'italic')">I</button>
+                            <button class="wishlist-format-btn strike" onmousedown="applyOverviewFormat(event, '${item.id}', 'strikeThrough')">S</button>
+                            <button class="wishlist-format-btn" onmousedown="applyOverviewFormat(event, '${item.id}', 'insertUnorderedList')">•</button>
+                        </div>
+                        <div class="book-overview-editor" id="bo-editor-${item.id}" contenteditable="true" 
+                             placeholder="Write synopsis, chapters, or thoughts..." 
+                             onfocus="showOverviewToolbar('${item.id}')" 
+                             onblur="hideOverviewToolbar('${item.id}')" 
+                             oninput="updateBookOverviewContent('${item.id}', this.innerHTML)">${item.content || ''}</div>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+
+            updateKeeBookOverviewSub();
+        }
+
+        function toggleBookOverviewItem(e, id) {
+            const item = keeBookOverviews.find(b => b.id === id);
+            if (item) {
+                item.expanded = !item.expanded;
+                saveKeeBookOverviews();
+                renderKeeBookOverviews();
+            }
+        }
+
+        function updateBookOverviewTitle(id, val) {
+            const item = keeBookOverviews.find(b => b.id === id);
+            if (item) {
+                item.title = val;
+                saveKeeBookOverviews();
+            }
+        }
+
+        function updateBookOverviewContent(id, html) {
+            const item = keeBookOverviews.find(b => b.id === id);
+            if (item) {
+                item.content = html;
+                saveKeeBookOverviews();
+            }
+        }
+
+        function addKeeBookOverview() {
+            const newId = 'bo_' + Date.now().toString();
+            keeBookOverviews.unshift({
+                id: newId,
+                title: 'New Book Overview',
+                content: '',
+                expanded: true
+            });
+            saveKeeBookOverviews();
+            renderKeeBookOverviews();
+            setTimeout(() => {
+                const ed = document.getElementById('bo-editor-' + newId);
+                if (ed) ed.focus();
+            }, 50);
+        }
+
+        function deleteBookOverviewItem(id) {
+            if (confirm("Delete this book overview?")) {
+                keeBookOverviews = keeBookOverviews.filter(b => b.id !== id);
+                saveKeeBookOverviews();
+                renderKeeBookOverviews();
+            }
+        }
+
+        function showOverviewToolbar(id) {
+            const tb = document.getElementById('bo-toolbar-' + id);
+            if (tb) tb.classList.add('visible');
+        }
+
+        function hideOverviewToolbar(id) {
+            // Short delay so toolbar button clicks can register before disappearing
+            setTimeout(() => {
+                const ed = document.getElementById('bo-editor-' + id);
+                if (document.activeElement !== ed) {
+                    const tb = document.getElementById('bo-toolbar-' + id);
+                    if (tb) tb.classList.remove('visible');
+                }
+            }, 180);
+        }
+
+        function applyOverviewFormat(e, id, command) {
+            e.preventDefault();
+            const ed = document.getElementById('bo-editor-' + id);
+            if (ed) {
+                ed.focus();
+                document.execCommand(command, false, null);
+                updateBookOverviewContent(id, ed.innerHTML);
+            }
         }
 
         // ----------------------------------------------------
@@ -2339,7 +2647,8 @@
                 userTools: userTools,
                 adhuBlocks: adhuBlocks,
                 adhuWishlistColor: localStorage.getItem('lc_adhu_wishlist_color') || 'default',
-                stickySortAsc: stickySortAsc
+                stickySortAsc: stickySortAsc,
+                keeBookOverviews: keeBookOverviews
             };
         }
 
@@ -2436,8 +2745,14 @@
                     if (data.stickySortAsc !== undefined) {
                         stickySortAsc = data.stickySortAsc;
                     }
+
+                    if (data.keeBookOverviews) {
+                        keeBookOverviews = data.keeBookOverviews;
+                        saveKeeBookOverviews();
+                    }
                     
                     loadAdhuWishlistPage();
+                    loadKeeBookOverviews();
                     saveLinksToStorage();
 
                     statusEl.innerText = '✓ Data restored successfully!';
@@ -2496,6 +2811,7 @@
             }
             updateDashboardCounts();
             loadAdhuWishlistPage();
+            loadKeeBookOverviews();
             checkBackupReminder(); 
         });
     </script>
