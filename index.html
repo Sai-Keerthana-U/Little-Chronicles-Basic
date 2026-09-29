@@ -1261,7 +1261,7 @@
             </div>
 
             <div class="modal-form">
-                <input type="text" id="bookSearchInput" class="modal-input" placeholder="Enter book title or author..." onkeypress="if(event.key==='Enter') searchGoogleBooks()">
+                <input type="text" id="bookSearchInput" class="modal-input" placeholder="Enter title, author, or ISBN..." onkeypress="if(event.key==='Enter') searchGoogleBooks()">
                 <button class="modal-save-btn" onclick="searchGoogleBooks()">🔍 Search</button>
                 
                 <input type="url" id="bookPurchaseLinkInput" class="modal-input" placeholder="Purchase Link (Amazon / Store - optional)">
@@ -1845,7 +1845,7 @@
         }
 
         // ----------------------------------------------------
-        // ADHU'S BOOKS WISHLIST (GOOGLE BOOKS API)
+        // ADHU'S BOOKS WISHLIST (GOOGLE BOOKS + OPEN LIBRARY API)
         // ----------------------------------------------------
         let adhuBooks = [];
         let booksViewMode = 'grid'; // 'grid' or 'list'
@@ -1951,48 +1951,102 @@
         }
 
         async function searchGoogleBooks() {
-            const query = document.getElementById('bookSearchInput').value.trim();
+            let query = document.getElementById('bookSearchInput').value.trim();
+            const purchaseLinkInput = document.getElementById('bookPurchaseLinkInput').value.trim();
             const resultsContainer = document.getElementById('bookSearchResultsContainer');
+            
+            // Auto-detect ISBN from Amazon URL if pasted into search box
+            if (query.includes('amazon.') || query.includes('/dp/') || query.includes('/gp/')) {
+                const match = query.match(/(?:dp|gp\/product|\/d)\/([A-Z0-9]{10})/i);
+                if (match && match[1]) {
+                    document.getElementById('bookPurchaseLinkInput').value = query;
+                    query = match[1];
+                    document.getElementById('bookSearchInput').value = query;
+                }
+            } else if (purchaseLinkInput && !query) {
+                const match = purchaseLinkInput.match(/(?:dp|gp\/product|\/d)\/([A-Z0-9]{10})/i);
+                if (match && match[1]) {
+                    query = match[1];
+                    document.getElementById('bookSearchInput').value = query;
+                }
+            }
+
             if (!query) return;
 
-            resultsContainer.innerHTML = '<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:12px;">Searching books...</div>';
+            resultsContainer.innerHTML = '<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:12px;">Searching catalog...</div>';
+
+            const cleanIsbn = query.replace(/[^0-9X]/gi, '');
+            const isIsbn = cleanIsbn.length === 10 || cleanIsbn.length === 13;
 
             try {
-                const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=5`);
-                const data = await response.json();
+                // Step 1: Try Google Books with ISBN / Title
+                let gQuery = isIsbn ? `isbn:${cleanIsbn}` : encodeURIComponent(query);
+                let response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${gQuery}&maxResults=5`);
+                let data = await response.json();
+
+                if ((!data.items || data.items.length === 0) && isIsbn) {
+                    response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${cleanIsbn}&maxResults=5`);
+                    data = await response.json();
+                }
 
                 resultsContainer.innerHTML = '';
 
-                if (!data.items || data.items.length === 0) {
-                    resultsContainer.innerHTML = '<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:12px;">No books found. Try a different title.</div>';
+                if (data.items && data.items.length > 0) {
+                    data.items.forEach(item => {
+                        const info = item.volumeInfo;
+                        const title = info.title || 'Untitled';
+                        const authors = info.authors ? info.authors.join(', ') : 'Unknown Author';
+                        let thumb = '';
+                        if (info.imageLinks) {
+                            thumb = (info.imageLinks.thumbnail || info.imageLinks.smallThumbnail || '').replace('http://', 'https://');
+                        }
+                        appendSearchResult(title, authors, thumb);
+                    });
                     return;
                 }
 
-                data.items.forEach(item => {
-                    const info = item.volumeInfo;
-                    const title = info.title || 'Untitled';
-                    const authors = info.authors ? info.authors.join(', ') : 'Unknown Author';
-                    const thumb = info.imageLinks ? info.imageLinks.thumbnail.replace('http://', 'https://') : '';
+                // Step 2: Fallback to Open Library if Google Books returns nothing
+                if (isIsbn) {
+                    const olRes = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${cleanIsbn}&format=json&jscmd=data`);
+                    const olData = await olRes.json();
+                    const bookKey = `ISBN:${cleanIsbn}`;
 
-                    const row = document.createElement('div');
-                    row.className = 'book-search-result';
-                    row.onclick = () => selectBookToAdd(title, authors, thumb);
+                    if (olData[bookKey]) {
+                        const b = olData[bookKey];
+                        const title = b.title || 'Untitled';
+                        const authors = b.authors ? b.authors.map(a => a.name).join(', ') : 'Unknown Author';
+                        let thumb = '';
+                        if (b.cover) {
+                            thumb = b.cover.medium || b.cover.large || b.cover.small || '';
+                        }
+                        appendSearchResult(title, authors, thumb);
+                        return;
+                    }
+                }
 
-                    row.innerHTML = `
-                        <img src="${thumb || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="55"><rect width="40" height="55" fill="%23ddd"/></svg>'}" class="book-search-thumb" alt="cover">
-                        <div style="flex:1; min-width:0;">
-                            <div style="font-size:12.5px; font-weight:700; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${title}</div>
-                            <div style="font-size:11px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${authors}</div>
-                        </div>
-                        <div style="font-size:12px; color:var(--primary); font-weight:700;">+ Add</div>
-                    `;
-                    resultsContainer.appendChild(row);
-                });
+                resultsContainer.innerHTML = '<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:12px;">No books found. Try searching by book title instead.</div>';
 
             } catch (err) {
                 console.error(err);
                 resultsContainer.innerHTML = '<div style="font-size:12px; color:#E53935; text-align:center; padding:12px;">Failed to fetch books. Check network connection.</div>';
             }
+        }
+
+        function appendSearchResult(title, authors, thumb) {
+            const resultsContainer = document.getElementById('bookSearchResultsContainer');
+            const row = document.createElement('div');
+            row.className = 'book-search-result';
+            row.onclick = () => selectBookToAdd(title, authors, thumb);
+
+            row.innerHTML = `
+                <img src="${thumb || 'data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'55\'><rect width=\'40\' height=\'55\' fill=\'%23ddd\'/></svg>'}" class="book-search-thumb" alt="cover">
+                <div style="flex:1; min-width:0;">
+                    <div style="font-size:12.5px; font-weight:700; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${title}</div>
+                    <div style="font-size:11px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${authors}</div>
+                </div>
+                <div style="font-size:12px; color:var(--primary); font-weight:700;">+ Add</div>
+            `;
+            resultsContainer.appendChild(row);
         }
 
         function selectBookToAdd(title, author, thumbnail) {
