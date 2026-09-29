@@ -322,7 +322,7 @@
         }
 
         /* Modals */
-        .drawer-overlay {
+        .drawer-overlay, .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
@@ -340,17 +340,17 @@
             transition: opacity 0.2s ease;
         }
 
-        .drawer-overlay.open {
+        .drawer-overlay.open, .modal-overlay.open {
             opacity: 1;
             pointer-events: auto;
         }
 
-        .drawer-sheet {
+        .drawer-sheet, .modal-sheet {
             background: var(--surface-card);
             border-radius: 20px;
             width: 100%;
             max-width: 420px;
-            max-height: 80vh;
+            max-height: 85vh;
             padding: 20px 18px 24px;
             box-shadow: 0 12px 36px rgba(0,0,0,0.3);
             overflow-y: auto;
@@ -362,23 +362,18 @@
             border: var(--card-border);
         }
 
-        .drawer-overlay.open .drawer-sheet {
+        .drawer-overlay.open .drawer-sheet,
+        .modal-overlay.open .modal-sheet {
             transform: scale(1);
         }
 
-        .drawer-header {
+        .drawer-header, .modal-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .drawer-title-group {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .drawer-title {
+        .drawer-title, .modal-title {
             font-size: 16.5px;
             font-weight: 700;
             color: var(--text-main);
@@ -418,13 +413,6 @@
             gap: 6px;
             border: 1px solid transparent;
             cursor: pointer;
-        }
-
-        .resource-pill:active {
-            background: var(--primary-soft);
-            color: var(--primary);
-            border-color: rgba(148, 93, 76, 0.2);
-            transform: scale(0.96);
         }
 
         .manage-pill-btn {
@@ -642,15 +630,6 @@
             font-family: inherit;
         }
 
-        /* Make placeholder text visible when editor is empty */
-        .ms-sticky-body[placeholder]:empty:before {
-            content: attr(placeholder);
-            color: var(--sticky-text);
-            opacity: 0.4;
-            pointer-events: none;
-            display: block;
-        }
-
         .ms-sticky-toolbar {
             display: flex;
             align-items: center;
@@ -794,63 +773,7 @@
             opacity: 0.6;
         }
 
-        /* Modal Sheets */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            z-index: 1100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
-        }
-
-        .modal-overlay.open {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal-sheet {
-            background: var(--surface-card);
-            border-radius: 20px;
-            width: 100%;
-            max-width: 420px;
-            max-height: 85vh;
-            padding: 20px 18px 24px;
-            overflow-y: auto;
-            transform: scale(0.92);
-            transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1);
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            border: var(--card-border);
-            box-shadow: 0 12px 36px rgba(0,0,0,0.3);
-        }
-
-        .modal-overlay.open .modal-sheet {
-            transform: scale(1);
-        }
-
-        .modal-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .modal-title {
-            font-size: 16.5px;
-            font-weight: 700;
-            color: var(--text-main);
-        }
-
+        /* Modal Forms */
         .modal-form {
             display: flex;
             flex-direction: column;
@@ -913,6 +836,226 @@
             color: #E53935;
             cursor: pointer;
             font-size: 14px;
+        }
+
+        /* ----------------------------------------------------
+           ADHU'S BOOKS WISHLIST (CLEAN BOOKSHELF)
+           ---------------------------------------------------- */
+        .wishlist-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+
+        .view-mode-toggle {
+            display: flex;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 2px;
+        }
+
+        .view-mode-btn {
+            background: transparent;
+            border: none;
+            outline: none;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .view-mode-btn.active {
+            background: var(--surface-card);
+            color: var(--primary);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+        }
+
+        /* Container: Grid Layout */
+        .books-container.grid-layout {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .books-container.grid-layout .book-card {
+            background: var(--surface-card);
+            border-radius: var(--radius-outer);
+            border: var(--card-border);
+            box-shadow: var(--card-shadow);
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+        }
+
+        .books-container.grid-layout .book-cover-wrap {
+            width: 100%;
+            height: 160px;
+            background: var(--surface-subtle);
+            border-radius: var(--radius-inner);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .books-container.grid-layout .book-cover-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .books-container.grid-layout .book-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            flex: 1;
+        }
+
+        .books-container.grid-layout .book-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .books-container.grid-layout .book-author {
+            font-size: 11px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Container: List Layout */
+        .books-container.list-layout {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .books-container.list-layout .book-card {
+            background: var(--surface-card);
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+            box-shadow: var(--card-shadow);
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+        }
+
+        .books-container.list-layout .book-cover-wrap {
+            width: 50px;
+            height: 70px;
+            background: var(--surface-subtle);
+            border-radius: 6px;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .books-container.list-layout .book-cover-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .books-container.list-layout .book-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .books-container.list-layout .book-title {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .books-container.list-layout .book-author {
+            font-size: 11.5px;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .book-actions-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: auto;
+            padding-top: 4px;
+        }
+
+        .book-link-btn {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--primary-soft);
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+
+        .book-delete-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 14px;
+            cursor: pointer;
+            padding: 4px;
+            opacity: 0.6;
+        }
+
+        .book-search-result {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            background: var(--surface-card);
+            border-radius: 8px;
+            border: var(--card-border);
+            cursor: pointer;
+            margin-bottom: 6px;
+        }
+
+        .book-search-result:active {
+            background: var(--surface-subtle);
+        }
+
+        .book-search-thumb {
+            width: 40px;
+            height: 55px;
+            object-fit: cover;
+            border-radius: 4px;
+            background: var(--surface-subtle);
+            flex-shrink: 0;
         }
     </style>
 </head>
@@ -1004,14 +1147,11 @@
 
                 <!-- 4. Notes & To-Do Split Tile -->
                 <div class="split-card-wrapper">
-                    <!-- Left Mini Card: Notes -->
                     <div class="micro-card" onclick="openSpecificNotesView('notes')">
                         <div class="micro-icon">📝</div>
                         <div class="micro-heading">Notes</div>
                         <div class="micro-subtitle" id="stickyCount">0 notes</div>
                     </div>
-                    
-                    <!-- Right Mini Card: Tasks -->
                     <div class="micro-card" onclick="openSpecificNotesView('todo')">
                         <div class="micro-icon">✅</div>
                         <div class="micro-heading">To-Do</div>
@@ -1084,20 +1224,51 @@
             </div>
         </main>
 
-        <!-- ADHU VIEW (BOOKS WISHLIST) -->
+        <!-- ADHU VIEW (BOOKS WISHLIST WITH GRID/LIST TOGGLE) -->
         <main id="view-adhu" class="view-content">
-            <div class="notes-view-header">
+            <div class="wishlist-toolbar">
                 <h2 style="font-size: 16.5px; font-weight: 700; color: var(--text-main);">📚 Books Wishlist</h2>
-                <button class="add-note-btn" onclick="addAdhuWishlistItem()">
-                    <span>+</span> Add Book
-                </button>
+                
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <div class="view-mode-toggle">
+                        <button class="view-mode-btn active" id="btnModeGrid" onclick="setBooksViewMode('grid')">
+                            ▦ Grid
+                        </button>
+                        <button class="view-mode-btn" id="btnModeList" onclick="setBooksViewMode('list')">
+                            ☰ List
+                        </button>
+                    </div>
+
+                    <button class="add-note-btn" onclick="openBookSearchModal()">
+                        <span>+</span> Add Book
+                    </button>
+                </div>
             </div>
             
-            <div class="sticky-grid" id="adhuWishlistContainer">
+            <div class="books-container grid-layout" id="adhuBooksContainer">
                 <!-- Book Cards Inject Here -->
             </div>
         </main>
 
+    </div>
+
+    <!-- MODAL: GOOGLE BOOKS SEARCH & ADD -->
+    <div class="modal-overlay" id="bookSearchModal" onclick="closeBookSearchModal(event)">
+        <div class="modal-sheet" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title">Search & Add Book</h3>
+                <button class="drawer-close-btn" onclick="closeBookSearchModal()">✕</button>
+            </div>
+
+            <div class="modal-form">
+                <input type="text" id="bookSearchInput" class="modal-input" placeholder="Enter book title or author..." onkeypress="if(event.key==='Enter') searchGoogleBooks()">
+                <button class="modal-save-btn" onclick="searchGoogleBooks()">🔍 Search</button>
+                
+                <input type="url" id="bookPurchaseLinkInput" class="modal-input" placeholder="Purchase Link (Amazon / Store - optional)">
+            </div>
+
+            <div id="bookSearchResultsContainer" style="max-height: 260px; overflow-y: auto;"></div>
+        </div>
     </div>
 
     <!-- CENTERED POPUP MODAL FOR CATEGORY RESOURCES -->
@@ -1150,7 +1321,7 @@
             </div>
 
             <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.45; margin: 0;">
-                Export your notes, to-dos, links, and wishlists directly to Google Drive. Tap below and choose <strong>Google Drive</strong> from the save sheet.
+                Export your notes, to-dos, links, and books wishlist directly to Google Drive.
             </p>
 
             <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
@@ -1505,8 +1676,8 @@
             }
         }
 
-        function formatDoc(command, value=null) {
-            document.execCommand(command, false, value);
+        function formatDoc(command) {
+            document.execCommand(command, false, null);
         }
 
         function renderStickyNotes() {
@@ -1532,7 +1703,7 @@
                                 <button class="note-btn" title="Delete" onclick="deleteStickyNote('${note.id}')">✕</button>
                             </div>
                         </div>
-                        <div class="ms-sticky-body" id="note-body-${note.id}" contenteditable="true" oninput="updateNoteText('${note.id}', this)" placeholder="Type note here...">${note.text}</div>
+                        <div class="ms-sticky-body" id="note-body-${note.id}" contenteditable="true" oninput="updateNoteText('${note.id}', this)">${note.text}</div>
                         <div class="ms-sticky-toolbar">
                             <button class="format-btn bold" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('bold');">B</button>
                             <button class="format-btn italic" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('italic');">I</button>
@@ -1674,147 +1845,181 @@
         }
 
         // ----------------------------------------------------
-        // ADHU BOOKS WISHLIST LOGIC
+        // ADHU'S BOOKS WISHLIST (GOOGLE BOOKS API)
         // ----------------------------------------------------
-        let adhuWishlist = [];
+        let adhuBooks = [];
+        let booksViewMode = 'grid'; // 'grid' or 'list'
 
         try {
-            const aw = localStorage.getItem('lc_adhu_wishlist');
-            if (aw) adhuWishlist = JSON.parse(aw);
+            const ab = localStorage.getItem('lc_adhu_books');
+            if (ab) adhuBooks = JSON.parse(ab);
+            const bm = localStorage.getItem('lc_books_view_mode');
+            if (bm) booksViewMode = bm;
         } catch (e) {
             console.error(e);
         }
 
-        function saveAdhuWishlist() {
+        function saveAdhuBooks() {
             try {
-                localStorage.setItem('lc_adhu_wishlist', JSON.stringify(adhuWishlist));
+                localStorage.setItem('lc_adhu_books', JSON.stringify(adhuBooks));
             } catch (e) {
                 console.error(e);
             }
         }
 
-        function renderAdhuWishlist() {
-            const container = document.getElementById('adhuWishlistContainer');
+        function setBooksViewMode(mode) {
+            booksViewMode = mode;
+            try {
+                localStorage.setItem('lc_books_view_mode', mode);
+            } catch (e) {}
+            
+            const btnGrid = document.getElementById('btnModeGrid');
+            const btnList = document.getElementById('btnModeList');
+            const container = document.getElementById('adhuBooksContainer');
+
+            if (mode === 'grid') {
+                btnGrid.classList.add('active');
+                btnList.classList.remove('active');
+                container.className = 'books-container grid-layout';
+            } else {
+                btnList.classList.add('active');
+                btnGrid.classList.remove('active');
+                container.className = 'books-container list-layout';
+            }
+
+            renderAdhuBooks();
+        }
+
+        function renderAdhuBooks() {
+            const container = document.getElementById('adhuBooksContainer');
             if (!container) return;
             container.innerHTML = '';
 
-            if (adhuWishlist.length === 0) {
+            if (adhuBooks.length === 0) {
                 container.innerHTML = `
-                    <div style="grid-column: span 2; text-align: center; color: var(--text-muted); padding: 40px 0; font-size: 13px;">
-                        Wishlist is empty. Tap <strong>+ Add Book</strong> to start curating!
+                    <div style="grid-column: 1 / -1; text-align: center; color: var(--text-muted); padding: 45px 0; font-size: 13px;">
+                        Your book wishlist is empty.<br>Tap <strong>+ Add Book</strong> to search and curate!
                     </div>
                 `;
                 return;
             }
 
-            adhuWishlist.forEach(item => {
-                const el = document.createElement('div');
-                el.className = 'ms-sticky-note';
-                el.style.background = 'var(--surface-card)';
-                el.style.border = '1px solid rgba(0,0,0,0.06)';
+            adhuBooks.forEach(book => {
+                const card = document.createElement('div');
+                card.className = 'book-card';
 
-                // If a link is attached, render the clickable button bar
-                let attachedLinkHTML = '';
-                if (item.linkUrl) {
-                    attachedLinkHTML = `
-                        <div style="padding: 7px 10px; background: var(--surface-subtle); border-top: 1px solid rgba(0,0,0,0.04); border-bottom: 1px solid rgba(0,0,0,0.04);">
-                            <a href="${item.linkUrl}" target="_blank" style="font-size: 11.5px; font-weight: 700; color: var(--primary); text-decoration: none; display: flex; align-items: center; gap: 5px;">
-                                🔗 ${item.linkName || 'View Link'}
-                            </a>
-                        </div>
+                const coverSrc = book.thumbnail || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="80" viewBox="0 0 60 80"><rect width="60" height="80" fill="%23E2DCD5"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="20">📖</text></svg>';
+
+                let purchaseBtn = '';
+                if (book.purchaseUrl) {
+                    purchaseBtn = `
+                        <a href="${book.purchaseUrl}" target="_blank" rel="noopener noreferrer" class="book-link-btn">
+                            🛒 Shop Link ↗
+                        </a>
                     `;
                 }
 
-                el.innerHTML = `
-                    <div class="ms-sticky-topbar" style="background: var(--surface-subtle);">
-                        <span class="note-time-stamp">${item.timestamp || ''}</span>
-                        <div class="note-actions">
-                            <button class="note-btn" title="Add/Edit Attached Link" onclick="editAdhuLink('${item.id}')" style="opacity:0.8; font-size: 13px;">🔗</button>
-                            <button class="note-btn" title="Delete Book" onclick="deleteAdhuWishlist('${item.id}')">✕</button>
-                        </div>
+                card.innerHTML = `
+                    <div class="book-cover-wrap">
+                        <img src="${coverSrc}" class="book-cover-img" alt="${book.title}" loading="lazy">
                     </div>
-                    <div class="ms-sticky-body" id="adhu-body-${item.id}" contenteditable="true" oninput="updateAdhuText('${item.id}', this)" placeholder="Add book details or notes...">${item.text}</div>
-                    ${attachedLinkHTML}
-                    <div class="ms-sticky-toolbar">
-                        <button class="format-btn bold" onmousedown="formatAdhuDoc(event, '${item.id}', 'bold')">B</button>
-                        <button class="format-btn italic" onmousedown="formatAdhuDoc(event, '${item.id}', 'italic')">I</button>
-                        <button class="format-btn strike" onmousedown="formatAdhuDoc(event, '${item.id}', 'strikeThrough')">S</button>
-                        <button class="format-btn" style="opacity: 0.8;" onmousedown="formatAdhuDoc(event, '${item.id}', 'backColor', '#FFE082')" title="Highlight">🖍️</button>
+                    <div class="book-meta">
+                        <div class="book-title" title="${book.title}">${book.title}</div>
+                        <div class="book-author">${book.author || 'Unknown Author'}</div>
+                    </div>
+                    <div class="book-actions-bar">
+                        ${purchaseBtn}
+                        <button class="book-delete-btn" onclick="deleteAdhuBook('${book.id}')" title="Delete">✕</button>
                     </div>
                 `;
-                container.appendChild(el);
+                container.appendChild(card);
             });
         }
 
-        function addAdhuWishlistItem() {
-            const newItem = {
-                id: 'aw_' + Date.now().toString(),
-                text: '',
-                linkUrl: '',
-                linkName: '',
+        function openBookSearchModal() {
+            document.getElementById('bookSearchInput').value = '';
+            document.getElementById('bookPurchaseLinkInput').value = '';
+            document.getElementById('bookSearchResultsContainer').innerHTML = '';
+            document.getElementById('bookSearchModal').classList.add('open');
+            setTimeout(() => document.getElementById('bookSearchInput').focus(), 100);
+        }
+
+        function closeBookSearchModal(e) {
+            if (!e || e.target.id === 'bookSearchModal' || e.target.classList.contains('drawer-close-btn')) {
+                document.getElementById('bookSearchModal').classList.remove('open');
+            }
+        }
+
+        async function searchGoogleBooks() {
+            const query = document.getElementById('bookSearchInput').value.trim();
+            const resultsContainer = document.getElementById('bookSearchResultsContainer');
+            if (!query) return;
+
+            resultsContainer.innerHTML = '<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:12px;">Searching books...</div>';
+
+            try {
+                const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&maxResults=5`);
+                const data = await response.json();
+
+                resultsContainer.innerHTML = '';
+
+                if (!data.items || data.items.length === 0) {
+                    resultsContainer.innerHTML = '<div style="font-size:12px; color:var(--text-muted); text-align:center; padding:12px;">No books found. Try a different title.</div>';
+                    return;
+                }
+
+                data.items.forEach(item => {
+                    const info = item.volumeInfo;
+                    const title = info.title || 'Untitled';
+                    const authors = info.authors ? info.authors.join(', ') : 'Unknown Author';
+                    const thumb = info.imageLinks ? info.imageLinks.thumbnail.replace('http://', 'https://') : '';
+
+                    const row = document.createElement('div');
+                    row.className = 'book-search-result';
+                    row.onclick = () => selectBookToAdd(title, authors, thumb);
+
+                    row.innerHTML = `
+                        <img src="${thumb || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="55"><rect width="40" height="55" fill="%23ddd"/></svg>'}" class="book-search-thumb" alt="cover">
+                        <div style="flex:1; min-width:0;">
+                            <div style="font-size:12.5px; font-weight:700; color:var(--text-main); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${title}</div>
+                            <div style="font-size:11px; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${authors}</div>
+                        </div>
+                        <div style="font-size:12px; color:var(--primary); font-weight:700;">+ Add</div>
+                    `;
+                    resultsContainer.appendChild(row);
+                });
+
+            } catch (err) {
+                console.error(err);
+                resultsContainer.innerHTML = '<div style="font-size:12px; color:#E53935; text-align:center; padding:12px;">Failed to fetch books. Check network connection.</div>';
+            }
+        }
+
+        function selectBookToAdd(title, author, thumbnail) {
+            let purchaseUrl = document.getElementById('bookPurchaseLinkInput').value.trim();
+            if (purchaseUrl && !purchaseUrl.startsWith('http://') && !purchaseUrl.startsWith('https://')) {
+                purchaseUrl = 'https://' + purchaseUrl;
+            }
+
+            const newBook = {
+                id: 'bk_' + Date.now().toString(),
+                title,
+                author,
+                thumbnail,
+                purchaseUrl,
                 timestamp: getFormattedTimestamp()
             };
-            adhuWishlist.unshift(newItem);
-            saveAdhuWishlist();
-            renderAdhuWishlist();
 
-            setTimeout(() => {
-                const body = document.getElementById('adhu-body-' + newItem.id);
-                if (body) body.focus();
-            }, 50);
+            adhuBooks.unshift(newBook);
+            saveAdhuBooks();
+            renderAdhuBooks();
+            closeBookSearchModal();
         }
 
-        function updateAdhuText(id, element) {
-            const item = adhuWishlist.find(w => w.id === id);
-            if (item) {
-                item.text = element.innerHTML;
-                saveAdhuWishlist();
-            }
-        }
-
-        function deleteAdhuWishlist(id) {
-            adhuWishlist = adhuWishlist.filter(w => w.id !== id);
-            saveAdhuWishlist();
-            renderAdhuWishlist();
-        }
-
-        // Handles applying styles without losing focus on the content box
-        function formatAdhuDoc(e, id, command, value=null) {
-            e.preventDefault(); 
-            const el = document.getElementById('adhu-body-' + id);
-            el.focus();
-            document.execCommand(command, false, value);
-            updateAdhuText(id, el);
-        }
-
-        // Handles attaching messy URLs nicely
-        function editAdhuLink(id) {
-            const item = adhuWishlist.find(w => w.id === id);
-            if (!item) return;
-
-            const currentUrl = item.linkUrl || '';
-            const currentName = item.linkName || 'View Book';
-
-            const newUrl = prompt("Enter hyperlink (e.g., long Instagram or Amazon link).\nLeave blank to remove it:", currentUrl);
-            
-            if (newUrl === null) return; // User pressed Cancel
-
-            if (newUrl.trim() === '') {
-                // Clear the link completely
-                item.linkUrl = '';
-                item.linkName = '';
-            } else {
-                let formattedUrl = newUrl.trim();
-                if (!formattedUrl.startsWith('http://') && !formattedUrl.startsWith('https://')) {
-                    formattedUrl = 'https://' + formattedUrl;
-                }
-                const newName = prompt("Enter a short name to hide the messy link:", currentName);
-                item.linkUrl = formattedUrl;
-                item.linkName = newName || 'View Link';
-            }
-            
-            saveAdhuWishlist();
-            renderAdhuWishlist();
+        function deleteAdhuBook(id) {
+            adhuBooks = adhuBooks.filter(b => b.id !== id);
+            saveAdhuBooks();
+            renderAdhuBooks();
         }
 
         // ----------------------------------------------------
@@ -1864,7 +2069,7 @@
                 userEbooks: userEbooks,
                 userAudiobooks: userAudiobooks,
                 userTools: userTools,
-                adhuWishlist: adhuWishlist // Ensures the new wishlist is backed up safely!
+                adhuBooks: adhuBooks
             };
         }
 
@@ -1943,9 +2148,9 @@
                     if (data.userAudiobooks) userAudiobooks = data.userAudiobooks;
                     if (data.userTools) userTools = data.userTools;
                     
-                    if (data.adhuWishlist) {
-                        adhuWishlist = data.adhuWishlist;
-                        saveAdhuWishlist();
+                    if (data.adhuBooks) {
+                        adhuBooks = data.adhuBooks;
+                        saveAdhuBooks();
                     }
 
                     saveLinksToStorage();
@@ -1957,7 +2162,7 @@
                     updateDashboardCounts();
                     renderStickyNotes();
                     renderTodoList();
-                    renderAdhuWishlist();
+                    renderAdhuBooks();
                 } catch (err) {
                     statusEl.innerText = 'Error: Invalid backup file format.';
                     statusEl.style.color = '#E53935';
@@ -2006,7 +2211,7 @@
                 setTheme('light');
             }
             updateDashboardCounts();
-            renderAdhuWishlist(); // Render wishlist on startup
+            setBooksViewMode(booksViewMode);
             checkBackupReminder(); 
         });
     </script>
