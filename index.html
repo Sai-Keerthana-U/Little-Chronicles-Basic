@@ -982,7 +982,7 @@
         }
 
         /* ----------------------------------------------------
-           KEE: BOOKS OVERVIEW (TITLE ACCORDIONS + DEDICATED DRIVE LINK)
+           KEE: BOOKS OVERVIEW (CLEAN MINIMAL CARD REDESIGN)
            ---------------------------------------------------- */
         .book-overview-item {
             background: var(--surface-subtle);
@@ -991,104 +991,131 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            transition: all 0.2s ease;
         }
 
         .book-overview-header {
-            padding: 10px 14px;
+            padding: 12px 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 8px;
+            gap: 12px;
             cursor: pointer;
-            background: rgba(0,0,0,0.02);
             user-select: none;
         }
 
-        .book-overview-title-input {
+        .book-overview-header:active {
+            background: rgba(0,0,0,0.02);
+        }
+
+        .book-overview-title-text {
             flex: 1;
             font-size: 13.5px;
             font-weight: 700;
             color: var(--text-main);
-            background: transparent;
-            border: none;
-            outline: none;
-            font-family: inherit;
+            line-height: 1.35;
         }
 
-        .book-overview-actions {
+        .book-overview-chevron-circle {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--surface-card);
+            border: var(--card-border);
             display: flex;
             align-items: center;
-            gap: 6px;
-        }
-
-        /* Dedicated Drive Link Badge & Edit Button */
-        .book-drive-badge {
-            background: var(--primary-soft);
-            color: var(--primary);
-            font-size: 11px;
-            font-weight: 700;
-            padding: 3px 8px;
-            border-radius: 6px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            border: 1px solid rgba(148, 93, 76, 0.2);
-            line-height: 1.2;
-        }
-
-        .book-drive-badge:active {
-            transform: scale(0.95);
-        }
-
-        .book-drive-edit-btn {
-            background: transparent;
-            border: none;
-            font-size: 12px;
-            cursor: pointer;
-            opacity: 0.65;
-            padding: 2px 4px;
-            border-radius: 4px;
-            color: var(--text-main);
-        }
-
-        .book-drive-edit-btn:active {
-            opacity: 1;
-        }
-
-        .book-overview-del-btn {
-            background: transparent;
-            border: none;
+            justify-content: center;
+            font-size: 8px;
             color: var(--text-muted);
-            font-size: 14px;
-            cursor: pointer;
-            opacity: 0.6;
-            padding: 2px;
+            transition: transform 0.25s ease;
+            flex-shrink: 0;
         }
 
-        .book-overview-chevron {
-            font-size: 9px;
-            color: var(--text-muted);
-            transition: transform 0.2s ease;
-        }
-
-        .book-overview-item.expanded .book-overview-chevron {
+        .book-overview-item.expanded .book-overview-chevron-circle {
             transform: rotate(180deg);
         }
 
         .book-overview-body-wrap {
             display: none;
             flex-direction: column;
-            padding: 10px 14px 14px;
+            padding: 12px 14px 14px;
             border-top: var(--card-border);
             background: var(--surface-card);
+            gap: 10px;
         }
 
         .book-overview-item.expanded .book-overview-body-wrap {
             display: flex;
         }
 
-        /* Contextual Floating Toolbar for Active Editing */
+        /* Clean Top Bar Inside Expanded Overview */
+        .book-overview-top-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed rgba(0,0,0,0.08);
+            gap: 8px;
+        }
+
+        .book-drive-pill-link {
+            background: var(--primary-soft);
+            color: var(--primary);
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 5px 11px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid rgba(148, 93, 76, 0.2);
+            line-height: 1.2;
+        }
+
+        .book-drive-pill-link:active {
+            transform: scale(0.96);
+        }
+
+        .book-overview-inner-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .book-inner-action-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .book-inner-action-btn.delete {
+            color: #E53935;
+            border-color: rgba(229, 57, 53, 0.2);
+        }
+
+        .book-overview-title-edit-input {
+            width: 100%;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 6px;
+            padding: 6px 10px;
+            outline: none;
+            font-family: inherit;
+            margin-bottom: 4px;
+        }
+
         .context-toolbar {
             display: none;
             align-items: center;
@@ -1098,7 +1125,6 @@
             border-radius: 999px;
             padding: 3px 6px;
             width: fit-content;
-            margin-bottom: 8px;
             box-shadow: 0 2px 6px rgba(0,0,0,0.05);
         }
 
@@ -1111,7 +1137,7 @@
             font-size: 13.5px;
             line-height: 1.6;
             color: var(--text-main);
-            min-height: 60px;
+            min-height: 70px;
             word-break: break-word;
             white-space: pre-wrap;
         }
@@ -1385,7 +1411,7 @@
                         <div class="feature-chevron">▼</div>
                     </div>
 
-                    <!-- Collapsible Body with Book Titles -->
+                    <!-- Collapsible Body with Clean Book Items -->
                     <div class="dropdown-feature-body">
                         <div id="keeBooksOverviewContainer" style="display: flex; flex-direction: column; gap: 8px; padding-top: 12px;"></div>
 
@@ -2150,7 +2176,7 @@
         }
 
         // ----------------------------------------------------
-        // KEE: BOOKS OVERVIEW (ACCORDION WITH DEDICATED DRIVE LINK)
+        // KEE: BOOKS OVERVIEW (CLEAN MINIMAL CARD REDESIGN)
         // ----------------------------------------------------
         let keeBookOverviews = [];
 
@@ -2163,7 +2189,7 @@
                     keeBookOverviews = [
                         {
                             id: 'bo_1',
-                            title: 'Fourth Wing — Notes & Overview',
+                            title: 'Fourth Wing',
                             content: 'Dragons, signet abilities, and military academy strategy.',
                             driveUrl: '',
                             expanded: false
@@ -2224,38 +2250,51 @@
                 row.className = 'book-overview-item' + (item.expanded ? ' expanded' : '');
                 row.id = 'bo-item-' + item.id;
 
-                let driveBadgeHtml = '';
-                if (item.driveUrl && item.driveUrl.trim()) {
-                    driveBadgeHtml = `
-                        <a href="${item.driveUrl}" target="_blank" rel="noopener noreferrer" class="book-drive-badge" onclick="event.stopPropagation()" title="Open Google Drive Document">
-                            ☁️ Drive ↗
-                        </a>
-                    `;
-                }
+                const hasDrive = item.driveUrl && item.driveUrl.trim();
+                const driveButtonHtml = hasDrive 
+                    ? `<a href="${item.driveUrl}" target="_blank" rel="noopener noreferrer" class="book-drive-pill-link" title="Open in Google Drive">☁️ Drive File ↗</a>`
+                    : `<button class="book-inner-action-btn" onclick="editBookDriveLink('${item.id}')">☁️ + Add Drive Link</button>`;
 
                 row.innerHTML = `
-                    <div class="book-overview-header" onclick="toggleBookOverviewItem(event, '${item.id}')">
-                        <input type="text" class="book-overview-title-input" value="${item.title || 'Untitled Book'}" placeholder="Enter Book Title..." onclick="event.stopPropagation()" oninput="updateBookOverviewTitle('${item.id}', this.value)">
-                        
-                        <div class="book-overview-actions">
-                            ${driveBadgeHtml}
-                            <button class="book-drive-edit-btn" onclick="event.stopPropagation(); editBookDriveLink('${item.id}')" title="Set Google Drive Link">✏️</button>
-                            <button class="book-overview-del-btn" onclick="event.stopPropagation(); deleteBookOverviewItem('${item.id}')" title="Delete">✕</button>
-                            <span class="book-overview-chevron">▼</span>
-                        </div>
+                    <div class="book-overview-header" onclick="toggleBookOverviewItem('${item.id}')">
+                        <span class="book-overview-title-text">${item.title || 'Untitled Book'}</span>
+                        <div class="book-overview-chevron-circle">▼</div>
                     </div>
+
                     <div class="book-overview-body-wrap">
+                        <!-- Top Meta Bar Inside the Card -->
+                        <div class="book-overview-top-meta">
+                            ${driveButtonHtml}
+
+                            <div class="book-overview-inner-actions">
+                                ${hasDrive ? `<button class="book-inner-action-btn" onclick="editBookDriveLink('${item.id}')">✏️ Edit Link</button>` : ''}
+                                <button class="book-inner-action-btn delete" onclick="deleteBookOverviewItem('${item.id}')">🗑️ Delete</button>
+                            </div>
+                        </div>
+
+                        <!-- Editable Title -->
+                        <div>
+                            <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.4px;">Book Title</label>
+                            <input type="text" class="book-overview-title-edit-input" value="${item.title || ''}" placeholder="Enter book title..." oninput="updateBookOverviewTitle('${item.id}', this.value)">
+                        </div>
+
+                        <!-- Formatting Toolbar (Visible only on edit) -->
                         <div class="context-toolbar" id="bo-toolbar-${item.id}">
                             <button class="wishlist-format-btn bold" onmousedown="applyOverviewFormat(event, '${item.id}', 'bold')">B</button>
                             <button class="wishlist-format-btn italic" onmousedown="applyOverviewFormat(event, '${item.id}', 'italic')">I</button>
                             <button class="wishlist-format-btn strike" onmousedown="applyOverviewFormat(event, '${item.id}', 'strikeThrough')">S</button>
                             <button class="wishlist-format-btn" onmousedown="applyOverviewFormat(event, '${item.id}', 'insertUnorderedList')">•</button>
                         </div>
-                        <div class="book-overview-editor" id="bo-editor-${item.id}" contenteditable="true" 
-                             placeholder="Write synopsis, chapters, or thoughts..." 
-                             onfocus="showOverviewToolbar('${item.id}')" 
-                             onblur="hideOverviewToolbar('${item.id}')" 
-                             oninput="updateBookOverviewContent('${item.id}', this.innerHTML)">${item.content || ''}</div>
+
+                        <!-- Editor Content -->
+                        <div>
+                            <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.4px;">Notes & Overview</label>
+                            <div class="book-overview-editor" id="bo-editor-${item.id}" contenteditable="true" 
+                                 placeholder="Write summary, key takeaways, chapter thoughts..." 
+                                 onfocus="showOverviewToolbar('${item.id}')" 
+                                 onblur="hideOverviewToolbar('${item.id}')" 
+                                 oninput="updateBookOverviewContent('${item.id}', this.innerHTML)">${item.content || ''}</div>
+                        </div>
                     </div>
                 `;
                 container.appendChild(row);
@@ -2269,9 +2308,9 @@
             if (!item) return;
 
             const current = item.driveUrl || '';
-            const newUrl = prompt("Enter Google Drive Link (leave blank to remove):", current);
+            const newUrl = prompt("Enter Google Drive file/folder URL (leave blank to remove):", current);
 
-            if (newUrl === null) return; // user hit cancel
+            if (newUrl === null) return;
 
             let formatted = newUrl.trim();
             if (formatted && !formatted.startsWith('http://') && !formatted.startsWith('https://')) {
@@ -2283,7 +2322,7 @@
             renderKeeBookOverviews();
         }
 
-        function toggleBookOverviewItem(e, id) {
+        function toggleBookOverviewItem(id) {
             const item = keeBookOverviews.find(b => b.id === id);
             if (item) {
                 item.expanded = !item.expanded;
@@ -2297,6 +2336,9 @@
             if (item) {
                 item.title = val;
                 saveKeeBookOverviews();
+                // Update the collapsed header title in real-time
+                const headerText = document.querySelector('#bo-item-' + id + ' .book-overview-title-text');
+                if (headerText) headerText.innerText = val || 'Untitled Book';
             }
         }
 
