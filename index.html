@@ -742,13 +742,15 @@
             display: block;
         }
 
+        /* Clean Tightly Aligned Bullet Lists */
         .notepad-body ul {
-            padding-left: 20px;
+            padding-left: 18px;
             margin: 4px 0;
         }
 
         .notepad-body li {
             margin-bottom: 2px;
+            padding-left: 2px;
         }
 
         /* Minimized state */
@@ -1214,7 +1216,7 @@
         }
 
         .book-overview-editor ul {
-            padding-left: 20px;
+            padding-left: 18px;
             margin: 4px 0;
         }
 
@@ -1332,7 +1334,7 @@
         }
 
         .wl-block-editor ul {
-            padding-left: 20px;
+            padding-left: 18px;
             margin: 4px 0;
         }
 
@@ -1687,7 +1689,7 @@
 
             <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
                 <button class="modal-save-btn" style="background:#2E7D32;" onclick="saveDirectToGoogleDrive()">
-                    ☁️ Upload / Save to Google Drive
+                    ☁️️ Upload / Save to Google Drive
                 </button>
 
                 <input type="file" id="restoreFileInput" accept=".txt,.json,application/json,text/plain" style="display:none;" onchange="handleRestoreFile(this)">
@@ -2008,7 +2010,7 @@
         }
 
         // ----------------------------------------------------
-        // CLEAN NOTEPAD LOGIC (OUTSIDE TOOLBAR + MINIMIZE)
+        // CLEAN NOTEPAD LOGIC (SPACE-UNBULLET & SMART LISTS)
         // ----------------------------------------------------
         const NOTE_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
         let noteSortAsc = false;
@@ -2051,7 +2053,6 @@
 
         function applyGlobalNoteFormat(e, command) {
             e.preventDefault();
-            // If user clicked without selecting, try focusing last active note
             if (lastFocusedNoteId) {
                 const el = document.getElementById('note-body-' + lastFocusedNoteId);
                 if (el && document.activeElement !== el) {
@@ -2062,6 +2063,46 @@
             if (lastFocusedNoteId) {
                 const el = document.getElementById('note-body-' + lastFocusedNoteId);
                 if (el) updateNoteItemText(lastFocusedNoteId, el);
+            }
+        }
+
+        // Handles unbulleting when user presses Space or Backspace at the beginning of an LI
+        function handleNoteKeyDown(e, id) {
+            const sel = window.getSelection();
+            if (!sel || sel.rangeCount === 0) return;
+
+            const range = sel.getRangeAt(0);
+            const node = sel.anchorNode;
+            const li = node.nodeType === 3 ? node.parentElement.closest('li') : node.closest('li');
+
+            if (!li) return;
+
+            // Check if cursor is at the very beginning of the list item
+            const isAtStart = range.startOffset === 0 && (range.startContainer === li || range.startContainer === li.firstChild);
+
+            if (e.key === ' ' || e.key === 'Spacebar') {
+                if (isAtStart) {
+                    e.preventDefault();
+                    // Strip the list format from this line
+                    document.execCommand('insertUnorderedList', false, null);
+                    const el = document.getElementById('note-body-' + id);
+                    if (el) updateNoteItemText(id, el);
+                }
+            } else if (e.key === 'Backspace') {
+                if (isAtStart) {
+                    e.preventDefault();
+                    document.execCommand('insertUnorderedList', false, null);
+                    const el = document.getElementById('note-body-' + id);
+                    if (el) updateNoteItemText(id, el);
+                }
+            } else if (e.key === 'Enter') {
+                // If pressing enter on an empty bullet, automatically exit list
+                if (li.innerText.trim() === '' || li.innerHTML === '<br>') {
+                    e.preventDefault();
+                    document.execCommand('insertUnorderedList', false, null);
+                    const el = document.getElementById('note-body-' + id);
+                    if (el) updateNoteItemText(id, el);
+                }
             }
         }
 
@@ -2130,7 +2171,6 @@
                 noteEl.className = 'notepad-card ' + colorClass + (isMin ? ' minimized' : '');
                 noteEl.id = 'notepad-card-' + note.id;
 
-                // Strip HTML for the minimized single-line snippet
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = note.text || '';
                 const plainSnippet = (tempDiv.innerText || tempDiv.textContent || '').trim().replace(/\n/g, ' • ');
@@ -2149,6 +2189,7 @@
 
                     <div class="notepad-body" id="note-body-${note.id}" contenteditable="true" 
                          onfocus="lastFocusedNoteId='${note.id}'"
+                         onkeydown="handleNoteKeyDown(event, '${note.id}')"
                          oninput="updateNoteItemText('${note.id}', this)" placeholder="Write your note here...">${note.text}</div>
                 `;
                 container.appendChild(noteEl);
@@ -2372,7 +2413,7 @@
                             ${driveButtonHtml}
 
                             <div class="book-overview-inner-actions">
-                                ${hasDrive ? `<button class="book-inner-action-btn" onclick="editBookDriveLink('${item.id}')">✏️️ Edit Link</button>` : ''}
+                                ${hasDrive ? `<button class="book-inner-action-btn" onclick="editBookDriveLink('${item.id}')">✏️ Edit Link</button>` : ''}
                                 <button class="book-inner-action-btn delete" onclick="deleteBookOverviewItem('${item.id}')">🗑️ Delete</button>
                             </div>
                         </div>
