@@ -982,7 +982,7 @@
         }
 
         /* ----------------------------------------------------
-           KEE: BOOKS OVERVIEW (TITLE ACCORDIONS + CONTEXTUAL TOOLBAR)
+           KEE: BOOKS OVERVIEW (TITLE ACCORDIONS + DEDICATED DRIVE LINK)
            ---------------------------------------------------- */
         .book-overview-item {
             background: var(--surface-subtle);
@@ -1019,6 +1019,41 @@
             display: flex;
             align-items: center;
             gap: 6px;
+        }
+
+        /* Dedicated Drive Link Badge & Edit Button */
+        .book-drive-badge {
+            background: var(--primary-soft);
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid rgba(148, 93, 76, 0.2);
+            line-height: 1.2;
+        }
+
+        .book-drive-badge:active {
+            transform: scale(0.95);
+        }
+
+        .book-drive-edit-btn {
+            background: transparent;
+            border: none;
+            font-size: 12px;
+            cursor: pointer;
+            opacity: 0.65;
+            padding: 2px 4px;
+            border-radius: 4px;
+            color: var(--text-main);
+        }
+
+        .book-drive-edit-btn:active {
+            opacity: 1;
         }
 
         .book-overview-del-btn {
@@ -2115,7 +2150,7 @@
         }
 
         // ----------------------------------------------------
-        // KEE: BOOKS OVERVIEW (ACCORDION WITH CONTEXTUAL TOOLBAR)
+        // KEE: BOOKS OVERVIEW (ACCORDION WITH DEDICATED DRIVE LINK)
         // ----------------------------------------------------
         let keeBookOverviews = [];
 
@@ -2130,6 +2165,7 @@
                             id: 'bo_1',
                             title: 'Fourth Wing — Notes & Overview',
                             content: 'Dragons, signet abilities, and military academy strategy.',
+                            driveUrl: '',
                             expanded: false
                         }
                     ];
@@ -2188,16 +2224,27 @@
                 row.className = 'book-overview-item' + (item.expanded ? ' expanded' : '');
                 row.id = 'bo-item-' + item.id;
 
+                let driveBadgeHtml = '';
+                if (item.driveUrl && item.driveUrl.trim()) {
+                    driveBadgeHtml = `
+                        <a href="${item.driveUrl}" target="_blank" rel="noopener noreferrer" class="book-drive-badge" onclick="event.stopPropagation()" title="Open Google Drive Document">
+                            ☁️ Drive ↗
+                        </a>
+                    `;
+                }
+
                 row.innerHTML = `
                     <div class="book-overview-header" onclick="toggleBookOverviewItem(event, '${item.id}')">
                         <input type="text" class="book-overview-title-input" value="${item.title || 'Untitled Book'}" placeholder="Enter Book Title..." onclick="event.stopPropagation()" oninput="updateBookOverviewTitle('${item.id}', this.value)">
+                        
                         <div class="book-overview-actions">
+                            ${driveBadgeHtml}
+                            <button class="book-drive-edit-btn" onclick="event.stopPropagation(); editBookDriveLink('${item.id}')" title="Set Google Drive Link">✏️</button>
                             <button class="book-overview-del-btn" onclick="event.stopPropagation(); deleteBookOverviewItem('${item.id}')" title="Delete">✕</button>
                             <span class="book-overview-chevron">▼</span>
                         </div>
                     </div>
                     <div class="book-overview-body-wrap">
-                        <!-- Contextual Formatting Toolbar: visible only when editing -->
                         <div class="context-toolbar" id="bo-toolbar-${item.id}">
                             <button class="wishlist-format-btn bold" onmousedown="applyOverviewFormat(event, '${item.id}', 'bold')">B</button>
                             <button class="wishlist-format-btn italic" onmousedown="applyOverviewFormat(event, '${item.id}', 'italic')">I</button>
@@ -2215,6 +2262,25 @@
             });
 
             updateKeeBookOverviewSub();
+        }
+
+        function editBookDriveLink(id) {
+            const item = keeBookOverviews.find(b => b.id === id);
+            if (!item) return;
+
+            const current = item.driveUrl || '';
+            const newUrl = prompt("Enter Google Drive Link (leave blank to remove):", current);
+
+            if (newUrl === null) return; // user hit cancel
+
+            let formatted = newUrl.trim();
+            if (formatted && !formatted.startsWith('http://') && !formatted.startsWith('https://')) {
+                formatted = 'https://' + formatted;
+            }
+
+            item.driveUrl = formatted;
+            saveKeeBookOverviews();
+            renderKeeBookOverviews();
         }
 
         function toggleBookOverviewItem(e, id) {
@@ -2248,6 +2314,7 @@
                 id: newId,
                 title: 'New Book Overview',
                 content: '',
+                driveUrl: '',
                 expanded: true
             });
             saveKeeBookOverviews();
@@ -2272,7 +2339,6 @@
         }
 
         function hideOverviewToolbar(id) {
-            // Short delay so toolbar button clicks can register before disappearing
             setTimeout(() => {
                 const ed = document.getElementById('bo-editor-' + id);
                 if (document.activeElement !== ed) {
