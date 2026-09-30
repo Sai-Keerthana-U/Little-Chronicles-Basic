@@ -22,17 +22,20 @@
             --radius-outer: 18px;
             --radius-inner: 12px;
 
-            /* Sticky Notes Palette (Light) */
+            /* Notepad Palette (Light) */
+            --note-default: #FFFFFF;
+            --note-yellow: #FFF9D2;
+            --note-green: #E4F9DE;
+            --note-pink: #FFE5EE;
+            --note-blue: #E1F0FF;
+            --note-purple: #EFE3FF;
+
+            /* Adhu Wishlist Palette (Light) */
             --sticky-yellow: #FFF7B2;
-            --sticky-yellow-bar: #F3E792;
             --sticky-green: #D7F9D0;
-            --sticky-green-bar: #BBEBB2;
             --sticky-pink: #FFD4E5;
-            --sticky-pink-bar: #F3B5CD;
             --sticky-blue: #D0E9FF;
-            --sticky-blue-bar: #B2D7F9;
             --sticky-purple: #E8D9FF;
-            --sticky-purple-bar: #D1BAF5;
             --sticky-text: #2B2625;
         }
 
@@ -48,17 +51,20 @@
             --card-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.3);
             --card-border: 1px solid rgba(255, 255, 255, 0.06);
 
-            /* Sticky Notes Palette (Dark) */
+            /* Notepad Palette (Dark) */
+            --note-default: #201E1D;
+            --note-yellow: #38341E;
+            --note-green: #1F3323;
+            --note-pink: #361F2B;
+            --note-blue: #1D2D3E;
+            --note-purple: #2D213F;
+
+            /* Adhu Wishlist Palette (Dark) */
             --sticky-yellow: #3D3A20;
-            --sticky-yellow-bar: #4D4929;
             --sticky-green: #233827;
-            --sticky-green-bar: #2D4732;
             --sticky-pink: #3D222F;
-            --sticky-pink-bar: #4F2C3D;
             --sticky-blue: #1D3145;
-            --sticky-blue-bar: #26405A;
             --sticky-purple: #322547;
-            --sticky-purple-bar: #42315E;
             --sticky-text: #F3EFE9;
         }
 
@@ -529,7 +535,7 @@
             background: var(--surface-subtle);
             border: var(--card-border);
             border-radius: 999px;
-            padding: 7px 11px;
+            padding: 7px 12px;
             font-size: 12px;
             font-weight: 600;
             color: var(--text-muted);
@@ -537,7 +543,7 @@
             outline: none;
             display: inline-flex;
             align-items: center;
-            gap: 3px;
+            gap: 4px;
         }
 
         .sort-notes-btn:active {
@@ -595,121 +601,106 @@
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         }
 
-        .sticky-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        /* Minimizable Sticky Note */
-        .ms-sticky-note {
-            border-radius: 8px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.07);
+        /* ----------------------------------------------------
+           NEW CLEAN NOTEPAD / GOOGLE KEEP STYLE NOTES
+           ---------------------------------------------------- */
+        .notes-stack-container {
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            min-height: 165px;
+            gap: 12px;
+        }
+
+        .notepad-card {
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+            box-shadow: var(--card-shadow);
+            padding: 14px 16px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
             position: relative;
-            transition: min-height 0.2s ease;
+            background-color: var(--note-default);
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
 
-        .ms-sticky-note.minimized {
-            min-height: unset;
-        }
+        .notepad-card.color-default { background-color: var(--note-default); }
+        .notepad-card.color-yellow { background-color: var(--note-yellow); }
+        .notepad-card.color-green { background-color: var(--note-green); }
+        .notepad-card.color-pink { background-color: var(--note-pink); }
+        .notepad-card.color-blue { background-color: var(--note-blue); }
+        .notepad-card.color-purple { background-color: var(--note-purple); }
 
-        .ms-sticky-note.minimized .ms-sticky-body,
-        .ms-sticky-note.minimized .ms-sticky-toolbar {
-            display: none;
-        }
-
-        .ms-sticky-topbar {
-            height: 28px;
+        .notepad-card-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 7px;
         }
 
-        .note-time-stamp {
-            font-size: 9px;
+        .notepad-timestamp {
+            font-size: 10.5px;
             font-weight: 600;
-            opacity: 0.7;
-            color: var(--sticky-text);
+            color: var(--text-muted);
+            letter-spacing: 0.1px;
         }
 
-        .note-actions {
-            display: flex;
-            align-items: center;
-            gap: 3px;
-        }
-
-        .note-btn {
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            opacity: 0.6;
-            font-size: 12px;
-            line-height: 1;
-            padding: 2px;
-            color: var(--sticky-text);
-            border-radius: 3px;
-        }
-
-        .note-btn.toggle-minimize {
+        .notepad-body {
             font-size: 14px;
-            font-weight: 800;
-            line-height: 0.8;
-            padding: 2px 4px;
-        }
-
-        .ms-sticky-body {
-            padding: 8px 10px 6px;
-            flex: 1;
-            font-size: 12.5px;
-            line-height: 1.4;
-            color: var(--sticky-text);
+            line-height: 1.6;
+            color: var(--text-main);
             outline: none;
             word-break: break-word;
             white-space: pre-wrap;
+            min-height: 48px;
             font-family: inherit;
         }
 
-        .ms-sticky-toolbar {
+        .notepad-body[placeholder]:empty:before {
+            content: attr(placeholder);
+            color: var(--text-muted);
+            opacity: 0.5;
+            pointer-events: none;
+            display: block;
+        }
+
+        .notepad-footer {
             display: flex;
             align-items: center;
-            padding: 4px 6px 5px;
-            gap: 4px;
-            border-top: 1px solid rgba(0, 0, 0, 0.05);
-            opacity: 0.85;
+            justify-content: space-between;
+            padding-top: 6px;
+            border-top: 1px dashed rgba(0, 0, 0, 0.08);
         }
 
-        .format-btn {
+        [data-theme="dark"] .notepad-footer {
+            border-top: 1px dashed rgba(255, 255, 255, 0.08);
+        }
+
+        .notepad-format-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .notepad-action-btn {
             background: transparent;
             border: none;
-            color: var(--sticky-text);
-            font-size: 11.5px;
+            color: var(--text-main);
+            font-size: 12px;
             cursor: pointer;
-            padding: 2px 5px;
-            border-radius: 3px;
-            line-height: 1;
+            padding: 4px 6px;
+            border-radius: 5px;
             opacity: 0.65;
-            user-select: none;
+            line-height: 1;
         }
 
-        .format-btn.bold { font-weight: 800; }
-        .format-btn.italic { font-style: italic; }
-        .format-btn.strike { text-decoration: line-through; }
+        .notepad-action-btn:active {
+            opacity: 1;
+            background: rgba(0,0,0,0.06);
+        }
 
-        .color-yellow { background-color: var(--sticky-yellow); }
-        .color-yellow .ms-sticky-topbar { background-color: var(--sticky-yellow-bar); }
-        .color-green { background-color: var(--sticky-green); }
-        .color-green .ms-sticky-topbar { background-color: var(--sticky-green-bar); }
-        .color-pink { background-color: var(--sticky-pink); }
-        .color-pink .ms-sticky-topbar { background-color: var(--sticky-pink-bar); }
-        .color-blue { background-color: var(--sticky-blue); }
-        .color-blue .ms-sticky-topbar { background-color: var(--sticky-blue-bar); }
-        .color-purple { background-color: var(--sticky-purple); }
-        .color-purple .ms-sticky-topbar { background-color: var(--sticky-purple-bar); }
+        .notepad-action-btn.bold { font-weight: 800; }
+        .notepad-action-btn.italic { font-style: italic; }
+        .notepad-action-btn.strike { text-decoration: line-through; }
+        .notepad-action-btn.del { color: #E53935; opacity: 0.75; }
 
         /* To-Do Styles */
         .todo-input-bar {
@@ -1048,7 +1039,6 @@
             display: flex;
         }
 
-        /* Clean Top Bar Inside Expanded Overview */
         .book-overview-top-meta {
             display: flex;
             align-items: center;
@@ -1472,15 +1462,16 @@
 
             <div class="hub-tabs">
                 <button class="hub-tab-btn active" id="tabNotesBtn" onclick="switchHubTab('notes')">
-                    📝 Sticky Notes
+                    📝 Notepad
                 </button>
                 <button class="hub-tab-btn" id="tabTodoBtn" onclick="switchHubTab('todo')">
                     ✅ To-Do List
                 </button>
             </div>
 
+            <!-- Clean Notepad Stack -->
             <div id="panelNotes">
-                <div class="sticky-grid" id="stickyNotesContainer"></div>
+                <div class="notes-stack-container" id="stickyNotesContainer"></div>
             </div>
 
             <div id="panelTodo" style="display: none;">
@@ -1640,7 +1631,7 @@
             document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active-view'));
             document.getElementById('view-notes').classList.add('active-view');
             document.getElementById('profileSwitcher').style.visibility = 'hidden';
-            renderStickyNotes();
+            renderNotesList();
             renderTodoList();
             switchHubTab(tab);
         }
@@ -1739,7 +1730,7 @@
             if (to) to.innerText = userTools.length + ' tools';
 
             const sc = document.getElementById('stickyCount');
-            if (sc) sc.innerText = stickyNotes.length + (stickyNotes.length === 1 ? ' note' : ' notes');
+            if (sc) sc.innerText = notesList.length + (notesList.length === 1 ? ' note' : ' notes');
 
             const tc = document.getElementById('todoCount');
             if (tc) {
@@ -1886,7 +1877,7 @@
         }
 
         // ----------------------------------------------------
-        // HUB TAB SWITCHER (STICKY NOTES VS TO-DO)
+        // HUB TAB SWITCHER (NOTEPAD VS TO-DO)
         // ----------------------------------------------------
         let currentHubTab = 'notes';
 
@@ -1907,8 +1898,8 @@
                 hubActionBtn.innerHTML = '<span>+</span> New Note';
                 if (sortNotesBtn) sortNotesBtn.style.display = 'inline-flex';
                 setTimeout(() => {
-                    const firstNoteBody = document.querySelector('.ms-sticky-body');
-                    if (firstNoteBody && stickyNotes.length > 0) firstNoteBody.focus();
+                    const firstNoteBody = document.querySelector('.notepad-body');
+                    if (firstNoteBody && notesList.length > 0) firstNoteBody.focus();
                 }, 50);
             } else {
                 tabTodoBtn.classList.add('active');
@@ -1925,15 +1916,15 @@
         }
 
         function handleHubAction() {
-            if (currentHubTab === 'notes') addNewStickyNote();
+            if (currentHubTab === 'notes') addNewNoteItem();
             else document.getElementById('todoInput').focus();
         }
 
         // ----------------------------------------------------
-        // STICKY NOTES LOGIC (SORTABLE & MINIMIZABLE)
+        // CLEAN NOTEPAD LOGIC (STABLE ORDER, CLEAN CARDS)
         // ----------------------------------------------------
-        const NOTE_COLORS = ['yellow', 'green', 'pink', 'blue', 'purple'];
-        let stickySortAsc = false;
+        const NOTE_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
+        let noteSortAsc = false; // false = newest first, true = oldest first
 
         function getFormattedTimestamp() {
             const now = new Date();
@@ -1942,101 +1933,109 @@
             return dateStr + ', ' + timeStr;
         }
 
-        let stickyNotes = [
+        let notesList = [
             {
                 id: '1',
-                text: 'Curate new sensory board ideas and touch-and-feel book list.',
-                color: 'yellow',
-                timestamp: 'Sep 26, 10:30 AM',
-                createdAt: 1727326800000,
-                minimized: false
+                text: 'Your warm-up — 6–8 minutes\nMarch in place / easy walking — 2 min\nArm circles — 10 forward + 10 backward\nShoulder rolls — 10 forward + 10 backward\nBodyweight squats — 10 reps',
+                color: 'green',
+                timestamp: 'Sep 30, 07:48',
+                createdAt: 1727662080000
             }
         ];
 
         try {
             const sn = localStorage.getItem('lc_sticky_notes');
-            if (sn) stickyNotes = JSON.parse(sn);
+            if (sn) notesList = JSON.parse(sn);
             const sa = localStorage.getItem('lc_sticky_sort_asc');
-            if (sa !== null) stickySortAsc = (sa === 'true');
+            if (sa !== null) noteSortAsc = (sa === 'true');
         } catch (e) {
             console.error(e);
         }
 
-        function saveStickyNotes() {
+        function saveNotesList() {
             try {
-                localStorage.setItem('lc_sticky_notes', JSON.stringify(stickyNotes));
+                localStorage.setItem('lc_sticky_notes', JSON.stringify(notesList));
             } catch (e) {
                 console.error(e);
             }
         }
 
-        function formatDoc(command) {
+        function formatNoteDoc(command) {
             document.execCommand(command, false, null);
         }
 
         function toggleStickySort() {
-            stickySortAsc = !stickySortAsc;
+            noteSortAsc = !noteSortAsc;
             try {
-                localStorage.setItem('lc_sticky_sort_asc', stickySortAsc);
+                localStorage.setItem('lc_sticky_sort_asc', noteSortAsc);
             } catch(e) {}
             
-            const indicator = document.getElementById('sortDirectionIndicator');
-            if (indicator) indicator.innerText = stickySortAsc ? '↑' : '↓';
-            
-            renderStickyNotes();
+            // Re-order the master array only when explicitly clicking Sort
+            notesList.sort((a, b) => {
+                const timeA = a.createdAt || parseInt(a.id) || 0;
+                const timeB = b.createdAt || parseInt(b.id) || 0;
+                return noteSortAsc ? (timeA - timeB) : (timeB - timeA);
+            });
+
+            saveNotesList();
+            renderNotesList();
         }
 
-        function toggleMinimizeNote(id) {
-            const note = stickyNotes.find(n => n.id === id);
+        function cycleNoteColor(id) {
+            const note = notesList.find(n => n.id === id);
             if (note) {
-                note.minimized = !note.minimized;
-                saveStickyNotes();
-                renderStickyNotes();
+                const currentIndex = NOTE_COLORS.indexOf(note.color || 'default');
+                note.color = NOTE_COLORS[(currentIndex + 1) % NOTE_COLORS.length];
+                saveNotesList();
+
+                const el = document.getElementById('notepad-card-' + id);
+                if (el) {
+                    NOTE_COLORS.forEach(c => el.classList.remove('color-' + c));
+                    el.classList.add('color-' + note.color);
+                }
             }
         }
 
-        function renderStickyNotes() {
+        function renderNotesList() {
             const container = document.getElementById('stickyNotesContainer');
             if (!container) return;
             container.innerHTML = '';
 
             const indicator = document.getElementById('sortDirectionIndicator');
-            if (indicator) indicator.innerText = stickySortAsc ? '↑' : '↓';
+            if (indicator) indicator.innerText = noteSortAsc ? '↑' : '↓';
 
-            if (stickyNotes.length === 0) {
+            if (notesList.length === 0) {
                 container.innerHTML = `
-                    <div style="grid-column: span 2; text-align: center; color: var(--text-muted); padding: 30px 0; font-size: 12.5px;">
-                        No sticky notes yet. Click <strong>+ New Note</strong>!
+                    <div style="text-align: center; color: var(--text-muted); padding: 40px 0; font-size: 13px;">
+                        No notes yet. Tap <strong>+ New Note</strong> to start writing!
                     </div>
                 `;
                 updateDashboardCounts();
                 return;
             }
 
-            const sortedList = [...stickyNotes].sort((a, b) => {
-                const timeA = a.createdAt || parseInt(a.id) || 0;
-                const timeB = b.createdAt || parseInt(b.id) || 0;
-                return stickySortAsc ? (timeA - timeB) : (timeB - timeA);
-            });
-
-            sortedList.forEach(note => {
+            notesList.forEach(note => {
                 const noteEl = document.createElement('div');
-                const isMinimized = !!note.minimized;
-                noteEl.className = 'ms-sticky-note color-' + note.color + (isMinimized ? ' minimized' : '');
+                const colorClass = note.color ? 'color-' + note.color : 'color-default';
+                noteEl.className = 'notepad-card ' + colorClass;
+                noteEl.id = 'notepad-card-' + note.id;
+
                 noteEl.innerHTML = `
-                    <div class="ms-sticky-topbar">
-                        <span class="note-time-stamp">${note.timestamp || ''}</span>
-                        <div class="note-actions">
-                            <button class="note-btn toggle-minimize" title="${isMinimized ? 'Expand' : 'Minimize'}" onclick="toggleMinimizeNote('${note.id}')">${isMinimized ? '＋' : '—'}</button>
-                            <button class="note-btn" title="Color" onclick="cycleColor('${note.id}')">🎨</button>
-                            <button class="note-btn" title="Delete" onclick="deleteStickyNote('${note.id}')">✕</button>
-                        </div>
+                    <div class="notepad-card-header">
+                        <span class="notepad-timestamp">${note.timestamp || ''}</span>
                     </div>
-                    <div class="ms-sticky-body" id="note-body-${note.id}" contenteditable="true" oninput="updateNoteText('${note.id}', this)">${note.text}</div>
-                    <div class="ms-sticky-toolbar">
-                        <button class="format-btn bold" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('bold');">B</button>
-                        <button class="format-btn italic" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('italic');">I</button>
-                        <button class="format-btn strike" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatDoc('strikeThrough');">S</button>
+
+                    <div class="notepad-body" id="note-body-${note.id}" contenteditable="true" 
+                         oninput="updateNoteItemText('${note.id}', this)" placeholder="Write your note here...">${note.text}</div>
+
+                    <div class="notepad-footer">
+                        <div class="notepad-format-group">
+                            <button class="notepad-action-btn bold" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatNoteDoc('bold');">B</button>
+                            <button class="notepad-action-btn italic" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatNoteDoc('italic');">I</button>
+                            <button class="notepad-action-btn strike" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatNoteDoc('strikeThrough');">S</button>
+                            <button class="notepad-action-btn" onmousedown="event.preventDefault(); cycleNoteColor('${note.id}')" title="Change Color">🎨</button>
+                        </div>
+                        <button class="notepad-action-btn del" onclick="deleteNoteItem('${note.id}')" title="Delete Note">🗑️</button>
                     </div>
                 `;
                 container.appendChild(noteEl);
@@ -2045,49 +2044,40 @@
             updateDashboardCounts(); 
         }
 
-        function addNewStickyNote() {
-            const randomColor = NOTE_COLORS[Math.floor(Math.random() * NOTE_COLORS.length)];
+        function addNewNoteItem() {
             const newNote = {
                 id: Date.now().toString(),
                 text: '',
-                color: randomColor,
+                color: 'default',
                 timestamp: getFormattedTimestamp(),
-                createdAt: Date.now(),
-                minimized: false
+                createdAt: Date.now()
             };
 
-            stickyNotes.unshift(newNote);
-            saveStickyNotes();
-            renderStickyNotes();
+            notesList.unshift(newNote);
+            saveNotesList();
+            renderNotesList();
 
             setTimeout(() => {
-                const firstNoteBody = document.querySelector('.ms-sticky-body');
+                const firstNoteBody = document.querySelector('.notepad-body');
                 if (firstNoteBody) firstNoteBody.focus();
             }, 50);
         }
 
-        function updateNoteText(id, element) {
-            const note = stickyNotes.find(n => n.id === id);
+        function updateNoteItemText(id, element) {
+            const note = notesList.find(n => n.id === id);
             if (note) {
                 note.text = element.innerHTML;
-                saveStickyNotes();
+                saveNotesList();
+                // We do NOT call renderNotesList() here so notes don't re-sort or bounce while typing!
             }
         }
 
-        function cycleColor(id) {
-            const note = stickyNotes.find(n => n.id === id);
-            if (note) {
-                const currentIndex = NOTE_COLORS.indexOf(note.color);
-                note.color = NOTE_COLORS[(currentIndex + 1) % NOTE_COLORS.length];
-                saveStickyNotes();
-                renderStickyNotes();
+        function deleteNoteItem(id) {
+            if (confirm("Delete this note?")) {
+                notesList = notesList.filter(n => n.id !== id);
+                saveNotesList();
+                renderNotesList();
             }
-        }
-
-        function deleteStickyNote(id) {
-            stickyNotes = stickyNotes.filter(n => n.id !== id);
-            saveStickyNotes();
-            renderStickyNotes();
         }
 
         // ----------------------------------------------------
@@ -2262,7 +2252,6 @@
                     </div>
 
                     <div class="book-overview-body-wrap">
-                        <!-- Top Meta Bar Inside the Card -->
                         <div class="book-overview-top-meta">
                             ${driveButtonHtml}
 
@@ -2272,13 +2261,11 @@
                             </div>
                         </div>
 
-                        <!-- Editable Title -->
                         <div>
                             <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.4px;">Book Title</label>
                             <input type="text" class="book-overview-title-edit-input" value="${item.title || ''}" placeholder="Enter book title..." oninput="updateBookOverviewTitle('${item.id}', this.value)">
                         </div>
 
-                        <!-- Formatting Toolbar (Visible only on edit) -->
                         <div class="context-toolbar" id="bo-toolbar-${item.id}">
                             <button class="wishlist-format-btn bold" onmousedown="applyOverviewFormat(event, '${item.id}', 'bold')">B</button>
                             <button class="wishlist-format-btn italic" onmousedown="applyOverviewFormat(event, '${item.id}', 'italic')">I</button>
@@ -2286,7 +2273,6 @@
                             <button class="wishlist-format-btn" onmousedown="applyOverviewFormat(event, '${item.id}', 'insertUnorderedList')">•</button>
                         </div>
 
-                        <!-- Editor Content -->
                         <div>
                             <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.4px;">Notes & Overview</label>
                             <div class="book-overview-editor" id="bo-editor-${item.id}" contenteditable="true" 
@@ -2336,7 +2322,6 @@
             if (item) {
                 item.title = val;
                 saveKeeBookOverviews();
-                // Update the collapsed header title in real-time
                 const headerText = document.querySelector('#bo-item-' + id + ' .book-overview-title-text');
                 if (headerText) headerText.innerText = val || 'Untitled Book';
             }
@@ -2748,14 +2733,14 @@
             return {
                 app: 'The Motherboard',
                 lastUpdated: new Date().toISOString(),
-                stickyNotes: stickyNotes,
+                stickyNotes: notesList,
                 todoList: todoList,
                 userEbooks: userEbooks,
                 userAudiobooks: userAudiobooks,
                 userTools: userTools,
                 adhuBlocks: adhuBlocks,
                 adhuWishlistColor: localStorage.getItem('lc_adhu_wishlist_color') || 'default',
-                stickySortAsc: stickySortAsc,
+                stickySortAsc: noteSortAsc,
                 keeBookOverviews: keeBookOverviews
             };
         }
@@ -2824,8 +2809,8 @@
                 try {
                     const data = JSON.parse(e.target.result);
                     if (data.stickyNotes) {
-                        stickyNotes = data.stickyNotes;
-                        saveStickyNotes();
+                        notesList = data.stickyNotes;
+                        saveNotesList();
                     }
                     if (data.todoList) {
                         todoList = data.todoList;
@@ -2851,7 +2836,7 @@
                     }
 
                     if (data.stickySortAsc !== undefined) {
-                        stickySortAsc = data.stickySortAsc;
+                        noteSortAsc = data.stickySortAsc;
                     }
 
                     if (data.keeBookOverviews) {
@@ -2868,7 +2853,7 @@
                     markBackupComplete(); 
 
                     updateDashboardCounts();
-                    renderStickyNotes();
+                    renderNotesList();
                     renderTodoList();
                 } catch (err) {
                     statusEl.innerText = 'Error: Invalid backup file format.';
