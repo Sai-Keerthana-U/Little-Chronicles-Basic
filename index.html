@@ -602,7 +602,7 @@
         }
 
         /* ----------------------------------------------------
-           GLOBAL NOTEPAD EDITING TOOLBAR (OUTSIDE OF NOTES)
+           GLOBAL NOTEPAD EDITING TOOLBAR (RICH CONTROLS)
            ---------------------------------------------------- */
         .notepad-global-toolbar {
             display: flex;
@@ -611,28 +611,35 @@
             background: var(--surface-card);
             border: var(--card-border);
             border-radius: var(--radius-inner);
-            padding: 6px 12px;
+            padding: 6px 10px;
             margin-bottom: 12px;
             box-shadow: var(--card-shadow);
+            gap: 6px;
+            overflow-x: auto;
         }
 
         .notepad-format-group {
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
 
         .notepad-toolbar-btn {
             background: var(--surface-subtle);
             border: 1px solid transparent;
             color: var(--text-main);
-            font-size: 12.5px;
+            font-size: 12px;
             font-weight: 700;
             cursor: pointer;
-            padding: 5px 10px;
+            padding: 5px 8px;
             border-radius: 7px;
             line-height: 1;
             user-select: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3px;
+            white-space: nowrap;
         }
 
         .notepad-toolbar-btn:active {
@@ -644,10 +651,73 @@
         .notepad-toolbar-btn.bold { font-weight: 800; }
         .notepad-toolbar-btn.italic { font-style: italic; font-family: serif; }
         .notepad-toolbar-btn.strike { text-decoration: line-through; }
-        .notepad-toolbar-btn.bullet { font-size: 13px; }
+
+        /* Color picker wrapper buttons */
+        .color-picker-label {
+            position: relative;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .color-picker-label input[type="color"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+        }
+
+        /* Lists Dropdown Styling */
+        .list-dropdown-wrap {
+            position: relative;
+            display: inline-block;
+        }
+
+        .list-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 4px;
+            background: var(--surface-card);
+            border: var(--card-border);
+            border-radius: 8px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+            z-index: 50;
+            flex-direction: column;
+            min-width: 115px;
+            overflow: hidden;
+        }
+
+        .list-dropdown-wrap.open .list-dropdown-menu {
+            display: flex;
+        }
+
+        .list-dropdown-item {
+            background: transparent;
+            border: none;
+            padding: 8px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-main);
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .list-dropdown-item:active {
+            background: var(--surface-subtle);
+        }
 
         /* ----------------------------------------------------
-           NOTEPAD CARDS (WITH MINIMIZE / COLLAPSE)
+           NOTEPAD CARDS (PIN, FAVORITE & STABLE INDENTS)
            ---------------------------------------------------- */
         .notes-stack-container {
             display: flex;
@@ -666,6 +736,11 @@
             position: relative;
             background-color: var(--note-default);
             transition: all 0.2s ease;
+        }
+
+        .notepad-card.is-pinned {
+            border-color: rgba(148, 93, 76, 0.4);
+            box-shadow: 0 4px 18px rgba(148, 93, 76, 0.12);
         }
 
         .notepad-card.color-default { background-color: var(--note-default); }
@@ -699,17 +774,29 @@
             background: transparent;
             border: none;
             color: var(--text-main);
-            font-size: 12px;
+            font-size: 12.5px;
             cursor: pointer;
-            padding: 3px 6px;
+            padding: 3px 5px;
             border-radius: 5px;
-            opacity: 0.65;
+            opacity: 0.6;
             line-height: 1;
         }
 
         .notepad-card-btn:active {
             opacity: 1;
             background: rgba(0,0,0,0.06);
+        }
+
+        .notepad-card-btn.active-pin {
+            opacity: 1;
+            color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        .notepad-card-btn.active-star {
+            opacity: 1;
+            color: #FFB300;
+            transform: scale(1.05);
         }
 
         .notepad-card-btn.toggle-min {
@@ -742,9 +829,9 @@
             display: block;
         }
 
-        /* Clean Tightly Aligned Bullet Lists */
-        .notepad-body ul {
-            padding-left: 18px;
+        /* Bullet & Numbering Perfect Alignment */
+        .notepad-body ul, .notepad-body ol {
+            padding-left: 22px;
             margin: 4px 0;
         }
 
@@ -1215,8 +1302,8 @@
             display: block;
         }
 
-        .book-overview-editor ul {
-            padding-left: 18px;
+        .book-overview-editor ul, .book-overview-editor ol {
+            padding-left: 20px;
             margin: 4px 0;
         }
 
@@ -1333,7 +1420,7 @@
             white-space: normal;
         }
 
-        .wl-block-editor ul {
+        .wl-block-editor ul, .wl-block-editor ol {
             padding-left: 18px;
             margin: 4px 0;
         }
@@ -1544,18 +1631,40 @@
                 </button>
             </div>
 
-            <!-- Global Outside Editing Toolbar for Notepad -->
+            <!-- Global Outside Editing Toolbar for Notepad (Undo, Lists, Highlighters, Colors) -->
             <div class="notepad-global-toolbar" id="notepadGlobalToolbar">
-                <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px;">Format</span>
                 <div class="notepad-format-group">
+                    <button class="notepad-toolbar-btn" onmousedown="applyGlobalNoteFormat(event, 'undo')" title="Undo">↺ Undo</button>
                     <button class="notepad-toolbar-btn bold" onmousedown="applyGlobalNoteFormat(event, 'bold')" title="Bold">B</button>
                     <button class="notepad-toolbar-btn italic" onmousedown="applyGlobalNoteFormat(event, 'italic')" title="Italic">I</button>
                     <button class="notepad-toolbar-btn strike" onmousedown="applyGlobalNoteFormat(event, 'strikeThrough')" title="Strikethrough">S</button>
-                    <button class="notepad-toolbar-btn bullet" onmousedown="applyGlobalNoteFormat(event, 'insertUnorderedList')" title="Bullet Points">• List</button>
+                    
+                    <!-- Lists Dropdown -->
+                    <div class="list-dropdown-wrap" id="listDropdownWrap">
+                        <button class="notepad-toolbar-btn" onmousedown="toggleListDropdown(event)">≡ List ▾</button>
+                        <div class="list-dropdown-menu">
+                            <button class="list-dropdown-item" onmousedown="applyListFormat(event, 'insertUnorderedList')">• Bullets</button>
+                            <button class="list-dropdown-item" onmousedown="applyListFormat(event, 'insertOrderedList')">1. Numbering</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="notepad-format-group">
+                    <!-- Text Color Picker -->
+                    <label class="notepad-toolbar-btn color-picker-label" title="Text Color">
+                        <span style="font-weight:800; border-bottom: 2px solid var(--primary); padding-bottom: 1px;">A</span>
+                        <input type="color" onchange="applyColorFormat('foreColor', this.value)">
+                    </label>
+
+                    <!-- Highlighter Picker -->
+                    <label class="notepad-toolbar-btn color-picker-label" title="Highlighter">
+                        <span>🖍️</span>
+                        <input type="color" value="#FFE082" onchange="applyColorFormat('hiliteColor', this.value)">
+                    </label>
                 </div>
             </div>
 
-            <!-- Clean Notepad Stack (with individual minimize) -->
+            <!-- Clean Notepad Stack (with individual minimize, pin, and star) -->
             <div id="panelNotes">
                 <div class="notes-stack-container" id="stickyNotesContainer"></div>
             </div>
@@ -2010,7 +2119,7 @@
         }
 
         // ----------------------------------------------------
-        // CLEAN NOTEPAD LOGIC (SPACE-UNBULLET & SMART LISTS)
+        // CLEAN NOTEPAD LOGIC (PIN, STAR, FORMATTING & SMART LISTS)
         // ----------------------------------------------------
         const NOTE_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
         let noteSortAsc = false;
@@ -2030,7 +2139,9 @@
                 color: 'green',
                 timestamp: 'Sep 30, 07:48',
                 createdAt: 1727662080000,
-                minimized: false
+                minimized: false,
+                pinned: false,
+                favorite: false
             }
         ];
 
@@ -2051,14 +2162,18 @@
             }
         }
 
-        function applyGlobalNoteFormat(e, command) {
-            e.preventDefault();
+        function ensureNoteFocused() {
             if (lastFocusedNoteId) {
                 const el = document.getElementById('note-body-' + lastFocusedNoteId);
                 if (el && document.activeElement !== el) {
                     el.focus();
                 }
             }
+        }
+
+        function applyGlobalNoteFormat(e, command) {
+            e.preventDefault();
+            ensureNoteFocused();
             document.execCommand(command, false, null);
             if (lastFocusedNoteId) {
                 const el = document.getElementById('note-body-' + lastFocusedNoteId);
@@ -2066,7 +2181,42 @@
             }
         }
 
-        // Handles unbulleting when user presses Space or Backspace at the beginning of an LI
+        function applyColorFormat(command, value) {
+            ensureNoteFocused();
+            document.execCommand(command, false, value);
+            if (lastFocusedNoteId) {
+                const el = document.getElementById('note-body-' + lastFocusedNoteId);
+                if (el) updateNoteItemText(lastFocusedNoteId, el);
+            }
+        }
+
+        function toggleListDropdown(e) {
+            e.preventDefault();
+            const wrap = document.getElementById('listDropdownWrap');
+            if (wrap) wrap.classList.toggle('open');
+        }
+
+        function applyListFormat(e, command) {
+            e.preventDefault();
+            const wrap = document.getElementById('listDropdownWrap');
+            if (wrap) wrap.classList.remove('open');
+            ensureNoteFocused();
+            document.execCommand(command, false, null);
+            if (lastFocusedNoteId) {
+                const el = document.getElementById('note-body-' + lastFocusedNoteId);
+                if (el) updateNoteItemText(lastFocusedNoteId, el);
+            }
+        }
+
+        // Close list dropdown on outside click
+        document.addEventListener('click', (e) => {
+            const wrap = document.getElementById('listDropdownWrap');
+            if (wrap && !wrap.contains(e.target)) {
+                wrap.classList.remove('open');
+            }
+        });
+
+        // Strip bullets or numbering when Space/Backspace is pressed at the start of a list item
         function handleNoteKeyDown(e, id) {
             const sel = window.getSelection();
             if (!sel || sel.rangeCount === 0) return;
@@ -2077,29 +2227,22 @@
 
             if (!li) return;
 
-            // Check if cursor is at the very beginning of the list item
             const isAtStart = range.startOffset === 0 && (range.startContainer === li || range.startContainer === li.firstChild);
 
-            if (e.key === ' ' || e.key === 'Spacebar') {
+            if (e.key === ' ' || e.key === 'Spacebar' || e.key === 'Backspace') {
                 if (isAtStart) {
                     e.preventDefault();
-                    // Strip the list format from this line
-                    document.execCommand('insertUnorderedList', false, null);
-                    const el = document.getElementById('note-body-' + id);
-                    if (el) updateNoteItemText(id, el);
-                }
-            } else if (e.key === 'Backspace') {
-                if (isAtStart) {
-                    e.preventDefault();
-                    document.execCommand('insertUnorderedList', false, null);
+                    // Toggle off unordered or ordered list
+                    const listType = li.closest('ol') ? 'insertOrderedList' : 'insertUnorderedList';
+                    document.execCommand(listType, false, null);
                     const el = document.getElementById('note-body-' + id);
                     if (el) updateNoteItemText(id, el);
                 }
             } else if (e.key === 'Enter') {
-                // If pressing enter on an empty bullet, automatically exit list
                 if (li.innerText.trim() === '' || li.innerHTML === '<br>') {
                     e.preventDefault();
-                    document.execCommand('insertUnorderedList', false, null);
+                    const listType = li.closest('ol') ? 'insertOrderedList' : 'insertUnorderedList';
+                    document.execCommand(listType, false, null);
                     const el = document.getElementById('note-body-' + id);
                     if (el) updateNoteItemText(id, el);
                 }
@@ -2112,7 +2255,9 @@
                 localStorage.setItem('lc_sticky_sort_asc', noteSortAsc);
             } catch(e) {}
             
+            // Sort by pin first, then date
             notesList.sort((a, b) => {
+                if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
                 const timeA = a.createdAt || parseInt(a.id) || 0;
                 const timeB = b.createdAt || parseInt(b.id) || 0;
                 return noteSortAsc ? (timeA - timeB) : (timeB - timeA);
@@ -2120,6 +2265,31 @@
 
             saveNotesList();
             renderNotesList();
+        }
+
+        function togglePinNote(id) {
+            const note = notesList.find(n => n.id === id);
+            if (note) {
+                note.pinned = !note.pinned;
+                // Move pinned to top
+                notesList.sort((a, b) => {
+                    if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+                    const timeA = a.createdAt || parseInt(a.id) || 0;
+                    const timeB = b.createdAt || parseInt(b.id) || 0;
+                    return noteSortAsc ? (timeA - timeB) : (timeB - timeA);
+                });
+                saveNotesList();
+                renderNotesList();
+            }
+        }
+
+        function toggleStarNote(id) {
+            const note = notesList.find(n => n.id === id);
+            if (note) {
+                note.favorite = !note.favorite;
+                saveNotesList();
+                renderNotesList();
+            }
         }
 
         function toggleMinimizeNoteCard(id) {
@@ -2168,7 +2338,10 @@
                 const noteEl = document.createElement('div');
                 const colorClass = note.color ? 'color-' + note.color : 'color-default';
                 const isMin = !!note.minimized;
-                noteEl.className = 'notepad-card ' + colorClass + (isMin ? ' minimized' : '');
+                const isPinned = !!note.pinned;
+                const isFav = !!note.favorite;
+
+                noteEl.className = `notepad-card ${colorClass}${isMin ? ' minimized' : ''}${isPinned ? ' is-pinned' : ''}`;
                 noteEl.id = 'notepad-card-' + note.id;
 
                 const tempDiv = document.createElement('div');
@@ -2179,6 +2352,8 @@
                     <div class="notepad-card-header">
                         <span class="notepad-timestamp">${note.timestamp || ''}</span>
                         <div class="notepad-card-actions">
+                            <button class="notepad-card-btn ${isPinned ? 'active-pin' : ''}" title="${isPinned ? 'Unpin' : 'Pin to top'}" onclick="togglePinNote('${note.id}')">📍</button>
+                            <button class="notepad-card-btn ${isFav ? 'active-star' : ''}" title="${isFav ? 'Unfavorite' : 'Favorite'}" onclick="toggleStarNote('${note.id}')">${isFav ? '★' : '☆'}</button>
                             <button class="notepad-card-btn toggle-min" title="${isMin ? 'Expand' : 'Minimize'}" onclick="toggleMinimizeNoteCard('${note.id}')">${isMin ? '＋' : '—'}</button>
                             <button class="notepad-card-btn" title="Change Color" onclick="cycleNoteColor('${note.id}')">🎨</button>
                             <button class="notepad-card-btn del" title="Delete Note" onclick="deleteNoteItem('${note.id}')">🗑️</button>
@@ -2205,7 +2380,9 @@
                 color: 'default',
                 timestamp: getFormattedTimestamp(),
                 createdAt: Date.now(),
-                minimized: false
+                minimized: false,
+                pinned: false,
+                favorite: false
             };
 
             notesList.unshift(newNote);
