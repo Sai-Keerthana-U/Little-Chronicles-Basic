@@ -1658,11 +1658,11 @@
                         </button>
                         <div class="popover-menu menu-right">
                             <div class="swatches-grid">
-                                <span class="color-swatch-dot" style="background:#2D2725;" onmousedown="applyColorFormat('foreColor', '#2D2725', event)" title="Black / Default"></span>
-                                <span class="color-swatch-dot" style="background:#945D4C;" onmousedown="applyColorFormat('foreColor', '#945D4C', event)" title="Ochre"></span>
-                                <span class="color-swatch-dot" style="background:#1976D2;" onmousedown="applyColorFormat('foreColor', '#1976D2', event)" title="Blue"></span>
-                                <span class="color-swatch-dot" style="background:#2E7D32;" onmousedown="applyColorFormat('foreColor', '#2E7D32', event)" title="Green"></span>
-                                <span class="color-swatch-dot" style="background:#D32F2F;" onmousedown="applyColorFormat('foreColor', '#D32F2F', event)" title="Red"></span>
+                                <span class="color-swatch-dot" style="background:#2D2725;" onmousedown="applyColorDirect('foreColor', '#2D2725', event)" title="Black / Default"></span>
+                                <span class="color-swatch-dot" style="background:#945D4C;" onmousedown="applyColorDirect('foreColor', '#945D4C', event)" title="Ochre"></span>
+                                <span class="color-swatch-dot" style="background:#1976D2;" onmousedown="applyColorDirect('foreColor', '#1976D2', event)" title="Blue"></span>
+                                <span class="color-swatch-dot" style="background:#2E7D32;" onmousedown="applyColorDirect('foreColor', '#2E7D32', event)" title="Green"></span>
+                                <span class="color-swatch-dot" style="background:#D32F2F;" onmousedown="applyColorDirect('foreColor', '#D32F2F', event)" title="Red"></span>
                             </div>
                         </div>
                     </div>
@@ -1674,11 +1674,11 @@
                         </button>
                         <div class="popover-menu menu-right">
                             <div class="swatches-grid">
-                                <span class="color-swatch-dot" style="background:#FFF176;" onmousedown="applyColorFormat('hiliteColor', '#FFF176', event)" title="Yellow"></span>
-                                <span class="color-swatch-dot" style="background:#A5D6A7;" onmousedown="applyColorFormat('hiliteColor', '#A5D6A7', event)" title="Green"></span>
-                                <span class="color-swatch-dot" style="background:#F48FB1;" onmousedown="applyColorFormat('hiliteColor', '#F48FB1', event)" title="Pink"></span>
-                                <span class="color-swatch-dot" style="background:#90CAF9;" onmousedown="applyColorFormat('hiliteColor', '#90CAF9', event)" title="Blue"></span>
-                                <span class="color-swatch-dot" style="background:#FFFFFF; border: 1.5px solid #bbb;" onmousedown="applyColorFormat('hiliteColor', 'transparent', event)" title="Remove Highlight"></span>
+                                <span class="color-swatch-dot" style="background:#FFF176;" onmousedown="applyColorDirect('hiliteColor', '#FFF176', event)" title="Yellow"></span>
+                                <span class="color-swatch-dot" style="background:#A5D6A7;" onmousedown="applyColorDirect('hiliteColor', '#A5D6A7', event)" title="Green"></span>
+                                <span class="color-swatch-dot" style="background:#F48FB1;" onmousedown="applyColorDirect('hiliteColor', '#F48FB1', event)" title="Pink"></span>
+                                <span class="color-swatch-dot" style="background:#90CAF9;" onmousedown="applyColorDirect('hiliteColor', '#90CAF9', event)" title="Blue"></span>
+                                <span class="color-swatch-dot" style="background:#FFFFFF; border: 1.5px solid #bbb;" onmousedown="applyColorDirect('hiliteColor', 'transparent', event)" title="Remove Highlight"></span>
                             </div>
                         </div>
                     </div>
@@ -2138,7 +2138,7 @@
         }
 
         // ----------------------------------------------------
-        // CLEAN NOTEPAD LOGIC (NO-SCROLL COLOR & LIST POPOVERS)
+        // CLEAN NOTEPAD LOGIC (DIRECT INLINE COLOR & RANGE ANCHORS)
         // ----------------------------------------------------
         const NOTE_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
         let noteSortAsc = false;
@@ -2203,7 +2203,6 @@
             }
         }
 
-        // Restores selection while completely preventing mobile viewport jump
         function restoreSelection() {
             if (savedNoteSelectionRange) {
                 const sel = window.getSelection();
@@ -2218,9 +2217,9 @@
         function togglePopover(e, wrapId) {
             e.preventDefault();
             e.stopPropagation();
+            saveCurrentSelection(); // Remember selection before opening popover
             const targetWrap = document.getElementById(wrapId);
             
-            // Close other open popovers
             document.querySelectorAll('.popover-wrap').forEach(w => {
                 if (w !== targetWrap) w.classList.remove('open');
             });
@@ -2249,14 +2248,61 @@
             }
         }
 
-        function applyColorFormat(command, value, e) {
+        // Direct Reliable Color & Highlight Implementation
+        function applyColorDirect(type, colorValue, e) {
             if (e) {
                 e.preventDefault();
                 e.stopPropagation();
             }
             closeAllPopovers();
             restoreSelection();
-            document.execCommand(command, false, value);
+
+            const sel = window.getSelection();
+            if (!sel || sel.rangeCount === 0) return;
+
+            const range = sel.getRangeAt(0);
+            
+            if (range.collapsed) {
+                // If cursor is placed with no selection, use standard execCommand
+                if (type === 'foreColor') {
+                    document.execCommand('foreColor', false, colorValue);
+                } else {
+                    document.execCommand('hiliteColor', false, colorValue);
+                }
+            } else {
+                // Wrap selection directly in an inline styled span
+                const span = document.createElement('span');
+                if (type === 'foreColor') {
+                    span.style.color = colorValue;
+                } else {
+                    if (colorValue === 'transparent') {
+                        span.style.backgroundColor = 'transparent';
+                    } else {
+                        span.style.backgroundColor = colorValue;
+                        span.style.borderRadius = '3px';
+                        span.style.padding = '0 2px';
+                    }
+                }
+                
+                try {
+                    const extracted = range.extractContents();
+                    span.appendChild(extracted);
+                    range.insertNode(span);
+                    
+                    // Re-anchor selection to span
+                    range.selectNodeContents(span);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                } catch(err) {
+                    // Fallback to execCommand if cross-node selection occurs
+                    if (type === 'foreColor') {
+                        document.execCommand('foreColor', false, colorValue);
+                    } else {
+                        document.execCommand('hiliteColor', false, colorValue);
+                    }
+                }
+            }
+
             saveCurrentSelection();
             if (lastFocusedNoteId) {
                 const el = document.getElementById('note-body-' + lastFocusedNoteId);
@@ -2638,7 +2684,7 @@
                             ${driveButtonHtml}
 
                             <div class="book-overview-inner-actions">
-                                ${hasDrive ? `<button class="book-inner-action-btn" onclick="editBookDriveLink('${item.id}')">✏️️ Edit Link</button>` : ''}
+                                ${hasDrive ? `<button class="book-inner-action-btn" onclick="editBookDriveLink('${item.id}')">✏️ Edit Link</button>` : ''}
                                 <button class="book-inner-action-btn delete" onclick="deleteBookOverviewItem('${item.id}')">🗑️ Delete</button>
                             </div>
                         </div>
