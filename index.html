@@ -615,7 +615,7 @@
             margin-bottom: 12px;
             box-shadow: var(--card-shadow);
             gap: 6px;
-            overflow-x: auto;
+            position: relative;
         }
 
         .notepad-format-group {
@@ -631,7 +631,7 @@
             font-size: 12px;
             font-weight: 700;
             cursor: pointer;
-            padding: 5px 8px;
+            padding: 6px 9px;
             border-radius: 7px;
             line-height: 1;
             user-select: none;
@@ -671,6 +671,7 @@
             left: 0;
         }
 
+        /* Direct List Dropdown Styling */
         .list-dropdown-wrap {
             position: relative;
             display: inline-block;
@@ -681,14 +682,14 @@
             position: absolute;
             top: 100%;
             left: 0;
-            margin-top: 4px;
+            margin-top: 6px;
             background: var(--surface-card);
             border: var(--card-border);
-            border-radius: 8px;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
-            z-index: 50;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            z-index: 999;
             flex-direction: column;
-            min-width: 115px;
+            min-width: 130px;
             overflow: hidden;
         }
 
@@ -699,8 +700,8 @@
         .list-dropdown-item {
             background: transparent;
             border: none;
-            padding: 8px 10px;
-            font-size: 12px;
+            padding: 9px 12px;
+            font-size: 12.5px;
             font-weight: 600;
             color: var(--text-main);
             text-align: left;
@@ -830,14 +831,16 @@
             display: block;
         }
 
+        /* Natural, Uniform Bullet & Numbering Indentation */
         .notepad-body ul, .notepad-body ol {
             padding-left: 22px;
             margin: 4px 0;
+            list-style-position: outside;
         }
 
         .notepad-body li {
             margin-bottom: 2px;
-            padding-left: 2px;
+            padding-left: 4px;
         }
 
         .notepad-card.minimized {
@@ -1460,7 +1463,7 @@
                     </svg>
                     <svg id="sunIcon" class="theme-icon" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="12" x2="12" y2="3"></line>
                         <line x1="12" y1="21" x2="12" y2="23"></line>
                         <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
                         <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
@@ -1635,7 +1638,7 @@
                     
                     <!-- Lists Dropdown -->
                     <div class="list-dropdown-wrap" id="listDropdownWrap">
-                        <button class="notepad-toolbar-btn" onmousedown="toggleListDropdown(event)">≡ List ▾</button>
+                        <button class="notepad-toolbar-btn" id="listDropdownBtn" onclick="toggleListDropdown(event)">≡ List ▾</button>
                         <div class="list-dropdown-menu">
                             <button class="list-dropdown-item" onmousedown="applyListFormat(event, 'insertUnorderedList')">• Bullets</button>
                             <button class="list-dropdown-item" onmousedown="applyListFormat(event, 'insertOrderedList')">1. Numbering</button>
@@ -1652,7 +1655,7 @@
 
                     <!-- Highlighter Picker -->
                     <label class="notepad-toolbar-btn color-picker-label" title="Highlighter">
-                        <span>🖍️️</span>
+                        <span>🖍</span>
                         <input type="color" value="#FFE082" onchange="applyColorFormat('hiliteColor', this.value)">
                     </label>
                 </div>
@@ -1703,7 +1706,7 @@
                             </div>
 
                             <button class="wishlist-clear-btn" onclick="deleteCheckedAdhuItems()" title="Delete Selected Items">
-                                🗑️
+                                🗑️️
                             </button>
                         </div>
 
@@ -1792,7 +1795,7 @@
 
             <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
                 <button class="modal-save-btn" style="background:#2E7D32;" onclick="saveDirectToGoogleDrive()">
-                    ☁️ Upload / Save to Google Drive
+                    ☁ Upload / Save to Google Drive
                 </button>
 
                 <input type="file" id="restoreFileInput" accept=".txt,.json,application/json,text/plain" style="display:none;" onchange="handleRestoreFile(this)">
@@ -2130,7 +2133,7 @@
         let notesList = [
             {
                 id: '1',
-                text: 'Your warm-up — 6–8 minutes\nMarch in place / easy walking — 2 min\nArm circles — 10 forward + 10 backward\nShoulder rolls — 10 forward + 10 backward\nBodyweight squats — 10 reps',
+                text: 'Your warm-up — 6–8 minutes\n1. March in place / easy walking — 2 min\n   Just enough to get warm. No need for jumping.\n2. Arm circles — 10 forward + 10 backward\n3. Shoulder rolls — 10 forward + 10 backward\n4. Bodyweight squats — 10 reps',
                 color: 'green',
                 timestamp: 'Sep 30, 07:48',
                 createdAt: 1727662080000,
@@ -2157,18 +2160,14 @@
             }
         }
 
-        // Master Sort Function: 1. Pinned -> 2. Starred -> 3. Date
         function sortNotesList() {
             notesList.sort((a, b) => {
-                // Tier 1: Pinned notes always highest priority
                 if (!!a.pinned !== !!b.pinned) {
                     return a.pinned ? -1 : 1;
                 }
-                // Tier 2: Starred / Favorite notes next priority
                 if (!!a.favorite !== !!b.favorite) {
                     return a.favorite ? -1 : 1;
                 }
-                // Tier 3: Chronological timestamp
                 const timeA = a.createdAt || parseInt(a.id) || 0;
                 const timeB = b.createdAt || parseInt(b.id) || 0;
                 return noteSortAsc ? (timeA - timeB) : (timeB - timeA);
@@ -2204,7 +2203,7 @@
         }
 
         function toggleListDropdown(e) {
-            e.preventDefault();
+            e.stopPropagation();
             const wrap = document.getElementById('listDropdownWrap');
             if (wrap) wrap.classList.toggle('open');
         }
@@ -2221,6 +2220,7 @@
             }
         }
 
+        // Close list dropdown only on clicks outside the dropdown wrapper
         document.addEventListener('click', (e) => {
             const wrap = document.getElementById('listDropdownWrap');
             if (wrap && !wrap.contains(e.target)) {
@@ -2228,7 +2228,7 @@
             }
         });
 
-        // Strip bullets or numbering when Space/Backspace is pressed at the start of a list item
+        // Natural keydown: Allows normal space typing everywhere without intercepting words
         function handleNoteKeyDown(e, id) {
             const sel = window.getSelection();
             if (!sel || sel.rangeCount === 0) return;
@@ -2241,14 +2241,13 @@
 
             const isAtStart = range.startOffset === 0 && (range.startContainer === li || range.startContainer === li.firstChild);
 
-            if (e.key === ' ' || e.key === 'Spacebar' || e.key === 'Backspace') {
-                if (isAtStart) {
-                    e.preventDefault();
-                    const listType = li.closest('ol') ? 'insertOrderedList' : 'insertUnorderedList';
-                    document.execCommand(listType, false, null);
-                    const el = document.getElementById('note-body-' + id);
-                    if (el) updateNoteItemText(id, el);
-                }
+            // Strip list format only when backspacing at start of line
+            if (e.key === 'Backspace' && isAtStart) {
+                e.preventDefault();
+                const listType = li.closest('ol') ? 'insertOrderedList' : 'insertUnorderedList';
+                document.execCommand(listType, false, null);
+                const el = document.getElementById('note-body-' + id);
+                if (el) updateNoteItemText(id, el);
             } else if (e.key === 'Enter') {
                 if (li.innerText.trim() === '' || li.innerHTML === '<br>') {
                     e.preventDefault();
