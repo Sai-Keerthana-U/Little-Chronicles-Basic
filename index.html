@@ -573,7 +573,7 @@
             border: var(--card-border);
             border-radius: 999px;
             padding: 3px;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             gap: 4px;
         }
 
@@ -602,25 +602,70 @@
         }
 
         /* ----------------------------------------------------
-           NEW CLEAN NOTEPAD / GOOGLE KEEP STYLE NOTES
+           GLOBAL NOTEPAD EDITING TOOLBAR (OUTSIDE OF NOTES)
+           ---------------------------------------------------- */
+        .notepad-global-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--surface-card);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            padding: 6px 12px;
+            margin-bottom: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .notepad-format-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .notepad-toolbar-btn {
+            background: var(--surface-subtle);
+            border: 1px solid transparent;
+            color: var(--text-main);
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 7px;
+            line-height: 1;
+            user-select: none;
+        }
+
+        .notepad-toolbar-btn:active {
+            background: var(--primary-soft);
+            color: var(--primary);
+            border-color: rgba(148, 93, 76, 0.2);
+        }
+
+        .notepad-toolbar-btn.bold { font-weight: 800; }
+        .notepad-toolbar-btn.italic { font-style: italic; font-family: serif; }
+        .notepad-toolbar-btn.strike { text-decoration: line-through; }
+        .notepad-toolbar-btn.bullet { font-size: 13px; }
+
+        /* ----------------------------------------------------
+           NOTEPAD CARDS (WITH MINIMIZE / COLLAPSE)
            ---------------------------------------------------- */
         .notes-stack-container {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .notepad-card {
             border-radius: var(--radius-inner);
             border: var(--card-border);
             box-shadow: var(--card-shadow);
-            padding: 14px 16px 10px;
+            padding: 12px 14px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
             position: relative;
             background-color: var(--note-default);
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            transition: all 0.2s ease;
         }
 
         .notepad-card.color-default { background-color: var(--note-default); }
@@ -634,6 +679,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            user-select: none;
         }
 
         .notepad-timestamp {
@@ -641,6 +687,40 @@
             font-weight: 600;
             color: var(--text-muted);
             letter-spacing: 0.1px;
+        }
+
+        .notepad-card-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .notepad-card-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 12px;
+            cursor: pointer;
+            padding: 3px 6px;
+            border-radius: 5px;
+            opacity: 0.65;
+            line-height: 1;
+        }
+
+        .notepad-card-btn:active {
+            opacity: 1;
+            background: rgba(0,0,0,0.06);
+        }
+
+        .notepad-card-btn.toggle-min {
+            font-weight: 800;
+            font-size: 14px;
+            padding: 2px 5px;
+        }
+
+        .notepad-card-btn.del {
+            color: #E53935;
+            opacity: 0.75;
         }
 
         .notepad-body {
@@ -662,45 +742,38 @@
             display: block;
         }
 
-        .notepad-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-top: 6px;
-            border-top: 1px dashed rgba(0, 0, 0, 0.08);
+        .notepad-body ul {
+            padding-left: 20px;
+            margin: 4px 0;
         }
 
-        [data-theme="dark"] .notepad-footer {
-            border-top: 1px dashed rgba(255, 255, 255, 0.08);
+        .notepad-body li {
+            margin-bottom: 2px;
         }
 
-        .notepad-format-group {
-            display: flex;
-            align-items: center;
-            gap: 4px;
+        /* Minimized state */
+        .notepad-card.minimized {
+            padding: 10px 14px;
         }
 
-        .notepad-action-btn {
-            background: transparent;
-            border: none;
+        .notepad-card.minimized .notepad-body {
+            display: none;
+        }
+
+        .notepad-card.minimized .notepad-preview-title {
+            display: block;
+        }
+
+        .notepad-preview-title {
+            display: none;
+            font-size: 12.5px;
+            font-weight: 600;
             color: var(--text-main);
-            font-size: 12px;
-            cursor: pointer;
-            padding: 4px 6px;
-            border-radius: 5px;
-            opacity: 0.65;
-            line-height: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-top: 2px;
         }
-
-        .notepad-action-btn:active {
-            opacity: 1;
-            background: rgba(0,0,0,0.06);
-        }
-
-        .notepad-action-btn.bold { font-weight: 800; }
-        .notepad-action-btn.italic { font-style: italic; }
-        .notepad-action-btn.strike { text-decoration: line-through; }
-        .notepad-action-btn.del { color: #E53935; opacity: 0.75; }
 
         /* To-Do Styles */
         .todo-input-bar {
@@ -1469,7 +1542,18 @@
                 </button>
             </div>
 
-            <!-- Clean Notepad Stack -->
+            <!-- Global Outside Editing Toolbar for Notepad -->
+            <div class="notepad-global-toolbar" id="notepadGlobalToolbar">
+                <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.3px;">Format</span>
+                <div class="notepad-format-group">
+                    <button class="notepad-toolbar-btn bold" onmousedown="applyGlobalNoteFormat(event, 'bold')" title="Bold">B</button>
+                    <button class="notepad-toolbar-btn italic" onmousedown="applyGlobalNoteFormat(event, 'italic')" title="Italic">I</button>
+                    <button class="notepad-toolbar-btn strike" onmousedown="applyGlobalNoteFormat(event, 'strikeThrough')" title="Strikethrough">S</button>
+                    <button class="notepad-toolbar-btn bullet" onmousedown="applyGlobalNoteFormat(event, 'insertUnorderedList')" title="Bullet Points">• List</button>
+                </div>
+            </div>
+
+            <!-- Clean Notepad Stack (with individual minimize) -->
             <div id="panelNotes">
                 <div class="notes-stack-container" id="stickyNotesContainer"></div>
             </div>
@@ -1889,6 +1973,7 @@
             const panelTodo = document.getElementById('panelTodo');
             const hubActionBtn = document.getElementById('hubActionBtn');
             const sortNotesBtn = document.getElementById('sortNotesBtn');
+            const globalToolbar = document.getElementById('notepadGlobalToolbar');
 
             if (tab === 'notes') {
                 tabNotesBtn.classList.add('active');
@@ -1897,6 +1982,7 @@
                 panelTodo.style.display = 'none';
                 hubActionBtn.innerHTML = '<span>+</span> New Note';
                 if (sortNotesBtn) sortNotesBtn.style.display = 'inline-flex';
+                if (globalToolbar) globalToolbar.style.display = 'flex';
                 setTimeout(() => {
                     const firstNoteBody = document.querySelector('.notepad-body');
                     if (firstNoteBody && notesList.length > 0) firstNoteBody.focus();
@@ -1908,6 +1994,7 @@
                 panelTodo.style.display = 'block';
                 hubActionBtn.innerHTML = '<span>+</span> Focus Input';
                 if (sortNotesBtn) sortNotesBtn.style.display = 'none';
+                if (globalToolbar) globalToolbar.style.display = 'none';
                 setTimeout(() => {
                     const todoInput = document.getElementById('todoInput');
                     if (todoInput) todoInput.focus();
@@ -1921,10 +2008,11 @@
         }
 
         // ----------------------------------------------------
-        // CLEAN NOTEPAD LOGIC (STABLE ORDER, CLEAN CARDS)
+        // CLEAN NOTEPAD LOGIC (OUTSIDE TOOLBAR + MINIMIZE)
         // ----------------------------------------------------
         const NOTE_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
-        let noteSortAsc = false; // false = newest first, true = oldest first
+        let noteSortAsc = false;
+        let lastFocusedNoteId = null;
 
         function getFormattedTimestamp() {
             const now = new Date();
@@ -1939,7 +2027,8 @@
                 text: 'Your warm-up — 6–8 minutes\nMarch in place / easy walking — 2 min\nArm circles — 10 forward + 10 backward\nShoulder rolls — 10 forward + 10 backward\nBodyweight squats — 10 reps',
                 color: 'green',
                 timestamp: 'Sep 30, 07:48',
-                createdAt: 1727662080000
+                createdAt: 1727662080000,
+                minimized: false
             }
         ];
 
@@ -1960,8 +2049,20 @@
             }
         }
 
-        function formatNoteDoc(command) {
+        function applyGlobalNoteFormat(e, command) {
+            e.preventDefault();
+            // If user clicked without selecting, try focusing last active note
+            if (lastFocusedNoteId) {
+                const el = document.getElementById('note-body-' + lastFocusedNoteId);
+                if (el && document.activeElement !== el) {
+                    el.focus();
+                }
+            }
             document.execCommand(command, false, null);
+            if (lastFocusedNoteId) {
+                const el = document.getElementById('note-body-' + lastFocusedNoteId);
+                if (el) updateNoteItemText(lastFocusedNoteId, el);
+            }
         }
 
         function toggleStickySort() {
@@ -1970,7 +2071,6 @@
                 localStorage.setItem('lc_sticky_sort_asc', noteSortAsc);
             } catch(e) {}
             
-            // Re-order the master array only when explicitly clicking Sort
             notesList.sort((a, b) => {
                 const timeA = a.createdAt || parseInt(a.id) || 0;
                 const timeB = b.createdAt || parseInt(b.id) || 0;
@@ -1979,6 +2079,15 @@
 
             saveNotesList();
             renderNotesList();
+        }
+
+        function toggleMinimizeNoteCard(id) {
+            const note = notesList.find(n => n.id === id);
+            if (note) {
+                note.minimized = !note.minimized;
+                saveNotesList();
+                renderNotesList();
+            }
         }
 
         function cycleNoteColor(id) {
@@ -2017,26 +2126,30 @@
             notesList.forEach(note => {
                 const noteEl = document.createElement('div');
                 const colorClass = note.color ? 'color-' + note.color : 'color-default';
-                noteEl.className = 'notepad-card ' + colorClass;
+                const isMin = !!note.minimized;
+                noteEl.className = 'notepad-card ' + colorClass + (isMin ? ' minimized' : '');
                 noteEl.id = 'notepad-card-' + note.id;
+
+                // Strip HTML for the minimized single-line snippet
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = note.text || '';
+                const plainSnippet = (tempDiv.innerText || tempDiv.textContent || '').trim().replace(/\n/g, ' • ');
 
                 noteEl.innerHTML = `
                     <div class="notepad-card-header">
                         <span class="notepad-timestamp">${note.timestamp || ''}</span>
+                        <div class="notepad-card-actions">
+                            <button class="notepad-card-btn toggle-min" title="${isMin ? 'Expand' : 'Minimize'}" onclick="toggleMinimizeNoteCard('${note.id}')">${isMin ? '＋' : '—'}</button>
+                            <button class="notepad-card-btn" title="Change Color" onclick="cycleNoteColor('${note.id}')">🎨</button>
+                            <button class="notepad-card-btn del" title="Delete Note" onclick="deleteNoteItem('${note.id}')">🗑️</button>
+                        </div>
                     </div>
+
+                    <div class="notepad-preview-title" onclick="toggleMinimizeNoteCard('${note.id}')">${plainSnippet || 'Empty Note'}</div>
 
                     <div class="notepad-body" id="note-body-${note.id}" contenteditable="true" 
+                         onfocus="lastFocusedNoteId='${note.id}'"
                          oninput="updateNoteItemText('${note.id}', this)" placeholder="Write your note here...">${note.text}</div>
-
-                    <div class="notepad-footer">
-                        <div class="notepad-format-group">
-                            <button class="notepad-action-btn bold" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatNoteDoc('bold');">B</button>
-                            <button class="notepad-action-btn italic" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatNoteDoc('italic');">I</button>
-                            <button class="notepad-action-btn strike" onmousedown="event.preventDefault(); document.getElementById('note-body-${note.id}').focus(); formatNoteDoc('strikeThrough');">S</button>
-                            <button class="notepad-action-btn" onmousedown="event.preventDefault(); cycleNoteColor('${note.id}')" title="Change Color">🎨</button>
-                        </div>
-                        <button class="notepad-action-btn del" onclick="deleteNoteItem('${note.id}')" title="Delete Note">🗑️</button>
-                    </div>
                 `;
                 container.appendChild(noteEl);
             });
@@ -2050,7 +2163,8 @@
                 text: '',
                 color: 'default',
                 timestamp: getFormattedTimestamp(),
-                createdAt: Date.now()
+                createdAt: Date.now(),
+                minimized: false
             };
 
             notesList.unshift(newNote);
@@ -2059,7 +2173,10 @@
 
             setTimeout(() => {
                 const firstNoteBody = document.querySelector('.notepad-body');
-                if (firstNoteBody) firstNoteBody.focus();
+                if (firstNoteBody) {
+                    firstNoteBody.focus();
+                    lastFocusedNoteId = newNote.id;
+                }
             }, 50);
         }
 
@@ -2068,7 +2185,6 @@
             if (note) {
                 note.text = element.innerHTML;
                 saveNotesList();
-                // We do NOT call renderNotesList() here so notes don't re-sort or bounce while typing!
             }
         }
 
@@ -2256,7 +2372,7 @@
                             ${driveButtonHtml}
 
                             <div class="book-overview-inner-actions">
-                                ${hasDrive ? `<button class="book-inner-action-btn" onclick="editBookDriveLink('${item.id}')">✏️ Edit Link</button>` : ''}
+                                ${hasDrive ? `<button class="book-inner-action-btn" onclick="editBookDriveLink('${item.id}')">✏️️ Edit Link</button>` : ''}
                                 <button class="book-inner-action-btn delete" onclick="deleteBookOverviewItem('${item.id}')">🗑️ Delete</button>
                             </div>
                         </div>
