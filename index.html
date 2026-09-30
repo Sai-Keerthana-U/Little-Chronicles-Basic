@@ -1635,17 +1635,17 @@
             <!-- Global Outside Editing Toolbar for Notepad (Clean Popovers) -->
             <div class="notepad-global-toolbar" id="notepadGlobalToolbar">
                 <div class="notepad-format-group">
-                    <button class="notepad-toolbar-btn" onmousedown="applyGlobalNoteFormat(event, 'undo')" title="Undo">↺ Undo</button>
-                    <button class="notepad-toolbar-btn bold" onmousedown="applyGlobalNoteFormat(event, 'bold')" title="Bold">B</button>
-                    <button class="notepad-toolbar-btn italic" onmousedown="applyGlobalNoteFormat(event, 'italic')" title="Italic">I</button>
-                    <button class="notepad-toolbar-btn strike" onmousedown="applyGlobalNoteFormat(event, 'strikeThrough')" title="Strikethrough">S</button>
+                    <button type="button" class="notepad-toolbar-btn" onpointerdown="applyGlobalNoteFormat(event, 'undo')" title="Undo">↺ Undo</button>
+                    <button type="button" class="notepad-toolbar-btn bold" onpointerdown="applyGlobalNoteFormat(event, 'bold')" title="Bold">B</button>
+                    <button type="button" class="notepad-toolbar-btn italic" onpointerdown="applyGlobalNoteFormat(event, 'italic')" title="Italic">I</button>
+                    <button type="button" class="notepad-toolbar-btn strike" onpointerdown="applyGlobalNoteFormat(event, 'strikeThrough')" title="Strikethrough">S</button>
                     
                     <!-- Lists Dropdown -->
                     <div class="popover-wrap" id="listDropdownWrap">
-                        <button class="notepad-toolbar-btn" onclick="togglePopover(event, 'listDropdownWrap')">≡ List ▾</button>
+                        <button type="button" class="notepad-toolbar-btn" onpointerdown="togglePopover(event, 'listDropdownWrap')">≡ List ▾</button>
                         <div class="popover-menu menu-left">
-                            <button class="popover-list-item" onmousedown="applyListFormat(event, 'insertUnorderedList')">• Bullets</button>
-                            <button class="popover-list-item" onmousedown="applyListFormat(event, 'insertOrderedList')">1. Numbering</button>
+                            <button type="button" class="popover-list-item" onpointerdown="applyListFormat(event, 'insertUnorderedList')">• Bullets</button>
+                            <button type="button" class="popover-list-item" onpointerdown="applyListFormat(event, 'insertOrderedList')">1. Numbering</button>
                         </div>
                     </div>
                 </div>
@@ -1653,32 +1653,32 @@
                 <div class="notepad-format-group">
                     <!-- Text Color Popover Menu -->
                     <div class="popover-wrap" id="textColorWrap">
-                        <button class="notepad-toolbar-btn" onclick="togglePopover(event, 'textColorWrap')" title="Text Color">
+                        <button type="button" class="notepad-toolbar-btn" onpointerdown="togglePopover(event, 'textColorWrap')" title="Text Color">
                             <span style="font-weight:800; border-bottom: 2px solid var(--primary); padding-bottom: 1px;">A</span> ▾
                         </button>
                         <div class="popover-menu menu-right">
                             <div class="swatches-grid">
-                                <span class="color-swatch-dot" style="background:#2D2725;" onmousedown="applyColorDirect('foreColor', '#2D2725', event)" title="Black / Default"></span>
-                                <span class="color-swatch-dot" style="background:#945D4C;" onmousedown="applyColorDirect('foreColor', '#945D4C', event)" title="Ochre"></span>
-                                <span class="color-swatch-dot" style="background:#1976D2;" onmousedown="applyColorDirect('foreColor', '#1976D2', event)" title="Blue"></span>
-                                <span class="color-swatch-dot" style="background:#2E7D32;" onmousedown="applyColorDirect('foreColor', '#2E7D32', event)" title="Green"></span>
-                                <span class="color-swatch-dot" style="background:#D32F2F;" onmousedown="applyColorDirect('foreColor', '#D32F2F', event)" title="Red"></span>
+                                <span class="color-swatch-dot" style="background:#2D2725;" onpointerdown="applyColorDirect('foreColor', '#2D2725', event)" title="Black / Default"></span>
+                                <span class="color-swatch-dot" style="background:#945D4C;" onpointerdown="applyColorDirect('foreColor', '#945D4C', event)" title="Ochre"></span>
+                                <span class="color-swatch-dot" style="background:#1976D2;" onpointerdown="applyColorDirect('foreColor', '#1976D2', event)" title="Blue"></span>
+                                <span class="color-swatch-dot" style="background:#2E7D32;" onpointerdown="applyColorDirect('foreColor', '#2E7D32', event)" title="Green"></span>
+                                <span class="color-swatch-dot" style="background:#D32F2F;" onpointerdown="applyColorDirect('foreColor', '#D32F2F', event)" title="Red"></span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Highlighter Popover Menu -->
                     <div class="popover-wrap" id="highlightColorWrap">
-                        <button class="notepad-toolbar-btn" onclick="togglePopover(event, 'highlightColorWrap')" title="Highlighter">
+                        <button type="button" class="notepad-toolbar-btn" onpointerdown="togglePopover(event, 'highlightColorWrap')" title="Highlighter">
                             <span>🖍️</span> ▾
                         </button>
                         <div class="popover-menu menu-right">
                             <div class="swatches-grid">
-                                <span class="color-swatch-dot" style="background:#FFF176;" onmousedown="applyColorDirect('hiliteColor', '#FFF176', event)" title="Yellow"></span>
-                                <span class="color-swatch-dot" style="background:#A5D6A7;" onmousedown="applyColorDirect('hiliteColor', '#A5D6A7', event)" title="Green"></span>
-                                <span class="color-swatch-dot" style="background:#F48FB1;" onmousedown="applyColorDirect('hiliteColor', '#F48FB1', event)" title="Pink"></span>
-                                <span class="color-swatch-dot" style="background:#90CAF9;" onmousedown="applyColorDirect('hiliteColor', '#90CAF9', event)" title="Blue"></span>
-                                <span class="color-swatch-dot" style="background:#FFFFFF; border: 1.5px solid #bbb;" onmousedown="applyColorDirect('hiliteColor', 'transparent', event)" title="Remove Highlight"></span>
+                                <span class="color-swatch-dot" style="background:#FFF176;" onpointerdown="applyColorDirect('hiliteColor', '#FFF176', event)" title="Yellow"></span>
+                                <span class="color-swatch-dot" style="background:#A5D6A7;" onpointerdown="applyColorDirect('hiliteColor', '#A5D6A7', event)" title="Green"></span>
+                                <span class="color-swatch-dot" style="background:#F48FB1;" onpointerdown="applyColorDirect('hiliteColor', '#F48FB1', event)" title="Pink"></span>
+                                <span class="color-swatch-dot" style="background:#90CAF9;" onpointerdown="applyColorDirect('hiliteColor', '#90CAF9', event)" title="Blue"></span>
+                                <span class="color-swatch-dot" style="background:#FFFFFF; border: 1.5px solid #bbb;" onpointerdown="applyColorDirect('hiliteColor', 'transparent', event)" title="Remove Highlight"></span>
                             </div>
                         </div>
                     </div>
@@ -2138,7 +2138,7 @@
         }
 
         // ----------------------------------------------------
-        // CLEAN NOTEPAD LOGIC (DIRECT INLINE COLOR & RANGE ANCHORS)
+        // CLEAN NOTEPAD LOGIC (BULLETPROOF SELECTION & COLORING)
         // ----------------------------------------------------
         const NOTE_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
         let noteSortAsc = false;
@@ -2196,12 +2196,17 @@
             });
         }
 
-        function saveCurrentSelection() {
+        // Dedicated listener saves selection ONLY when inside an actual note body
+        document.addEventListener('selectionchange', () => {
             const sel = window.getSelection();
-            if (sel && sel.rangeCount > 0) {
+            if (!sel || sel.rangeCount === 0) return;
+            const node = sel.anchorNode;
+            if (!node) return;
+            const editorEl = node.nodeType === 3 ? node.parentElement.closest('.notepad-body') : node.closest('.notepad-body');
+            if (editorEl) {
                 savedNoteSelectionRange = sel.getRangeAt(0).cloneRange();
             }
-        }
+        });
 
         function restoreSelection() {
             if (savedNoteSelectionRange) {
@@ -2217,7 +2222,6 @@
         function togglePopover(e, wrapId) {
             e.preventDefault();
             e.stopPropagation();
-            saveCurrentSelection(); // Remember selection before opening popover
             const targetWrap = document.getElementById(wrapId);
             
             document.querySelectorAll('.popover-wrap').forEach(w => {
@@ -2238,17 +2242,18 @@
         });
 
         function applyGlobalNoteFormat(e, command) {
-            e.preventDefault();
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
             restoreSelection();
             document.execCommand(command, false, null);
-            saveCurrentSelection();
             if (lastFocusedNoteId) {
                 const el = document.getElementById('note-body-' + lastFocusedNoteId);
                 if (el) updateNoteItemText(lastFocusedNoteId, el);
             }
         }
 
-        // Direct Reliable Color & Highlight Implementation
         function applyColorDirect(type, colorValue, e) {
             if (e) {
                 e.preventDefault();
@@ -2263,14 +2268,14 @@
             const range = sel.getRangeAt(0);
             
             if (range.collapsed) {
-                // If cursor is placed with no selection, use standard execCommand
+                // When cursor is placed without selection
                 if (type === 'foreColor') {
                     document.execCommand('foreColor', false, colorValue);
                 } else {
                     document.execCommand('hiliteColor', false, colorValue);
                 }
             } else {
-                // Wrap selection directly in an inline styled span
+                // Direct Inline Insertion for mobile reliability
                 const span = document.createElement('span');
                 if (type === 'foreColor') {
                     span.style.color = colorValue;
@@ -2289,12 +2294,11 @@
                     span.appendChild(extracted);
                     range.insertNode(span);
                     
-                    // Re-anchor selection to span
                     range.selectNodeContents(span);
                     sel.removeAllRanges();
                     sel.addRange(range);
+                    savedNoteSelectionRange = range.cloneRange();
                 } catch(err) {
-                    // Fallback to execCommand if cross-node selection occurs
                     if (type === 'foreColor') {
                         document.execCommand('foreColor', false, colorValue);
                     } else {
@@ -2303,7 +2307,6 @@
                 }
             }
 
-            saveCurrentSelection();
             if (lastFocusedNoteId) {
                 const el = document.getElementById('note-body-' + lastFocusedNoteId);
                 if (el) updateNoteItemText(lastFocusedNoteId, el);
@@ -2311,11 +2314,13 @@
         }
 
         function applyListFormat(e, command) {
-            e.preventDefault();
+            if (e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
             closeAllPopovers();
             restoreSelection();
             document.execCommand(command, false, null);
-            saveCurrentSelection();
             if (lastFocusedNoteId) {
                 const el = document.getElementById('note-body-' + lastFocusedNoteId);
                 if (el) updateNoteItemText(lastFocusedNoteId, el);
@@ -2442,21 +2447,18 @@
                     <div class="notepad-card-header">
                         <span class="notepad-timestamp">${note.timestamp || ''}</span>
                         <div class="notepad-card-actions">
-                            <button class="notepad-card-btn ${isPinned ? 'active-pin' : ''}" title="${isPinned ? 'Unpin' : 'Pin to top'}" onclick="togglePinNote('${note.id}')">${isPinned ? '📌' : '📍'}</button>
-                            <button class="notepad-card-btn ${isFav ? 'active-star' : ''}" title="${isFav ? 'Unfavorite' : 'Favorite'}" onclick="toggleStarNote('${note.id}')">${isFav ? '★' : '☆'}</button>
-                            <button class="notepad-card-btn toggle-min" title="${isMin ? 'Expand' : 'Minimize'}" onclick="toggleMinimizeNoteCard('${note.id}')">${isMin ? '＋' : '—'}</button>
-                            <button class="notepad-card-btn" title="Change Color" onclick="cycleNoteColor('${note.id}')">🎨</button>
-                            <button class="notepad-card-btn del" title="Delete Note" onclick="deleteNoteItem('${note.id}')">🗑️</button>
+                            <button type="button" class="notepad-card-btn ${isPinned ? 'active-pin' : ''}" title="${isPinned ? 'Unpin' : 'Pin to top'}" onclick="togglePinNote('${note.id}')">${isPinned ? '📌' : '📍'}</button>
+                            <button type="button" class="notepad-card-btn ${isFav ? 'active-star' : ''}" title="${isFav ? 'Unfavorite' : 'Favorite'}" onclick="toggleStarNote('${note.id}')">${isFav ? '★' : '☆'}</button>
+                            <button type="button" class="notepad-card-btn toggle-min" title="${isMin ? 'Expand' : 'Minimize'}" onclick="toggleMinimizeNoteCard('${note.id}')">${isMin ? '＋' : '—'}</button>
+                            <button type="button" class="notepad-card-btn" title="Change Color" onclick="cycleNoteColor('${note.id}')">🎨</button>
+                            <button type="button" class="notepad-card-btn del" title="Delete Note" onclick="deleteNoteItem('${note.id}')">🗑️</button>
                         </div>
                     </div>
 
                     <div class="notepad-preview-title" onclick="toggleMinimizeNoteCard('${note.id}')">${plainSnippet || 'Empty Note'}</div>
 
                     <div class="notepad-body" id="note-body-${note.id}" contenteditable="true" 
-                         onfocus="lastFocusedNoteId='${note.id}'; saveCurrentSelection();"
-                         onkeyup="saveCurrentSelection()"
-                         onmouseup="saveCurrentSelection()"
-                         ontouchend="saveCurrentSelection()"
+                         onfocus="lastFocusedNoteId='${note.id}'"
                          onkeydown="handleNoteKeyDown(event, '${note.id}')"
                          oninput="updateNoteItemText('${note.id}', this)" placeholder="Write your note here...">${note.text}</div>
                 `;
