@@ -602,49 +602,47 @@
         }
 
         /* ----------------------------------------------------
-           CLEAN UNIFIED NOTEPAD TOOLBAR & INLINE COLOR TRAYS
+           PERMANENT 2-ROW FIXED TOOLBAR (ZERO JUMPING / ZERO BOUNCE)
            ---------------------------------------------------- */
         .notepad-global-toolbar {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
             background: var(--surface-card);
             border: var(--card-border);
             border-radius: var(--radius-inner);
-            padding: 6px 10px;
+            padding: 8px 10px;
             margin-bottom: 12px;
             box-shadow: var(--card-shadow);
         }
 
-        .notepad-toolbar-main-row {
+        .notepad-toolbar-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 4px;
-            overflow-x: auto;
+            gap: 6px;
         }
 
         .notepad-format-group {
             display: flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
         }
 
         .notepad-toolbar-btn {
             background: var(--surface-subtle);
             border: 1px solid transparent;
             color: var(--text-main);
-            font-size: 12px;
+            font-size: 12.5px;
             font-weight: 700;
             cursor: pointer;
-            padding: 6px 9px;
-            border-radius: 7px;
+            padding: 5px 8px;
+            border-radius: 6px;
             line-height: 1;
             user-select: none;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 3px;
             white-space: nowrap;
         }
 
@@ -657,50 +655,54 @@
         .notepad-toolbar-btn.bold { font-weight: 800; }
         .notepad-toolbar-btn.italic { font-style: italic; font-family: serif; }
         .notepad-toolbar-btn.strike { text-decoration: line-through; }
+        .notepad-toolbar-btn.icon-only { font-size: 14px; padding: 4px 8px; }
 
-        /* Integrated Color Expand Tray (Zero Viewport Jump) */
-        .notepad-color-tray {
-            display: none;
-            align-items: center;
-            justify-content: space-between;
-            padding: 6px 4px 2px;
-            border-top: 1px dashed rgba(0, 0, 0, 0.08);
-        }
-
-        [data-theme="dark"] .notepad-color-tray {
-            border-top: 1px dashed rgba(255, 255, 255, 0.08);
-        }
-
-        .tray-swatches-wrap {
+        /* Row 2: Fixed Color & Highlight Bar */
+        .color-section-wrap {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 5px;
+        }
+
+        .color-label-tag {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .swatch-strip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--surface-subtle);
+            padding: 3px 6px;
+            border-radius: 8px;
         }
 
         .color-swatch-dot {
-            width: 20px;
-            height: 20px;
+            width: 17px;
+            height: 17px;
             border-radius: 50%;
             cursor: pointer;
-            border: 1.5px solid rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(0, 0, 0, 0.15);
             display: inline-block;
             box-sizing: border-box;
-            transition: transform 0.15s ease;
+            transition: transform 0.1s ease;
         }
 
         .color-swatch-dot:active {
             transform: scale(1.2);
         }
 
-        .clear-highlight-pill {
-            background: var(--surface-subtle);
-            border: var(--card-border);
-            border-radius: 6px;
-            padding: 3px 8px;
-            font-size: 11px;
-            font-weight: 700;
+        .clear-highlight-text-btn {
+            background: transparent;
+            border: none;
+            font-size: 10px;
+            font-weight: 800;
             color: var(--text-muted);
             cursor: pointer;
+            padding: 0 3px;
+            line-height: 1;
         }
 
         /* ----------------------------------------------------
@@ -1451,7 +1453,7 @@
                     </svg>
                     <svg id="sunIcon" class="theme-icon" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="12" x2="12" y2="3"></line>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
                         <line x1="12" y1="21" x2="12" y2="23"></line>
                         <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
                         <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
@@ -1614,49 +1616,45 @@
                 </button>
             </div>
 
-            <!-- Global Outside Editing Toolbar for Notepad (Direct 1-Tap Lists & In-Bar Trays) -->
+            <!-- Permanent Fixed 2-Row Toolbar (Zero Bounce / Zero Screen Jump) -->
             <div class="notepad-global-toolbar" id="notepadGlobalToolbar">
-                <div class="notepad-toolbar-main-row">
+                <!-- Row 1: Direct Commands & Single-Tap Clean List Icons -->
+                <div class="notepad-toolbar-row">
                     <div class="notepad-format-group">
-                        <button type="button" class="notepad-toolbar-btn" onpointerdown="applyGlobalCommand(event, 'undo')" title="Undo">↺ Undo</button>
-                        <button type="button" class="notepad-toolbar-btn bold" onpointerdown="applyGlobalCommand(event, 'bold')" title="Bold">B</button>
-                        <button type="button" class="notepad-toolbar-btn italic" onpointerdown="applyGlobalCommand(event, 'italic')" title="Italic">I</button>
-                        <button type="button" class="notepad-toolbar-btn strike" onpointerdown="applyGlobalCommand(event, 'strikeThrough')" title="Strikethrough">S</button>
-                        <button type="button" class="notepad-toolbar-btn" onpointerdown="applyGlobalCommand(event, 'insertUnorderedList')" title="Bullet List">• List</button>
-                        <button type="button" class="notepad-toolbar-btn" onpointerdown="applyGlobalCommand(event, 'insertOrderedList')" title="Numbered List">1. List</button>
+                        <button type="button" class="notepad-toolbar-btn" onpointerdown="applyFormatting(event, 'undo')" title="Undo">↺ Undo</button>
+                        <button type="button" class="notepad-toolbar-btn bold" onpointerdown="applyFormatting(event, 'bold')" title="Bold">B</button>
+                        <button type="button" class="notepad-toolbar-btn italic" onpointerdown="applyFormatting(event, 'italic')" title="Italic">I</button>
+                        <button type="button" class="notepad-toolbar-btn strike" onpointerdown="applyFormatting(event, 'strikeThrough')" title="Strikethrough">S</button>
                     </div>
 
                     <div class="notepad-format-group">
-                        <button type="button" class="notepad-toolbar-btn" onpointerdown="toggleColorTray('text', event)" title="Text Color">
-                            <span style="font-weight:800; border-bottom: 2px solid var(--primary); padding-bottom: 1px;">A</span> ▾
-                        </button>
-                        <button type="button" class="notepad-toolbar-btn" onpointerdown="toggleColorTray('highlight', event)" title="Highlighter">
-                            <span>🖍️</span> ▾
-                        </button>
+                        <button type="button" class="notepad-toolbar-btn icon-only" onpointerdown="applyFormatting(event, 'insertUnorderedList')" title="Bullet List">⁝≡</button>
+                        <button type="button" class="notepad-toolbar-btn icon-only" onpointerdown="applyFormatting(event, 'insertOrderedList')" title="Numbered List">1≡</button>
                     </div>
                 </div>
 
-                <!-- Integrated Inline Text Color Tray (No Popover, No Screen Jump) -->
-                <div class="notepad-color-tray" id="textColorTray">
-                    <span style="font-size:11px; font-weight:700; color:var(--text-muted);">Text Color:</span>
-                    <div class="tray-swatches-wrap">
-                        <span class="color-swatch-dot" style="background:#2D2725;" onpointerdown="applyTextColor('#2D2725', event)" title="Black / Default"></span>
-                        <span class="color-swatch-dot" style="background:#945D4C;" onpointerdown="applyTextColor('#945D4C', event)" title="Ochre"></span>
-                        <span class="color-swatch-dot" style="background:#1976D2;" onpointerdown="applyTextColor('#1976D2', event)" title="Blue"></span>
-                        <span class="color-swatch-dot" style="background:#2E7D32;" onpointerdown="applyTextColor('#2E7D32', event)" title="Green"></span>
-                        <span class="color-swatch-dot" style="background:#D32F2F;" onpointerdown="applyTextColor('#D32F2F', event)" title="Red"></span>
+                <!-- Row 2: Fixed Color & Highlighter Strips -->
+                <div class="notepad-toolbar-row">
+                    <div class="color-section-wrap">
+                        <span class="color-label-tag">Text:</span>
+                        <div class="swatch-strip">
+                            <span class="color-swatch-dot" style="background:#2D2725;" onpointerdown="applyTextColor('#2D2725', event)" title="Black / Default"></span>
+                            <span class="color-swatch-dot" style="background:#945D4C;" onpointerdown="applyTextColor('#945D4C', event)" title="Ochre"></span>
+                            <span class="color-swatch-dot" style="background:#1976D2;" onpointerdown="applyTextColor('#1976D2', event)" title="Blue"></span>
+                            <span class="color-swatch-dot" style="background:#2E7D32;" onpointerdown="applyTextColor('#2E7D32', event)" title="Green"></span>
+                            <span class="color-swatch-dot" style="background:#D32F2F;" onpointerdown="applyTextColor('#D32F2F', event)" title="Red"></span>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Integrated Inline Highlighter Tray (No Screen Jump) -->
-                <div class="notepad-color-tray" id="highlightColorTray">
-                    <span style="font-size:11px; font-weight:700; color:var(--text-muted);">Highlight:</span>
-                    <div class="tray-swatches-wrap">
-                        <span class="color-swatch-dot" style="background:#FFF176;" onpointerdown="applyHighlight('#FFF176', event)" title="Yellow"></span>
-                        <span class="color-swatch-dot" style="background:#A5D6A7;" onpointerdown="applyHighlight('#A5D6A7', event)" title="Green"></span>
-                        <span class="color-swatch-dot" style="background:#F48FB1;" onpointerdown="applyHighlight('#F48FB1', event)" title="Pink"></span>
-                        <span class="color-swatch-dot" style="background:#90CAF9;" onpointerdown="applyHighlight('#90CAF9', event)" title="Blue"></span>
-                        <button type="button" class="clear-highlight-pill" onpointerdown="applyHighlight('transparent', event)">None</button>
+                    <div class="color-section-wrap">
+                        <span class="color-label-tag">Highlight:</span>
+                        <div class="swatch-strip">
+                            <span class="color-swatch-dot" style="background:#FFF176;" onpointerdown="applyHighlightColor('#FFF176', event)" title="Yellow"></span>
+                            <span class="color-swatch-dot" style="background:#A5D6A7;" onpointerdown="applyHighlightColor('#A5D6A7', event)" title="Green"></span>
+                            <span class="color-swatch-dot" style="background:#F48FB1;" onpointerdown="applyHighlightColor('#F48FB1', event)" title="Pink"></span>
+                            <span class="color-swatch-dot" style="background:#90CAF9;" onpointerdown="applyHighlightColor('#90CAF9', event)" title="Blue"></span>
+                            <button type="button" class="clear-highlight-text-btn" onpointerdown="applyHighlightColor('transparent', event)" title="Clear Highlight">None</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2114,7 +2112,7 @@
         }
 
         // ----------------------------------------------------
-        // CLEAN NOTEPAD LOGIC (BULLETPROOF SELECTION & COLORING)
+        // CLEAN NOTEPAD LOGIC (PERMANENT ROW 2, ZERO-SCROLL)
         // ----------------------------------------------------
         const NOTE_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
         let noteSortAsc = false;
@@ -2172,7 +2170,6 @@
             });
         }
 
-        // Dedicated listener saves selection ONLY when inside an actual note body
         document.addEventListener('selectionchange', () => {
             const sel = window.getSelection();
             if (!sel || sel.rangeCount === 0) return;
@@ -2197,36 +2194,11 @@
             }
         }
 
-        function toggleColorTray(type, e) {
+        function applyFormatting(e, command, value = null) {
             if (e) {
                 e.preventDefault();
                 e.stopPropagation();
             }
-            const textTray = document.getElementById('textColorTray');
-            const highlightTray = document.getElementById('highlightColorTray');
-
-            if (type === 'text') {
-                highlightTray.style.display = 'none';
-                textTray.style.display = textTray.style.display === 'flex' ? 'none' : 'flex';
-            } else {
-                textTray.style.display = 'none';
-                highlightTray.style.display = highlightTray.style.display === 'flex' ? 'none' : 'flex';
-            }
-        }
-
-        function closeColorTrays() {
-            const textTray = document.getElementById('textColorTray');
-            const highlightTray = document.getElementById('highlightColorTray');
-            if (textTray) textTray.style.display = 'none';
-            if (highlightTray) highlightTray.style.display = 'none';
-        }
-
-        function applyGlobalCommand(e, command, value = null) {
-            if (e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-            closeColorTrays();
             restoreSelection();
             document.execCommand(command, false, value);
             if (lastFocusedNoteId) {
@@ -2235,13 +2207,11 @@
             }
         }
 
-        // Direct Text Color (No screen jump)
         function applyTextColor(color, e) {
             if (e) {
                 e.preventDefault();
                 e.stopPropagation();
             }
-            closeColorTrays();
             restoreSelection();
             document.execCommand('foreColor', false, color);
             if (lastFocusedNoteId) {
@@ -2250,13 +2220,11 @@
             }
         }
 
-        // Direct Highlight (Supports hiliteColor & backColor for full mobile compatibility)
-        function applyHighlight(color, e) {
+        function applyHighlightColor(color, e) {
             if (e) {
                 e.preventDefault();
                 e.stopPropagation();
             }
-            closeColorTrays();
             restoreSelection();
             if (!document.execCommand('hiliteColor', false, color)) {
                 document.execCommand('backColor', false, color);
