@@ -602,20 +602,26 @@
         }
 
         /* ----------------------------------------------------
-           GLOBAL NOTEPAD EDITING TOOLBAR (RICH CONTROLS)
+           GLOBAL NOTEPAD EDITING TOOLBAR (RELIABLE COLOR PALETTES)
            ---------------------------------------------------- */
         .notepad-global-toolbar {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
+            flex-direction: column;
+            gap: 6px;
             background: var(--surface-card);
             border: var(--card-border);
             border-radius: var(--radius-inner);
-            padding: 6px 10px;
+            padding: 8px 10px;
             margin-bottom: 12px;
             box-shadow: var(--card-shadow);
+        }
+
+        .notepad-toolbar-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             gap: 6px;
-            position: relative;
+            overflow-x: auto;
         }
 
         .notepad-format-group {
@@ -652,23 +658,28 @@
         .notepad-toolbar-btn.italic { font-style: italic; font-family: serif; }
         .notepad-toolbar-btn.strike { text-decoration: line-through; }
 
-        .color-picker-label {
-            position: relative;
-            overflow: hidden;
+        /* Direct Reliable Color Swatches */
+        .swatch-group {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            cursor: pointer;
+            gap: 3px;
+            background: var(--surface-subtle);
+            padding: 3px 5px;
+            border-radius: 8px;
         }
 
-        .color-picker-label input[type="color"] {
-            position: absolute;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
+        .color-swatch-dot {
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
             cursor: pointer;
-            top: 0;
-            left: 0;
+            border: 1px solid rgba(0,0,0,0.15);
+            display: inline-block;
+            box-sizing: border-box;
+        }
+
+        .color-swatch-dot:active {
+            transform: scale(1.15);
         }
 
         /* Direct List Dropdown Styling */
@@ -1463,7 +1474,7 @@
                     </svg>
                     <svg id="sunIcon" class="theme-icon" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="12" x2="12" y2="3"></line>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
                         <line x1="12" y1="21" x2="12" y2="23"></line>
                         <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
                         <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
@@ -1548,7 +1559,6 @@
 
                 <!-- FEATURE: BOOKS OVERVIEW ACCORDION (KEE) -->
                 <div class="dropdown-feature-card open" id="keeBooksOverviewCard">
-                    <!-- Dropdown Toggle Header -->
                     <div class="dropdown-feature-header" onclick="toggleKeeBooksOverviewDropdown()">
                         <div class="feature-header-left">
                             <div class="feature-icon-badge">📖</div>
@@ -1560,7 +1570,6 @@
                         <div class="feature-chevron">▼</div>
                     </div>
 
-                    <!-- Collapsible Body with Clean Book Items -->
                     <div class="dropdown-feature-body">
                         <div id="keeBooksOverviewContainer" style="display: flex; flex-direction: column; gap: 8px; padding-top: 12px;"></div>
 
@@ -1628,40 +1637,54 @@
                 </button>
             </div>
 
-            <!-- Global Outside Editing Toolbar for Notepad (Undo, Lists, Highlighters, Colors) -->
+            <!-- Global Outside Editing Toolbar for Notepad (Reliable Swatch Pickers) -->
             <div class="notepad-global-toolbar" id="notepadGlobalToolbar">
-                <div class="notepad-format-group">
-                    <button class="notepad-toolbar-btn" onmousedown="applyGlobalNoteFormat(event, 'undo')" title="Undo">↺ Undo</button>
-                    <button class="notepad-toolbar-btn bold" onmousedown="applyGlobalNoteFormat(event, 'bold')" title="Bold">B</button>
-                    <button class="notepad-toolbar-btn italic" onmousedown="applyGlobalNoteFormat(event, 'italic')" title="Italic">I</button>
-                    <button class="notepad-toolbar-btn strike" onmousedown="applyGlobalNoteFormat(event, 'strikeThrough')" title="Strikethrough">S</button>
-                    
-                    <!-- Lists Dropdown -->
-                    <div class="list-dropdown-wrap" id="listDropdownWrap">
-                        <button class="notepad-toolbar-btn" id="listDropdownBtn" onclick="toggleListDropdown(event)">≡ List ▾</button>
-                        <div class="list-dropdown-menu">
-                            <button class="list-dropdown-item" onmousedown="applyListFormat(event, 'insertUnorderedList')">• Bullets</button>
-                            <button class="list-dropdown-item" onmousedown="applyListFormat(event, 'insertOrderedList')">1. Numbering</button>
+                <div class="notepad-toolbar-row">
+                    <div class="notepad-format-group">
+                        <button class="notepad-toolbar-btn" onmousedown="applyGlobalNoteFormat(event, 'undo')" title="Undo">↺ Undo</button>
+                        <button class="notepad-toolbar-btn bold" onmousedown="applyGlobalNoteFormat(event, 'bold')" title="Bold">B</button>
+                        <button class="notepad-toolbar-btn italic" onmousedown="applyGlobalNoteFormat(event, 'italic')" title="Italic">I</button>
+                        <button class="notepad-toolbar-btn strike" onmousedown="applyGlobalNoteFormat(event, 'strikeThrough')" title="Strikethrough">S</button>
+                        
+                        <!-- Lists Dropdown -->
+                        <div class="list-dropdown-wrap" id="listDropdownWrap">
+                            <button class="notepad-toolbar-btn" id="listDropdownBtn" onclick="toggleListDropdown(event)">≡ List ▾</button>
+                            <div class="list-dropdown-menu">
+                                <button class="list-dropdown-item" onmousedown="applyListFormat(event, 'insertUnorderedList')">• Bullets</button>
+                                <button class="list-dropdown-item" onmousedown="applyListFormat(event, 'insertOrderedList')">1. Numbering</button>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="notepad-format-group">
-                    <!-- Text Color Picker -->
-                    <label class="notepad-toolbar-btn color-picker-label" title="Text Color">
-                        <span style="font-weight:800; border-bottom: 2px solid var(--primary); padding-bottom: 1px;">A</span>
-                        <input type="color" onchange="applyColorFormat('foreColor', this.value)">
-                    </label>
+                <div class="notepad-toolbar-row" style="padding-top: 2px;">
+                    <!-- Direct Swatch Palette for Text Color -->
+                    <div class="notepad-format-group">
+                        <span style="font-size:11px; font-weight:700; color:var(--text-muted); margin-right:2px;">Text:</span>
+                        <div class="swatch-group">
+                            <span class="color-swatch-dot" style="background:#2D2725;" onmousedown="applyColorFormat('foreColor', '#2D2725', event)" title="Black / Default"></span>
+                            <span class="color-swatch-dot" style="background:#945D4C;" onmousedown="applyColorFormat('foreColor', '#945D4C', event)" title="Primary Ochre"></span>
+                            <span class="color-swatch-dot" style="background:#1976D2;" onmousedown="applyColorFormat('foreColor', '#1976D2', event)" title="Blue"></span>
+                            <span class="color-swatch-dot" style="background:#2E7D32;" onmousedown="applyColorFormat('foreColor', '#2E7D32', event)" title="Green"></span>
+                            <span class="color-swatch-dot" style="background:#D32F2F;" onmousedown="applyColorFormat('foreColor', '#D32F2F', event)" title="Red"></span>
+                        </div>
+                    </div>
 
-                    <!-- Highlighter Picker -->
-                    <label class="notepad-toolbar-btn color-picker-label" title="Highlighter">
-                        <span>🖍</span>
-                        <input type="color" value="#FFE082" onchange="applyColorFormat('hiliteColor', this.value)">
-                    </label>
+                    <!-- Direct Swatch Palette for Highlighter -->
+                    <div class="notepad-format-group">
+                        <span style="font-size:11px; font-weight:700; color:var(--text-muted); margin-right:2px;">Highlight:</span>
+                        <div class="swatch-group">
+                            <span class="color-swatch-dot" style="background:#FFF176;" onmousedown="applyColorFormat('hiliteColor', '#FFF176', event)" title="Yellow"></span>
+                            <span class="color-swatch-dot" style="background:#A5D6A7;" onmousedown="applyColorFormat('hiliteColor', '#A5D6A7', event)" title="Green"></span>
+                            <span class="color-swatch-dot" style="background:#F48FB1;" onmousedown="applyColorFormat('hiliteColor', '#F48FB1', event)" title="Pink"></span>
+                            <span class="color-swatch-dot" style="background:#90CAF9;" onmousedown="applyColorFormat('hiliteColor', '#90CAF9', event)" title="Blue"></span>
+                            <span class="color-swatch-dot" style="background:transparent; border: 1.5px dashed var(--text-muted);" onmousedown="applyColorFormat('hiliteColor', 'transparent', event)" title="Clear Highlight">✕</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Clean Notepad Stack (Pinned & Starred stay strictly on top) -->
+            <!-- Clean Notepad Stack -->
             <div id="panelNotes">
                 <div class="notes-stack-container" id="stickyNotesContainer"></div>
             </div>
@@ -1681,7 +1704,6 @@
                 
                 <!-- FEATURE 1: BOOKS WISHLIST (EXPANDABLE DROPDOWN) -->
                 <div class="dropdown-feature-card adhu-dropdown-card open" id="adhuWishlistCard">
-                    <!-- Dropdown Toggle Header -->
                     <div class="dropdown-feature-header" onclick="toggleAdhuWishlistDropdown()">
                         <div class="feature-header-left">
                             <div class="feature-icon-badge">📚</div>
@@ -1693,7 +1715,6 @@
                         <div class="feature-chevron">▼</div>
                     </div>
 
-                    <!-- Collapsible Checklist Body -->
                     <div class="dropdown-feature-body">
                         <div class="adhu-card-toolbar">
                             <div class="wishlist-format-toolbar">
@@ -1706,11 +1727,10 @@
                             </div>
 
                             <button class="wishlist-clear-btn" onclick="deleteCheckedAdhuItems()" title="Delete Selected Items">
-                                🗑️️
+                                🗑️
                             </button>
                         </div>
 
-                        <!-- Checklist Rows -->
                         <div id="adhuBlocksContainer" style="display:flex; flex-direction:column; gap:4px;"></div>
 
                         <button class="add-note-btn" style="width: 100%; margin-top: 6px;" onclick="addAdhuBlock()">
@@ -1795,7 +1815,7 @@
 
             <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
                 <button class="modal-save-btn" style="background:#2E7D32;" onclick="saveDirectToGoogleDrive()">
-                    ☁ Upload / Save to Google Drive
+                    ☁️ Upload / Save to Google Drive
                 </button>
 
                 <input type="file" id="restoreFileInput" accept=".txt,.json,application/json,text/plain" style="display:none;" onchange="handleRestoreFile(this)">
@@ -2117,11 +2137,12 @@
         }
 
         // ----------------------------------------------------
-        // CLEAN NOTEPAD LOGIC (PIN & STAR PRIORITY SORTING)
+        // CLEAN NOTEPAD LOGIC (PRECISE COLOR & LIST ENGINE)
         // ----------------------------------------------------
         const NOTE_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
         let noteSortAsc = false;
         let lastFocusedNoteId = null;
+        let savedNoteSelectionRange = null;
 
         function getFormattedTimestamp() {
             const now = new Date();
@@ -2174,28 +2195,40 @@
             });
         }
 
-        function ensureNoteFocused() {
-            if (lastFocusedNoteId) {
+        function saveCurrentSelection() {
+            const sel = window.getSelection();
+            if (sel && sel.rangeCount > 0) {
+                savedNoteSelectionRange = sel.getRangeAt(0).cloneRange();
+            }
+        }
+
+        function restoreSelection() {
+            if (savedNoteSelectionRange) {
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(savedNoteSelectionRange);
+            } else if (lastFocusedNoteId) {
                 const el = document.getElementById('note-body-' + lastFocusedNoteId);
-                if (el && document.activeElement !== el) {
-                    el.focus();
-                }
+                if (el) el.focus();
             }
         }
 
         function applyGlobalNoteFormat(e, command) {
             e.preventDefault();
-            ensureNoteFocused();
+            restoreSelection();
             document.execCommand(command, false, null);
+            saveCurrentSelection();
             if (lastFocusedNoteId) {
                 const el = document.getElementById('note-body-' + lastFocusedNoteId);
                 if (el) updateNoteItemText(lastFocusedNoteId, el);
             }
         }
 
-        function applyColorFormat(command, value) {
-            ensureNoteFocused();
+        function applyColorFormat(command, value, e) {
+            if (e) e.preventDefault();
+            restoreSelection();
             document.execCommand(command, false, value);
+            saveCurrentSelection();
             if (lastFocusedNoteId) {
                 const el = document.getElementById('note-body-' + lastFocusedNoteId);
                 if (el) updateNoteItemText(lastFocusedNoteId, el);
@@ -2212,15 +2245,15 @@
             e.preventDefault();
             const wrap = document.getElementById('listDropdownWrap');
             if (wrap) wrap.classList.remove('open');
-            ensureNoteFocused();
+            restoreSelection();
             document.execCommand(command, false, null);
+            saveCurrentSelection();
             if (lastFocusedNoteId) {
                 const el = document.getElementById('note-body-' + lastFocusedNoteId);
                 if (el) updateNoteItemText(lastFocusedNoteId, el);
             }
         }
 
-        // Close list dropdown only on clicks outside the dropdown wrapper
         document.addEventListener('click', (e) => {
             const wrap = document.getElementById('listDropdownWrap');
             if (wrap && !wrap.contains(e.target)) {
@@ -2228,7 +2261,7 @@
             }
         });
 
-        // Natural keydown: Allows normal space typing everywhere without intercepting words
+        // Keydown handler: Only strip list tags when backspacing at start of line
         function handleNoteKeyDown(e, id) {
             const sel = window.getSelection();
             if (!sel || sel.rangeCount === 0) return;
@@ -2241,7 +2274,6 @@
 
             const isAtStart = range.startOffset === 0 && (range.startContainer === li || range.startContainer === li.firstChild);
 
-            // Strip list format only when backspacing at start of line
             if (e.key === 'Backspace' && isAtStart) {
                 e.preventDefault();
                 const listType = li.closest('ol') ? 'insertOrderedList' : 'insertUnorderedList';
@@ -2361,7 +2393,10 @@
                     <div class="notepad-preview-title" onclick="toggleMinimizeNoteCard('${note.id}')">${plainSnippet || 'Empty Note'}</div>
 
                     <div class="notepad-body" id="note-body-${note.id}" contenteditable="true" 
-                         onfocus="lastFocusedNoteId='${note.id}'"
+                         onfocus="lastFocusedNoteId='${note.id}'; saveCurrentSelection();"
+                         onkeyup="saveCurrentSelection()"
+                         onmouseup="saveCurrentSelection()"
+                         ontouchend="saveCurrentSelection()"
                          onkeydown="handleNoteKeyDown(event, '${note.id}')"
                          oninput="updateNoteItemText('${note.id}', this)" placeholder="Write your note here...">${note.text}</div>
                 `;
