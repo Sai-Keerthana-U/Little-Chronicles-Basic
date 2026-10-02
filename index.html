@@ -37,6 +37,13 @@
             --sticky-blue: #D0E9FF;
             --sticky-purple: #E8D9FF;
             --sticky-text: #2B2625;
+
+            /* Tier List Colors */
+            --tier-s: #B4F47B;
+            --tier-a: #FFF176;
+            --tier-b: #FFD57E;
+            --tier-c: #FFB380;
+            --tier-d: #FF8A8A;
         }
 
         /* Dark Mode */
@@ -66,6 +73,13 @@
             --sticky-blue: #1D3145;
             --sticky-purple: #322547;
             --sticky-text: #F3EFE9;
+
+            /* Tier List Colors (Dark) */
+            --tier-s: #3B5A24;
+            --tier-a: #5E531B;
+            --tier-b: #5C451D;
+            --tier-c: #5E3921;
+            --tier-d: #5C2727;
         }
 
         * {
@@ -1125,6 +1139,109 @@
             display: flex;
         }
 
+        /* ----------------------------------------------------
+           CARTOONS TIER LIST STYLES (S A B C D)
+           ---------------------------------------------------- */
+        .tier-board {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: var(--surface-subtle);
+            padding: 8px;
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+        }
+
+        .tier-row {
+            display: flex;
+            align-items: stretch;
+            background: var(--surface-card);
+            border-radius: 8px;
+            border: var(--card-border);
+            min-height: 44px;
+            overflow: hidden;
+        }
+
+        .tier-badge {
+            width: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 800;
+            color: #1a1a1a;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        [data-theme="dark"] .tier-badge {
+            color: #f4efeb;
+        }
+
+        .tier-badge.badge-s { background-color: var(--tier-s); }
+        .tier-badge.badge-a { background-color: var(--tier-a); }
+        .tier-badge.badge-b { background-color: var(--tier-b); }
+        .tier-badge.badge-c { background-color: var(--tier-c); }
+        .tier-badge.badge-d { background-color: var(--tier-d); }
+
+        .tier-items-wrap {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+        }
+
+        .cartoon-chip {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            color: var(--text-main);
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.15s ease;
+        }
+
+        .cartoon-chip:active {
+            transform: scale(0.96);
+        }
+
+        .tier-input-bar {
+            display: flex;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .tier-input {
+            flex: 1;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12.5px;
+            font-family: inherit;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .tier-select {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            outline: none;
+        }
+
         /* Kee: Books Overview Clean Item */
         .book-overview-item {
             background: var(--surface-subtle);
@@ -1537,7 +1654,7 @@
                 </div>
 
                 <!-- FEATURE: BOOKS OVERVIEW ACCORDION (KEE) -->
-                <div class="dropdown-feature-card open" id="keeBooksOverviewCard">
+                <div class="dropdown-feature-card" id="keeBooksOverviewCard">
                     <div class="dropdown-feature-header" onclick="toggleKeeBooksOverviewDropdown()">
                         <div class="feature-header-left">
                             <div class="feature-icon-badge">📖</div>
@@ -1555,6 +1672,63 @@
                         <button class="add-note-btn" style="width: 100%; margin-top: 4px;" onclick="addKeeBookOverview()">
                             <span>+</span> Add Book Overview
                         </button>
+                    </div>
+                </div>
+
+                <!-- FEATURE: CARTOONS TIER LIST ACCORDION (KEE) -->
+                <div class="dropdown-feature-card open" id="cartoonsTierCard">
+                    <div class="dropdown-feature-header" onclick="toggleCartoonsTierDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">📺</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Cartoons Tier List</span>
+                                <span class="feature-sub-title" id="cartoonsCountSub">0 cartoons</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="tier-board">
+                            <!-- S Tier -->
+                            <div class="tier-row">
+                                <div class="tier-badge badge-s">S</div>
+                                <div class="tier-items-wrap" id="tier-wrap-S"></div>
+                            </div>
+                            <!-- A Tier -->
+                            <div class="tier-row">
+                                <div class="tier-badge badge-a">A</div>
+                                <div class="tier-items-wrap" id="tier-wrap-A"></div>
+                            </div>
+                            <!-- B Tier -->
+                            <div class="tier-row">
+                                <div class="tier-badge badge-b">B</div>
+                                <div class="tier-items-wrap" id="tier-wrap-B"></div>
+                            </div>
+                            <!-- C Tier -->
+                            <div class="tier-row">
+                                <div class="tier-badge badge-c">C</div>
+                                <div class="tier-items-wrap" id="tier-wrap-C"></div>
+                            </div>
+                            <!-- D Tier -->
+                            <div class="tier-row">
+                                <div class="tier-badge badge-d">D</div>
+                                <div class="tier-items-wrap" id="tier-wrap-D"></div>
+                            </div>
+                        </div>
+
+                        <!-- Add Cartoon Quick Bar -->
+                        <div class="tier-input-bar">
+                            <input type="text" id="newCartoonName" class="tier-input" placeholder="Cartoon name (e.g. Tom & Jerry)..." onkeypress="if(event.key==='Enter') addCartoonItem()">
+                            <select id="newCartoonTier" class="tier-select">
+                                <option value="S">S</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                            <button class="add-note-btn" onclick="addCartoonItem()">+ Add</button>
+                        </div>
                     </div>
                 </div>
 
@@ -1785,7 +1959,7 @@
             </div>
 
             <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.45; margin: 0;">
-                Export your notes, to-dos, links, books overview, and wishlist directly to Google Drive.
+                Export your notes, to-dos, links, books overview, cartoons tier list, and wishlist directly to Google Drive.
             </p>
 
             <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
@@ -2416,6 +2590,121 @@
                 saveNotesList();
                 renderNotesList();
             }
+        }
+
+        // ----------------------------------------------------
+        // CARTOONS TIER LIST LOGIC (S A B C D)
+        // ----------------------------------------------------
+        let cartoonsList = [];
+
+        function loadCartoonsList() {
+            try {
+                const stored = localStorage.getItem('lc_cartoons_list');
+                if (stored) {
+                    cartoonsList = JSON.parse(stored);
+                } else {
+                    cartoonsList = [
+                        { id: 'c1', name: 'Tom & Jerry', tier: 'S' },
+                        { id: 'c2', name: 'Courage the Cowardly Dog', tier: 'S' },
+                        { id: 'c3', name: 'Dexter\'s Laboratory', tier: 'A' },
+                        { id: 'c4', name: 'Ben 10', tier: 'B' },
+                        { id: 'c5', name: 'Oswald', tier: 'A' },
+                        { id: 'c6', name: 'Popeye', tier: 'B' },
+                        { id: 'c7', name: 'Chhota Bheem', tier: 'D' }
+                    ];
+                }
+            } catch(e) {
+                cartoonsList = [];
+            }
+
+            const isDropdownOpen = localStorage.getItem('lc_cartoons_dropdown_open');
+            const card = document.getElementById('cartoonsTierCard');
+            if (card && isDropdownOpen !== null) {
+                if (isDropdownOpen === 'false') card.classList.remove('open');
+                else card.classList.add('open');
+            }
+
+            renderCartoonsTierBoard();
+        }
+
+        function saveCartoonsList() {
+            try {
+                localStorage.setItem('lc_cartoons_list', JSON.stringify(cartoonsList));
+            } catch(e) {}
+            updateCartoonsCountSub();
+        }
+
+        function toggleCartoonsTierDropdown() {
+            const card = document.getElementById('cartoonsTierCard');
+            if (card) {
+                card.classList.toggle('open');
+                try {
+                    localStorage.setItem('lc_cartoons_dropdown_open', card.classList.contains('open'));
+                } catch(e) {}
+            }
+        }
+
+        function updateCartoonsCountSub() {
+            const sub = document.getElementById('cartoonsCountSub');
+            if (!sub) return;
+            const count = cartoonsList.length;
+            sub.innerText = count + (count === 1 ? ' cartoon' : ' cartoons');
+        }
+
+        function renderCartoonsTierBoard() {
+            ['S', 'A', 'B', 'C', 'D'].forEach(tier => {
+                const wrap = document.getElementById('tier-wrap-' + tier);
+                if (wrap) wrap.innerHTML = '';
+            });
+
+            cartoonsList.forEach(item => {
+                const wrap = document.getElementById('tier-wrap-' + item.tier);
+                if (wrap) {
+                    const chip = document.createElement('div');
+                    chip.className = 'cartoon-chip';
+                    chip.innerHTML = `<span>${item.name}</span>`;
+                    chip.onclick = () => promptEditCartoon(item.id);
+                    wrap.appendChild(chip);
+                }
+            });
+
+            updateCartoonsCountSub();
+        }
+
+        function addCartoonItem() {
+            const input = document.getElementById('newCartoonName');
+            const tierSelect = document.getElementById('newCartoonTier');
+            const name = input.value.trim();
+            if (!name) return;
+
+            const tier = tierSelect.value || 'S';
+            cartoonsList.push({
+                id: 'c_' + Date.now().toString(),
+                name: name,
+                tier: tier
+            });
+
+            saveCartoonsList();
+            renderCartoonsTierBoard();
+            input.value = '';
+        }
+
+        function promptEditCartoon(id) {
+            const item = cartoonsList.find(c => c.id === id);
+            if (!item) return;
+
+            const action = prompt(`Edit "${item.name}"\n\nEnter new tier (S, A, B, C, D) to move, or type "del" to delete:`, item.tier);
+            if (action === null) return;
+
+            const cleaned = action.trim().toUpperCase();
+            if (cleaned === 'DEL') {
+                cartoonsList = cartoonsList.filter(c => c.id !== id);
+            } else if (['S', 'A', 'B', 'C', 'D'].includes(cleaned)) {
+                item.tier = cleaned;
+            }
+
+            saveCartoonsList();
+            renderCartoonsTierBoard();
         }
 
         // ----------------------------------------------------
@@ -3079,7 +3368,8 @@
                 adhuBlocks: adhuBlocks,
                 adhuWishlistColor: localStorage.getItem('lc_adhu_wishlist_color') || 'default',
                 stickySortAsc: noteSortAsc,
-                keeBookOverviews: keeBookOverviews
+                keeBookOverviews: keeBookOverviews,
+                cartoonsList: cartoonsList
             };
         }
 
@@ -3182,9 +3472,15 @@
                         keeBookOverviews = data.keeBookOverviews;
                         saveKeeBookOverviews();
                     }
+
+                    if (data.cartoonsList) {
+                        cartoonsList = data.cartoonsList;
+                        saveCartoonsList();
+                    }
                     
                     loadAdhuWishlistPage();
                     loadKeeBookOverviews();
+                    loadCartoonsList();
                     saveLinksToStorage();
 
                     statusEl.innerText = '✓ Data restored successfully!';
@@ -3244,6 +3540,7 @@
             updateDashboardCounts();
             loadAdhuWishlistPage();
             loadKeeBookOverviews();
+            loadCartoonsList();
             sortNotesList();
             renderNotesList();
             checkBackupReminder(); 
