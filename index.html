@@ -202,7 +202,7 @@
         }
 
         /* ----------------------------------------------------
-           SCROLLING NEON TICKER BANNER
+           PERMANENT SCROLLING NEON TICKER BANNER
            ---------------------------------------------------- */
         .neon-ticker-banner {
             position: relative;
@@ -276,6 +276,7 @@
             font-weight: 700;
             cursor: pointer;
             box-shadow: 0 0 6px rgba(0, 245, 212, 0.4);
+            transition: all 0.2s ease;
         }
 
         .neon-banner-btn:active {
@@ -1136,7 +1137,7 @@
             font-size: 14px;
         }
 
-        /* Accordion Structure */
+        /* Feature Card Accordion */
         .features-stack {
             display: flex;
             flex-direction: column;
@@ -1796,7 +1797,7 @@
             </div>
         </header>
 
-        <!-- Scrolling Neon Ticker Banner -->
+        <!-- Permanent Scrolling Neon Ticker Banner -->
         <div class="neon-ticker-banner" id="neonTickerBanner">
             <div class="neon-tag"><span>⚡</span> SYNC</div>
             <div class="marquee-track">
@@ -1805,7 +1806,7 @@
                 </div>
             </div>
             <div class="neon-banner-actions">
-                <button class="neon-banner-btn" onclick="triggerAppSave()">💾 Save</button>
+                <button class="neon-banner-btn" id="bannerSaveBtn" onclick="triggerAppSave()">💾 Save</button>
                 <button class="neon-banner-btn" onclick="openDriveSettingsModal()">☁️ Drive</button>
                 <button class="neon-close-btn" onclick="dismissNeonBanner()">✕</button>
             </div>
@@ -2935,9 +2936,8 @@
                     chip.addEventListener('pointerdown', (e) => startCartoonPress(item.id, e));
                     chip.addEventListener('pointerup', cancelCartoonPress);
                     chip.addEventListener('pointerleave', cancelCartoonPress);
-                    chip.addEventListener('contextmenu', (e) => e.preventDefault()); // Prevent default context menu
+                    chip.addEventListener('contextmenu', (e) => e.preventDefault());
                     
-                    // Direct click also opens options cleanly
                     chip.addEventListener('click', () => openCartoonActionSheet(item.id));
 
                     wrap.appendChild(chip);
@@ -2951,7 +2951,7 @@
             cancelCartoonPress();
             pressTimer = setTimeout(() => {
                 openCartoonActionSheet(id);
-            }, 450); // 450ms long press threshold
+            }, 450);
         }
 
         function cancelCartoonPress() {
@@ -3204,7 +3204,7 @@
 
                             <div class="book-overview-inner-actions">
                                 ${hasDrive ? `<button class="book-inner-action-btn" onclick="editBookDriveLink('${item.id}')">✏️ Edit Link</button>` : ''}
-                                <button class="book-inner-action-btn delete" onclick="deleteBookOverviewItem('${item.id}')">🗑️ Delete</button>
+                                <button class="book-inner-action-btn delete" onclick="deleteBookOverviewItem('${item.id}')">🗑️️ Delete</button>
                             </div>
                         </div>
 
@@ -3698,6 +3698,20 @@
             const jsonString = JSON.stringify(payload, null, 2);
             localStorage.setItem('lc_full_app_snapshot', jsonString);
 
+            // Flash visual confirmation on the banner save button without dismissing the ticker
+            const saveBtn = document.getElementById('bannerSaveBtn');
+            if (saveBtn) {
+                const originalText = saveBtn.innerHTML;
+                saveBtn.innerHTML = '✓ Saved!';
+                saveBtn.style.background = '#00F5D4';
+                saveBtn.style.color = '#101018';
+                setTimeout(() => {
+                    saveBtn.innerHTML = originalText;
+                    saveBtn.style.background = 'rgba(0, 245, 212, 0.15)';
+                    saveBtn.style.color = '#FFFFFF';
+                }, 2000);
+            }
+
             if (localDirHandle) {
                 try {
                     const fileHandle = await localDirHandle.getFileHandle('TheMotherboard-Backup.json', { create: true });
@@ -3705,7 +3719,6 @@
                     await writable.write(jsonString);
                     await writable.close();
                     markBackupComplete();
-                    dismissNeonBanner();
                     const status = document.getElementById('syncStatus');
                     if (status) {
                         status.innerText = '✓ Saved to local directory!';
@@ -3718,7 +3731,6 @@
             }
 
             triggerDownload(jsonString, 'TheMotherboard-Backup.json');
-            dismissNeonBanner();
             const status = document.getElementById('syncStatus');
             if (status) {
                 status.innerText = '✓ Downloaded backup file!';
@@ -3780,7 +3792,6 @@
                 statusEl.innerText = '✓ Shared to Drive successfully!';
                 statusEl.style.color = '#2E7D32';
                 markBackupComplete(); 
-                dismissNeonBanner();
 
             } catch (err) {
                 if (err.name === 'AbortError') {
@@ -3863,7 +3874,6 @@
                     statusEl.innerText = '✓ Data restored successfully!';
                     statusEl.style.color = '#2E7D32';
                     markBackupComplete(); 
-                    dismissNeonBanner();
 
                     updateDashboardCounts();
                     renderNotesList();
