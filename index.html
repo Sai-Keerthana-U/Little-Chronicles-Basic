@@ -105,7 +105,7 @@
             max-width: 480px;
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 14px;
         }
 
         /* Top Header */
@@ -164,9 +164,10 @@
             right: 2px;
             width: 8px;
             height: 8px;
-            background-color: #E53935;
+            background-color: #00F5D4;
             border-radius: 50%;
             border: 2px solid var(--bg-color);
+            box-shadow: 0 0 8px #00F5D4;
         }
 
         .profile-switcher {
@@ -200,6 +201,98 @@
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         }
 
+        /* ----------------------------------------------------
+           SCROLLING NEON TICKER BANNER
+           ---------------------------------------------------- */
+        .neon-ticker-banner {
+            position: relative;
+            background: #101018;
+            border: 1px solid #00F5D4;
+            box-shadow: 0 0 14px rgba(0, 245, 212, 0.4), inset 0 0 10px rgba(255, 0, 127, 0.2);
+            border-radius: 12px;
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            gap: 10px;
+        }
+
+        .neon-tag {
+            background: #FF007F;
+            color: #FFFFFF;
+            font-size: 9.5px;
+            font-weight: 800;
+            padding: 3px 7px;
+            border-radius: 6px;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            box-shadow: 0 0 8px #FF007F;
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .marquee-track {
+            flex: 1;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            white-space: nowrap;
+            animation: marqueeScroll 18s linear infinite;
+            font-size: 11px;
+            font-weight: 700;
+            color: #00F5D4;
+            text-shadow: 0 0 6px rgba(0, 245, 212, 0.6);
+        }
+
+        .marquee-content:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes marqueeScroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .neon-banner-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .neon-banner-btn {
+            background: rgba(0, 245, 212, 0.15);
+            border: 1px solid #00F5D4;
+            color: #FFFFFF;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 10.5px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 0 6px rgba(0, 245, 212, 0.4);
+        }
+
+        .neon-banner-btn:active {
+            transform: scale(0.93);
+        }
+
+        .neon-close-btn {
+            background: transparent;
+            border: none;
+            color: #FF007F;
+            font-size: 12px;
+            cursor: pointer;
+            padding: 0 2px;
+            font-weight: 800;
+            text-shadow: 0 0 6px #FF007F;
+        }
+
         .view-content {
             display: none;
         }
@@ -208,7 +301,7 @@
             display: block;
         }
 
-        /* Bento Grid (Kee Dashboard) */
+        /* Bento Grid */
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -1043,7 +1136,7 @@
             font-size: 14px;
         }
 
-        /* Common Accordion Styling */
+        /* Accordion Structure */
         .features-stack {
             display: flex;
             flex-direction: column;
@@ -1139,7 +1232,9 @@
             display: flex;
         }
 
-        /* Option 1: Horizontal Scroll Tier Board */
+        /* ----------------------------------------------------
+           OPTION 1: FIXED-HEIGHT HORIZONTAL SCROLL TIER BOARD
+           ---------------------------------------------------- */
         .tier-board {
             display: flex;
             flex-direction: column;
@@ -1205,7 +1300,7 @@
             background: var(--surface-subtle);
             border: var(--card-border);
             color: var(--text-main);
-            padding: 4px 10px;
+            padding: 5px 12px;
             border-radius: 999px;
             font-size: 12px;
             font-weight: 600;
@@ -1215,11 +1310,12 @@
             cursor: pointer;
             user-select: none;
             flex-shrink: 0;
-            transition: transform 0.15s ease;
+            transition: transform 0.15s ease, background-color 0.15s ease;
         }
 
         .cartoon-chip:active {
             transform: scale(0.96);
+            background: var(--primary-soft);
         }
 
         .tier-input-bar {
@@ -1251,7 +1347,110 @@
             outline: none;
         }
 
-        /* Books Overview Items */
+        /* ----------------------------------------------------
+           CARTOON ACTION BOTTOM SHEET (LONG PRESS MODAL)
+           ---------------------------------------------------- */
+        .tier-sheet-backdrop {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(4px);
+            z-index: 1100;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .tier-sheet-backdrop.open {
+            display: flex;
+        }
+
+        .tier-action-sheet {
+            background: var(--surface-card);
+            border-radius: 20px 20px 0 0;
+            width: 100%;
+            max-width: 440px;
+            padding: 20px 18px 28px;
+            box-shadow: 0 -8px 28px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border-top: var(--card-border);
+            animation: slideUpSheet 0.22s ease-out;
+        }
+
+        @keyframes slideUpSheet {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .tier-sheet-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+            text-align: center;
+        }
+
+        .tier-choice-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 4px 0;
+        }
+
+        .tier-choice-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            font-size: 16px;
+            font-weight: 800;
+            color: #111;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tier-choice-btn:active {
+            transform: scale(0.92);
+        }
+
+        .tier-choice-btn.badge-s { background: var(--tier-s); }
+        .tier-choice-btn.badge-a { background: var(--tier-a); }
+        .tier-choice-btn.badge-b { background: var(--tier-b); }
+        .tier-choice-btn.badge-c { background: var(--tier-c); }
+        .tier-choice-btn.badge-d { background: var(--tier-d); }
+
+        .tier-action-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .sheet-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 12.5px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+        }
+
+        .sheet-btn.edit {
+            background: var(--surface-subtle);
+            color: var(--text-main);
+            border: var(--card-border);
+        }
+
+        .sheet-btn.delete {
+            background: rgba(229, 57, 53, 0.12);
+            color: #E53935;
+        }
+
+        /* Books Overview */
         .book-overview-item {
             background: var(--surface-subtle);
             border: var(--card-border);
@@ -1422,7 +1621,7 @@
             margin: 4px 0;
         }
 
-        /* Wishlist Toolbar */
+        /* Wishlist */
         .adhu-dropdown-card.wl-color-default { background: var(--surface-card); }
         .adhu-dropdown-card.wl-color-yellow { background: var(--sticky-yellow); }
         .adhu-dropdown-card.wl-color-green { background: var(--sticky-green); }
@@ -1563,18 +1762,16 @@
 
     <div class="dashboard-container">
         
-        <!-- Header (Clean, balanced single row) -->
+        <!-- Header (Clean 1-line balanced row) -->
         <header>
             <div class="app-title">The Motherboard</div>
             
             <div class="header-actions">
-                <!-- Settings Button (with subtle update dot) -->
-                <button class="theme-toggle-btn" id="headerSettingsBtn" onclick="openDriveSettingsModal()" title="Settings & Drive Backup">
+                <button class="theme-toggle-btn" id="headerSettingsBtn" onclick="openDriveSettingsModal()" title="Settings & Backup">
                     ⚙️
                     <span id="backupBadge" class="notification-badge" style="display: none;"></span>
                 </button>
 
-                <!-- Theme Toggle Button -->
                 <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle Theme">
                     <svg id="moonIcon" class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
@@ -1592,13 +1789,27 @@
                     </svg>
                 </button>
 
-                <!-- Profile Switcher with full width visibility -->
                 <div class="profile-switcher" id="profileSwitcher">
                     <button class="switch-btn active" onclick="switchProfile(this, 'kee')">Kee</button>
                     <button class="switch-btn" onclick="switchProfile(this, 'adhu')">Adhu</button>
                 </div>
             </div>
         </header>
+
+        <!-- Scrolling Neon Ticker Banner -->
+        <div class="neon-ticker-banner" id="neonTickerBanner">
+            <div class="neon-tag"><span>⚡</span> SYNC</div>
+            <div class="marquee-track">
+                <div class="marquee-content">
+                    REMINDER: Don't forget to save your local database copy & sync with Google Drive! • Tap 'Save' or 'Drive' to update.
+                </div>
+            </div>
+            <div class="neon-banner-actions">
+                <button class="neon-banner-btn" onclick="triggerAppSave()">💾 Save</button>
+                <button class="neon-banner-btn" onclick="openDriveSettingsModal()">☁️ Drive</button>
+                <button class="neon-close-btn" onclick="dismissNeonBanner()">✕</button>
+            </div>
+        </div>
 
         <!-- KEE DASHBOARD -->
         <main id="view-kee" class="view-content active-view">
@@ -1745,7 +1956,7 @@
                 </button>
             </div>
 
-            <!-- Permanent Fixed 2-Row Toolbar (Zero Bounce / Zero Screen Jump) -->
+            <!-- Permanent Fixed 2-Row Toolbar (Zero Bounce) -->
             <div class="notepad-global-toolbar" id="notepadGlobalToolbar">
                 <div class="notepad-toolbar-row">
                     <div class="notepad-format-group">
@@ -1841,7 +2052,7 @@
                     </div>
                 </div>
 
-                <!-- FEATURE 2: CARTOONS TIER LIST (OPTION 1: HORIZONTAL SWIPE ROWS) -->
+                <!-- FEATURE 2: CARTOONS TIER LIST (HORIZONTAL SWIPE ROWS) -->
                 <div class="dropdown-feature-card open" id="cartoonsTierCard">
                     <div class="dropdown-feature-header" onclick="toggleCartoonsTierDropdown()">
                         <div class="feature-header-left">
@@ -1903,6 +2114,27 @@
 
     </div>
 
+    <!-- CARTOON LONG-PRESS ACTION SHEET MODAL -->
+    <div class="tier-sheet-backdrop" id="tierActionSheetModal" onclick="closeCartoonActionSheet()">
+        <div class="tier-action-sheet" onclick="event.stopPropagation()">
+            <div class="tier-sheet-title" id="sheetCartoonTitle">Cartoon Options</div>
+            
+            <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-align:center;">MOVE TO TIER</div>
+            <div class="tier-choice-row">
+                <button class="tier-choice-btn badge-s" onclick="moveActiveCartoon('S')">S</button>
+                <button class="tier-choice-btn badge-a" onclick="moveActiveCartoon('A')">A</button>
+                <button class="tier-choice-btn badge-b" onclick="moveActiveCartoon('B')">B</button>
+                <button class="tier-choice-btn badge-c" onclick="moveActiveCartoon('C')">C</button>
+                <button class="tier-choice-btn badge-d" onclick="moveActiveCartoon('D')">D</button>
+            </div>
+
+            <div class="tier-action-row">
+                <button class="sheet-btn edit" onclick="renameActiveCartoon()">✏️ Edit Name</button>
+                <button class="sheet-btn delete" onclick="deleteActiveCartoon()">🗑️ Delete</button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL: ADD HYPERLINK TO WISHLIST -->
     <div class="modal-overlay" id="wishlistLinkModal" onclick="closeWishlistLinkModal(event)">
         <div class="modal-sheet" onclick="event.stopPropagation()">
@@ -1960,7 +2192,7 @@
         </div>
     </div>
 
-    <!-- MODAL: SETTINGS & BACKUP (CLEAN SYSTEM DRAWER) -->
+    <!-- MODAL: SETTINGS & BACKUP -->
     <div class="modal-overlay" id="driveModal" onclick="closeDriveSettingsModal(event)">
         <div class="modal-sheet" onclick="event.stopPropagation()">
             <div class="modal-header">
@@ -1968,7 +2200,6 @@
                 <button class="drawer-close-btn" onclick="closeDriveSettingsModal()">✕</button>
             </div>
 
-            <!-- Instant Local Save Button -->
             <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
                 <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Instant Local Backup</div>
                 <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.4;">
@@ -1979,7 +2210,6 @@
                 </button>
             </div>
 
-            <!-- Local Directory Configuration Option -->
             <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
                 <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Auto-Save Folder (Optional)</div>
                 <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.4;">
@@ -2628,9 +2858,11 @@
         }
 
         // ----------------------------------------------------
-        // CARTOONS TIER LIST LOGIC (S A B C D)
+        // CARTOONS TIER LIST LOGIC (WITH LONG PRESS SUPPORT)
         // ----------------------------------------------------
         let cartoonsList = [];
+        let activeCartoonId = null;
+        let pressTimer = null;
 
         function loadCartoonsList() {
             try {
@@ -2698,12 +2930,83 @@
                     const chip = document.createElement('div');
                     chip.className = 'cartoon-chip';
                     chip.innerHTML = `<span>${item.name}</span>`;
-                    chip.onclick = () => promptEditCartoon(item.id);
+
+                    // Long press listener for mobile + click fallback
+                    chip.addEventListener('pointerdown', (e) => startCartoonPress(item.id, e));
+                    chip.addEventListener('pointerup', cancelCartoonPress);
+                    chip.addEventListener('pointerleave', cancelCartoonPress);
+                    chip.addEventListener('contextmenu', (e) => e.preventDefault()); // Prevent default context menu
+                    
+                    // Direct click also opens options cleanly
+                    chip.addEventListener('click', () => openCartoonActionSheet(item.id));
+
                     wrap.appendChild(chip);
                 }
             });
 
             updateCartoonsCountSub();
+        }
+
+        function startCartoonPress(id, e) {
+            cancelCartoonPress();
+            pressTimer = setTimeout(() => {
+                openCartoonActionSheet(id);
+            }, 450); // 450ms long press threshold
+        }
+
+        function cancelCartoonPress() {
+            if (pressTimer) {
+                clearTimeout(pressTimer);
+                pressTimer = null;
+            }
+        }
+
+        function openCartoonActionSheet(id) {
+            cancelCartoonPress();
+            const item = cartoonsList.find(c => c.id === id);
+            if (!item) return;
+
+            activeCartoonId = id;
+            document.getElementById('sheetCartoonTitle').innerText = `${item.name} (${item.tier} Tier)`;
+            document.getElementById('tierActionSheetModal').classList.add('open');
+        }
+
+        function closeCartoonActionSheet() {
+            document.getElementById('tierActionSheetModal').classList.remove('open');
+            activeCartoonId = null;
+        }
+
+        function moveActiveCartoon(newTier) {
+            if (!activeCartoonId) return;
+            const item = cartoonsList.find(c => c.id === activeCartoonId);
+            if (item) {
+                item.tier = newTier;
+                saveCartoonsList();
+                renderCartoonsTierBoard();
+            }
+            closeCartoonActionSheet();
+        }
+
+        function renameActiveCartoon() {
+            if (!activeCartoonId) return;
+            const item = cartoonsList.find(c => c.id === activeCartoonId);
+            if (!item) return;
+
+            const newName = prompt("Rename cartoon:", item.name);
+            if (newName && newName.trim()) {
+                item.name = newName.trim();
+                saveCartoonsList();
+                renderCartoonsTierBoard();
+            }
+            closeCartoonActionSheet();
+        }
+
+        function deleteActiveCartoon() {
+            if (!activeCartoonId) return;
+            cartoonsList = cartoonsList.filter(c => c.id !== activeCartoonId);
+            saveCartoonsList();
+            renderCartoonsTierBoard();
+            closeCartoonActionSheet();
         }
 
         function addCartoonItem() {
@@ -2722,24 +3025,6 @@
             saveCartoonsList();
             renderCartoonsTierBoard();
             input.value = '';
-        }
-
-        function promptEditCartoon(id) {
-            const item = cartoonsList.find(c => c.id === id);
-            if (!item) return;
-
-            const action = prompt(`Edit "${item.name}"\n\nEnter new tier (S, A, B, C, D) to move, or type "del" to delete:`, item.tier);
-            if (action === null) return;
-
-            const cleaned = action.trim().toUpperCase();
-            if (cleaned === 'DEL') {
-                cartoonsList = cartoonsList.filter(c => c.id !== id);
-            } else if (['S', 'A', 'B', 'C', 'D'].includes(cleaned)) {
-                item.tier = cleaned;
-            }
-
-            saveCartoonsList();
-            renderCartoonsTierBoard();
         }
 
         // ----------------------------------------------------
@@ -3354,7 +3639,7 @@
         }
 
         // ----------------------------------------------------
-        // BACKUP STATUS CHECK
+        // BACKUP STATUS & NEON BANNER
         // ----------------------------------------------------
         function checkBackupReminder() {
             const badge = document.getElementById('backupBadge');
@@ -3373,6 +3658,11 @@
                 localStorage.setItem('lc_last_backup_time', Date.now().toString());
             } catch(e) {}
             checkBackupReminder();
+        }
+
+        function dismissNeonBanner() {
+            const b = document.getElementById('neonTickerBanner');
+            if (b) b.style.display = 'none';
         }
 
         // ----------------------------------------------------
@@ -3415,6 +3705,7 @@
                     await writable.write(jsonString);
                     await writable.close();
                     markBackupComplete();
+                    dismissNeonBanner();
                     const status = document.getElementById('syncStatus');
                     if (status) {
                         status.innerText = '✓ Saved to local directory!';
@@ -3427,6 +3718,7 @@
             }
 
             triggerDownload(jsonString, 'TheMotherboard-Backup.json');
+            dismissNeonBanner();
             const status = document.getElementById('syncStatus');
             if (status) {
                 status.innerText = '✓ Downloaded backup file!';
@@ -3488,6 +3780,7 @@
                 statusEl.innerText = '✓ Shared to Drive successfully!';
                 statusEl.style.color = '#2E7D32';
                 markBackupComplete(); 
+                dismissNeonBanner();
 
             } catch (err) {
                 if (err.name === 'AbortError') {
@@ -3570,6 +3863,7 @@
                     statusEl.innerText = '✓ Data restored successfully!';
                     statusEl.style.color = '#2E7D32';
                     markBackupComplete(); 
+                    dismissNeonBanner();
 
                     updateDashboardCounts();
                     renderNotesList();
