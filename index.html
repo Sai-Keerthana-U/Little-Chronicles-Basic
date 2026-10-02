@@ -126,7 +126,27 @@
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+        }
+
+        .save-btn {
+            background: var(--primary);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 999px;
+            padding: 6px 12px;
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 6px rgba(148, 93, 76, 0.2);
+        }
+
+        .save-btn:active {
+            transform: scale(0.95);
         }
 
         .theme-toggle-btn {
@@ -671,7 +691,6 @@
         .notepad-toolbar-btn.strike { text-decoration: line-through; }
         .notepad-toolbar-btn.icon-only { font-size: 14px; padding: 4px 8px; }
 
-        /* Row 2: Fixed Color & Highlight Bar */
         .color-section-wrap {
             display: flex;
             align-items: center;
@@ -835,7 +854,6 @@
             display: block;
         }
 
-        /* Natural, Uniform Bullet & Numbering Indentation */
         .notepad-body ul, .notepad-body ol {
             padding-left: 24px;
             margin: 6px 0;
@@ -1140,7 +1158,7 @@
         }
 
         /* ----------------------------------------------------
-           CARTOONS TIER LIST STYLES (S A B C D)
+           OPTION 1: FIXED-HEIGHT HORIZONTAL SCROLL TIER BOARD
            ---------------------------------------------------- */
         .tier-board {
             display: flex;
@@ -1154,16 +1172,18 @@
 
         .tier-row {
             display: flex;
-            align-items: stretch;
+            align-items: center;
             background: var(--surface-card);
             border-radius: 8px;
             border: var(--card-border);
+            height: 44px; /* Strict 1-line fixed height */
             min-height: 44px;
             overflow: hidden;
         }
 
         .tier-badge {
             width: 44px;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1184,13 +1204,22 @@
         .tier-badge.badge-c { background-color: var(--tier-c); }
         .tier-badge.badge-d { background-color: var(--tier-d); }
 
+        /* Horizontal Scroll Area (No downward wrapping or stretching) */
         .tier-items-wrap {
             flex: 1;
             display: flex;
-            flex-wrap: wrap;
             align-items: center;
             gap: 6px;
-            padding: 6px 10px;
+            padding: 0 10px;
+            height: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+        }
+
+        .tier-items-wrap::-webkit-scrollbar {
+            display: none; /* Chrome & Safari */
         }
 
         .cartoon-chip {
@@ -1206,6 +1235,7 @@
             gap: 6px;
             cursor: pointer;
             user-select: none;
+            flex-shrink: 0; /* Keep chips from compressing */
             transition: transform 0.15s ease;
         }
 
@@ -1559,7 +1589,12 @@
             <div class="app-title">The Motherboard</div>
             
             <div class="header-actions">
-                <button class="theme-toggle-btn" onclick="openDriveSettingsModal()" title="Drive Backup & Restore">
+                <!-- Save Button: Snapshots to Local Storage + Local File Directory -->
+                <button class="save-btn" onclick="triggerAppSave()" title="Save local copy to storage & device">
+                    💾 Save
+                </button>
+
+                <button class="theme-toggle-btn" onclick="openDriveSettingsModal()" title="Drive Backup & Settings">
                     ⚙️
                     <span id="backupBadge" class="notification-badge" style="display: none;"></span>
                 </button>
@@ -1570,7 +1605,7 @@
                     </svg>
                     <svg id="sunIcon" class="theme-icon" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="12" x2="12" y2="3"></line>
                         <line x1="12" y1="21" x2="12" y2="23"></line>
                         <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
                         <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
@@ -1675,63 +1710,6 @@
                     </div>
                 </div>
 
-                <!-- FEATURE: CARTOONS TIER LIST ACCORDION (KEE) -->
-                <div class="dropdown-feature-card open" id="cartoonsTierCard">
-                    <div class="dropdown-feature-header" onclick="toggleCartoonsTierDropdown()">
-                        <div class="feature-header-left">
-                            <div class="feature-icon-badge">📺</div>
-                            <div class="feature-titles-group">
-                                <span class="feature-main-title">Cartoons Tier List</span>
-                                <span class="feature-sub-title" id="cartoonsCountSub">0 cartoons</span>
-                            </div>
-                        </div>
-                        <div class="feature-chevron">▼</div>
-                    </div>
-
-                    <div class="dropdown-feature-body">
-                        <div class="tier-board">
-                            <!-- S Tier -->
-                            <div class="tier-row">
-                                <div class="tier-badge badge-s">S</div>
-                                <div class="tier-items-wrap" id="tier-wrap-S"></div>
-                            </div>
-                            <!-- A Tier -->
-                            <div class="tier-row">
-                                <div class="tier-badge badge-a">A</div>
-                                <div class="tier-items-wrap" id="tier-wrap-A"></div>
-                            </div>
-                            <!-- B Tier -->
-                            <div class="tier-row">
-                                <div class="tier-badge badge-b">B</div>
-                                <div class="tier-items-wrap" id="tier-wrap-B"></div>
-                            </div>
-                            <!-- C Tier -->
-                            <div class="tier-row">
-                                <div class="tier-badge badge-c">C</div>
-                                <div class="tier-items-wrap" id="tier-wrap-C"></div>
-                            </div>
-                            <!-- D Tier -->
-                            <div class="tier-row">
-                                <div class="tier-badge badge-d">D</div>
-                                <div class="tier-items-wrap" id="tier-wrap-D"></div>
-                            </div>
-                        </div>
-
-                        <!-- Add Cartoon Quick Bar -->
-                        <div class="tier-input-bar">
-                            <input type="text" id="newCartoonName" class="tier-input" placeholder="Cartoon name (e.g. Tom & Jerry)..." onkeypress="if(event.key==='Enter') addCartoonItem()">
-                            <select id="newCartoonTier" class="tier-select">
-                                <option value="S">S</option>
-                                <option value="A">A</option>
-                                <option value="B">B</option>
-                                <option value="C">C</option>
-                                <option value="D">D</option>
-                            </select>
-                            <button class="add-note-btn" onclick="addCartoonItem()">+ Add</button>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </main>
 
@@ -1792,7 +1770,6 @@
 
             <!-- Permanent Fixed 2-Row Toolbar (Zero Bounce / Zero Screen Jump) -->
             <div class="notepad-global-toolbar" id="notepadGlobalToolbar">
-                <!-- Row 1: Direct Commands & Single-Tap Clean List Icons -->
                 <div class="notepad-toolbar-row">
                     <div class="notepad-format-group">
                         <button type="button" class="notepad-toolbar-btn" onpointerdown="applyFormatting(event, 'undo')" title="Undo">↺ Undo</button>
@@ -1807,7 +1784,6 @@
                     </div>
                 </div>
 
-                <!-- Row 2: Fixed Color & Highlighter Strips -->
                 <div class="notepad-toolbar-row">
                     <div class="color-section-wrap">
                         <span class="color-label-tag">Text:</span>
@@ -1888,6 +1864,63 @@
                     </div>
                 </div>
 
+                <!-- FEATURE 2: CARTOONS TIER LIST (OPTION 1: HORIZONTAL SWIPE ROWS) -->
+                <div class="dropdown-feature-card open" id="cartoonsTierCard">
+                    <div class="dropdown-feature-header" onclick="toggleCartoonsTierDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">📺</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Cartoons Tier List</span>
+                                <span class="feature-sub-title" id="cartoonsCountSub">0 cartoons</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="tier-board">
+                            <!-- S Tier -->
+                            <div class="tier-row">
+                                <div class="tier-badge badge-s">S</div>
+                                <div class="tier-items-wrap" id="tier-wrap-S"></div>
+                            </div>
+                            <!-- A Tier -->
+                            <div class="tier-row">
+                                <div class="tier-badge badge-a">A</div>
+                                <div class="tier-items-wrap" id="tier-wrap-A"></div>
+                            </div>
+                            <!-- B Tier -->
+                            <div class="tier-row">
+                                <div class="tier-badge badge-b">B</div>
+                                <div class="tier-items-wrap" id="tier-wrap-B"></div>
+                            </div>
+                            <!-- C Tier -->
+                            <div class="tier-row">
+                                <div class="tier-badge badge-c">C</div>
+                                <div class="tier-items-wrap" id="tier-wrap-C"></div>
+                            </div>
+                            <!-- D Tier -->
+                            <div class="tier-row">
+                                <div class="tier-badge badge-d">D</div>
+                                <div class="tier-items-wrap" id="tier-wrap-D"></div>
+                            </div>
+                        </div>
+
+                        <!-- Add Cartoon Quick Bar -->
+                        <div class="tier-input-bar">
+                            <input type="text" id="newCartoonName" class="tier-input" placeholder="Cartoon name (e.g. Tom & Jerry)..." onkeypress="if(event.key==='Enter') addCartoonItem()">
+                            <select id="newCartoonTier" class="tier-select">
+                                <option value="S">S</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                            <button class="add-note-btn" onclick="addCartoonItem()">+ Add</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </main>
 
@@ -1950,19 +1983,35 @@
         </div>
     </div>
 
-    <!-- MODAL: DIRECT GOOGLE DRIVE BACKUP & RESTORE -->
+    <!-- MODAL: SETTINGS & BACKUP (WITH LOCAL DIRECTORY OPTIONS) -->
     <div class="modal-overlay" id="driveModal" onclick="closeDriveSettingsModal(event)">
         <div class="modal-sheet" onclick="event.stopPropagation()">
             <div class="modal-header">
-                <h3 class="modal-title">Google Drive Backup</h3>
+                <h3 class="modal-title">Settings & Backup</h3>
                 <button class="drawer-close-btn" onclick="closeDriveSettingsModal()">✕</button>
             </div>
 
-            <p style="font-size: 12.5px; color: var(--text-muted); line-height: 1.45; margin: 0;">
-                Export your notes, to-dos, links, books overview, cartoons tier list, and wishlist directly to Google Drive.
+            <!-- Local Directory Configuration Option -->
+            <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-size: 12.5px; font-weight: 700; color: var(--text-main);">Local Directory Backup</div>
+                <p style="font-size: 11px; color: var(--text-muted); line-height: 1.4;">
+                    Set a local folder on your device. Every time you tap 💾 Save, a backup copy is automatically written into this folder.
+                </p>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    <button class="modal-save-btn" style="flex: 1; padding: 8px 12px; font-size: 11.5px; background: var(--surface-card); color: var(--text-main); border: var(--card-border);" onclick="pickLocalBackupDirectory()">
+                        📁 Select Local Folder
+                    </button>
+                </div>
+                <div id="localPathLabel" style="font-size: 11px; font-weight: 600; color: var(--primary); word-break: break-all;">
+                    No directory selected (will use direct download)
+                </div>
+            </div>
+
+            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.45; margin: 0;">
+                Export or import your full database (notes, to-dos, links, books overview, tier list, and wishlist) to and from Google Drive or files.
             </p>
 
-            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px;">
+            <div style="display: flex; flex-direction: column; gap: 8px;">
                 <button class="modal-save-btn" style="background:#2E7D32;" onclick="saveDirectToGoogleDrive()">
                     ☁️ Upload / Save to Google Drive
                 </button>
@@ -1970,7 +2019,7 @@
                 <input type="file" id="restoreFileInput" accept=".txt,.json,application/json,text/plain" style="display:none;" onchange="handleRestoreFile(this)">
                 
                 <button class="modal-save-btn" style="background:var(--surface-subtle); color:var(--text-main); border:var(--card-border);" onclick="document.getElementById('restoreFileInput').click()">
-                    📥 Restore from Drive / Device
+                    📥 Restore from File
                 </button>
             </div>
 
@@ -3343,6 +3392,70 @@
         }
 
         // ----------------------------------------------------
+        // LOCAL DIRECTORY & APP SAVE FUNCTIONALITY
+        // ----------------------------------------------------
+        let localDirHandle = null;
+
+        async function pickLocalBackupDirectory() {
+            if ('showDirectoryPicker' in window) {
+                try {
+                    localDirHandle = await window.showDirectoryPicker();
+                    document.getElementById('localPathLabel').innerText = `✓ Selected Folder: ${localDirHandle.name}`;
+                    document.getElementById('localPathLabel').style.color = '#2E7D32';
+                } catch(err) {
+                    if (err.name !== 'AbortError') {
+                        alert('Could not set local directory: ' + err.message);
+                    }
+                }
+            } else {
+                alert('Directory picking is not supported by your current browser. Tapping 💾 Save will directly download the file instead.');
+            }
+        }
+
+        async function triggerAppSave() {
+            saveNotesList();
+            saveTodoList();
+            saveLinksToStorage();
+            saveKeeBookOverviews();
+            saveCartoonsList();
+            syncAllAdhuBlocks();
+
+            const payload = getFullPayload();
+            const jsonString = JSON.stringify(payload, null, 2);
+            localStorage.setItem('lc_full_app_snapshot', jsonString);
+
+            if (localDirHandle) {
+                try {
+                    const fileHandle = await localDirHandle.getFileHandle('TheMotherboard-Backup.json', { create: true });
+                    const writable = await fileHandle.createWritable();
+                    await writable.write(jsonString);
+                    await writable.close();
+                    markBackupComplete();
+                    showSaveToast('Saved to folder & localStorage!');
+                    return;
+                } catch(err) {
+                    console.warn('Writing to directory failed, falling back to download:', err);
+                }
+            }
+
+            triggerDownload(jsonString, 'TheMotherboard-Backup.json');
+            showSaveToast('Saved locally!');
+        }
+
+        function showSaveToast(msg) {
+            const btn = document.querySelector('.save-btn');
+            if (btn) {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = `✓ ${msg}`;
+                btn.style.background = '#2E7D32';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = 'var(--primary)';
+                }, 1600);
+            }
+        }
+
+        // ----------------------------------------------------
         // DIRECT GOOGLE DRIVE BACKUP & RESTORE
         // ----------------------------------------------------
         function openDriveSettingsModal() {
@@ -3382,12 +3495,7 @@
             try {
                 const file = new File([jsonString], fileName, { type: 'text/plain' });
 
-                if (!navigator.canShare) {
-                    triggerDownload(jsonString, fileName);
-                    return;
-                }
-
-                if (!navigator.canShare({ files: [file] })) {
+                if (!navigator.canShare || !navigator.canShare({ files: [file] })) {
                     triggerDownload(jsonString, fileName);
                     return;
                 }
@@ -3412,7 +3520,7 @@
         }
 
         function triggerDownload(content, fName) {
-            const blob = new Blob([content], { type: 'text/plain' });
+            const blob = new Blob([content], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const dlAnchor = document.createElement('a');
             dlAnchor.href = url;
@@ -3421,9 +3529,6 @@
             dlAnchor.click();
             document.body.removeChild(dlAnchor);
             URL.revokeObjectURL(url);
-            
-            document.getElementById('syncStatus').innerText = '✓ Downloaded file to device.';
-            document.getElementById('syncStatus').style.color = '#2E7D32';
             markBackupComplete(); 
         }
 
