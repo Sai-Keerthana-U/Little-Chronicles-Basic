@@ -97,7 +97,7 @@
             display: flex;
             justify-content: center;
             min-height: 100vh;
-            padding: 16px 14px 36px;
+            padding: 18px 14px 36px;
         }
 
         .dashboard-container {
@@ -105,37 +105,37 @@
             max-width: 480px;
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 16px;
         }
 
-        /* Top Header (Aligned & Proportional) */
+        /* Top Header */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 2px 0;
-            min-height: 38px;
+            padding: 0 2px;
+            width: 100%;
         }
 
         .app-title {
-            font-size: 18.5px;
+            font-size: 19px;
             font-weight: 700;
             letter-spacing: -0.4px;
             color: var(--text-main);
-            flex-shrink: 0;
+            white-space: nowrap;
         }
 
         .header-actions {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
+            flex-shrink: 0;
         }
 
-        /* Standardized Action Buttons */
-        .icon-action-btn {
+        .theme-toggle-btn {
             background: var(--surface-subtle);
             border: var(--card-border);
-            border-radius: 50%;
+            border-radius: 999px;
             width: 34px;
             height: 34px;
             display: flex;
@@ -146,111 +146,27 @@
             outline: none;
             padding: 0;
             position: relative;
-            font-size: 15px;
             flex-shrink: 0;
         }
 
-        .icon-action-btn:active {
+        .theme-toggle-btn:active {
             transform: scale(0.92);
         }
 
-        /* Neon Indicators & Glow Effects */
-        .neon-save-pulse {
-            border-color: #FF9100 !important;
-            box-shadow: 0 0 10px rgba(255, 145, 0, 0.55), inset 0 0 4px rgba(255, 145, 0, 0.35);
-            animation: neonSaveBreath 2.2s infinite ease-in-out;
-        }
-
-        @keyframes neonSaveBreath {
-            0%, 100% {
-                box-shadow: 0 0 6px rgba(255, 145, 0, 0.45);
-            }
-            50% {
-                box-shadow: 0 0 14px rgba(255, 145, 0, 0.85), 0 0 4px #FFB300;
-            }
-        }
-
-        .neon-drive-pulse {
-            border-color: #00E676 !important;
-            box-shadow: 0 0 10px rgba(0, 230, 118, 0.55), inset 0 0 4px rgba(0, 230, 118, 0.35);
-            animation: neonDriveBreath 2.2s infinite ease-in-out;
-        }
-
-        @keyframes neonDriveBreath {
-            0%, 100% {
-                box-shadow: 0 0 6px rgba(0, 230, 118, 0.45);
-            }
-            50% {
-                box-shadow: 0 0 14px rgba(0, 230, 118, 0.85), 0 0 4px #69F0AE;
-            }
+        .theme-icon {
+            width: 16px;
+            height: 16px;
         }
 
         .notification-badge {
             position: absolute;
             top: 2px;
             right: 2px;
-            width: 9px;
-            height: 9px;
-            background-color: #00E676;
+            width: 8px;
+            height: 8px;
+            background-color: #E53935;
             border-radius: 50%;
             border: 2px solid var(--bg-color);
-            box-shadow: 0 0 6px #00E676;
-        }
-
-        /* Reload Backup Alert Banner */
-        .neon-banner {
-            background: linear-gradient(135deg, rgba(255, 145, 0, 0.12), rgba(0, 230, 118, 0.12));
-            border: 1px solid rgba(255, 145, 0, 0.4);
-            border-radius: 14px;
-            padding: 10px 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            box-shadow: 0 4px 16px rgba(255, 145, 0, 0.1);
-            animation: bannerSlideIn 0.35s ease;
-        }
-
-        @keyframes bannerSlideIn {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .neon-banner-text {
-            font-size: 11.5px;
-            font-weight: 700;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .neon-banner-actions {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            flex-shrink: 0;
-        }
-
-        .neon-quick-btn {
-            background: var(--surface-card);
-            border: var(--card-border);
-            border-radius: 999px;
-            padding: 4px 10px;
-            font-size: 11px;
-            font-weight: 700;
-            color: var(--text-main);
-            cursor: pointer;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-        }
-
-        .neon-quick-btn:active {
-            transform: scale(0.94);
-        }
-
-        .theme-icon {
-            width: 16px;
-            height: 16px;
         }
 
         .profile-switcher {
@@ -260,6 +176,7 @@
             padding: 3px;
             display: flex;
             gap: 2px;
+            flex-shrink: 0;
         }
 
         .switch-btn {
@@ -269,11 +186,12 @@
             padding: 5px 14px;
             border-radius: 999px;
             font-family: inherit;
-            font-size: 12px;
+            font-size: 12.5px;
             font-weight: 600;
             color: var(--text-muted);
             cursor: pointer;
             transition: all 0.2s ease;
+            white-space: nowrap;
         }
 
         .switch-btn.active {
@@ -1125,7 +1043,7 @@
             font-size: 14px;
         }
 
-        /* Feature Card Accordion */
+        /* Common Accordion Styling */
         .features-stack {
             display: flex;
             flex-direction: column;
@@ -1645,24 +1563,19 @@
 
     <div class="dashboard-container">
         
-        <!-- Header: Perfectly Aligned 34px Circular Action Row -->
+        <!-- Header (Clean, balanced single row) -->
         <header>
             <div class="app-title">The Motherboard</div>
             
             <div class="header-actions">
-                <!-- 34px Aligned Save Button with Neon Glow -->
-                <button class="icon-action-btn neon-save-pulse" id="headerSaveBtn" onclick="triggerAppSave()" title="Save local copy to storage & folder">
-                    💾
-                </button>
-
-                <!-- 34px Settings Button with Drive Status Glow -->
-                <button class="icon-action-btn" id="headerSettingsBtn" onclick="openDriveSettingsModal()" title="Settings & Drive Backup">
+                <!-- Settings Button (with subtle update dot) -->
+                <button class="theme-toggle-btn" id="headerSettingsBtn" onclick="openDriveSettingsModal()" title="Settings & Drive Backup">
                     ⚙️
                     <span id="backupBadge" class="notification-badge" style="display: none;"></span>
                 </button>
 
-                <!-- 34px Theme Toggle Button -->
-                <button class="icon-action-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle Theme">
+                <!-- Theme Toggle Button -->
+                <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle Theme">
                     <svg id="moonIcon" class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
                     </svg>
@@ -1679,24 +1592,13 @@
                     </svg>
                 </button>
 
+                <!-- Profile Switcher with full width visibility -->
                 <div class="profile-switcher" id="profileSwitcher">
                     <button class="switch-btn active" onclick="switchProfile(this, 'kee')">Kee</button>
                     <button class="switch-btn" onclick="switchProfile(this, 'adhu')">Adhu</button>
                 </div>
             </div>
         </header>
-
-        <!-- Fresh Reload Reminder Banner (Visible on every reload to prompt backup) -->
-        <div class="neon-banner" id="reloadReminderBanner">
-            <div class="neon-banner-text">
-                <span>⚡</span> Backup reminder: Save your local copy or sync Drive!
-            </div>
-            <div class="neon-banner-actions">
-                <button class="neon-quick-btn" onclick="triggerAppSave()">💾 Save</button>
-                <button class="neon-quick-btn" onclick="openDriveSettingsModal()">☁️ Sync</button>
-                <button style="background:transparent; border:none; color:var(--text-muted); cursor:pointer; font-size:13px; padding:0 2px;" onclick="dismissReloadBanner()">✕</button>
-            </div>
-        </div>
 
         <!-- KEE DASHBOARD -->
         <main id="view-kee" class="view-content active-view">
@@ -1845,7 +1747,6 @@
 
             <!-- Permanent Fixed 2-Row Toolbar (Zero Bounce / Zero Screen Jump) -->
             <div class="notepad-global-toolbar" id="notepadGlobalToolbar">
-                <!-- Row 1: Commands & List Options -->
                 <div class="notepad-toolbar-row">
                     <div class="notepad-format-group">
                         <button type="button" class="notepad-toolbar-btn" onpointerdown="applyFormatting(event, 'undo')" title="Undo">↺ Undo</button>
@@ -1860,7 +1761,6 @@
                     </div>
                 </div>
 
-                <!-- Row 2: Fixed Swatch Strip -->
                 <div class="notepad-toolbar-row">
                     <div class="color-section-wrap">
                         <span class="color-label-tag">Text:</span>
@@ -2060,7 +1960,7 @@
         </div>
     </div>
 
-    <!-- MODAL: SETTINGS & BACKUP (WITH LOCAL DIRECTORY OPTIONS) -->
+    <!-- MODAL: SETTINGS & BACKUP (CLEAN SYSTEM DRAWER) -->
     <div class="modal-overlay" id="driveModal" onclick="closeDriveSettingsModal(event)">
         <div class="modal-sheet" onclick="event.stopPropagation()">
             <div class="modal-header">
@@ -2068,29 +1968,38 @@
                 <button class="drawer-close-btn" onclick="closeDriveSettingsModal()">✕</button>
             </div>
 
+            <!-- Instant Local Save Button -->
+            <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Instant Local Backup</div>
+                <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.4;">
+                    Download an updated snapshot of your entire motherboard (notes, to-dos, cartoons, wishlist).
+                </p>
+                <button class="modal-save-btn" style="background: var(--primary);" onclick="triggerAppSave()">
+                    💾 Save Full Backup File
+                </button>
+            </div>
+
             <!-- Local Directory Configuration Option -->
             <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
-                <div style="font-size: 12.5px; font-weight: 700; color: var(--text-main);">Local Directory Backup</div>
-                <p style="font-size: 11px; color: var(--text-muted); line-height: 1.4;">
-                    Set a local folder on your device. Every time you tap 💾 Save, a backup copy is automatically written into this folder.
+                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Auto-Save Folder (Optional)</div>
+                <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.4;">
+                    Select a local folder on your device to write backups directly without popup prompts.
                 </p>
-                <div style="display: flex; gap: 6px; align-items: center;">
-                    <button class="modal-save-btn" style="flex: 1; padding: 8px 12px; font-size: 11.5px; background: var(--surface-card); color: var(--text-main); border: var(--card-border);" onclick="pickLocalBackupDirectory()">
-                        📁 Select Local Folder
-                    </button>
-                </div>
-                <div id="localPathLabel" style="font-size: 11px; font-weight: 600; color: var(--primary); word-break: break-all;">
-                    No directory selected (will use direct download)
+                <button class="modal-save-btn" style="background: var(--surface-card); color: var(--text-main); border: var(--card-border);" onclick="pickLocalBackupDirectory()">
+                    📁 Select Local Folder
+                </button>
+                <div id="localPathLabel" style="font-size: 11px; font-weight: 600; color: var(--text-muted); word-break: break-all;">
+                    No directory set (defaults to standard downloads)
                 </div>
             </div>
 
             <p style="font-size: 12px; color: var(--text-muted); line-height: 1.45; margin: 0;">
-                Export or import your full database (notes, to-dos, links, books overview, tier list, and wishlist) to and from Google Drive or files.
+                Export or import to Google Drive and local JSON files.
             </p>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">
                 <button class="modal-save-btn" style="background:#2E7D32;" onclick="saveDirectToGoogleDrive()">
-                    ☁️ Upload / Save to Google Drive
+                    ☁️ Upload to Google Drive
                 </button>
 
                 <input type="file" id="restoreFileInput" accept=".txt,.json,application/json,text/plain" style="display:none;" onchange="handleRestoreFile(this)">
@@ -3445,25 +3354,17 @@
         }
 
         // ----------------------------------------------------
-        // BACKUP & NEON REMINDER LOGIC
+        // BACKUP STATUS CHECK
         // ----------------------------------------------------
         function checkBackupReminder() {
             const badge = document.getElementById('backupBadge');
-            const settingsBtn = document.getElementById('headerSettingsBtn');
-            const saveBtn = document.getElementById('headerSaveBtn');
-            
             const lastBackupStr = localStorage.getItem('lc_last_backup_time');
-            const oneDay = 24 * 60 * 60 * 1000; 
+            const twoDays = 2 * 24 * 60 * 60 * 1000; 
             
-            // If backup is older than 24h or missing, activate glowing neon animations
-            if (!lastBackupStr || (Date.now() - parseInt(lastBackupStr)) > oneDay) {
+            if (!lastBackupStr || (Date.now() - parseInt(lastBackupStr)) > twoDays) {
                 if (badge) badge.style.display = 'block'; 
-                if (settingsBtn) settingsBtn.classList.add('neon-drive-pulse');
-                if (saveBtn) saveBtn.classList.add('neon-save-pulse');
             } else {
                 if (badge) badge.style.display = 'none'; 
-                if (settingsBtn) settingsBtn.classList.remove('neon-drive-pulse');
-                if (saveBtn) saveBtn.classList.remove('neon-save-pulse');
             }
         }
 
@@ -3472,11 +3373,6 @@
                 localStorage.setItem('lc_last_backup_time', Date.now().toString());
             } catch(e) {}
             checkBackupReminder();
-        }
-
-        function dismissReloadBanner() {
-            const b = document.getElementById('reloadReminderBanner');
-            if (b) b.style.display = 'none';
         }
 
         // ----------------------------------------------------
@@ -3488,7 +3384,7 @@
             if ('showDirectoryPicker' in window) {
                 try {
                     localDirHandle = await window.showDirectoryPicker();
-                    document.getElementById('localPathLabel').innerText = `✓ Selected Folder: ${localDirHandle.name}`;
+                    document.getElementById('localPathLabel').innerText = `✓ Selected: ${localDirHandle.name}`;
                     document.getElementById('localPathLabel').style.color = '#2E7D32';
                 } catch(err) {
                     if (err.name !== 'AbortError') {
@@ -3496,7 +3392,7 @@
                     }
                 }
             } else {
-                alert('Directory picking is not supported by your current browser. Tapping 💾 Save will directly download the file instead.');
+                alert('Directory picking is not supported by your current browser. Tapping Save File will download directly.');
             }
         }
 
@@ -3519,27 +3415,22 @@
                     await writable.write(jsonString);
                     await writable.close();
                     markBackupComplete();
-                    showSaveToast('Saved to folder & localStorage!');
-                    dismissReloadBanner();
+                    const status = document.getElementById('syncStatus');
+                    if (status) {
+                        status.innerText = '✓ Saved to local directory!';
+                        status.style.color = '#2E7D32';
+                    }
                     return;
                 } catch(err) {
-                    console.warn('Writing to directory failed, falling back to download:', err);
+                    console.warn('Writing to directory failed, downloading instead:', err);
                 }
             }
 
             triggerDownload(jsonString, 'TheMotherboard-Backup.json');
-            showSaveToast('Saved locally!');
-            dismissReloadBanner();
-        }
-
-        function showSaveToast(msg) {
-            const btn = document.getElementById('headerSaveBtn');
-            if (btn) {
-                btn.style.boxShadow = '0 0 16px #00E676';
-                btn.style.borderColor = '#00E676';
-                setTimeout(() => {
-                    checkBackupReminder();
-                }, 1800);
+            const status = document.getElementById('syncStatus');
+            if (status) {
+                status.innerText = '✓ Downloaded backup file!';
+                status.style.color = '#2E7D32';
             }
         }
 
@@ -3597,7 +3488,6 @@
                 statusEl.innerText = '✓ Shared to Drive successfully!';
                 statusEl.style.color = '#2E7D32';
                 markBackupComplete(); 
-                dismissReloadBanner();
 
             } catch (err) {
                 if (err.name === 'AbortError') {
@@ -3680,7 +3570,6 @@
                     statusEl.innerText = '✓ Data restored successfully!';
                     statusEl.style.color = '#2E7D32';
                     markBackupComplete(); 
-                    dismissReloadBanner();
 
                     updateDashboardCounts();
                     renderNotesList();
