@@ -441,278 +441,466 @@
             margin-top: 4px;
         }
 
-        /* Modals */
-        .drawer-overlay, .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
-        }
-
-        .drawer-overlay.open, .modal-overlay.open {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .drawer-sheet, .modal-sheet {
-            background: var(--surface-card);
-            border-radius: 20px;
-            width: 100%;
-            max-width: 420px;
-            max-height: 85vh;
-            padding: 20px 18px 24px;
-            box-shadow: 0 12px 36px rgba(0,0,0,0.3);
-            overflow-y: auto;
-            transform: scale(0.92);
-            transition: transform 0.2s cubic-bezier(0.32, 0.72, 0, 1);
+        /* Common Feature Card Accordion */
+        .features-stack {
             display: flex;
             flex-direction: column;
-            gap: 14px;
+            gap: 12px;
+        }
+
+        .dropdown-feature-card {
+            background: var(--surface-card);
+            border-radius: var(--radius-outer);
             border: var(--card-border);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: background-color 0.25s ease, box-shadow 0.2s ease;
         }
 
-        .drawer-overlay.open .drawer-sheet,
-        .modal-overlay.open .modal-sheet {
-            transform: scale(1);
-        }
-
-        .drawer-header, .modal-header {
+        .dropdown-feature-header {
+            padding: 14px 16px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
         }
 
-        .drawer-title, .modal-title {
-            font-size: 16.5px;
+        .dropdown-feature-header:active {
+            opacity: 0.9;
+        }
+
+        .feature-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .feature-icon-badge {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-inner);
+            background: var(--primary-soft);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            line-height: 1;
+        }
+
+        .feature-titles-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .feature-main-title {
+            font-size: 14.5px;
             font-weight: 700;
             color: var(--text-main);
+            letter-spacing: -0.2px;
         }
 
-        .drawer-close-btn {
-            background: var(--surface-subtle);
-            border: none;
+        .feature-sub-title {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .feature-chevron {
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
-            width: 30px;
-            height: 30px;
+            background: var(--surface-subtle);
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--text-muted);
-            cursor: pointer;
-            font-size: 14px;
+            font-size: 10px;
+            transition: transform 0.25s ease;
         }
 
-        .drawer-links-wrap {
+        .dropdown-feature-card.open .feature-chevron {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-feature-body {
+            display: none;
+            padding: 0 16px 16px;
+            flex-direction: column;
+            gap: 12px;
+            border-top: var(--card-border);
+        }
+
+        .dropdown-feature-card.open .dropdown-feature-body {
+            display: flex;
+        }
+
+        /* ----------------------------------------------------
+           NEW FEATURE: MILK TRACKER CARD STYLES
+           ---------------------------------------------------- */
+        .milk-progress-box {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .milk-metrics-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .milk-total-current {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1;
+        }
+
+        .milk-targets-sub {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-align: right;
+            line-height: 1.35;
+        }
+
+        .milk-bar-track {
+            width: 100%;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.06);
+            border-radius: 999px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        [data-theme="dark"] .milk-bar-track {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .milk-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #FFB380 0%, #00E676 100%);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .milk-pct-tags {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11.5px;
+            font-weight: 700;
+        }
+
+        .milk-pct-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: var(--surface-card);
+            border: var(--card-border);
+        }
+
+        .milk-input-bar {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .milk-input {
+            flex: 1;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 10px;
+            padding: 9px 12px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .milk-quick-pills {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding: 2px 0;
+            scrollbar-width: none;
+        }
+
+        .milk-quick-pills::-webkit-scrollbar {
+            display: none;
+        }
+
+        .milk-pill-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 5px 11px;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .milk-pill-btn:active {
+            transform: scale(0.94);
+            background: var(--primary-soft);
+        }
+
+        .milk-chips-history {
             display: flex;
             flex-wrap: wrap;
+            gap: 6px;
+            max-height: 85px;
+            overflow-y: auto;
+            padding-top: 2px;
+        }
+
+        .milk-entry-chip {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .milk-entry-del {
+            background: transparent;
+            border: none;
+            color: #E53935;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 0;
+            line-height: 1;
+        }
+
+        /* ----------------------------------------------------
+           OPTION 1: FIXED-HEIGHT HORIZONTAL SCROLL TIER BOARD
+           ---------------------------------------------------- */
+        .tier-board {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: var(--surface-subtle);
+            padding: 8px;
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+        }
+
+        .tier-row {
+            display: flex;
+            align-items: center;
+            background: var(--surface-card);
+            border-radius: 8px;
+            border: var(--card-border);
+            height: 44px;
+            min-height: 44px;
+            overflow: hidden;
+        }
+
+        .tier-badge {
+            width: 44px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 800;
+            color: #1a1a1a;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        [data-theme="dark"] .tier-badge {
+            color: #f4efeb;
+        }
+
+        .tier-badge.badge-s { background-color: var(--tier-s); }
+        .tier-badge.badge-a { background-color: var(--tier-a); }
+        .tier-badge.badge-b { background-color: var(--tier-b); }
+        .tier-badge.badge-c { background-color: var(--tier-c); }
+        .tier-badge.badge-d { background-color: var(--tier-d); }
+
+        .tier-items-wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 10px;
+            height: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .tier-items-wrap::-webkit-scrollbar {
+            display: none;
+        }
+
+        .cartoon-chip {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            color: var(--text-main);
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            user-select: none;
+            flex-shrink: 0;
+            transition: transform 0.15s ease, background-color 0.15s ease;
+        }
+
+        .cartoon-chip:active {
+            transform: scale(0.96);
+            background: var(--primary-soft);
+        }
+
+        .tier-input-bar {
+            display: flex;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .tier-input {
+            flex: 1;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12.5px;
+            font-family: inherit;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .tier-select {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        /* Long Press Modal Sheet */
+        .tier-sheet-backdrop {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(4px);
+            z-index: 1100;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .tier-sheet-backdrop.open {
+            display: flex;
+        }
+
+        .tier-action-sheet {
+            background: var(--surface-card);
+            border-radius: 20px 20px 0 0;
+            width: 100%;
+            max-width: 440px;
+            padding: 20px 18px 28px;
+            box-shadow: 0 -8px 28px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border-top: var(--card-border);
+            animation: slideUpSheet 0.22s ease-out;
+        }
+
+        @keyframes slideUpSheet {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .tier-sheet-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+            text-align: center;
+        }
+
+        .tier-choice-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 4px 0;
+        }
+
+        .tier-choice-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            font-size: 16px;
+            font-weight: 800;
+            color: #111;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tier-choice-btn:active {
+            transform: scale(0.92);
+        }
+
+        .tier-choice-btn.badge-s { background: var(--tier-s); }
+        .tier-choice-btn.badge-a { background: var(--tier-a); }
+        .tier-choice-btn.badge-b { background: var(--tier-b); }
+        .tier-choice-btn.badge-c { background: var(--tier-c); }
+        .tier-choice-btn.badge-d { background: var(--tier-d); }
+
+        .tier-action-row {
+            display: flex;
             gap: 8px;
             margin-top: 4px;
         }
 
-        .resource-pill {
-            background: var(--surface-subtle);
-            color: var(--text-main);
-            padding: 9px 14px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-size: 12.5px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            border: 1px solid transparent;
-            cursor: pointer;
-        }
-
-        .manage-pill-btn {
-            background: var(--primary-soft);
-            color: var(--primary);
-            border: 1px dashed var(--primary);
-            padding: 9px 14px;
-            border-radius: 12px;
-            font-size: 12.5px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            outline: none;
-        }
-
-        .arrow-up-right {
-            font-size: 10px;
-            opacity: 0.6;
-        }
-
-        /* PDF Viewer Frame */
-        .pdf-view-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .pdf-controls-bar {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 14px;
-            flex-wrap: wrap;
-        }
-
-        .pdf-action-btn {
-            background: var(--surface-subtle);
-            border: var(--card-border);
-            border-radius: var(--radius-inner);
-            padding: 8px 14px;
-            font-size: 12.5px;
-            font-weight: 600;
-            color: var(--text-main);
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            text-decoration: none;
-        }
-
-        .pdf-action-btn.primary {
-            background: var(--primary);
-            color: #FFFFFF;
-            border: none;
-        }
-
-        .pdf-viewer-frame {
-            width: 100%;
-            height: 72vh;
-            border-radius: var(--radius-inner);
-            border: var(--card-border);
-            background: #FFFFFF;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .pdf-viewer-frame iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .pdf-placeholder-msg {
-            color: var(--text-muted);
-            font-size: 13px;
-            text-align: center;
-            padding: 20px;
-        }
-
-        /* Notes & To-Do Header and Toolbar */
-        .notes-view-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .back-nav-btn {
-            background: var(--surface-subtle);
-            border: var(--card-border);
-            border-radius: 999px;
-            padding: 7px 12px;
-            color: var(--text-main);
-            font-size: 12.5px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-            outline: none;
-        }
-
-        .notes-actions-group {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .sort-notes-btn {
-            background: var(--surface-subtle);
-            border: var(--card-border);
-            border-radius: 999px;
-            padding: 7px 12px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--text-muted);
-            cursor: pointer;
-            outline: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .sort-notes-btn:active {
-            transform: scale(0.94);
-        }
-
-        .add-note-btn {
-            background: var(--primary);
-            color: #FFFFFF;
-            border: none;
-            border-radius: 999px;
-            padding: 7px 14px;
-            font-size: 12.5px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(148, 93, 76, 0.2);
-            outline: none;
-            justify-content: center;
-        }
-
-        .hub-tabs {
-            display: flex;
-            background: var(--surface-subtle);
-            border: var(--card-border);
-            border-radius: 999px;
-            padding: 3px;
-            margin-bottom: 12px;
-            gap: 4px;
-        }
-
-        .hub-tab-btn {
+        .sheet-btn {
             flex: 1;
-            border: none;
-            background: transparent;
-            padding: 7px 0;
-            border-radius: 999px;
-            font-family: inherit;
+            padding: 10px;
+            border-radius: 10px;
             font-size: 12.5px;
-            font-weight: 600;
-            color: var(--text-muted);
+            font-weight: 700;
+            border: none;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            transition: all 0.2s ease;
         }
 
-        .hub-tab-btn.active {
-            background: var(--surface-card);
-            color: var(--primary);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        .sheet-btn.edit {
+            background: var(--surface-subtle);
+            color: var(--text-main);
+            border: var(--card-border);
+        }
+
+        .sheet-btn.delete {
+            background: rgba(229, 57, 53, 0.12);
+            color: #E53935;
         }
 
         /* Fixed 2-Row Toolbar */
@@ -1072,7 +1260,7 @@
             opacity: 0.6;
         }
 
-        /* Modal Forms */
+        /* Modal Sheets */
         .modal-form {
             display: flex;
             flex-direction: column;
@@ -1080,17 +1268,6 @@
             background: var(--surface-subtle);
             padding: 14px;
             border-radius: var(--radius-inner);
-        }
-
-        .modal-input, .modal-select {
-            background: var(--surface-card);
-            border: var(--card-border);
-            border-radius: 8px;
-            padding: 9px 12px;
-            font-family: inherit;
-            font-size: 12.5px;
-            color: var(--text-main);
-            outline: none;
         }
 
         .modal-save-btn {
@@ -1135,491 +1312,6 @@
             color: #E53935;
             cursor: pointer;
             font-size: 14px;
-        }
-
-        /* Feature Card Accordion */
-        .features-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .dropdown-feature-card {
-            background: var(--surface-card);
-            border-radius: var(--radius-outer);
-            border: var(--card-border);
-            box-shadow: var(--card-shadow);
-            overflow: hidden;
-            transition: background-color 0.25s ease, box-shadow 0.2s ease;
-        }
-
-        .dropdown-feature-header {
-            padding: 14px 16px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .dropdown-feature-header:active {
-            opacity: 0.9;
-        }
-
-        .feature-header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .feature-icon-badge {
-            width: 38px;
-            height: 38px;
-            border-radius: var(--radius-inner);
-            background: var(--primary-soft);
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 19px;
-            line-height: 1;
-        }
-
-        .feature-titles-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .feature-main-title {
-            font-size: 14.5px;
-            font-weight: 700;
-            color: var(--text-main);
-            letter-spacing: -0.2px;
-        }
-
-        .feature-sub-title {
-            font-size: 11px;
-            font-weight: 500;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        .feature-chevron {
-            width: 26px;
-            height: 26px;
-            border-radius: 50%;
-            background: var(--surface-subtle);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 10px;
-            transition: transform 0.25s ease;
-        }
-
-        .dropdown-feature-card.open .feature-chevron {
-            transform: rotate(180deg);
-        }
-
-        .dropdown-feature-body {
-            display: none;
-            padding: 0 16px 16px;
-            flex-direction: column;
-            gap: 12px;
-            border-top: var(--card-border);
-        }
-
-        .dropdown-feature-card.open .dropdown-feature-body {
-            display: flex;
-        }
-
-        /* ----------------------------------------------------
-           OPTION 1: FIXED-HEIGHT HORIZONTAL SCROLL TIER BOARD
-           ---------------------------------------------------- */
-        .tier-board {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            background: var(--surface-subtle);
-            padding: 8px;
-            border-radius: var(--radius-inner);
-            border: var(--card-border);
-        }
-
-        .tier-row {
-            display: flex;
-            align-items: center;
-            background: var(--surface-card);
-            border-radius: 8px;
-            border: var(--card-border);
-            height: 44px;
-            min-height: 44px;
-            overflow: hidden;
-        }
-
-        .tier-badge {
-            width: 44px;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
-            font-weight: 800;
-            color: #1a1a1a;
-            user-select: none;
-            flex-shrink: 0;
-        }
-
-        [data-theme="dark"] .tier-badge {
-            color: #f4efeb;
-        }
-
-        .tier-badge.badge-s { background-color: var(--tier-s); }
-        .tier-badge.badge-a { background-color: var(--tier-a); }
-        .tier-badge.badge-b { background-color: var(--tier-b); }
-        .tier-badge.badge-c { background-color: var(--tier-c); }
-        .tier-badge.badge-d { background-color: var(--tier-d); }
-
-        .tier-items-wrap {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 0 10px;
-            height: 100%;
-            overflow-x: auto;
-            white-space: nowrap;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-        }
-
-        .tier-items-wrap::-webkit-scrollbar {
-            display: none;
-        }
-
-        .cartoon-chip {
-            background: var(--surface-subtle);
-            border: var(--card-border);
-            color: var(--text-main);
-            padding: 5px 12px;
-            border-radius: 999px;
-            font-size: 12px;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            user-select: none;
-            flex-shrink: 0;
-            transition: transform 0.15s ease, background-color 0.15s ease;
-        }
-
-        .cartoon-chip:active {
-            transform: scale(0.96);
-            background: var(--primary-soft);
-        }
-
-        .tier-input-bar {
-            display: flex;
-            gap: 6px;
-            margin-top: 4px;
-        }
-
-        .tier-input {
-            flex: 1;
-            background: var(--surface-subtle);
-            border: var(--card-border);
-            border-radius: 8px;
-            padding: 8px 12px;
-            font-size: 12.5px;
-            font-family: inherit;
-            color: var(--text-main);
-            outline: none;
-        }
-
-        .tier-select {
-            background: var(--surface-subtle);
-            border: var(--card-border);
-            border-radius: 8px;
-            padding: 8px 10px;
-            font-size: 12.5px;
-            font-weight: 700;
-            color: var(--text-main);
-            outline: none;
-        }
-
-        /* ----------------------------------------------------
-           CARTOON ACTION BOTTOM SHEET (LONG PRESS MODAL)
-           ---------------------------------------------------- */
-        .tier-sheet-backdrop {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.45);
-            backdrop-filter: blur(4px);
-            z-index: 1100;
-            display: none;
-            align-items: flex-end;
-            justify-content: center;
-        }
-
-        .tier-sheet-backdrop.open {
-            display: flex;
-        }
-
-        .tier-action-sheet {
-            background: var(--surface-card);
-            border-radius: 20px 20px 0 0;
-            width: 100%;
-            max-width: 440px;
-            padding: 20px 18px 28px;
-            box-shadow: 0 -8px 28px rgba(0,0,0,0.25);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            border-top: var(--card-border);
-            animation: slideUpSheet 0.22s ease-out;
-        }
-
-        @keyframes slideUpSheet {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
-
-        .tier-sheet-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: var(--text-main);
-            text-align: center;
-        }
-
-        .tier-choice-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin: 4px 0;
-        }
-
-        .tier-choice-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 10px;
-            border: 2px solid transparent;
-            font-size: 16px;
-            font-weight: 800;
-            color: #111;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .tier-choice-btn:active {
-            transform: scale(0.92);
-        }
-
-        .tier-choice-btn.badge-s { background: var(--tier-s); }
-        .tier-choice-btn.badge-a { background: var(--tier-a); }
-        .tier-choice-btn.badge-b { background: var(--tier-b); }
-        .tier-choice-btn.badge-c { background: var(--tier-c); }
-        .tier-choice-btn.badge-d { background: var(--tier-d); }
-
-        .tier-action-row {
-            display: flex;
-            gap: 8px;
-            margin-top: 4px;
-        }
-
-        .sheet-btn {
-            flex: 1;
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 12.5px;
-            font-weight: 700;
-            border: none;
-            cursor: pointer;
-        }
-
-        .sheet-btn.edit {
-            background: var(--surface-subtle);
-            color: var(--text-main);
-            border: var(--card-border);
-        }
-
-        .sheet-btn.delete {
-            background: rgba(229, 57, 53, 0.12);
-            color: #E53935;
-        }
-
-        /* Books Overview */
-        .book-overview-item {
-            background: var(--surface-subtle);
-            border: var(--card-border);
-            border-radius: var(--radius-inner);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: all 0.2s ease;
-        }
-
-        .book-overview-header {
-            padding: 12px 14px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .book-overview-header:active {
-            background: rgba(0,0,0,0.02);
-        }
-
-        .book-overview-title-text {
-            flex: 1;
-            font-size: 13.5px;
-            font-weight: 700;
-            color: var(--text-main);
-            line-height: 1.35;
-        }
-
-        .book-overview-chevron-circle {
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            background: var(--surface-card);
-            border: var(--card-border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 8px;
-            color: var(--text-muted);
-            transition: transform 0.25s ease;
-            flex-shrink: 0;
-        }
-
-        .book-overview-item.expanded .book-overview-chevron-circle {
-            transform: rotate(180deg);
-        }
-
-        .book-overview-body-wrap {
-            display: none;
-            flex-direction: column;
-            padding: 12px 14px 14px;
-            border-top: var(--card-border);
-            background: var(--surface-card);
-            gap: 10px;
-        }
-
-        .book-overview-item.expanded .book-overview-body-wrap {
-            display: flex;
-        }
-
-        .book-overview-top-meta {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-bottom: 8px;
-            border-bottom: 1px dashed rgba(0,0,0,0.08);
-            gap: 8px;
-        }
-
-        .book-drive-pill-link {
-            background: var(--primary-soft);
-            color: var(--primary);
-            font-size: 11.5px;
-            font-weight: 700;
-            padding: 5px 11px;
-            border-radius: 8px;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            border: 1px solid rgba(148, 93, 76, 0.2);
-            line-height: 1.2;
-        }
-
-        .book-drive-pill-link:active {
-            transform: scale(0.96);
-        }
-
-        .book-overview-inner-actions {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .book-inner-action-btn {
-            background: var(--surface-subtle);
-            border: var(--card-border);
-            font-size: 11px;
-            font-weight: 600;
-            color: var(--text-muted);
-            padding: 4px 8px;
-            border-radius: 6px;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .book-inner-action-btn.delete {
-            color: #E53935;
-            border-color: rgba(229, 57, 53, 0.2);
-        }
-
-        .book-overview-title-edit-input {
-            width: 100%;
-            font-size: 13.5px;
-            font-weight: 700;
-            color: var(--text-main);
-            background: var(--surface-subtle);
-            border: var(--card-border);
-            border-radius: 6px;
-            padding: 6px 10px;
-            outline: none;
-            font-family: inherit;
-            margin-bottom: 4px;
-        }
-
-        .context-toolbar {
-            display: none;
-            align-items: center;
-            gap: 3px;
-            background: var(--surface-subtle);
-            border: var(--card-border);
-            border-radius: 999px;
-            padding: 3px 6px;
-            width: fit-content;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-        }
-
-        .context-toolbar.visible {
-            display: inline-flex;
-        }
-
-        .book-overview-editor {
-            outline: none;
-            font-size: 13.5px;
-            line-height: 1.6;
-            color: var(--text-main);
-            min-height: 70px;
-            word-break: break-word;
-            white-space: pre-wrap;
-        }
-
-        .book-overview-editor[placeholder]:empty:before {
-            content: attr(placeholder);
-            color: var(--text-muted);
-            opacity: 0.5;
-            pointer-events: none;
-            display: block;
-        }
-
-        .book-overview-editor ul, .book-overview-editor ol {
-            padding-left: 18px;
-            margin: 4px 0;
         }
 
         /* Wishlist */
@@ -1797,7 +1489,7 @@
             </div>
         </header>
 
-        <!-- Permanent Scrolling Neon Ticker Banner -->
+        <!-- Permanent Scrolling Neon Ticker Banner (Always stays mounted) -->
         <div class="neon-ticker-banner" id="neonTickerBanner">
             <div class="neon-tag"><span>⚡</span> SYNC</div>
             <div class="marquee-track">
@@ -1957,7 +1649,7 @@
                 </button>
             </div>
 
-            <!-- Permanent Fixed 2-Row Toolbar (Zero Bounce) -->
+            <!-- Permanent Fixed 2-Row Toolbar -->
             <div class="notepad-global-toolbar" id="notepadGlobalToolbar">
                 <div class="notepad-toolbar-row">
                     <div class="notepad-format-group">
@@ -1998,7 +1690,7 @@
                 </div>
             </div>
 
-            <!-- Clean Notepad Stack -->
+            <!-- Notes Stack -->
             <div id="panelNotes">
                 <div class="notes-stack-container" id="stickyNotesContainer"></div>
             </div>
@@ -2012,12 +1704,76 @@
             </div>
         </main>
 
-        <!-- ADHU DASHBOARD -->
+        <!-- ADHU DASHBOARD (WITH MILK TRACKER & CARTOONS) -->
         <main id="view-adhu" class="view-content">
             <div class="features-stack">
+
+                <!-- FEATURE 1: MILK TRACKER (600ml - 900ml TARGETS) -->
+                <div class="dropdown-feature-card open" id="adhuMilkCard">
+                    <div class="dropdown-feature-header" onclick="toggleAdhuMilkDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">🍼</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Milk Tracker</span>
+                                <span class="feature-sub-title" id="milkHeaderSub">Today: 0 ml</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="milk-progress-box">
+                            <div class="milk-metrics-row">
+                                <div>
+                                    <span style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Consumed</span>
+                                    <div class="milk-total-current"><span id="milkTotalVal">0</span> <small style="font-size:14px; font-weight:600;">ml</small></div>
+                                </div>
+                                <div class="milk-targets-sub">
+                                    Min: <strong>600 ml</strong><br>
+                                    Max: <strong>900 ml</strong>
+                                </div>
+                            </div>
+
+                            <!-- Progress Track -->
+                            <div class="milk-bar-track">
+                                <div class="milk-bar-fill" id="milkProgressBar" style="width: 0%;"></div>
+                            </div>
+
+                            <!-- Percentage Badges -->
+                            <div class="milk-pct-tags">
+                                <div class="milk-pct-pill">
+                                    <span style="color:var(--text-muted);">Min Goal:</span>
+                                    <strong id="milkMinPct" style="color: #FF9800;">0%</strong>
+                                </div>
+                                <div class="milk-pct-pill">
+                                    <span style="color:var(--text-muted);">Max Goal:</span>
+                                    <strong id="milkMaxPct" style="color: #2E7D32;">0%</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Milk Input Bar -->
+                        <div class="milk-input-bar">
+                            <input type="number" id="milkInputVal" class="milk-input" placeholder="Amount (ml)..." min="1" step="5" onkeypress="if(event.key==='Enter') addMilkEntry()">
+                            <button class="add-note-btn" onclick="addMilkEntry()">+ Log</button>
+                        </div>
+
+                        <!-- Quick Presets -->
+                        <div class="milk-quick-pills">
+                            <span class="milk-pill-btn" onclick="logQuickMilk(60)">+60 ml</span>
+                            <span class="milk-pill-btn" onclick="logQuickMilk(90)">+90 ml</span>
+                            <span class="milk-pill-btn" onclick="logQuickMilk(120)">+120 ml</span>
+                            <span class="milk-pill-btn" onclick="logQuickMilk(150)">+150 ml</span>
+                            <span class="milk-pill-btn" onclick="logQuickMilk(180)">+180 ml</span>
+                        </div>
+
+                        <!-- Logged Chips -->
+                        <div class="milk-chips-history" id="milkChipsHistory"></div>
+                    </div>
+                </div>
                 
-                <!-- FEATURE 1: BOOKS WISHLIST (EXPANDABLE DROPDOWN) -->
-                <div class="dropdown-feature-card adhu-dropdown-card open" id="adhuWishlistCard">
+                <!-- FEATURE 2: BOOKS WISHLIST -->
+                <div class="dropdown-feature-card" id="adhuWishlistCard">
                     <div class="dropdown-feature-header" onclick="toggleAdhuWishlistDropdown()">
                         <div class="feature-header-left">
                             <div class="feature-icon-badge">📚</div>
@@ -2053,7 +1809,7 @@
                     </div>
                 </div>
 
-                <!-- FEATURE 2: CARTOONS TIER LIST (HORIZONTAL SWIPE ROWS) -->
+                <!-- FEATURE 3: CARTOONS TIER LIST (HORIZONTAL SWIPE ROWS) -->
                 <div class="dropdown-feature-card open" id="cartoonsTierCard">
                     <div class="dropdown-feature-header" onclick="toggleCartoonsTierDropdown()">
                         <div class="feature-header-left">
@@ -2204,7 +1960,7 @@
             <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
                 <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Instant Local Backup</div>
                 <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.4;">
-                    Download an updated snapshot of your entire motherboard (notes, to-dos, cartoons, wishlist).
+                    Download an updated snapshot of your entire motherboard (notes, to-dos, cartoons, milk log, wishlist).
                 </p>
                 <button class="modal-save-btn" style="background: var(--primary);" onclick="triggerAppSave()">
                     💾 Save Full Backup File
@@ -2859,6 +2615,129 @@
         }
 
         // ----------------------------------------------------
+        // ADHU'S MILK TRACKER LOGIC (600ml - 900ml)
+        // ----------------------------------------------------
+        let milkEntries = [];
+
+        function getTodayDateString() {
+            const d = new Date();
+            return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+        }
+
+        function loadMilkData() {
+            try {
+                const stored = localStorage.getItem('lc_adhu_milk_data');
+                const lastDate = localStorage.getItem('lc_adhu_milk_date');
+                const today = getTodayDateString();
+
+                if (stored && lastDate === today) {
+                    milkEntries = JSON.parse(stored);
+                } else {
+                    milkEntries = [];
+                    localStorage.setItem('lc_adhu_milk_date', today);
+                }
+            } catch(e) {
+                milkEntries = [];
+            }
+
+            const isDropdownOpen = localStorage.getItem('lc_adhu_milk_open');
+            const card = document.getElementById('adhuMilkCard');
+            if (card && isDropdownOpen !== null) {
+                if (isDropdownOpen === 'false') card.classList.remove('open');
+                else card.classList.add('open');
+            }
+
+            renderMilkTracker();
+        }
+
+        function saveMilkData() {
+            try {
+                localStorage.setItem('lc_adhu_milk_data', JSON.stringify(milkEntries));
+                localStorage.setItem('lc_adhu_milk_date', getTodayDateString());
+            } catch(e) {}
+        }
+
+        function toggleAdhuMilkDropdown() {
+            const card = document.getElementById('adhuMilkCard');
+            if (card) {
+                card.classList.toggle('open');
+                try {
+                    localStorage.setItem('lc_adhu_milk_open', card.classList.contains('open'));
+                } catch(e) {}
+            }
+        }
+
+        function renderMilkTracker() {
+            const total = milkEntries.reduce((sum, item) => sum + item.amount, 0);
+
+            // Update numerical and subtitle displays
+            document.getElementById('milkTotalVal').innerText = total;
+            document.getElementById('milkHeaderSub').innerText = `Today: ${total} ml`;
+
+            // Percentage computations (Min: 600 ml, Max: 900 ml)
+            const minPct = Math.round((total / 600) * 100);
+            const maxPct = Math.round((total / 900) * 100);
+
+            document.getElementById('milkMinPct').innerText = `${minPct}%`;
+            document.getElementById('milkMaxPct').innerText = `${maxPct}%`;
+
+            // Visual bar fill clamped to 100% based on max goal (900 ml)
+            const barFillPct = Math.min(100, Math.round((total / 900) * 100));
+            const progressBar = document.getElementById('milkProgressBar');
+            if (progressBar) {
+                progressBar.style.width = `${barFillPct}%`;
+                if (total >= 600) {
+                    progressBar.style.background = 'linear-gradient(90deg, #FFB380 0%, #00E676 100%)';
+                } else {
+                    progressBar.style.background = '#FFB380';
+                }
+            }
+
+            // Render logged chips
+            const container = document.getElementById('milkChipsHistory');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (milkEntries.length === 0) {
+                container.innerHTML = '<span style="font-size:11px; color:var(--text-muted);">No feedings logged today.</span>';
+                return;
+            }
+
+            milkEntries.forEach((item, index) => {
+                const chip = document.createElement('div');
+                chip.className = 'milk-entry-chip';
+                chip.innerHTML = `
+                    <span><strong>${item.amount}</strong> ml</span>
+                    <button class="milk-entry-del" onclick="deleteMilkEntry(${index})">✕</button>
+                `;
+                container.appendChild(chip);
+            });
+        }
+
+        function addMilkEntry() {
+            const input = document.getElementById('milkInputVal');
+            const val = parseInt(input.value);
+            if (!val || val <= 0) return;
+
+            milkEntries.push({ id: Date.now().toString(), amount: val });
+            saveMilkData();
+            renderMilkTracker();
+            input.value = '';
+        }
+
+        function logQuickMilk(amount) {
+            milkEntries.push({ id: Date.now().toString(), amount: amount });
+            saveMilkData();
+            renderMilkTracker();
+        }
+
+        function deleteMilkEntry(index) {
+            milkEntries.splice(index, 1);
+            saveMilkData();
+            renderMilkTracker();
+        }
+
+        // ----------------------------------------------------
         // CARTOONS TIER LIST LOGIC (WITH LONG PRESS SUPPORT)
         // ----------------------------------------------------
         let cartoonsList = [];
@@ -3204,7 +3083,7 @@
 
                             <div class="book-overview-inner-actions">
                                 ${hasDrive ? `<button class="book-inner-action-btn" onclick="editBookDriveLink('${item.id}')">✏️ Edit Link</button>` : ''}
-                                <button class="book-inner-action-btn delete" onclick="deleteBookOverviewItem('${item.id}')">🗑️️ Delete</button>
+                                <button class="book-inner-action-btn delete" onclick="deleteBookOverviewItem('${item.id}')">🗑️ Delete</button>
                             </div>
                         </div>
 
@@ -3692,13 +3571,14 @@
             saveLinksToStorage();
             saveKeeBookOverviews();
             saveCartoonsList();
+            saveMilkData();
             syncAllAdhuBlocks();
 
             const payload = getFullPayload();
             const jsonString = JSON.stringify(payload, null, 2);
             localStorage.setItem('lc_full_app_snapshot', jsonString);
 
-            // Flash visual confirmation on the banner save button without dismissing the ticker
+            // Flash visual confirmation on banner save button
             const saveBtn = document.getElementById('bannerSaveBtn');
             if (saveBtn) {
                 const originalText = saveBtn.innerHTML;
@@ -3765,7 +3645,9 @@
                 adhuWishlistColor: localStorage.getItem('lc_adhu_wishlist_color') || 'default',
                 stickySortAsc: noteSortAsc,
                 keeBookOverviews: keeBookOverviews,
-                cartoonsList: cartoonsList
+                cartoonsList: cartoonsList,
+                milkData: milkEntries,
+                milkDate: getTodayDateString()
             };
         }
 
@@ -3865,10 +3747,16 @@
                         cartoonsList = data.cartoonsList;
                         saveCartoonsList();
                     }
+
+                    if (data.milkData) {
+                        milkEntries = data.milkData;
+                        saveMilkData();
+                    }
                     
                     loadAdhuWishlistPage();
                     loadKeeBookOverviews();
                     loadCartoonsList();
+                    loadMilkData();
                     saveLinksToStorage();
 
                     statusEl.innerText = '✓ Data restored successfully!';
@@ -3929,6 +3817,7 @@
             loadAdhuWishlistPage();
             loadKeeBookOverviews();
             loadCartoonsList();
+            loadMilkData();
             sortNotesList();
             renderNotesList();
             checkBackupReminder(); 
