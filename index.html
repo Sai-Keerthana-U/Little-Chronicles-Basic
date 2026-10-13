@@ -1099,7 +1099,7 @@
             display: flex;
         }
 
-        /* Web Hub Styles */
+        /* Workout / Web Hub Styles */
         .webhub-subtabs {
             display: flex;
             background: var(--surface-subtle);
@@ -1849,8 +1849,8 @@
                 </button>
 
                 <div class="profile-switcher" id="profileSwitcher">
-                    <button class="switch-btn active" onclick="switchProfile(this, 'user1')">User 1</button>
-                    <button class="switch-btn" onclick="switchProfile(this, 'user2')">User 2</button>
+                    <button class="switch-btn active" id="profileTabBtn1" onclick="switchProfile(this, 'user1')">User 1</button>
+                    <button class="switch-btn" id="profileTabBtn2" onclick="switchProfile(this, 'user2')">User 2</button>
                 </div>
             </div>
         </header>
@@ -1951,14 +1951,14 @@
                     </div>
                 </div>
 
-                <!-- FEATURE: WEB HUB (WEBSITES, YOUTUBE/INSTA, AND SIMPLE NOTES) -->
-                <div class="dropdown-feature-card open" id="webHubCard">
-                    <div class="dropdown-feature-header" onclick="toggleWebHubDropdown()">
+                <!-- FEATURE: WORKOUT HUB -->
+                <div class="dropdown-feature-card open" id="workoutCard">
+                    <div class="dropdown-feature-header" onclick="toggleWorkoutDropdown()">
                         <div class="feature-header-left">
-                            <div class="feature-icon-badge">🌐</div>
+                            <div class="feature-icon-badge">💪</div>
                             <div class="feature-titles-group">
-                                <span class="feature-main-title">Web Hub</span>
-                                <span class="feature-sub-title" id="webHubCountSub">Websites, Videos & Notes</span>
+                                <span class="feature-main-title">Workout</span>
+                                <span class="feature-sub-title" id="workoutCountSub">Websites, Videos & Routine Notes</span>
                             </div>
                         </div>
                         <div class="feature-chevron">▼</div>
@@ -1966,34 +1966,34 @@
 
                     <div class="dropdown-feature-body">
                         <div class="webhub-subtabs">
-                            <button class="webhub-subtab-btn active" id="subtabSitesBtn" onclick="switchWebHubSubtab('sites')">🔗 Websites</button>
-                            <button class="webhub-subtab-btn" id="subtabMediaBtn" onclick="switchWebHubSubtab('media')">📱 YouTube / Insta</button>
-                            <button class="webhub-subtab-btn" id="subtabNotesBtn" onclick="switchWebHubSubtab('notes')">📝 Notes</button>
+                            <button class="webhub-subtab-btn active" id="subtabSitesBtn" onclick="switchWorkoutSubtab('sites')">🔗 Websites</button>
+                            <button class="webhub-subtab-btn" id="subtabMediaBtn" onclick="switchWorkoutSubtab('media')">📱 YouTube / Insta</button>
+                            <button class="webhub-subtab-btn" id="subtabNotesBtn" onclick="switchWorkoutSubtab('notes')">📝 Notes</button>
                         </div>
 
                         <!-- Sub-panel 1: Websites -->
-                        <div class="webhub-panel" id="webhubPanelSites">
+                        <div class="webhub-panel" id="workoutPanelSites">
                             <div class="webhub-input-row">
-                                <input type="text" id="newSiteName" class="webhub-input" placeholder="Site name (e.g. Reference)">
+                                <input type="text" id="newSiteName" class="webhub-input" placeholder="Site name (e.g. Workout Plans)">
                                 <input type="url" id="newSiteUrl" class="webhub-input" placeholder="URL (https://...)">
-                                <button class="add-note-btn" onclick="addWebHubSite()">+ Add</button>
+                                <button class="add-note-btn" onclick="addWorkoutSite()">+ Add</button>
                             </div>
-                            <div class="webhub-badges-grid" id="webhubSitesList"></div>
+                            <div class="webhub-badges-grid" id="workoutSitesList"></div>
                         </div>
 
                         <!-- Sub-panel 2: YouTube / Instagram -->
-                        <div class="webhub-panel" id="webhubPanelMedia" style="display:none;">
+                        <div class="webhub-panel" id="workoutPanelMedia" style="display:none;">
                             <div class="webhub-input-row">
-                                <input type="text" id="newMediaTitle" class="webhub-input" placeholder="Video/Reel title...">
+                                <input type="text" id="newMediaTitle" class="webhub-input" placeholder="Video/Reel title (e.g. Squat Form)">
                                 <input type="url" id="newMediaUrl" class="webhub-input" placeholder="YouTube/Insta link...">
-                                <button class="add-note-btn" onclick="addWebHubMedia()">+ Add</button>
+                                <button class="add-note-btn" onclick="addWorkoutMedia()">+ Add</button>
                             </div>
-                            <div class="webhub-badges-grid" id="webhubMediaList"></div>
+                            <div class="webhub-badges-grid" id="workoutMediaList"></div>
                         </div>
 
                         <!-- Sub-panel 3: Simple Notes -->
-                        <div class="webhub-panel" id="webhubPanelNotes" style="display:none;">
-                            <textarea id="webHubSimpleNotesText" class="webhub-simple-notes" placeholder="Jot down routines, plans, reminders, or quick thoughts..." oninput="saveWebHubSimpleNotes()"></textarea>
+                        <div class="webhub-panel" id="workoutPanelNotes" style="display:none;">
+                            <textarea id="workoutSimpleNotesText" class="webhub-simple-notes" placeholder="Jot down workout splits, routine plans, reps, weights or reminders..." oninput="saveWorkoutSimpleNotes()"></textarea>
                         </div>
                     </div>
                 </div>
@@ -2173,7 +2173,7 @@
                 </div>
                 
                 <!-- FEATURE 2: WISHLIST -->
-                <div class="dropdown-feature-card" id="wishlistCard">
+                <div class="dropdown-feature-card open" id="wishlistCard">
                     <div class="dropdown-feature-header" onclick="toggleWishlistDropdown()">
                         <div class="feature-header-left">
                             <div class="feature-icon-badge">📚</div>
@@ -2343,12 +2343,21 @@
         </div>
     </div>
 
-    <!-- MODAL: SETTINGS & BACKUP -->
+    <!-- MODAL: SETTINGS & BACKUP (WITH CUSTOM PROFILE NAMES) -->
     <div class="modal-overlay" id="driveModal" onclick="closeDriveSettingsModal(event)">
         <div class="modal-sheet" onclick="event.stopPropagation()">
             <div class="modal-header">
                 <h3 class="modal-title">Settings & Backup</h3>
                 <button class="drawer-close-btn" onclick="closeDriveSettingsModal()">✕</button>
+            </div>
+
+            <!-- Profile Display Names Customizer -->
+            <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Profile Display Names</div>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="customNameInput1" class="webhub-input" placeholder="Name for Profile 1" oninput="saveCustomProfileNames()">
+                    <input type="text" id="customNameInput2" class="webhub-input" placeholder="Name for Profile 2" oninput="saveCustomProfileNames()">
+                </div>
             </div>
 
             <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
@@ -2395,6 +2404,38 @@
     </div>
 
     <script>
+        // Custom Profile Names Logic
+        function loadCustomProfileNames() {
+            const name1 = localStorage.getItem('lc_profile_name_1') || 'User 1';
+            const name2 = localStorage.getItem('lc_profile_name_2') || 'User 2';
+
+            const tab1 = document.getElementById('profileTabBtn1');
+            const tab2 = document.getElementById('profileTabBtn2');
+            const inp1 = document.getElementById('customNameInput1');
+            const inp2 = document.getElementById('customNameInput2');
+
+            if (tab1) tab1.innerText = name1;
+            if (tab2) tab2.innerText = name2;
+            if (inp1) inp1.value = name1;
+            if (inp2) inp2.value = name2;
+        }
+
+        function saveCustomProfileNames() {
+            const inp1 = document.getElementById('customNameInput1');
+            const inp2 = document.getElementById('customNameInput2');
+
+            const name1 = (inp1 && inp1.value.trim()) ? inp1.value.trim() : 'User 1';
+            const name2 = (inp2 && inp2.value.trim()) ? inp2.value.trim() : 'User 2';
+
+            localStorage.setItem('lc_profile_name_1', name1);
+            localStorage.setItem('lc_profile_name_2', name2);
+
+            const tab1 = document.getElementById('profileTabBtn1');
+            const tab2 = document.getElementById('profileTabBtn2');
+            if (tab1) tab1.innerText = name1;
+            if (tab2) tab2.innerText = name2;
+        }
+
         function switchProfile(button, profileKey) {
             document.querySelectorAll('.switch-btn').forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
@@ -2610,14 +2651,8 @@
             const name = document.getElementById('modalLinkName').value.trim();
             let url = document.getElementById('modalLinkUrl').value.trim();
 
-            if (!name || !url) {
-                alert('Please enter both a name and a link URL.');
-                return;
-            }
-
-            if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                url = 'https://' + url;
-            }
+            if (!name || !url) return;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
 
             const newLink = { id: Date.now().toString(), name, url };
 
@@ -2641,7 +2676,7 @@
             renderExistingModalLinks();
         }
 
-        // Generic Hub Data
+        // Hub Data
         let currentHubTab = 'notes';
 
         function switchHubTab(tab) {
@@ -2694,7 +2729,6 @@
             return dateStr + ', ' + timeStr;
         }
 
-        // Generic Starter Notes
         let notesList = [
             {
                 id: '1',
@@ -2965,104 +2999,97 @@
             }
         }
 
-        // Generic Starter Web Hub
-        let webHubSites = [];
-        let webHubMedia = [];
-        let webHubSimpleNotes = '';
+        // WORKOUT HUB LOGIC (User 1)
+        let workoutSites = [];
+        let workoutMedia = [];
+        let workoutSimpleNotes = '';
 
-        function loadWebHubData() {
+        function loadWorkoutData() {
             try {
-                const sSites = localStorage.getItem('lc_webhub_sites');
-                if (sSites) webHubSites = JSON.parse(sSites);
-                else {
-                    webHubSites = [
-                        { id: 'wh_s1', name: 'Open Culture', url: 'https://www.openculture.com' }
-                    ];
-                }
+                // Support both generic and previous webhub keys
+                const sSites = localStorage.getItem('lc_workout_sites') || localStorage.getItem('lc_webhub_sites');
+                if (sSites) workoutSites = JSON.parse(sSites);
+                else workoutSites = [];
 
-                const sMedia = localStorage.getItem('lc_webhub_media');
-                if (sMedia) webHubMedia = JSON.parse(sMedia);
-                else {
-                    webHubMedia = [
-                        { id: 'wh_m1', title: 'Sample Resource', url: 'https://youtube.com', type: 'youtube' }
-                    ];
-                }
+                const sMedia = localStorage.getItem('lc_workout_media') || localStorage.getItem('lc_webhub_media');
+                if (sMedia) workoutMedia = JSON.parse(sMedia);
+                else workoutMedia = [];
 
-                const sNotes = localStorage.getItem('lc_webhub_notes');
-                if (sNotes !== null) webHubSimpleNotes = sNotes;
+                const sNotes = localStorage.getItem('lc_workout_notes') || localStorage.getItem('lc_webhub_notes');
+                if (sNotes !== null) workoutSimpleNotes = sNotes;
             } catch(e) {
-                webHubSites = [];
-                webHubMedia = [];
-                webHubSimpleNotes = '';
+                workoutSites = [];
+                workoutMedia = [];
+                workoutSimpleNotes = '';
             }
 
-            const isCardOpen = localStorage.getItem('lc_webhub_open');
-            const card = document.getElementById('webHubCard');
+            const isCardOpen = localStorage.getItem('lc_workout_open');
+            const card = document.getElementById('workoutCard');
             if (card && isCardOpen !== null) {
                 if (isCardOpen === 'false') card.classList.remove('open');
                 else card.classList.add('open');
             }
 
-            const textarea = document.getElementById('webHubSimpleNotesText');
-            if (textarea) textarea.value = webHubSimpleNotes;
+            const textarea = document.getElementById('workoutSimpleNotesText');
+            if (textarea) textarea.value = workoutSimpleNotes;
 
-            renderWebHubSites();
-            renderWebHubMedia();
+            renderWorkoutSites();
+            renderWorkoutMedia();
         }
 
-        function saveWebHubData() {
+        function saveWorkoutData() {
             try {
-                localStorage.setItem('lc_webhub_sites', JSON.stringify(webHubSites));
-                localStorage.setItem('lc_webhub_media', JSON.stringify(webHubMedia));
-                localStorage.setItem('lc_webhub_notes', webHubSimpleNotes);
+                localStorage.setItem('lc_workout_sites', JSON.stringify(workoutSites));
+                localStorage.setItem('lc_workout_media', JSON.stringify(workoutMedia));
+                localStorage.setItem('lc_workout_notes', workoutSimpleNotes);
             } catch(e) {}
         }
 
-        function toggleWebHubDropdown() {
-            const card = document.getElementById('webHubCard');
+        function toggleWorkoutDropdown() {
+            const card = document.getElementById('workoutCard');
             if (card) {
                 card.classList.toggle('open');
                 try {
-                    localStorage.setItem('lc_webhub_open', card.classList.contains('open'));
+                    localStorage.setItem('lc_workout_open', card.classList.contains('open'));
                 } catch(e) {}
             }
         }
 
-        function switchWebHubSubtab(tab) {
+        function switchWorkoutSubtab(tab) {
             document.querySelectorAll('.webhub-subtab-btn').forEach(btn => btn.classList.remove('active'));
             document.getElementById('subtabSitesBtn').classList.toggle('active', tab === 'sites');
             document.getElementById('subtabMediaBtn').classList.toggle('active', tab === 'media');
             document.getElementById('subtabNotesBtn').classList.toggle('active', tab === 'notes');
 
-            document.getElementById('webhubPanelSites').style.display = tab === 'sites' ? 'flex' : 'none';
-            document.getElementById('webhubPanelMedia').style.display = tab === 'media' ? 'flex' : 'none';
-            document.getElementById('webhubPanelNotes').style.display = tab === 'notes' ? 'flex' : 'none';
+            document.getElementById('workoutPanelSites').style.display = tab === 'sites' ? 'flex' : 'none';
+            document.getElementById('workoutPanelMedia').style.display = tab === 'media' ? 'flex' : 'none';
+            document.getElementById('workoutPanelNotes').style.display = tab === 'notes' ? 'flex' : 'none';
         }
 
-        function renderWebHubSites() {
-            const list = document.getElementById('webhubSitesList');
+        function renderWorkoutSites() {
+            const list = document.getElementById('workoutSitesList');
             if (!list) return;
             list.innerHTML = '';
 
-            if (webHubSites.length === 0) {
+            if (workoutSites.length === 0) {
                 list.innerHTML = '<span style="font-size:11px; color:var(--text-muted);">No websites saved yet.</span>';
                 return;
             }
 
-            webHubSites.forEach((site, index) => {
+            workoutSites.forEach((site, index) => {
                 const chip = document.createElement('div');
                 chip.className = 'webhub-chip';
                 chip.innerHTML = `
                     <a href="${site.url}" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
                         🌐 ${site.name} <span class="arrow-up-right">↗</span>
                     </a>
-                    <button class="webhub-chip-del" onclick="deleteWebHubSite(${index})">✕</button>
+                    <button class="webhub-chip-del" onclick="deleteWorkoutSite(${index})">✕</button>
                 `;
                 list.appendChild(chip);
             });
         }
 
-        function addWebHubSite() {
+        function addWorkoutSite() {
             const nameInput = document.getElementById('newSiteName');
             const urlInput = document.getElementById('newSiteUrl');
             const name = nameInput.value.trim();
@@ -3071,30 +3098,30 @@
             if (!name || !url) return;
             if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
 
-            webHubSites.push({ id: 'wh_s_' + Date.now().toString(), name, url });
-            saveWebHubData();
-            renderWebHubSites();
+            workoutSites.push({ id: 'w_s_' + Date.now().toString(), name, url });
+            saveWorkoutData();
+            renderWorkoutSites();
             nameInput.value = '';
             urlInput.value = '';
         }
 
-        function deleteWebHubSite(index) {
-            webHubSites.splice(index, 1);
-            saveWebHubData();
-            renderWebHubSites();
+        function deleteWorkoutSite(index) {
+            workoutSites.splice(index, 1);
+            saveWorkoutData();
+            renderWorkoutSites();
         }
 
-        function renderWebHubMedia() {
-            const list = document.getElementById('webhubMediaList');
+        function renderWorkoutMedia() {
+            const list = document.getElementById('workoutMediaList');
             if (!list) return;
             list.innerHTML = '';
 
-            if (webHubMedia.length === 0) {
+            if (workoutMedia.length === 0) {
                 list.innerHTML = '<span style="font-size:11px; color:var(--text-muted);">No video or reel links saved yet.</span>';
                 return;
             }
 
-            webHubMedia.forEach((media, index) => {
+            workoutMedia.forEach((media, index) => {
                 const isYt = media.type === 'youtube' || media.url.includes('youtu');
                 const isInsta = media.type === 'instagram' || media.url.includes('instagram');
                 const tagClass = isYt ? 'youtube' : (isInsta ? 'instagram' : '');
@@ -3106,13 +3133,13 @@
                     <a href="${media.url}" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
                         ${icon}: ${media.title} <span class="arrow-up-right">↗</span>
                     </a>
-                    <button class="webhub-chip-del" onclick="deleteWebHubMedia(${index})">✕</button>
+                    <button class="webhub-chip-del" onclick="deleteWorkoutMedia(${index})">✕</button>
                 `;
                 list.appendChild(chip);
             });
         }
 
-        function addWebHubMedia() {
+        function addWorkoutMedia() {
             const titleInput = document.getElementById('newMediaTitle');
             const urlInput = document.getElementById('newMediaUrl');
             const title = titleInput.value.trim();
@@ -3125,28 +3152,28 @@
             if (url.includes('youtu.be') || url.includes('youtube.com')) type = 'youtube';
             else if (url.includes('instagram.com')) type = 'instagram';
 
-            webHubMedia.push({ id: 'wh_m_' + Date.now().toString(), title, url, type });
-            saveWebHubData();
-            renderWebHubMedia();
+            workoutMedia.push({ id: 'w_m_' + Date.now().toString(), title, url, type });
+            saveWorkoutData();
+            renderWorkoutMedia();
             titleInput.value = '';
             urlInput.value = '';
         }
 
-        function deleteWebHubMedia(index) {
-            webHubMedia.splice(index, 1);
-            saveWebHubData();
-            renderWebHubMedia();
+        function deleteWorkoutMedia(index) {
+            workoutMedia.splice(index, 1);
+            saveWorkoutData();
+            renderWorkoutMedia();
         }
 
-        function saveWebHubSimpleNotes() {
-            const textarea = document.getElementById('webHubSimpleNotesText');
+        function saveWorkoutSimpleNotes() {
+            const textarea = document.getElementById('workoutSimpleNotesText');
             if (textarea) {
-                webHubSimpleNotes = textarea.value;
-                saveWebHubData();
+                workoutSimpleNotes = textarea.value;
+                saveWorkoutData();
             }
         }
 
-        // Generic Starter Milk Data
+        // MILK TRACKER LOGIC
         let milkEntries = [];
 
         function getTodayDateString() {
@@ -3156,8 +3183,9 @@
 
         function loadMilkData() {
             try {
-                const stored = localStorage.getItem('lc_milk_data');
-                const lastDate = localStorage.getItem('lc_milk_date');
+                // Support both keys
+                const stored = localStorage.getItem('lc_milk_data') || localStorage.getItem('lc_adhu_milk_data');
+                const lastDate = localStorage.getItem('lc_milk_date') || localStorage.getItem('lc_adhu_milk_date');
                 const today = getTodayDateString();
 
                 if (stored && lastDate === today) {
@@ -3247,7 +3275,7 @@
             renderMilkTracker();
         }
 
-        // Generic Starter Cartoons
+        // CARTOONS TIER LIST LOGIC
         let cartoonsList = [];
         let activeCartoonId = null;
         let pressTimer = null;
@@ -3258,11 +3286,7 @@
                 if (stored) {
                     cartoonsList = JSON.parse(stored);
                 } else {
-                    cartoonsList = [
-                        { id: 'c1', name: 'Example Cartoon A', tier: 'S' },
-                        { id: 'c2', name: 'Example Cartoon B', tier: 'A' },
-                        { id: 'c3', name: 'Example Cartoon C', tier: 'B' }
-                    ];
+                    cartoonsList = [];
                 }
             } catch(e) {
                 cartoonsList = [];
@@ -3396,7 +3420,7 @@
             input.value = '';
         }
 
-        // Generic Starter Tasks
+        // TO-DO LOGIC
         let todoList = [
             { id: '1', text: 'Sample generic task', completed: false, timestamp: getFormattedTimestamp() }
         ];
@@ -3475,24 +3499,16 @@
             renderTodoList();
         }
 
-        // Generic Starter Books Overview
+        // BOOKS OVERVIEW
         let bookOverviews = [];
 
         function loadBookOverviews() {
             try {
-                const stored = localStorage.getItem('lc_book_overviews');
+                const stored = localStorage.getItem('lc_book_overviews') || localStorage.getItem('lc_kee_book_overviews');
                 if (stored) {
                     bookOverviews = JSON.parse(stored);
                 } else {
-                    bookOverviews = [
-                        {
-                            id: 'bo_1',
-                            title: 'Sample Book Title',
-                            content: 'Summary notes, takeaways, or chapter thoughts.',
-                            driveUrl: '',
-                            expanded: false
-                        }
-                    ];
+                    bookOverviews = [];
                 }
             } catch(e) {
                 bookOverviews = [];
@@ -3673,7 +3689,7 @@
             }
         }
 
-        // Generic Starter Wishlist
+        // UNIVERSAL WISHLIST RESTORE (Fixes 0 items issue)
         const WL_SHEET_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
         let currentWlColor = 'default';
         let savedRange = null;
@@ -3699,11 +3715,20 @@
 
         function loadWishlistPage() {
             try {
-                const storedBlocks = localStorage.getItem('lc_wishlist_blocks');
+                // Reads from BOTH current and previous keys to guarantee zero data loss
+                const storedBlocks = localStorage.getItem('lc_wishlist_blocks') || localStorage.getItem('lc_adhu_blocks');
                 if (storedBlocks) {
                     wishlistBlocks = JSON.parse(storedBlocks);
+                    wishlistBlocks.forEach(b => {
+                        b.html = cleanHtmlContent(b.html);
+                    });
                 } else {
-                    wishlistBlocks = [{ id: Date.now().toString(), html: '', checked: false }];
+                    const oldContent = localStorage.getItem('lc_adhu_wishlist_content');
+                    if (oldContent && oldContent.trim() !== '') {
+                        wishlistBlocks = [{ id: Date.now().toString(), html: cleanHtmlContent(oldContent), checked: false }];
+                    } else {
+                        wishlistBlocks = [{ id: Date.now().toString(), html: '', checked: false }];
+                    }
                 }
             } catch(e) {
                 wishlistBlocks = [{ id: Date.now().toString(), html: '', checked: false }];
@@ -3716,6 +3741,7 @@
         function saveWishlistBlocks() {
             try {
                 localStorage.setItem('lc_wishlist_blocks', JSON.stringify(wishlistBlocks));
+                localStorage.setItem('lc_adhu_blocks', JSON.stringify(wishlistBlocks)); // dual sync
             } catch (e) {}
             updateWishlistSubtitle();
         }
@@ -3862,7 +3888,7 @@
             syncAllWishlistBlocks();
         }
 
-        // Backup and Storage Management
+        // BACKUP & SAVE LOGIC
         function checkBackupReminder() {
             const badge = document.getElementById('backupBadge');
             const lastBackupStr = localStorage.getItem('lc_last_backup_time');
@@ -3911,7 +3937,7 @@
             saveBookOverviews();
             saveCartoonsList();
             saveMilkData();
-            saveWebHubData();
+            saveWorkoutData();
             syncAllWishlistBlocks();
 
             const payload = getFullPayload();
@@ -3963,18 +3989,23 @@
                 app: 'The Motherboard',
                 lastUpdated: new Date().toISOString(),
                 notesList,
+                stickyNotes: notesList,
                 todoList,
                 userEbooks,
                 userAudiobooks,
                 userTools,
                 wishlistBlocks,
+                adhuBlocks: wishlistBlocks, // backwards-compatible export
                 bookOverviews,
+                keeBookOverviews: bookOverviews,
                 cartoonsList,
                 milkData: milkEntries,
                 milkDate: getTodayDateString(),
-                webHubSites,
-                webHubMedia,
-                webHubSimpleNotes
+                workoutSites,
+                workoutMedia,
+                workoutSimpleNotes,
+                profileName1: localStorage.getItem('lc_profile_name_1') || 'User 1',
+                profileName2: localStorage.getItem('lc_profile_name_2') || 'User 2'
             };
         }
 
@@ -4016,6 +4047,7 @@
             markBackupComplete(); 
         }
 
+        // FULL RESTORE FUNCTION: Reads all legacy & current keys
         function handleRestoreFile(input) {
             const file = input.files[0];
             const statusEl = document.getElementById('syncStatus');
@@ -4025,18 +4057,52 @@
             reader.onload = function(e) {
                 try {
                     const data = JSON.parse(e.target.result);
-                    if (data.notesList) notesList = data.notesList;
+                    
+                    // Notes
+                    if (data.notesList || data.stickyNotes) {
+                        notesList = data.notesList || data.stickyNotes;
+                    }
+                    // To-Do
                     if (data.todoList) todoList = data.todoList;
+                    
+                    // Vault Resources
                     if (data.userEbooks) userEbooks = data.userEbooks;
                     if (data.userAudiobooks) userAudiobooks = data.userAudiobooks;
                     if (data.userTools) userTools = data.userTools;
-                    if (data.wishlistBlocks) wishlistBlocks = data.wishlistBlocks;
-                    if (data.bookOverviews) bookOverviews = data.bookOverviews;
+                    
+                    // Wishlist (Supports adhuBlocks, wishlistBlocks, adhuWishlistContent)
+                    if (data.adhuBlocks || data.wishlistBlocks) {
+                        wishlistBlocks = data.adhuBlocks || data.wishlistBlocks;
+                        wishlistBlocks.forEach(b => {
+                            b.html = cleanHtmlContent(b.html);
+                        });
+                    } else if (data.adhuWishlistContent !== undefined) {
+                        wishlistBlocks = [{ id: Date.now().toString(), html: cleanHtmlContent(data.adhuWishlistContent), checked: false }];
+                    }
+
+                    // Books Overview
+                    if (data.bookOverviews || data.keeBookOverviews) {
+                        bookOverviews = data.bookOverviews || data.keeBookOverviews;
+                    }
+
+                    // Cartoons
                     if (data.cartoonsList) cartoonsList = data.cartoonsList;
+
+                    // Milk Tracker
                     if (data.milkData) milkEntries = data.milkData;
-                    if (data.webHubSites) webHubSites = data.webHubSites;
-                    if (data.webHubMedia) webHubMedia = data.webHubMedia;
-                    if (data.webHubSimpleNotes !== undefined) webHubSimpleNotes = data.webHubSimpleNotes;
+
+                    // Workout / Web Hub
+                    if (data.workoutSites || data.webHubSites) workoutSites = data.workoutSites || data.webHubSites;
+                    if (data.workoutMedia || data.webHubMedia) workoutMedia = data.workoutMedia || data.webHubMedia;
+                    if (data.workoutSimpleNotes !== undefined || data.webHubSimpleNotes !== undefined) {
+                        workoutSimpleNotes = (data.workoutSimpleNotes !== undefined) ? data.workoutSimpleNotes : data.webHubSimpleNotes;
+                        const ta = document.getElementById('workoutSimpleNotesText');
+                        if (ta) ta.value = workoutSimpleNotes;
+                    }
+
+                    // Custom Profile Names
+                    if (data.profileName1) localStorage.setItem('lc_profile_name_1', data.profileName1);
+                    if (data.profileName2) localStorage.setItem('lc_profile_name_2', data.profileName2);
 
                     saveNotesList();
                     saveTodoList();
@@ -4044,14 +4110,15 @@
                     saveBookOverviews();
                     saveCartoonsList();
                     saveMilkData();
-                    saveWebHubData();
+                    saveWorkoutData();
                     saveWishlistBlocks();
 
+                    loadCustomProfileNames();
                     loadWishlistPage();
                     loadBookOverviews();
                     loadCartoonsList();
                     loadMilkData();
-                    loadWebHubData();
+                    loadWorkoutData();
 
                     statusEl.innerText = '✓ Restored successfully!';
                     statusEl.style.color = '#2E7D32';
@@ -4096,12 +4163,13 @@
             } catch (e) {
                 setTheme('light');
             }
+            loadCustomProfileNames();
             updateDashboardCounts();
             loadWishlistPage();
             loadBookOverviews();
             loadCartoonsList();
             loadMilkData();
-            loadWebHubData();
+            loadWorkoutData();
             sortNotesList();
             renderNotesList();
             checkBackupReminder(); 
