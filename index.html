@@ -30,7 +30,7 @@
             --note-blue: #E1F0FF;
             --note-purple: #EFE3FF;
 
-            /* Adhu Wishlist Palette (Light) */
+            /* Wishlist Palette (Light) */
             --sticky-yellow: #FFF7B2;
             --sticky-green: #D7F9D0;
             --sticky-pink: #FFD4E5;
@@ -66,7 +66,7 @@
             --note-blue: #1D2D3E;
             --note-purple: #2D213F;
 
-            /* Adhu Wishlist Palette (Dark) */
+            /* Wishlist Palette (Dark) */
             --sticky-yellow: #3D3A20;
             --sticky-green: #233827;
             --sticky-pink: #3D222F;
@@ -255,6 +255,10 @@
             text-shadow: 0 0 6px rgba(0, 245, 212, 0.6);
         }
 
+        .marquee-content:hover {
+            animation-play-state: paused;
+        }
+
         @keyframes marqueeScroll {
             0% { transform: translateX(100%); }
             100% { transform: translateX(-100%); }
@@ -436,7 +440,7 @@
             margin-top: 4px;
         }
 
-        /* Modal Structure */
+        /* Modal Overlay System */
         .modal-overlay, .drawer-overlay {
             position: fixed !important;
             top: 0 !important;
@@ -1095,9 +1099,7 @@
             display: flex;
         }
 
-        /* ----------------------------------------------------
-           NEW FEATURE: WEB HUB / WEBSITES ACCORDION STYLES
-           ---------------------------------------------------- */
+        /* Web Hub Styles */
         .webhub-subtabs {
             display: flex;
             background: var(--surface-subtle);
@@ -1633,12 +1635,6 @@
             line-height: 1.2;
         }
 
-        .book-overview-inner-actions {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
         .book-inner-action-btn {
             background: var(--surface-subtle);
             border: var(--card-border);
@@ -1853,8 +1849,8 @@
                 </button>
 
                 <div class="profile-switcher" id="profileSwitcher">
-                    <button class="switch-btn active" onclick="switchProfile(this, 'kee')">Kee</button>
-                    <button class="switch-btn" onclick="switchProfile(this, 'adhu')">Adhu</button>
+                    <button class="switch-btn active" onclick="switchProfile(this, 'user1')">User 1</button>
+                    <button class="switch-btn" onclick="switchProfile(this, 'user2')">User 2</button>
                 </div>
             </div>
         </header>
@@ -1874,8 +1870,8 @@
             </div>
         </div>
 
-        <!-- KEE DASHBOARD -->
-        <main id="view-kee" class="view-content active-view">
+        <!-- USER 1 DASHBOARD -->
+        <main id="view-user1" class="view-content active-view">
             <div style="display: flex; flex-direction: column; gap: 14px;">
                 
                 <!-- 2x2 Bento Grid -->
@@ -1908,9 +1904,7 @@
 
                     <div class="compact-card" onclick="openResourceDrawer('tools')">
                         <div class="card-top">
-                            <div class="icon-badge">
-                                <img src="epub2pdf.png" onerror="this.onerror=null; this.parentElement.innerHTML='⚡';" alt="Tools">
-                            </div>
+                            <div class="icon-badge">⚡</div>
                             <div class="card-arrow">
                                 <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
                             </div>
@@ -1935,31 +1929,31 @@
                     </div>
                 </div>
 
-                <!-- FEATURE: BOOKS OVERVIEW ACCORDION (KEE) -->
-                <div class="dropdown-feature-card" id="keeBooksOverviewCard">
-                    <div class="dropdown-feature-header" onclick="toggleKeeBooksOverviewDropdown()">
+                <!-- FEATURE: BOOKS OVERVIEW ACCORDION -->
+                <div class="dropdown-feature-card" id="user1BooksOverviewCard">
+                    <div class="dropdown-feature-header" onclick="toggleBooksOverviewDropdown()">
                         <div class="feature-header-left">
                             <div class="feature-icon-badge">📖</div>
                             <div class="feature-titles-group">
                                 <span class="feature-main-title">Books Overview</span>
-                                <span class="feature-sub-title" id="keeBooksOverviewSub">0 overviews</span>
+                                <span class="feature-sub-title" id="booksOverviewSub">0 overviews</span>
                             </div>
                         </div>
                         <div class="feature-chevron">▼</div>
                     </div>
 
                     <div class="dropdown-feature-body">
-                        <div id="keeBooksOverviewContainer" style="display: flex; flex-direction: column; gap: 8px; padding-top: 12px;"></div>
+                        <div id="booksOverviewContainer" style="display: flex; flex-direction: column; gap: 8px; padding-top: 12px;"></div>
 
-                        <button class="add-note-btn" style="width: 100%; margin-top: 4px;" onclick="addKeeBookOverview()">
+                        <button class="add-note-btn" style="width: 100%; margin-top: 4px;" onclick="addBookOverview()">
                             <span>+</span> Add Book Overview
                         </button>
                     </div>
                 </div>
 
-                <!-- NEW FEATURE: WEB HUB (WEBSITES, YOUTUBE/INSTA, AND SIMPLE NOTES) -->
-                <div class="dropdown-feature-card open" id="keeWebHubCard">
-                    <div class="dropdown-feature-header" onclick="toggleKeeWebHubDropdown()">
+                <!-- FEATURE: WEB HUB (WEBSITES, YOUTUBE/INSTA, AND SIMPLE NOTES) -->
+                <div class="dropdown-feature-card open" id="webHubCard">
+                    <div class="dropdown-feature-header" onclick="toggleWebHubDropdown()">
                         <div class="feature-header-left">
                             <div class="feature-icon-badge">🌐</div>
                             <div class="feature-titles-group">
@@ -1971,7 +1965,6 @@
                     </div>
 
                     <div class="dropdown-feature-body">
-                        <!-- Sub-feature Switcher Tabs -->
                         <div class="webhub-subtabs">
                             <button class="webhub-subtab-btn active" id="subtabSitesBtn" onclick="switchWebHubSubtab('sites')">🔗 Websites</button>
                             <button class="webhub-subtab-btn" id="subtabMediaBtn" onclick="switchWebHubSubtab('media')">📱 YouTube / Insta</button>
@@ -1981,7 +1974,7 @@
                         <!-- Sub-panel 1: Websites -->
                         <div class="webhub-panel" id="webhubPanelSites">
                             <div class="webhub-input-row">
-                                <input type="text" id="newSiteName" class="webhub-input" placeholder="Site name (e.g. Strength Routine)">
+                                <input type="text" id="newSiteName" class="webhub-input" placeholder="Site name (e.g. Reference)">
                                 <input type="url" id="newSiteUrl" class="webhub-input" placeholder="URL (https://...)">
                                 <button class="add-note-btn" onclick="addWebHubSite()">+ Add</button>
                             </div>
@@ -1991,16 +1984,16 @@
                         <!-- Sub-panel 2: YouTube / Instagram -->
                         <div class="webhub-panel" id="webhubPanelMedia" style="display:none;">
                             <div class="webhub-input-row">
-                                <input type="text" id="newMediaTitle" class="webhub-input" placeholder="Video/Reel title (e.g. Squat Form)">
+                                <input type="text" id="newMediaTitle" class="webhub-input" placeholder="Video/Reel title...">
                                 <input type="url" id="newMediaUrl" class="webhub-input" placeholder="YouTube/Insta link...">
                                 <button class="add-note-btn" onclick="addWebHubMedia()">+ Add</button>
                             </div>
                             <div class="webhub-badges-grid" id="webhubMediaList"></div>
                         </div>
 
-                        <!-- Sub-panel 3: Simple Notes (No heavy formatting) -->
+                        <!-- Sub-panel 3: Simple Notes -->
                         <div class="webhub-panel" id="webhubPanelNotes" style="display:none;">
-                            <textarea id="webHubSimpleNotesText" class="webhub-simple-notes" placeholder="Jot down workout splits, routine plans, reminders, or quick thoughts..." oninput="saveWebHubSimpleNotes()"></textarea>
+                            <textarea id="webHubSimpleNotesText" class="webhub-simple-notes" placeholder="Jot down routines, plans, reminders, or quick thoughts..." oninput="saveWebHubSimpleNotes()"></textarea>
                         </div>
                     </div>
                 </div>
@@ -2116,13 +2109,13 @@
             </div>
         </main>
 
-        <!-- ADHU DASHBOARD -->
-        <main id="view-adhu" class="view-content">
+        <!-- USER 2 DASHBOARD -->
+        <main id="view-user2" class="view-content">
             <div class="features-stack">
 
                 <!-- FEATURE 1: MILK TRACKER -->
-                <div class="dropdown-feature-card open" id="adhuMilkCard">
-                    <div class="dropdown-feature-header" onclick="toggleAdhuMilkDropdown()">
+                <div class="dropdown-feature-card open" id="milkCard">
+                    <div class="dropdown-feature-header" onclick="toggleMilkDropdown()">
                         <div class="feature-header-left">
                             <div class="feature-icon-badge">🍼</div>
                             <div class="feature-titles-group">
@@ -2179,14 +2172,14 @@
                     </div>
                 </div>
                 
-                <!-- FEATURE 2: BOOKS WISHLIST -->
-                <div class="dropdown-feature-card" id="adhuWishlistCard">
-                    <div class="dropdown-feature-header" onclick="toggleAdhuWishlistDropdown()">
+                <!-- FEATURE 2: WISHLIST -->
+                <div class="dropdown-feature-card" id="wishlistCard">
+                    <div class="dropdown-feature-header" onclick="toggleWishlistDropdown()">
                         <div class="feature-header-left">
                             <div class="feature-icon-badge">📚</div>
                             <div class="feature-titles-group">
-                                <span class="feature-main-title">Books Wishlist</span>
-                                <span class="feature-sub-title" id="adhuWishlistSub">0 books</span>
+                                <span class="feature-main-title">Wishlist</span>
+                                <span class="feature-sub-title" id="wishlistSub">0 items</span>
                             </div>
                         </div>
                         <div class="feature-chevron">▼</div>
@@ -2203,14 +2196,14 @@
                                 <button class="wishlist-format-btn" onmousedown="cycleWishlistColor(event)" title="Cycle Card Color">🎨</button>
                             </div>
 
-                            <button class="wishlist-clear-btn" onclick="deleteCheckedAdhuItems()" title="Delete Selected Items">
+                            <button class="wishlist-clear-btn" onclick="deleteCheckedWishlistItems()" title="Delete Selected Items">
                                 🗑️
                             </button>
                         </div>
 
-                        <div id="adhuBlocksContainer" style="display:flex; flex-direction:column; gap:4px;"></div>
+                        <div id="wishlistBlocksContainer" style="display:flex; flex-direction:column; gap:4px;"></div>
 
-                        <button class="add-note-btn" style="width: 100%; margin-top: 6px;" onclick="addAdhuBlock()">
+                        <button class="add-note-btn" style="width: 100%; margin-top: 6px;" onclick="addWishlistBlock()">
                             <span>+</span> Add New Line
                         </button>
                     </div>
@@ -2254,7 +2247,7 @@
                         </div>
 
                         <div class="tier-input-bar">
-                            <input type="text" id="newCartoonName" class="tier-input" placeholder="Cartoon name (e.g. Tom & Jerry)..." onkeypress="if(event.key==='Enter') addCartoonItem()">
+                            <input type="text" id="newCartoonName" class="tier-input" placeholder="Item name..." onkeypress="if(event.key==='Enter') addCartoonItem()">
                             <select id="newCartoonTier" class="tier-select">
                                 <option value="S">S</option>
                                 <option value="A">A</option>
@@ -2275,7 +2268,7 @@
     <!-- CARTOON LONG-PRESS ACTION SHEET -->
     <div class="tier-sheet-backdrop" id="tierActionSheetModal" onclick="closeCartoonActionSheet()">
         <div class="tier-action-sheet" onclick="event.stopPropagation()">
-            <div class="tier-sheet-title" id="sheetCartoonTitle">Cartoon Options</div>
+            <div class="tier-sheet-title" id="sheetCartoonTitle">Options</div>
             
             <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-align:center;">MOVE TO TIER</div>
             <div class="tier-choice-row">
@@ -2302,20 +2295,20 @@
             </div>
 
             <div class="modal-form">
-                <input type="url" id="wlLinkUrl" class="modal-input" placeholder="URL (e.g. Amazon or BookChor link)">
-                <input type="text" id="wlLinkName" class="modal-input" placeholder="NAME (e.g. Bizzy Bear: Pizza Chef)">
+                <input type="url" id="wlLinkUrl" class="modal-input" placeholder="URL (https://...)">
+                <input type="text" id="wlLinkName" class="modal-input" placeholder="Display Name">
                 <button class="modal-save-btn" onclick="insertCustomHyperlink()">Add Link</button>
             </div>
         </div>
     </div>
 
-    <!-- CENTERED POPUP MODAL FOR CATEGORY RESOURCES -->
+    <!-- POPUP MODAL FOR CATEGORY RESOURCES -->
     <div class="drawer-overlay" id="resourceDrawer" onclick="closeResourceDrawer(event)">
         <div class="drawer-sheet" onclick="event.stopPropagation()">
             <div class="drawer-header">
                 <div class="drawer-title-group">
                     <span id="drawerIcon" style="font-size: 20px;">🌐</span>
-                    <h3 class="drawer-title" id="drawerTitle">eBooks Vault</h3>
+                    <h3 class="drawer-title" id="drawerTitle">Resources</h3>
                 </div>
                 <button class="drawer-close-btn" onclick="closeResourceDrawer()">✕</button>
             </div>
@@ -2334,11 +2327,11 @@
 
             <div class="modal-form">
                 <select id="modalCategory" class="modal-select">
-                    <option value="ebooks">eBooks Vault (🌐)</option>
-                    <option value="audiobooks">Audiobook Stash (🎧)</option>
-                    <option value="tools">Tools & Converters (⚡)</option>
+                    <option value="ebooks">eBooks Vault</option>
+                    <option value="audiobooks">Audiobook Stash</option>
+                    <option value="tools">Tools & Converters</option>
                 </select>
-                <input type="text" id="modalLinkName" class="modal-input" placeholder="Site Name (e.g. YouTube to MP3)">
+                <input type="text" id="modalLinkName" class="modal-input" placeholder="Site Name">
                 <input type="url" id="modalLinkUrl" class="modal-input" placeholder="URL (https://...)">
                 <button class="modal-save-btn" onclick="saveNewUserLink()">+ Add Resource</button>
             </div>
@@ -2361,7 +2354,7 @@
             <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
                 <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Instant Local Backup</div>
                 <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.4;">
-                    Download an updated snapshot of your entire motherboard (notes, to-dos, cartoons, web hub, wishlist).
+                    Download an updated snapshot of your entire dashboard data.
                 </p>
                 <button class="modal-save-btn" style="background: var(--primary);" onclick="triggerAppSave()">
                     💾 Save Full Backup File
@@ -2423,7 +2416,7 @@
 
         function closeNotesView() {
             document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active-view'));
-            document.getElementById('view-kee').classList.add('active-view');
+            document.getElementById('view-user1').classList.add('active-view');
             document.getElementById('profileSwitcher').style.visibility = 'visible';
             updateDashboardCounts();
         }
@@ -2437,7 +2430,7 @@
 
         function closePdfView() {
             document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active-view'));
-            document.getElementById('view-kee').classList.add('active-view');
+            document.getElementById('view-user1').classList.add('active-view');
             document.getElementById('profileSwitcher').style.visibility = 'visible';
         }
 
@@ -2454,30 +2447,18 @@
             }
         }
 
-        // ----------------------------------------------------
-        // RESOURCES DATA & MODAL LOGIC
-        // ----------------------------------------------------
+        // Generic Initial Resources
         const defaultEbooks = [
-            { id: '1', name: 'FMHY Reading', url: 'https://fmhy.net/reading' },
-            { id: '2', name: 'Open Culture', url: 'https://www.openculture.com/free_ebooks' },
-            { id: '3', name: 'Lit2Go', url: 'https://etc.usf.edu/lit2go/' },
-            { id: '4', name: 'ZipComic', url: 'https://www.zipcomic.com/' },
-            { id: '5', name: 'Loyal Books', url: 'https://www.loyalbooks.com/' }
+            { id: '1', name: 'Open Culture', url: 'https://www.openculture.com/free_ebooks' },
+            { id: '2', name: 'Project Gutenberg', url: 'https://www.gutenberg.org' }
         ];
 
         const defaultAudiobooks = [
-            { id: 'a1', name: 'FMHY Audiobooks', url: 'https://fmhy.net/readingpiracyguide#audiobooks' },
-            { id: 'a2', name: '99Audiobooks', url: 'https://99audiobooks.com/' },
-            { id: 'a3', name: 'FindAudiobook', url: 'https://findaudiobook.com/' },
-            { id: 'a4', name: 'Open Culture', url: 'https://www.openculture.com/freeaudiobooks' },
-            { id: 'a5', name: 'Free Classic', url: 'https://freeclassicaudiobooks.com/' }
+            { id: 'a1', name: 'LibriVox Free Audio', url: 'https://librivox.org' }
         ];
 
         const defaultTools = [
-            { id: 't0', name: '📖 PDF Reader', action: 'openPdfView' },
-            { id: 't1', name: 'ePub → PDF', url: 'https://cloudconvert.com/epub-to-pdf' },
-            { id: 't2', name: 'Reel Downloader', url: 'https://fastdl.app/en5IW' },
-            { id: 't3', name: 'YouTube to MP3', url: 'https://y2mate.gs/' }
+            { id: 't0', name: '📖 PDF Reader', action: 'openPdfView' }
         ];
 
         let userEbooks = defaultEbooks;
@@ -2520,7 +2501,7 @@
             const tc = document.getElementById('todoCount');
             if (tc) {
                 const pending = todoList.filter(t => !t.completed).length;
-                tc.innerText = pending + (pending === 1 ? ' pending' : ' pending');
+                tc.innerText = pending + ' pending';
             }
         }
 
@@ -2660,9 +2641,7 @@
             renderExistingModalLinks();
         }
 
-        // ----------------------------------------------------
-        // HUB TAB SWITCHER (NOTEPAD VS TO-DO)
-        // ----------------------------------------------------
+        // Generic Hub Data
         let currentHubTab = 'notes';
 
         function switchHubTab(tab) {
@@ -2683,10 +2662,6 @@
                 hubActionBtn.innerHTML = '<span>+</span> New Note';
                 if (sortNotesBtn) sortNotesBtn.style.display = 'inline-flex';
                 if (globalToolbar) globalToolbar.style.display = 'flex';
-                setTimeout(() => {
-                    const firstNoteBody = document.querySelector('.notepad-body');
-                    if (firstNoteBody && notesList.length > 0) firstNoteBody.focus({ preventScroll: true });
-                }, 50);
             } else {
                 tabTodoBtn.classList.add('active');
                 tabNotesBtn.classList.remove('active');
@@ -2707,9 +2682,6 @@
             else document.getElementById('todoInput').focus();
         }
 
-        // ----------------------------------------------------
-        // NOTEPAD LOGIC
-        // ----------------------------------------------------
         const NOTE_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
         let noteSortAsc = false;
         let lastFocusedNoteId = null;
@@ -2722,13 +2694,14 @@
             return dateStr + ', ' + timeStr;
         }
 
+        // Generic Starter Notes
         let notesList = [
             {
                 id: '1',
-                text: 'Your warm-up — 6–8 minutes\n1. March in place / easy walking — 2 min\n   Just enough to get warm. No need for jumping.\n2. Arm circles — 10 forward + 10 backward\n3. Shoulder rolls — 10 forward + 10 backward\n4. Bodyweight squats — 10 reps',
-                color: 'green',
-                timestamp: 'Sep 30, 07:48',
-                createdAt: 1727662080000,
+                text: 'Welcome to your private dashboard!\n• Tap any note to edit.\n• Use the toolbar above for formatting.',
+                color: 'default',
+                timestamp: getFormattedTimestamp(),
+                createdAt: Date.now(),
                 minimized: false,
                 pinned: true,
                 favorite: false
@@ -2754,12 +2727,8 @@
 
         function sortNotesList() {
             notesList.sort((a, b) => {
-                if (!!a.pinned !== !!b.pinned) {
-                    return a.pinned ? -1 : 1;
-                }
-                if (!!a.favorite !== !!b.favorite) {
-                    return a.favorite ? -1 : 1;
-                }
+                if (!!a.pinned !== !!b.pinned) return a.pinned ? -1 : 1;
+                if (!!a.favorite !== !!b.favorite) return a.favorite ? -1 : 1;
                 const timeA = a.createdAt || parseInt(a.id) || 0;
                 const timeB = b.createdAt || parseInt(b.id) || 0;
                 return noteSortAsc ? (timeA - timeB) : (timeB - timeA);
@@ -2865,7 +2834,6 @@
             try {
                 localStorage.setItem('lc_sticky_sort_asc', noteSortAsc);
             } catch(e) {}
-            
             sortNotesList();
             saveNotesList();
             renderNotesList();
@@ -2906,7 +2874,6 @@
                 const currentIndex = NOTE_COLORS.indexOf(note.color || 'default');
                 note.color = NOTE_COLORS[(currentIndex + 1) % NOTE_COLORS.length];
                 saveNotesList();
-
                 const el = document.getElementById('notepad-card-' + id);
                 if (el) {
                     NOTE_COLORS.forEach(c => el.classList.remove('color-' + c));
@@ -2924,11 +2891,7 @@
             if (indicator) indicator.innerText = noteSortAsc ? '↑' : '↓';
 
             if (notesList.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; color: var(--text-muted); padding: 40px 0; font-size: 13px;">
-                        No notes yet. Tap <strong>+ New Note</strong> to start writing!
-                    </div>
-                `;
+                container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 40px 0; font-size: 13px;">No notes yet. Tap <strong>+ New Note</strong> to start writing!</div>`;
                 updateDashboardCounts();
                 return;
             }
@@ -2951,16 +2914,14 @@
                     <div class="notepad-card-header">
                         <span class="notepad-timestamp">${note.timestamp || ''}</span>
                         <div class="notepad-card-actions">
-                            <button type="button" class="notepad-card-btn ${isPinned ? 'active-pin' : ''}" title="${isPinned ? 'Unpin' : 'Pin to top'}" onclick="togglePinNote('${note.id}')">${isPinned ? '📌' : '📍'}</button>
+                            <button type="button" class="notepad-card-btn ${isPinned ? 'active-pin' : ''}" title="${isPinned ? 'Unpin' : 'Pin'}" onclick="togglePinNote('${note.id}')">${isPinned ? '📌' : '📍'}</button>
                             <button type="button" class="notepad-card-btn ${isFav ? 'active-star' : ''}" title="${isFav ? 'Unfavorite' : 'Favorite'}" onclick="toggleStarNote('${note.id}')">${isFav ? '★' : '☆'}</button>
-                            <button type="button" class="notepad-card-btn toggle-min" title="${isMin ? 'Expand' : 'Minimize'}" onclick="toggleMinimizeNoteCard('${note.id}')">${isMin ? '＋' : '—'}</button>
-                            <button type="button" class="notepad-card-btn" title="Change Color" onclick="cycleNoteColor('${note.id}')">🎨</button>
-                            <button type="button" class="notepad-card-btn del" title="Delete Note" onclick="deleteNoteItem('${note.id}')">🗑️</button>
+                            <button type="button" class="notepad-card-btn" title="${isMin ? 'Expand' : 'Minimize'}" onclick="toggleMinimizeNoteCard('${note.id}')">${isMin ? '＋' : '—'}</button>
+                            <button type="button" class="notepad-card-btn" title="Color" onclick="cycleNoteColor('${note.id}')">🎨</button>
+                            <button type="button" class="notepad-card-btn" style="color:#E53935;" title="Delete" onclick="deleteNoteItem('${note.id}')">🗑️</button>
                         </div>
                     </div>
-
                     <div class="notepad-preview-title" onclick="toggleMinimizeNoteCard('${note.id}')">${plainSnippet || 'Empty Note'}</div>
-
                     <div class="notepad-body" id="note-body-${note.id}" contenteditable="true" 
                          onfocus="lastFocusedNoteId='${note.id}';"
                          onkeydown="handleNoteKeyDown(event, '${note.id}')"
@@ -2968,7 +2929,6 @@
                 `;
                 container.appendChild(noteEl);
             });
-
             updateDashboardCounts(); 
         }
 
@@ -2983,19 +2943,10 @@
                 pinned: false,
                 favorite: false
             };
-
             notesList.unshift(newNote);
             sortNotesList();
             saveNotesList();
             renderNotesList();
-
-            setTimeout(() => {
-                const firstNoteBody = document.querySelector('.notepad-body');
-                if (firstNoteBody) {
-                    firstNoteBody.focus({ preventScroll: true });
-                    lastFocusedNoteId = newNote.id;
-                }
-            }, 50);
         }
 
         function updateNoteItemText(id, element) {
@@ -3014,9 +2965,7 @@
             }
         }
 
-        // ----------------------------------------------------
-        // KEE: WEB HUB LOGIC (WEBSITES, MEDIA, SIMPLE NOTES)
-        // ----------------------------------------------------
+        // Generic Starter Web Hub
         let webHubSites = [];
         let webHubMedia = [];
         let webHubSimpleNotes = '';
@@ -3027,8 +2976,7 @@
                 if (sSites) webHubSites = JSON.parse(sSites);
                 else {
                     webHubSites = [
-                        { id: 'wh_s1', name: 'ExRx Exercise Directory', url: 'https://exrx.net' },
-                        { id: 'wh_s2', name: 'Open Culture Free Courses', url: 'https://www.openculture.com' }
+                        { id: 'wh_s1', name: 'Open Culture', url: 'https://www.openculture.com' }
                     ];
                 }
 
@@ -3036,7 +2984,7 @@
                 if (sMedia) webHubMedia = JSON.parse(sMedia);
                 else {
                     webHubMedia = [
-                        { id: 'wh_m1', title: 'Squat Form Analysis', url: 'https://youtube.com', type: 'youtube' }
+                        { id: 'wh_m1', title: 'Sample Resource', url: 'https://youtube.com', type: 'youtube' }
                     ];
                 }
 
@@ -3049,7 +2997,7 @@
             }
 
             const isCardOpen = localStorage.getItem('lc_webhub_open');
-            const card = document.getElementById('keeWebHubCard');
+            const card = document.getElementById('webHubCard');
             if (card && isCardOpen !== null) {
                 if (isCardOpen === 'false') card.classList.remove('open');
                 else card.classList.add('open');
@@ -3070,8 +3018,8 @@
             } catch(e) {}
         }
 
-        function toggleKeeWebHubDropdown() {
-            const card = document.getElementById('keeWebHubCard');
+        function toggleWebHubDropdown() {
+            const card = document.getElementById('webHubCard');
             if (card) {
                 card.classList.toggle('open');
                 try {
@@ -3120,14 +3068,8 @@
             const name = nameInput.value.trim();
             let url = urlInput.value.trim();
 
-            if (!name || !url) {
-                alert('Please enter both a name and a link URL.');
-                return;
-            }
-
-            if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                url = 'https://' + url;
-            }
+            if (!name || !url) return;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
 
             webHubSites.push({ id: 'wh_s_' + Date.now().toString(), name, url });
             saveWebHubData();
@@ -3176,14 +3118,8 @@
             const title = titleInput.value.trim();
             let url = urlInput.value.trim();
 
-            if (!title || !url) {
-                alert('Please enter both a title and a link URL.');
-                return;
-            }
-
-            if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                url = 'https://' + url;
-            }
+            if (!title || !url) return;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
 
             let type = 'video';
             if (url.includes('youtu.be') || url.includes('youtube.com')) type = 'youtube';
@@ -3210,9 +3146,7 @@
             }
         }
 
-        // ----------------------------------------------------
-        // ADHU: MILK TRACKER LOGIC
-        // ----------------------------------------------------
+        // Generic Starter Milk Data
         let milkEntries = [];
 
         function getTodayDateString() {
@@ -3222,25 +3156,18 @@
 
         function loadMilkData() {
             try {
-                const stored = localStorage.getItem('lc_adhu_milk_data');
-                const lastDate = localStorage.getItem('lc_adhu_milk_date');
+                const stored = localStorage.getItem('lc_milk_data');
+                const lastDate = localStorage.getItem('lc_milk_date');
                 const today = getTodayDateString();
 
                 if (stored && lastDate === today) {
                     milkEntries = JSON.parse(stored);
                 } else {
                     milkEntries = [];
-                    localStorage.setItem('lc_adhu_milk_date', today);
+                    localStorage.setItem('lc_milk_date', today);
                 }
             } catch(e) {
                 milkEntries = [];
-            }
-
-            const isDropdownOpen = localStorage.getItem('lc_adhu_milk_open');
-            const card = document.getElementById('adhuMilkCard');
-            if (card && isDropdownOpen !== null) {
-                if (isDropdownOpen === 'false') card.classList.remove('open');
-                else card.classList.add('open');
             }
 
             renderMilkTracker();
@@ -3248,19 +3175,14 @@
 
         function saveMilkData() {
             try {
-                localStorage.setItem('lc_adhu_milk_data', JSON.stringify(milkEntries));
-                localStorage.setItem('lc_adhu_milk_date', getTodayDateString());
+                localStorage.setItem('lc_milk_data', JSON.stringify(milkEntries));
+                localStorage.setItem('lc_milk_date', getTodayDateString());
             } catch(e) {}
         }
 
-        function toggleAdhuMilkDropdown() {
-            const card = document.getElementById('adhuMilkCard');
-            if (card) {
-                card.classList.toggle('open');
-                try {
-                    localStorage.setItem('lc_adhu_milk_open', card.classList.contains('open'));
-                } catch(e) {}
-            }
+        function toggleMilkDropdown() {
+            const card = document.getElementById('milkCard');
+            if (card) card.classList.toggle('open');
         }
 
         function renderMilkTracker() {
@@ -3279,11 +3201,7 @@
             const progressBar = document.getElementById('milkProgressBar');
             if (progressBar) {
                 progressBar.style.width = `${barFillPct}%`;
-                if (total >= 600) {
-                    progressBar.style.background = 'linear-gradient(90deg, #FFB380 0%, #00E676 100%)';
-                } else {
-                    progressBar.style.background = '#FFB380';
-                }
+                progressBar.style.background = total >= 600 ? 'linear-gradient(90deg, #FFB380 0%, #00E676 100%)' : '#FFB380';
             }
 
             const container = document.getElementById('milkChipsHistory');
@@ -3291,7 +3209,7 @@
             container.innerHTML = '';
 
             if (milkEntries.length === 0) {
-                container.innerHTML = '<span style="font-size:11px; color:var(--text-muted);">No feedings logged today.</span>';
+                container.innerHTML = '<span style="font-size:11px; color:var(--text-muted);">No entries logged today.</span>';
                 return;
             }
 
@@ -3329,9 +3247,7 @@
             renderMilkTracker();
         }
 
-        // ----------------------------------------------------
-        // CARTOONS TIER LIST LOGIC
-        // ----------------------------------------------------
+        // Generic Starter Cartoons
         let cartoonsList = [];
         let activeCartoonId = null;
         let pressTimer = null;
@@ -3343,24 +3259,13 @@
                     cartoonsList = JSON.parse(stored);
                 } else {
                     cartoonsList = [
-                        { id: 'c1', name: 'Tom & Jerry', tier: 'S' },
-                        { id: 'c2', name: 'Courage the Cowardly Dog', tier: 'S' },
-                        { id: 'c3', name: 'Dexter\'s Laboratory', tier: 'A' },
-                        { id: 'c4', name: 'Ben 10', tier: 'B' },
-                        { id: 'c5', name: 'Oswald', tier: 'A' },
-                        { id: 'c6', name: 'Popeye', tier: 'B' },
-                        { id: 'c7', name: 'Chhota Bheem', tier: 'D' }
+                        { id: 'c1', name: 'Example Cartoon A', tier: 'S' },
+                        { id: 'c2', name: 'Example Cartoon B', tier: 'A' },
+                        { id: 'c3', name: 'Example Cartoon C', tier: 'B' }
                     ];
                 }
             } catch(e) {
                 cartoonsList = [];
-            }
-
-            const isDropdownOpen = localStorage.getItem('lc_cartoons_dropdown_open');
-            const card = document.getElementById('cartoonsTierCard');
-            if (card && isDropdownOpen !== null) {
-                if (isDropdownOpen === 'false') card.classList.remove('open');
-                else card.classList.add('open');
             }
 
             renderCartoonsTierBoard();
@@ -3375,12 +3280,7 @@
 
         function toggleCartoonsTierDropdown() {
             const card = document.getElementById('cartoonsTierCard');
-            if (card) {
-                card.classList.toggle('open');
-                try {
-                    localStorage.setItem('lc_cartoons_dropdown_open', card.classList.contains('open'));
-                } catch(e) {}
-            }
+            if (card) card.classList.toggle('open');
         }
 
         function updateCartoonsCountSub() {
@@ -3461,7 +3361,7 @@
             const item = cartoonsList.find(c => c.id === activeCartoonId);
             if (!item) return;
 
-            const newName = prompt("Rename cartoon:", item.name);
+            const newName = prompt("Rename item:", item.name);
             if (newName && newName.trim()) {
                 item.name = newName.trim();
                 saveCartoonsList();
@@ -3496,11 +3396,9 @@
             input.value = '';
         }
 
-        // ----------------------------------------------------
-        // TO-DO LOGIC
-        // ----------------------------------------------------
+        // Generic Starter Tasks
         let todoList = [
-            { id: '1', text: 'Inspect pre-loved board books condition', completed: false, timestamp: 'Sep 26, 01:40 AM' }
+            { id: '1', text: 'Sample generic task', completed: false, timestamp: getFormattedTimestamp() }
         ];
 
         try {
@@ -3524,11 +3422,7 @@
             container.innerHTML = '';
 
             if (todoList.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; color: var(--text-muted); padding: 30px 0; font-size: 12.5px;">
-                        All clear! Type a task above to add it.
-                    </div>
-                `;
+                container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 30px 0; font-size: 12.5px;">All clear! Type a task above to add it.</div>`;
             } else {
                 todoList.forEach(item => {
                     const itemEl = document.createElement('div');
@@ -3581,77 +3475,63 @@
             renderTodoList();
         }
 
-        // ----------------------------------------------------
-        // KEE: BOOKS OVERVIEW
-        // ----------------------------------------------------
-        let keeBookOverviews = [];
+        // Generic Starter Books Overview
+        let bookOverviews = [];
 
-        function loadKeeBookOverviews() {
+        function loadBookOverviews() {
             try {
-                const stored = localStorage.getItem('lc_kee_book_overviews');
+                const stored = localStorage.getItem('lc_book_overviews');
                 if (stored) {
-                    keeBookOverviews = JSON.parse(stored);
+                    bookOverviews = JSON.parse(stored);
                 } else {
-                    keeBookOverviews = [
+                    bookOverviews = [
                         {
                             id: 'bo_1',
-                            title: 'Fourth Wing',
-                            content: 'Dragons, signet abilities, and military academy strategy.',
+                            title: 'Sample Book Title',
+                            content: 'Summary notes, takeaways, or chapter thoughts.',
                             driveUrl: '',
                             expanded: false
                         }
                     ];
                 }
             } catch(e) {
-                keeBookOverviews = [];
+                bookOverviews = [];
             }
 
-            const isDropdownOpen = localStorage.getItem('lc_kee_bo_dropdown_open');
-            const card = document.getElementById('keeBooksOverviewCard');
-            if (card && isDropdownOpen !== null) {
-                if (isDropdownOpen === 'false') card.classList.remove('open');
-                else card.classList.add('open');
-            }
-
-            renderKeeBookOverviews();
+            renderBookOverviews();
         }
 
-        function saveKeeBookOverviews() {
+        function saveBookOverviews() {
             try {
-                localStorage.setItem('lc_kee_book_overviews', JSON.stringify(keeBookOverviews));
+                localStorage.setItem('lc_book_overviews', JSON.stringify(bookOverviews));
             } catch (e) {}
-            updateKeeBookOverviewSub();
+            updateBookOverviewSub();
         }
 
-        function toggleKeeBooksOverviewDropdown() {
-            const card = document.getElementById('keeBooksOverviewCard');
-            if (card) {
-                card.classList.toggle('open');
-                try {
-                    localStorage.setItem('lc_kee_bo_dropdown_open', card.classList.contains('open'));
-                } catch(e) {}
-            }
+        function toggleBooksOverviewDropdown() {
+            const card = document.getElementById('user1BooksOverviewCard');
+            if (card) card.classList.toggle('open');
         }
 
-        function updateKeeBookOverviewSub() {
-            const sub = document.getElementById('keeBooksOverviewSub');
+        function updateBookOverviewSub() {
+            const sub = document.getElementById('booksOverviewSub');
             if (!sub) return;
-            const len = keeBookOverviews.length;
+            const len = bookOverviews.length;
             sub.innerText = len + (len === 1 ? ' book' : ' books');
         }
 
-        function renderKeeBookOverviews() {
-            const container = document.getElementById('keeBooksOverviewContainer');
+        function renderBookOverviews() {
+            const container = document.getElementById('booksOverviewContainer');
             if (!container) return;
             container.innerHTML = '';
 
-            if (keeBookOverviews.length === 0) {
+            if (bookOverviews.length === 0) {
                 container.innerHTML = '<div style="text-align:center; font-size:12px; color:var(--text-muted); padding:10px 0;">No book overviews yet. Click "+ Add Book Overview" below.</div>';
-                updateKeeBookOverviewSub();
+                updateBookOverviewSub();
                 return;
             }
 
-            keeBookOverviews.forEach(item => {
+            bookOverviews.forEach(item => {
                 const row = document.createElement('div');
                 row.className = 'book-overview-item' + (item.expanded ? ' expanded' : '');
                 row.id = 'bo-item-' + item.id;
@@ -3670,7 +3550,6 @@
                     <div class="book-overview-body-wrap">
                         <div class="book-overview-top-meta">
                             ${driveButtonHtml}
-
                             <div class="book-overview-inner-actions">
                                 ${hasDrive ? `<button class="book-inner-action-btn" onclick="editBookDriveLink('${item.id}')">✏️ Edit Link</button>` : ''}
                                 <button class="book-inner-action-btn delete" onclick="deleteBookOverviewItem('${item.id}')">🗑️ Delete</button>
@@ -3678,8 +3557,8 @@
                         </div>
 
                         <div>
-                            <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.4px;">Book Title</label>
-                            <input type="text" class="book-overview-title-edit-input" value="${item.title || ''}" placeholder="Enter book title..." oninput="updateBookOverviewTitle('${item.id}', this.value)">
+                            <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Title</label>
+                            <input type="text" class="book-overview-title-edit-input" value="${item.title || ''}" placeholder="Enter title..." oninput="updateBookOverviewTitle('${item.id}', this.value)">
                         </div>
 
                         <div class="context-toolbar" id="bo-toolbar-${item.id}">
@@ -3690,9 +3569,9 @@
                         </div>
 
                         <div>
-                            <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.4px;">Notes & Overview</label>
+                            <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Overview & Notes</label>
                             <div class="book-overview-editor" id="bo-editor-${item.id}" contenteditable="true" 
-                                 placeholder="Write summary, key takeaways, chapter thoughts..." 
+                                 placeholder="Write summary, key takeaways..." 
                                  onfocus="showOverviewToolbar('${item.id}')" 
                                  onblur="hideOverviewToolbar('${item.id}')" 
                                  oninput="updateBookOverviewContent('${item.id}', this.innerHTML)">${item.content || ''}</div>
@@ -3702,16 +3581,15 @@
                 container.appendChild(row);
             });
 
-            updateKeeBookOverviewSub();
+            updateBookOverviewSub();
         }
 
         function editBookDriveLink(id) {
-            const item = keeBookOverviews.find(b => b.id === id);
+            const item = bookOverviews.find(b => b.id === id);
             if (!item) return;
 
             const current = item.driveUrl || '';
             const newUrl = prompt("Enter Google Drive file/folder URL (leave blank to remove):", current);
-
             if (newUrl === null) return;
 
             let formatted = newUrl.trim();
@@ -3720,59 +3598,53 @@
             }
 
             item.driveUrl = formatted;
-            saveKeeBookOverviews();
-            renderKeeBookOverviews();
+            saveBookOverviews();
+            renderBookOverviews();
         }
 
         function toggleBookOverviewItem(id) {
-            const item = keeBookOverviews.find(b => b.id === id);
+            const item = bookOverviews.find(b => b.id === id);
             if (item) {
                 item.expanded = !item.expanded;
-                saveKeeBookOverviews();
-                renderKeeBookOverviews();
+                saveBookOverviews();
+                renderBookOverviews();
             }
         }
 
         function updateBookOverviewTitle(id, val) {
-            const item = keeBookOverviews.find(b => b.id === id);
+            const item = bookOverviews.find(b => b.id === id);
             if (item) {
                 item.title = val;
-                saveKeeBookOverviews();
-                const headerText = document.querySelector('#bo-item-' + id + ' .book-overview-title-text');
-                if (headerText) headerText.innerText = val || 'Untitled Book';
+                saveBookOverviews();
             }
         }
 
         function updateBookOverviewContent(id, html) {
-            const item = keeBookOverviews.find(b => b.id === id);
+            const item = bookOverviews.find(b => b.id === id);
             if (item) {
                 item.content = html;
-                saveKeeBookOverviews();
+                saveBookOverviews();
             }
         }
 
-        function addKeeBookOverview() {
+        function addBookOverview() {
             const newId = 'bo_' + Date.now().toString();
-            keeBookOverviews.unshift({
+            bookOverviews.unshift({
                 id: newId,
                 title: 'New Book Overview',
                 content: '',
                 driveUrl: '',
                 expanded: true
             });
-            saveKeeBookOverviews();
-            renderKeeBookOverviews();
-            setTimeout(() => {
-                const ed = document.getElementById('bo-editor-' + newId);
-                if (ed) ed.focus({ preventScroll: true });
-            }, 50);
+            saveBookOverviews();
+            renderBookOverviews();
         }
 
         function deleteBookOverviewItem(id) {
-            if (confirm("Delete this book overview?")) {
-                keeBookOverviews = keeBookOverviews.filter(b => b.id !== id);
-                saveKeeBookOverviews();
-                renderKeeBookOverviews();
+            if (confirm("Delete this overview?")) {
+                bookOverviews = bookOverviews.filter(b => b.id !== id);
+                saveBookOverviews();
+                renderBookOverviews();
             }
         }
 
@@ -3801,105 +3673,75 @@
             }
         }
 
-        // ----------------------------------------------------
-        // ADHU'S BOOKS WISHLIST
-        // ----------------------------------------------------
+        // Generic Starter Wishlist
         const WL_SHEET_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
         let currentWlColor = 'default';
         let savedRange = null;
-
-        let adhuBlocks = [];
+        let wishlistBlocks = [];
 
         function cleanHtmlContent(raw) {
             if (!raw) return '';
             let s = raw.trim();
-            s = s.replace(/^(\s*<br\s*\/?>|\s*&nbsp;|\s+)+/gi, '');
-            return s;
+            return s.replace(/^(\s*<br\s*\/?>|\s*&nbsp;|\s+)+/gi, '');
         }
 
-        function toggleAdhuWishlistDropdown() {
-            const card = document.getElementById('adhuWishlistCard');
-            if (card) {
-                card.classList.toggle('open');
-                try {
-                    localStorage.setItem('lc_adhu_dropdown_open', card.classList.contains('open'));
-                } catch(e) {}
-            }
+        function toggleWishlistDropdown() {
+            const card = document.getElementById('wishlistCard');
+            if (card) card.classList.toggle('open');
         }
 
         function updateWishlistSubtitle() {
-            const sub = document.getElementById('adhuWishlistSub');
+            const sub = document.getElementById('wishlistSub');
             if (!sub) return;
-            const count = adhuBlocks.filter(b => b.html && b.html.trim() !== '').length;
+            const count = wishlistBlocks.filter(b => b.html && b.html.trim() !== '').length;
             sub.innerText = count + (count === 1 ? ' item' : ' items');
         }
 
-        function loadAdhuWishlistPage() {
+        function loadWishlistPage() {
             try {
-                const storedBlocks = localStorage.getItem('lc_adhu_blocks');
+                const storedBlocks = localStorage.getItem('lc_wishlist_blocks');
                 if (storedBlocks) {
-                    adhuBlocks = JSON.parse(storedBlocks);
-                    adhuBlocks.forEach(b => {
-                        b.html = cleanHtmlContent(b.html);
-                    });
+                    wishlistBlocks = JSON.parse(storedBlocks);
                 } else {
-                    const oldContent = localStorage.getItem('lc_adhu_wishlist_content');
-                    if (oldContent && oldContent.trim() !== '') {
-                        adhuBlocks = [{ id: Date.now().toString(), html: cleanHtmlContent(oldContent), checked: false }];
-                    } else {
-                        adhuBlocks = [{ id: Date.now().toString(), html: '', checked: false }];
-                    }
+                    wishlistBlocks = [{ id: Date.now().toString(), html: '', checked: false }];
                 }
             } catch(e) {
-                adhuBlocks = [{ id: Date.now().toString(), html: '', checked: false }];
+                wishlistBlocks = [{ id: Date.now().toString(), html: '', checked: false }];
             }
 
-            const savedColor = localStorage.getItem('lc_adhu_wishlist_color');
-            if (savedColor && WL_SHEET_COLORS.includes(savedColor)) {
-                applySheetColorClass(savedColor);
-            }
-
-            const isDropdownOpen = localStorage.getItem('lc_adhu_dropdown_open');
-            const card = document.getElementById('adhuWishlistCard');
-            if (card && isDropdownOpen !== null) {
-                if (isDropdownOpen === 'false') card.classList.remove('open');
-                else card.classList.add('open');
-            }
-
-            renderAdhuBlocks();
+            renderWishlistBlocks();
             updateWishlistSubtitle();
-
-            const container = document.getElementById('adhuBlocksContainer');
-            if (container) {
-                container.removeEventListener('click', handleWishlistLinkClick);
-                container.addEventListener('click', handleWishlistLinkClick);
-            }
         }
 
-        function saveAdhuBlocks() {
+        function saveWishlistBlocks() {
             try {
-                localStorage.setItem('lc_adhu_blocks', JSON.stringify(adhuBlocks));
+                localStorage.setItem('lc_wishlist_blocks', JSON.stringify(wishlistBlocks));
             } catch (e) {}
             updateWishlistSubtitle();
         }
 
-        function syncAllAdhuBlocks() {
-            adhuBlocks.forEach(b => {
+        function syncAllWishlistBlocks() {
+            wishlistBlocks.forEach(b => {
                 const el = document.getElementById('wl-block-' + b.id);
                 if (el) b.html = cleanHtmlContent(el.innerHTML);
             });
-            saveAdhuBlocks();
+            saveWishlistBlocks();
         }
 
-        function renderAdhuBlocks() {
-            const container = document.getElementById('adhuBlocksContainer');
+        function renderWishlistBlocks() {
+            const container = document.getElementById('wishlistBlocksContainer');
             if (!container) return;
             container.innerHTML = '';
 
-            adhuBlocks.forEach((block, index) => {
+            wishlistBlocks.forEach((block, index) => {
                 const el = document.createElement('div');
                 el.className = 'wl-block ' + (block.checked ? 'checked' : '');
-                el.innerHTML = '<div class="todo-checkbox" style="border-color: var(--text-muted); ' + (block.checked ? 'background: var(--primary); border-color: var(--primary); color: #fff;' : '') + '" onclick="toggleAdhuBlockCheck(\'' + block.id + '\')">' + (block.checked ? '✓' : '') + '</div><div class="wl-block-editor" id="wl-block-' + block.id + '" contenteditable="true" oninput="updateAdhuBlockHtml(\'' + block.id + '\')" onkeydown="handleBlockKeyDown(event, \'' + block.id + '\', ' + index + ')" placeholder="Type book or note...">' + (block.html || '') + '</div>';
+                el.innerHTML = `
+                    <div class="todo-checkbox" style="${block.checked ? 'background: var(--primary); border-color: var(--primary); color: #fff;' : ''}" onclick="toggleWishlistBlockCheck('${block.id}')">
+                        ${block.checked ? '✓' : ''}
+                    </div>
+                    <div class="wl-block-editor" id="wl-block-${block.id}" contenteditable="true" oninput="updateWishlistBlockHtml('${block.id}')" onkeydown="handleBlockKeyDown(event, '${block.id}', ${index})" placeholder="Add item or note...">${block.html || ''}</div>
+                `;
                 container.appendChild(el);
             });
             updateWishlistSubtitle();
@@ -3908,130 +3750,65 @@
         function handleBlockKeyDown(e, blockId, index) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                
-                const sel = window.getSelection();
-                let remainingHtml = '';
-                
-                if (sel && sel.rangeCount > 0) {
-                    const range = sel.getRangeAt(0);
-                    const currentEl = document.getElementById('wl-block-' + blockId);
-                    
-                    if (currentEl) {
-                        const postRange = range.cloneRange();
-                        postRange.selectNodeContents(currentEl);
-                        postRange.setStart(range.endContainer, range.endOffset);
-                        
-                        const frag = postRange.extractContents();
-                        const temp = document.createElement('div');
-                        temp.appendChild(frag);
-                        remainingHtml = cleanHtmlContent(temp.innerHTML);
-                    }
-                }
-
-                syncAllAdhuBlocks();
-
-                const newBlock = { 
-                    id: Date.now().toString(), 
-                    html: remainingHtml || '', 
-                    checked: false 
-                };
-
-                adhuBlocks.splice(index + 1, 0, newBlock);
-                saveAdhuBlocks();
-                renderAdhuBlocks();
-
-                setTimeout(() => {
-                    const nextEl = document.getElementById('wl-block-' + newBlock.id);
-                    if (nextEl) {
-                        nextEl.focus({ preventScroll: true });
-                        const r = document.createRange();
-                        const s = window.getSelection();
-                        r.setStart(nextEl, 0);
-                        r.collapse(true);
-                        s.removeAllRanges();
-                        s.addRange(r);
-                    }
-                }, 30);
-
+                syncAllWishlistBlocks();
+                const newBlock = { id: Date.now().toString(), html: '', checked: false };
+                wishlistBlocks.splice(index + 1, 0, newBlock);
+                saveWishlistBlocks();
+                renderWishlistBlocks();
             } else if (e.key === 'Backspace') {
                 const currentEl = document.getElementById('wl-block-' + blockId);
                 const isBlank = !currentEl || currentEl.innerText.trim() === '' || currentEl.innerHTML === '<br>';
-                
-                if (isBlank && adhuBlocks.length > 1) {
+                if (isBlank && wishlistBlocks.length > 1) {
                     e.preventDefault();
-                    adhuBlocks = adhuBlocks.filter(b => b.id !== blockId);
-                    saveAdhuBlocks();
-                    renderAdhuBlocks();
-
-                    const prevIndex = Math.max(0, index - 1);
-                    const prevId = adhuBlocks[prevIndex].id;
-                    setTimeout(() => {
-                        const prevEl = document.getElementById('wl-block-' + prevId);
-                        if (prevEl) {
-                            prevEl.focus({ preventScroll: true });
-                            const range = document.createRange();
-                            const sel = window.getSelection();
-                            range.selectNodeContents(prevEl);
-                            range.collapse(false);
-                            sel.removeAllRanges();
-                            sel.addRange(range);
-                        }
-                    }, 30);
+                    wishlistBlocks = wishlistBlocks.filter(b => b.id !== blockId);
+                    saveWishlistBlocks();
+                    renderWishlistBlocks();
                 }
             }
         }
 
-        function updateAdhuBlockHtml(id) {
-            const block = adhuBlocks.find(b => b.id === id);
+        function updateWishlistBlockHtml(id) {
+            const block = wishlistBlocks.find(b => b.id === id);
             const el = document.getElementById('wl-block-' + id);
             if (block && el) {
                 block.html = cleanHtmlContent(el.innerHTML);
-                saveAdhuBlocks();
+                saveWishlistBlocks();
             }
         }
 
-        function toggleAdhuBlockCheck(id) {
-            syncAllAdhuBlocks();
-            const block = adhuBlocks.find(b => b.id === id);
+        function toggleWishlistBlockCheck(id) {
+            syncAllWishlistBlocks();
+            const block = wishlistBlocks.find(b => b.id === id);
             if (block) {
                 block.checked = !block.checked;
-                saveAdhuBlocks();
-                renderAdhuBlocks();
+                saveWishlistBlocks();
+                renderWishlistBlocks();
             }
         }
 
-        function addAdhuBlock() {
-            syncAllAdhuBlocks();
+        function addWishlistBlock() {
+            syncAllWishlistBlocks();
             const newId = Date.now().toString();
-            adhuBlocks.push({ id: newId, html: '', checked: false });
-            saveAdhuBlocks();
-            renderAdhuBlocks();
-            setTimeout(() => {
-                const el = document.getElementById('wl-block-' + newId);
-                if (el) el.focus({ preventScroll: true });
-            }, 50);
+            wishlistBlocks.push({ id: newId, html: '', checked: false });
+            saveWishlistBlocks();
+            renderWishlistBlocks();
         }
 
-        function deleteCheckedAdhuItems() {
-            const hasChecked = adhuBlocks.some(b => b.checked);
-            if (!hasChecked) {
-                alert("Check the box next to an item to delete it.");
-                return;
-            }
-            if (confirm("Delete selected items?")) {
-                adhuBlocks = adhuBlocks.filter(b => !b.checked);
-                if (adhuBlocks.length === 0) {
-                    adhuBlocks = [{ id: Date.now().toString(), html: '', checked: false }];
+        function deleteCheckedWishlistItems() {
+            if (confirm("Delete checked items?")) {
+                wishlistBlocks = wishlistBlocks.filter(b => !b.checked);
+                if (wishlistBlocks.length === 0) {
+                    wishlistBlocks = [{ id: Date.now().toString(), html: '', checked: false }];
                 }
-                saveAdhuBlocks();
-                renderAdhuBlocks();
+                saveWishlistBlocks();
+                renderWishlistBlocks();
             }
         }
 
         function applyWishlistFormat(e, command) {
             e.preventDefault();
             document.execCommand(command, false, null);
-            syncAllAdhuBlocks();
+            syncAllWishlistBlocks();
         }
 
         function cycleWishlistColor(e) {
@@ -4039,16 +3816,12 @@
             const curIdx = WL_SHEET_COLORS.indexOf(currentWlColor);
             const nextColor = WL_SHEET_COLORS[(curIdx + 1) % WL_SHEET_COLORS.length];
             applySheetColorClass(nextColor);
-            try {
-                localStorage.setItem('lc_adhu_wishlist_color', nextColor);
-            } catch (err) {}
         }
 
         function applySheetColorClass(colorName) {
             currentWlColor = colorName;
-            const card = document.getElementById('adhuWishlistCard');
+            const card = document.getElementById('wishlistCard');
             if (!card) return;
-            
             WL_SHEET_COLORS.forEach(c => card.classList.remove('wl-color-' + c));
             card.classList.add('wl-color-' + colorName);
         }
@@ -4059,11 +3832,9 @@
             if (sel && sel.getRangeAt && sel.rangeCount) {
                 savedRange = sel.getRangeAt(0);
             }
-            
             document.getElementById('wlLinkUrl').value = '';
             document.getElementById('wlLinkName').value = '';
             document.getElementById('wishlistLinkModal').classList.add('open');
-            setTimeout(() => document.getElementById('wlLinkUrl').focus(), 100);
         }
 
         function closeWishlistLinkModal(e) {
@@ -4075,15 +3846,8 @@
         function insertCustomHyperlink() {
             let url = document.getElementById('wlLinkUrl').value.trim();
             const name = document.getElementById('wlLinkName').value.trim();
-
-            if (!url) {
-                alert('Please enter a URL.');
-                return;
-            }
-
-            if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                url = 'https://' + url;
-            }
+            if (!url) return;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
 
             const displayName = name || url;
             closeWishlistLinkModal();
@@ -4094,27 +3858,15 @@
                 sel.addRange(savedRange);
             }
 
-            const linkHTML = `<a href="${url}" target="_blank" rel="noopener noreferrer">${displayName}</a>&nbsp;`;
-            document.execCommand('insertHTML', false, linkHTML);
-            syncAllAdhuBlocks();
+            document.execCommand('insertHTML', false, `<a href="${url}" target="_blank" rel="noopener noreferrer">${displayName}</a>&nbsp;`);
+            syncAllWishlistBlocks();
         }
 
-        function handleWishlistLinkClick(e) {
-            const target = e.target.closest('a');
-            if (target && target.href) {
-                e.preventDefault();
-                window.open(target.href, '_blank', 'noopener,noreferrer');
-            }
-        }
-
-        // ----------------------------------------------------
-        // BACKUP STATUS & BANNER
-        // ----------------------------------------------------
+        // Backup and Storage Management
         function checkBackupReminder() {
             const badge = document.getElementById('backupBadge');
             const lastBackupStr = localStorage.getItem('lc_last_backup_time');
             const twoDays = 2 * 24 * 60 * 60 * 1000; 
-            
             if (!lastBackupStr || (Date.now() - parseInt(lastBackupStr)) > twoDays) {
                 if (badge) badge.style.display = 'block'; 
             } else {
@@ -4134,9 +3886,6 @@
             if (b) b.style.display = 'none';
         }
 
-        // ----------------------------------------------------
-        // LOCAL DIRECTORY & APP SAVE FUNCTIONALITY
-        // ----------------------------------------------------
         let localDirHandle = null;
 
         async function pickLocalBackupDirectory() {
@@ -4151,7 +3900,7 @@
                     }
                 }
             } else {
-                alert('Directory picking is not supported by your current browser. Tapping Save File will download directly.');
+                alert('Directory picking is not supported by your current browser.');
             }
         }
 
@@ -4159,11 +3908,11 @@
             saveNotesList();
             saveTodoList();
             saveLinksToStorage();
-            saveKeeBookOverviews();
+            saveBookOverviews();
             saveCartoonsList();
             saveMilkData();
             saveWebHubData();
-            syncAllAdhuBlocks();
+            syncAllWishlistBlocks();
 
             const payload = getFullPayload();
             const jsonString = JSON.stringify(payload, null, 2);
@@ -4189,28 +3938,15 @@
                     await writable.write(jsonString);
                     await writable.close();
                     markBackupComplete();
-                    const status = document.getElementById('syncStatus');
-                    if (status) {
-                        status.innerText = '✓ Saved to local directory!';
-                        status.style.color = '#2E7D32';
-                    }
                     return;
                 } catch(err) {
-                    console.warn('Writing to directory failed, downloading instead:', err);
+                    console.warn(err);
                 }
             }
 
             triggerDownload(jsonString, 'TheMotherboard-Backup.json');
-            const status = document.getElementById('syncStatus');
-            if (status) {
-                status.innerText = '✓ Downloaded backup file!';
-                status.style.color = '#2E7D32';
-            }
         }
 
-        // ----------------------------------------------------
-        // DIRECT GOOGLE DRIVE BACKUP & RESTORE
-        // ----------------------------------------------------
         function openDriveSettingsModal() {
             document.getElementById('syncStatus').innerText = '';
             document.getElementById('driveModal').classList.add('open');
@@ -4226,21 +3962,19 @@
             return {
                 app: 'The Motherboard',
                 lastUpdated: new Date().toISOString(),
-                stickyNotes: notesList,
-                todoList: todoList,
-                userEbooks: userEbooks,
-                userAudiobooks: userAudiobooks,
-                userTools: userTools,
-                adhuBlocks: adhuBlocks,
-                adhuWishlistColor: localStorage.getItem('lc_adhu_wishlist_color') || 'default',
-                stickySortAsc: noteSortAsc,
-                keeBookOverviews: keeBookOverviews,
-                cartoonsList: cartoonsList,
+                notesList,
+                todoList,
+                userEbooks,
+                userAudiobooks,
+                userTools,
+                wishlistBlocks,
+                bookOverviews,
+                cartoonsList,
                 milkData: milkEntries,
                 milkDate: getTodayDateString(),
-                webHubSites: webHubSites,
-                webHubMedia: webHubMedia,
-                webHubSimpleNotes: webHubSimpleNotes
+                webHubSites,
+                webHubMedia,
+                webHubSimpleNotes
             };
         }
 
@@ -4252,28 +3986,20 @@
 
             try {
                 const file = new File([jsonString], fileName, { type: 'text/plain' });
-
                 if (!navigator.canShare || !navigator.canShare({ files: [file] })) {
                     triggerDownload(jsonString, fileName);
                     return;
                 }
-
                 await navigator.share({
                     title: 'The Motherboard Backup',
-                    text: 'Select Google Drive to save your backup.',
+                    text: 'Save data snapshot to Google Drive.',
                     files: [file]
                 });
-                
-                statusEl.innerText = '✓ Shared to Drive successfully!';
+                statusEl.innerText = '✓ Shared successfully!';
                 statusEl.style.color = '#2E7D32';
                 markBackupComplete(); 
-
             } catch (err) {
-                if (err.name === 'AbortError') {
-                    statusEl.innerText = 'Share cancelled.';
-                    return;
-                }
-                triggerDownload(jsonString, fileName);
+                if (err.name !== 'AbortError') triggerDownload(jsonString, fileName);
             }
         }
 
@@ -4299,78 +4025,42 @@
             reader.onload = function(e) {
                 try {
                     const data = JSON.parse(e.target.result);
-                    if (data.stickyNotes) {
-                        notesList = data.stickyNotes;
-                        sortNotesList();
-                        saveNotesList();
-                    }
-                    if (data.todoList) {
-                        todoList = data.todoList;
-                        saveTodoList();
-                    }
+                    if (data.notesList) notesList = data.notesList;
+                    if (data.todoList) todoList = data.todoList;
                     if (data.userEbooks) userEbooks = data.userEbooks;
                     if (data.userAudiobooks) userAudiobooks = data.userAudiobooks;
                     if (data.userTools) userTools = data.userTools;
-                    
-                    if (data.adhuBlocks) {
-                        adhuBlocks = data.adhuBlocks;
-                        adhuBlocks.forEach(b => {
-                            b.html = cleanHtmlContent(b.html);
-                        });
-                        saveAdhuBlocks();
-                    } else if (data.adhuWishlistContent !== undefined) {
-                        adhuBlocks = [{ id: Date.now().toString(), html: cleanHtmlContent(data.adhuWishlistContent), checked: false }];
-                        saveAdhuBlocks();
-                    }
-
-                    if (data.adhuWishlistColor) {
-                        localStorage.setItem('lc_adhu_wishlist_color', data.adhuWishlistColor);
-                    }
-
-                    if (data.stickySortAsc !== undefined) {
-                        noteSortAsc = data.stickySortAsc;
-                    }
-
-                    if (data.keeBookOverviews) {
-                        keeBookOverviews = data.keeBookOverviews;
-                        saveKeeBookOverviews();
-                    }
-
-                    if (data.cartoonsList) {
-                        cartoonsList = data.cartoonsList;
-                        saveCartoonsList();
-                    }
-
-                    if (data.milkData) {
-                        milkEntries = data.milkData;
-                        saveMilkData();
-                    }
-
+                    if (data.wishlistBlocks) wishlistBlocks = data.wishlistBlocks;
+                    if (data.bookOverviews) bookOverviews = data.bookOverviews;
+                    if (data.cartoonsList) cartoonsList = data.cartoonsList;
+                    if (data.milkData) milkEntries = data.milkData;
                     if (data.webHubSites) webHubSites = data.webHubSites;
                     if (data.webHubMedia) webHubMedia = data.webHubMedia;
-                    if (data.webHubSimpleNotes !== undefined) {
-                        webHubSimpleNotes = data.webHubSimpleNotes;
-                        const ta = document.getElementById('webHubSimpleNotesText');
-                        if (ta) ta.value = webHubSimpleNotes;
-                    }
+                    if (data.webHubSimpleNotes !== undefined) webHubSimpleNotes = data.webHubSimpleNotes;
+
+                    saveNotesList();
+                    saveTodoList();
+                    saveLinksToStorage();
+                    saveBookOverviews();
+                    saveCartoonsList();
+                    saveMilkData();
                     saveWebHubData();
-                    
-                    loadAdhuWishlistPage();
-                    loadKeeBookOverviews();
+                    saveWishlistBlocks();
+
+                    loadWishlistPage();
+                    loadBookOverviews();
                     loadCartoonsList();
                     loadMilkData();
                     loadWebHubData();
-                    saveLinksToStorage();
 
-                    statusEl.innerText = '✓ Data restored successfully!';
+                    statusEl.innerText = '✓ Restored successfully!';
                     statusEl.style.color = '#2E7D32';
                     markBackupComplete(); 
-
                     updateDashboardCounts();
                     renderNotesList();
                     renderTodoList();
                 } catch (err) {
-                    statusEl.innerText = 'Error: Invalid backup file format.';
+                    statusEl.innerText = 'Error: Invalid file format.';
                     statusEl.style.color = '#E53935';
                 }
             };
@@ -4378,17 +4068,13 @@
             input.value = '';
         }
 
-        // ----------------------------------------------------
-        // THEME TOGGLE
-        // ----------------------------------------------------
+        // Theme Toggle
         const moonIcon = document.getElementById('moonIcon');
         const sunIcon = document.getElementById('sunIcon');
 
         function setTheme(theme) {
             document.documentElement.setAttribute('data-theme', theme);
-            try {
-                localStorage.setItem('lc_theme', theme);
-            } catch (e) {}
+            try { localStorage.setItem('lc_theme', theme); } catch (e) {}
             if (theme === 'dark') {
                 if (moonIcon) moonIcon.style.display = 'none';
                 if (sunIcon) sunIcon.style.display = 'block';
@@ -4406,19 +4092,13 @@
         document.addEventListener('DOMContentLoaded', () => {
             try {
                 const savedTheme = localStorage.getItem('lc_theme');
-                if (savedTheme) {
-                    setTheme(savedTheme);
-                } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                    setTheme('dark');
-                } else {
-                    setTheme('light');
-                }
+                if (savedTheme) setTheme(savedTheme);
             } catch (e) {
                 setTheme('light');
             }
             updateDashboardCounts();
-            loadAdhuWishlistPage();
-            loadKeeBookOverviews();
+            loadWishlistPage();
+            loadBookOverviews();
             loadCartoonsList();
             loadMilkData();
             loadWebHubData();
