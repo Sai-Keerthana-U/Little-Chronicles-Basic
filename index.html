@@ -115,7 +115,7 @@
             gap: 14px;
         }
 
-        /* Top Header */
+        /* Header */
         header {
             display: flex;
             justify-content: space-between;
@@ -208,7 +208,7 @@
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         }
 
-        /* Scrolling Neon Ticker */
+        /* Ticker Banner */
         .neon-ticker-banner {
             position: relative;
             background: #101018;
@@ -436,7 +436,7 @@
             margin-top: 4px;
         }
 
-        /* Fixed Overlay Architecture for All Modals & Drawers */
+        /* Modal Structure */
         .modal-overlay, .drawer-overlay {
             position: fixed !important;
             top: 0 !important;
@@ -542,7 +542,7 @@
             opacity: 0.6;
         }
 
-        /* PDF Viewer */
+        /* PDF Viewer Frame */
         .pdf-view-header {
             display: flex;
             align-items: center;
@@ -603,7 +603,7 @@
             padding: 20px;
         }
 
-        /* Notes & To-Do */
+        /* Notes & To-Do Header */
         .notes-view-header {
             display: flex;
             align-items: center;
@@ -698,7 +698,7 @@
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
         }
 
-        /* Toolbar */
+        /* 2-Row Notepad Toolbar */
         .notepad-global-toolbar {
             display: flex;
             flex-direction: column;
@@ -775,7 +775,6 @@
             border: 1px solid rgba(0, 0, 0, 0.15);
             display: inline-block;
             box-sizing: border-box;
-            transition: transform 0.1s ease;
         }
 
         .clear-highlight-text-btn {
@@ -831,7 +830,6 @@
             font-size: 10.5px;
             font-weight: 600;
             color: var(--text-muted);
-            letter-spacing: 0.1px;
         }
 
         .notepad-card-actions {
@@ -1005,72 +1003,7 @@
             opacity: 0.6;
         }
 
-        /* Modal Inner Forms */
-        .modal-form {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            background: var(--surface-subtle);
-            padding: 14px;
-            border-radius: var(--radius-inner);
-        }
-
-        .modal-input, .modal-select {
-            background: var(--surface-card);
-            border: var(--card-border);
-            border-radius: 8px;
-            padding: 9px 12px;
-            font-family: inherit;
-            font-size: 12.5px;
-            color: var(--text-main);
-            outline: none;
-        }
-
-        .modal-save-btn {
-            background: var(--primary);
-            color: #FFFFFF;
-            border: none;
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .existing-links-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .existing-link-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 9px 12px;
-            background: var(--surface-subtle);
-            border-radius: 8px;
-            font-size: 12.5px;
-        }
-
-        .existing-link-name {
-            font-weight: 600;
-            color: var(--text-main);
-        }
-
-        .existing-link-del {
-            background: transparent;
-            border: none;
-            color: #E53935;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        /* Feature Accordions */
+        /* Feature Card Accordions */
         .features-stack {
             display: flex;
             flex-direction: column;
@@ -1160,6 +1093,122 @@
 
         .dropdown-feature-card.open .dropdown-feature-body {
             display: flex;
+        }
+
+        /* ----------------------------------------------------
+           NEW FEATURE: WEB HUB / WEBSITES ACCORDION STYLES
+           ---------------------------------------------------- */
+        .webhub-subtabs {
+            display: flex;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 3px;
+            gap: 3px;
+            margin-top: 10px;
+        }
+
+        .webhub-subtab-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 6px 0;
+            border-radius: 999px;
+            font-family: inherit;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .webhub-subtab-btn.active {
+            background: var(--surface-card);
+            color: var(--primary);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .webhub-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-top: 4px;
+        }
+
+        .webhub-input-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .webhub-input {
+            flex: 1;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 12px;
+            color: var(--text-main);
+            outline: none;
+            font-family: inherit;
+        }
+
+        .webhub-badges-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding-top: 2px;
+        }
+
+        .webhub-chip {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 10px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .webhub-chip.youtube {
+            border-color: rgba(229, 57, 53, 0.3);
+            background: rgba(229, 57, 53, 0.08);
+        }
+
+        .webhub-chip.instagram {
+            border-color: rgba(233, 30, 99, 0.3);
+            background: rgba(233, 30, 99, 0.08);
+        }
+
+        .webhub-chip-del {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            padding: 0 2px;
+            opacity: 0.6;
+        }
+
+        .webhub-simple-notes {
+            width: 100%;
+            height: 110px;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-family: inherit;
+            font-size: 13px;
+            color: var(--text-main);
+            line-height: 1.5;
+            outline: none;
+            resize: none;
+            box-sizing: border-box;
         }
 
         /* Milk Tracker */
@@ -1810,7 +1859,7 @@
             </div>
         </header>
 
-        <!-- Scrolling Neon Ticker Banner -->
+        <!-- Permanent Scrolling Neon Ticker Banner -->
         <div class="neon-ticker-banner" id="neonTickerBanner">
             <div class="neon-tag"><span>⚡</span> SYNC</div>
             <div class="marquee-track">
@@ -1905,6 +1954,54 @@
                         <button class="add-note-btn" style="width: 100%; margin-top: 4px;" onclick="addKeeBookOverview()">
                             <span>+</span> Add Book Overview
                         </button>
+                    </div>
+                </div>
+
+                <!-- NEW FEATURE: WEB HUB (WEBSITES, YOUTUBE/INSTA, AND SIMPLE NOTES) -->
+                <div class="dropdown-feature-card open" id="keeWebHubCard">
+                    <div class="dropdown-feature-header" onclick="toggleKeeWebHubDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">🌐</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Web Hub</span>
+                                <span class="feature-sub-title" id="webHubCountSub">Websites, Videos & Notes</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <!-- Sub-feature Switcher Tabs -->
+                        <div class="webhub-subtabs">
+                            <button class="webhub-subtab-btn active" id="subtabSitesBtn" onclick="switchWebHubSubtab('sites')">🔗 Websites</button>
+                            <button class="webhub-subtab-btn" id="subtabMediaBtn" onclick="switchWebHubSubtab('media')">📱 YouTube / Insta</button>
+                            <button class="webhub-subtab-btn" id="subtabNotesBtn" onclick="switchWebHubSubtab('notes')">📝 Notes</button>
+                        </div>
+
+                        <!-- Sub-panel 1: Websites -->
+                        <div class="webhub-panel" id="webhubPanelSites">
+                            <div class="webhub-input-row">
+                                <input type="text" id="newSiteName" class="webhub-input" placeholder="Site name (e.g. Strength Routine)">
+                                <input type="url" id="newSiteUrl" class="webhub-input" placeholder="URL (https://...)">
+                                <button class="add-note-btn" onclick="addWebHubSite()">+ Add</button>
+                            </div>
+                            <div class="webhub-badges-grid" id="webhubSitesList"></div>
+                        </div>
+
+                        <!-- Sub-panel 2: YouTube / Instagram -->
+                        <div class="webhub-panel" id="webhubPanelMedia" style="display:none;">
+                            <div class="webhub-input-row">
+                                <input type="text" id="newMediaTitle" class="webhub-input" placeholder="Video/Reel title (e.g. Squat Form)">
+                                <input type="url" id="newMediaUrl" class="webhub-input" placeholder="YouTube/Insta link...">
+                                <button class="add-note-btn" onclick="addWebHubMedia()">+ Add</button>
+                            </div>
+                            <div class="webhub-badges-grid" id="webhubMediaList"></div>
+                        </div>
+
+                        <!-- Sub-panel 3: Simple Notes (No heavy formatting) -->
+                        <div class="webhub-panel" id="webhubPanelNotes" style="display:none;">
+                            <textarea id="webHubSimpleNotesText" class="webhub-simple-notes" placeholder="Jot down workout splits, routine plans, reminders, or quick thoughts..." oninput="saveWebHubSimpleNotes()"></textarea>
+                        </div>
                     </div>
                 </div>
 
@@ -2023,7 +2120,7 @@
         <main id="view-adhu" class="view-content">
             <div class="features-stack">
 
-                <!-- FEATURE 1: MILK TRACKER (600ml - 900ml TARGETS) -->
+                <!-- FEATURE 1: MILK TRACKER -->
                 <div class="dropdown-feature-card open" id="adhuMilkCard">
                     <div class="dropdown-feature-header" onclick="toggleAdhuMilkDropdown()">
                         <div class="feature-header-left">
@@ -2264,7 +2361,7 @@
             <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
                 <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Instant Local Backup</div>
                 <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.4;">
-                    Download an updated snapshot of your entire motherboard (notes, to-dos, cartoons, wishlist).
+                    Download an updated snapshot of your entire motherboard (notes, to-dos, cartoons, web hub, wishlist).
                 </p>
                 <button class="modal-save-btn" style="background: var(--primary);" onclick="triggerAppSave()">
                     💾 Save Full Backup File
@@ -2918,7 +3015,203 @@
         }
 
         // ----------------------------------------------------
-        // ADHU'S MILK TRACKER LOGIC (600ml - 900ml)
+        // KEE: WEB HUB LOGIC (WEBSITES, MEDIA, SIMPLE NOTES)
+        // ----------------------------------------------------
+        let webHubSites = [];
+        let webHubMedia = [];
+        let webHubSimpleNotes = '';
+
+        function loadWebHubData() {
+            try {
+                const sSites = localStorage.getItem('lc_webhub_sites');
+                if (sSites) webHubSites = JSON.parse(sSites);
+                else {
+                    webHubSites = [
+                        { id: 'wh_s1', name: 'ExRx Exercise Directory', url: 'https://exrx.net' },
+                        { id: 'wh_s2', name: 'Open Culture Free Courses', url: 'https://www.openculture.com' }
+                    ];
+                }
+
+                const sMedia = localStorage.getItem('lc_webhub_media');
+                if (sMedia) webHubMedia = JSON.parse(sMedia);
+                else {
+                    webHubMedia = [
+                        { id: 'wh_m1', title: 'Squat Form Analysis', url: 'https://youtube.com', type: 'youtube' }
+                    ];
+                }
+
+                const sNotes = localStorage.getItem('lc_webhub_notes');
+                if (sNotes !== null) webHubSimpleNotes = sNotes;
+            } catch(e) {
+                webHubSites = [];
+                webHubMedia = [];
+                webHubSimpleNotes = '';
+            }
+
+            const isCardOpen = localStorage.getItem('lc_webhub_open');
+            const card = document.getElementById('keeWebHubCard');
+            if (card && isCardOpen !== null) {
+                if (isCardOpen === 'false') card.classList.remove('open');
+                else card.classList.add('open');
+            }
+
+            const textarea = document.getElementById('webHubSimpleNotesText');
+            if (textarea) textarea.value = webHubSimpleNotes;
+
+            renderWebHubSites();
+            renderWebHubMedia();
+        }
+
+        function saveWebHubData() {
+            try {
+                localStorage.setItem('lc_webhub_sites', JSON.stringify(webHubSites));
+                localStorage.setItem('lc_webhub_media', JSON.stringify(webHubMedia));
+                localStorage.setItem('lc_webhub_notes', webHubSimpleNotes);
+            } catch(e) {}
+        }
+
+        function toggleKeeWebHubDropdown() {
+            const card = document.getElementById('keeWebHubCard');
+            if (card) {
+                card.classList.toggle('open');
+                try {
+                    localStorage.setItem('lc_webhub_open', card.classList.contains('open'));
+                } catch(e) {}
+            }
+        }
+
+        function switchWebHubSubtab(tab) {
+            document.querySelectorAll('.webhub-subtab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('subtabSitesBtn').classList.toggle('active', tab === 'sites');
+            document.getElementById('subtabMediaBtn').classList.toggle('active', tab === 'media');
+            document.getElementById('subtabNotesBtn').classList.toggle('active', tab === 'notes');
+
+            document.getElementById('webhubPanelSites').style.display = tab === 'sites' ? 'flex' : 'none';
+            document.getElementById('webhubPanelMedia').style.display = tab === 'media' ? 'flex' : 'none';
+            document.getElementById('webhubPanelNotes').style.display = tab === 'notes' ? 'flex' : 'none';
+        }
+
+        function renderWebHubSites() {
+            const list = document.getElementById('webhubSitesList');
+            if (!list) return;
+            list.innerHTML = '';
+
+            if (webHubSites.length === 0) {
+                list.innerHTML = '<span style="font-size:11px; color:var(--text-muted);">No websites saved yet.</span>';
+                return;
+            }
+
+            webHubSites.forEach((site, index) => {
+                const chip = document.createElement('div');
+                chip.className = 'webhub-chip';
+                chip.innerHTML = `
+                    <a href="${site.url}" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                        🌐 ${site.name} <span class="arrow-up-right">↗</span>
+                    </a>
+                    <button class="webhub-chip-del" onclick="deleteWebHubSite(${index})">✕</button>
+                `;
+                list.appendChild(chip);
+            });
+        }
+
+        function addWebHubSite() {
+            const nameInput = document.getElementById('newSiteName');
+            const urlInput = document.getElementById('newSiteUrl');
+            const name = nameInput.value.trim();
+            let url = urlInput.value.trim();
+
+            if (!name || !url) {
+                alert('Please enter both a name and a link URL.');
+                return;
+            }
+
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+
+            webHubSites.push({ id: 'wh_s_' + Date.now().toString(), name, url });
+            saveWebHubData();
+            renderWebHubSites();
+            nameInput.value = '';
+            urlInput.value = '';
+        }
+
+        function deleteWebHubSite(index) {
+            webHubSites.splice(index, 1);
+            saveWebHubData();
+            renderWebHubSites();
+        }
+
+        function renderWebHubMedia() {
+            const list = document.getElementById('webhubMediaList');
+            if (!list) return;
+            list.innerHTML = '';
+
+            if (webHubMedia.length === 0) {
+                list.innerHTML = '<span style="font-size:11px; color:var(--text-muted);">No video or reel links saved yet.</span>';
+                return;
+            }
+
+            webHubMedia.forEach((media, index) => {
+                const isYt = media.type === 'youtube' || media.url.includes('youtu');
+                const isInsta = media.type === 'instagram' || media.url.includes('instagram');
+                const tagClass = isYt ? 'youtube' : (isInsta ? 'instagram' : '');
+                const icon = isYt ? '▶️ YouTube' : (isInsta ? '📸 Insta' : '🎬 Video');
+
+                const chip = document.createElement('div');
+                chip.className = `webhub-chip ${tagClass}`;
+                chip.innerHTML = `
+                    <a href="${media.url}" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+                        ${icon}: ${media.title} <span class="arrow-up-right">↗</span>
+                    </a>
+                    <button class="webhub-chip-del" onclick="deleteWebHubMedia(${index})">✕</button>
+                `;
+                list.appendChild(chip);
+            });
+        }
+
+        function addWebHubMedia() {
+            const titleInput = document.getElementById('newMediaTitle');
+            const urlInput = document.getElementById('newMediaUrl');
+            const title = titleInput.value.trim();
+            let url = urlInput.value.trim();
+
+            if (!title || !url) {
+                alert('Please enter both a title and a link URL.');
+                return;
+            }
+
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+
+            let type = 'video';
+            if (url.includes('youtu.be') || url.includes('youtube.com')) type = 'youtube';
+            else if (url.includes('instagram.com')) type = 'instagram';
+
+            webHubMedia.push({ id: 'wh_m_' + Date.now().toString(), title, url, type });
+            saveWebHubData();
+            renderWebHubMedia();
+            titleInput.value = '';
+            urlInput.value = '';
+        }
+
+        function deleteWebHubMedia(index) {
+            webHubMedia.splice(index, 1);
+            saveWebHubData();
+            renderWebHubMedia();
+        }
+
+        function saveWebHubSimpleNotes() {
+            const textarea = document.getElementById('webHubSimpleNotesText');
+            if (textarea) {
+                webHubSimpleNotes = textarea.value;
+                saveWebHubData();
+            }
+        }
+
+        // ----------------------------------------------------
+        // ADHU: MILK TRACKER LOGIC
         // ----------------------------------------------------
         let milkEntries = [];
 
@@ -3815,7 +4108,7 @@
         }
 
         // ----------------------------------------------------
-        // BACKUP STATUS & NEON BANNER
+        // BACKUP STATUS & BANNER
         // ----------------------------------------------------
         function checkBackupReminder() {
             const badge = document.getElementById('backupBadge');
@@ -3869,6 +4162,7 @@
             saveKeeBookOverviews();
             saveCartoonsList();
             saveMilkData();
+            saveWebHubData();
             syncAllAdhuBlocks();
 
             const payload = getFullPayload();
@@ -3943,7 +4237,10 @@
                 keeBookOverviews: keeBookOverviews,
                 cartoonsList: cartoonsList,
                 milkData: milkEntries,
-                milkDate: getTodayDateString()
+                milkDate: getTodayDateString(),
+                webHubSites: webHubSites,
+                webHubMedia: webHubMedia,
+                webHubSimpleNotes: webHubSimpleNotes
             };
         }
 
@@ -4048,11 +4345,21 @@
                         milkEntries = data.milkData;
                         saveMilkData();
                     }
+
+                    if (data.webHubSites) webHubSites = data.webHubSites;
+                    if (data.webHubMedia) webHubMedia = data.webHubMedia;
+                    if (data.webHubSimpleNotes !== undefined) {
+                        webHubSimpleNotes = data.webHubSimpleNotes;
+                        const ta = document.getElementById('webHubSimpleNotesText');
+                        if (ta) ta.value = webHubSimpleNotes;
+                    }
+                    saveWebHubData();
                     
                     loadAdhuWishlistPage();
                     loadKeeBookOverviews();
                     loadCartoonsList();
                     loadMilkData();
+                    loadWebHubData();
                     saveLinksToStorage();
 
                     statusEl.innerText = '✓ Data restored successfully!';
@@ -4114,6 +4421,7 @@
             loadKeeBookOverviews();
             loadCartoonsList();
             loadMilkData();
+            loadWebHubData();
             sortNotesList();
             renderNotesList();
             checkBackupReminder(); 
