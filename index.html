@@ -1208,21 +1208,181 @@
         }
 
         /* ----------------------------------------------------
-           NEW FEATURE: WHIMSICAL WEBSITES STYLES
+           OPTION 2: FOLDER-BASED WHIMSICAL WEBSITES & RANDOM
            ---------------------------------------------------- */
+        .whimsical-top-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .surprise-me-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #FF007F 0%, #7928CA 100%);
+            color: #FFFFFF;
+            border: none;
+            border-radius: var(--radius-inner);
+            padding: 10px 14px;
+            font-size: 12.5px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 0, 127, 0.3);
+            letter-spacing: 0.2px;
+        }
+
+        .surprise-me-btn:active {
+            transform: scale(0.96);
+        }
+
+        .new-folder-action-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            color: var(--text-main);
+            border-radius: var(--radius-inner);
+            padding: 10px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+        .new-folder-action-btn:active {
+            transform: scale(0.96);
+        }
+
+        .whimsical-add-bar {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            background: var(--surface-subtle);
+            padding: 8px 10px;
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+        }
+
+        .whimsical-folder-select {
+            background: var(--surface-card);
+            border: var(--card-border);
+            border-radius: 8px;
+            padding: 7px 8px;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            outline: none;
+            max-width: 110px;
+        }
+
+        .whimsical-folders-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-top: 2px;
+        }
+
+        .whimsical-folder-card {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s ease;
+        }
+
+        .whimsical-folder-header {
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .whimsical-folder-header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .whimsical-folder-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .whimsical-folder-count {
+            font-size: 10.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: var(--surface-card);
+            padding: 2px 7px;
+            border-radius: 999px;
+            border: var(--card-border);
+        }
+
+        .whimsical-folder-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .folder-tool-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 11px;
+            cursor: pointer;
+            padding: 2px 4px;
+            opacity: 0.6;
+        }
+
+        .whimsical-folder-chevron {
+            font-size: 9px;
+            color: var(--text-muted);
+            transition: transform 0.2s ease;
+            margin-left: 4px;
+        }
+
+        .whimsical-folder-card.open .whimsical-folder-chevron {
+            transform: rotate(180deg);
+        }
+
+        .whimsical-folder-content {
+            display: none;
+            padding: 10px 12px 12px;
+            flex-wrap: wrap;
+            gap: 6px;
+            border-top: var(--card-border);
+            background: var(--surface-card);
+        }
+
+        .whimsical-folder-card.open .whimsical-folder-content {
+            display: flex;
+        }
+
         .whimsical-chip {
             background: var(--surface-subtle);
-            border: 1px solid rgba(148, 93, 76, 0.25);
-            border-radius: 10px;
-            padding: 6px 10px;
-            font-size: 12px;
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 5px 11px;
+            font-size: 11.5px;
             font-weight: 600;
             color: var(--text-main);
             display: inline-flex;
             align-items: center;
             gap: 6px;
             text-decoration: none;
-            transition: all 0.15s ease;
+            transition: transform 0.15s ease;
         }
 
         .whimsical-chip:active {
@@ -2012,7 +2172,7 @@
                     </div>
                 </div>
 
-                <!-- NEW FEATURE: WHIMSICAL WEBSITES ACCORDION -->
+                <!-- NEW FEATURE: WHIMSICAL WEBSITES (OPTION 2: FOLDERS + 🎲 SURPRISE ME) -->
                 <div class="dropdown-feature-card open" id="whimsicalCard">
                     <div class="dropdown-feature-header" onclick="toggleWhimsicalDropdown()">
                         <div class="feature-header-left">
@@ -2026,12 +2186,25 @@
                     </div>
 
                     <div class="dropdown-feature-body">
-                        <div class="webhub-input-row">
-                            <input type="url" id="newWhimsicalUrl" class="webhub-input" placeholder="Paste website URL (e.g. pointerpointer.com)" onkeypress="if(event.key==='Enter') addWhimsicalSite()">
-                            <button class="add-note-btn" onclick="addWhimsicalSite()">+ Add</button>
+                        <!-- Top Action Controls: Surprise Me (Random) + Add Folder -->
+                        <div class="whimsical-top-controls">
+                            <button class="surprise-me-btn" onclick="launchRandomWhimsicalSite()" title="Open a random whimsical site!">
+                                🎲 Surprise Me!
+                            </button>
+                            <button class="new-folder-action-btn" onclick="promptCreateFolder()">
+                                📁 + New Folder
+                            </button>
                         </div>
 
-                        <div class="webhub-badges-grid" id="whimsicalBadgesList"></div>
+                        <!-- Add Link into Selected Folder Bar -->
+                        <div class="whimsical-add-bar">
+                            <select id="whimsicalFolderSelect" class="whimsical-folder-select"></select>
+                            <input type="url" id="newWhimsicalUrl" class="webhub-input" placeholder="Paste website URL..." onkeypress="if(event.key==='Enter') addWhimsicalSiteToFolder()">
+                            <button class="add-note-btn" onclick="addWhimsicalSiteToFolder()">+ Add</button>
+                        </div>
+
+                        <!-- Dynamic Folder Accordions Stack -->
+                        <div class="whimsical-folders-stack" id="whimsicalFoldersContainer"></div>
                     </div>
                 </div>
 
@@ -3208,17 +3381,40 @@
         }
 
         // ----------------------------------------------------
-        // NEW FEATURE: WHIMSICAL WEBSITES LOGIC
+        // OPTION 2: FOLDER-BASED WHIMSICAL WEBSITES LOGIC
         // ----------------------------------------------------
-        let whimsicalSites = [];
+        let whimsicalFolders = [];
 
-        function loadWhimsicalSites() {
+        function loadWhimsicalFolders() {
             try {
-                const stored = localStorage.getItem('lc_whimsical_sites');
-                if (stored) whimsicalSites = JSON.parse(stored);
-                else whimsicalSites = [];
+                const storedFolders = localStorage.getItem('lc_whimsical_folders');
+                if (storedFolders) {
+                    whimsicalFolders = JSON.parse(storedFolders);
+                } else {
+                    // Migrate flat list if present
+                    const oldFlatSites = localStorage.getItem('lc_whimsical_sites');
+                    if (oldFlatSites) {
+                        const parsedFlat = JSON.parse(oldFlatSites);
+                        whimsicalFolders = [
+                            {
+                                id: 'wf_general',
+                                name: 'General',
+                                open: true,
+                                sites: parsedFlat
+                            }
+                        ];
+                    } else {
+                        whimsicalFolders = [
+                            { id: 'wf_explorables', name: 'Interactive & Explorables', open: true, sites: [] },
+                            { id: 'wf_data', name: 'Data Stories & Essays', open: false, sites: [] },
+                            { id: 'wf_thinking', name: 'Philosophy & Logic', open: false, sites: [] }
+                        ];
+                    }
+                }
             } catch(e) {
-                whimsicalSites = [];
+                whimsicalFolders = [
+                    { id: 'wf_general', name: 'General', open: true, sites: [] }
+                ];
             }
 
             const isCardOpen = localStorage.getItem('lc_whimsical_open');
@@ -3228,12 +3424,12 @@
                 else card.classList.add('open');
             }
 
-            renderWhimsicalSites();
+            renderWhimsicalFolders();
         }
 
-        function saveWhimsicalSites() {
+        function saveWhimsicalFolders() {
             try {
-                localStorage.setItem('lc_whimsical_sites', JSON.stringify(whimsicalSites));
+                localStorage.setItem('lc_whimsical_folders', JSON.stringify(whimsicalFolders));
             } catch(e) {}
             updateWhimsicalSubtitle();
         }
@@ -3251,41 +3447,136 @@
         function updateWhimsicalSubtitle() {
             const sub = document.getElementById('whimsicalSub');
             if (!sub) return;
-            const count = whimsicalSites.length;
-            sub.innerText = count + (count === 1 ? ' link' : ' links');
+            const totalSites = whimsicalFolders.reduce((sum, f) => sum + (f.sites ? f.sites.length : 0), 0);
+            sub.innerText = `${totalSites} ${totalSites === 1 ? 'link' : 'links'} across ${whimsicalFolders.length} folders`;
         }
 
-        function renderWhimsicalSites() {
-            const list = document.getElementById('whimsicalBadgesList');
-            if (!list) return;
-            list.innerHTML = '';
+        function renderWhimsicalFolders() {
+            const container = document.getElementById('whimsicalFoldersContainer');
+            const selectEl = document.getElementById('whimsicalFolderSelect');
+            if (!container || !selectEl) return;
 
-            if (whimsicalSites.length === 0) {
-                list.innerHTML = '<span style="font-size:11px; color:var(--text-muted);">No whimsical websites added yet.</span>';
-                updateWhimsicalSubtitle();
-                return;
+            container.innerHTML = '';
+            selectEl.innerHTML = '';
+
+            if (whimsicalFolders.length === 0) {
+                whimsicalFolders.push({ id: 'wf_' + Date.now(), name: 'General', open: true, sites: [] });
             }
 
-            whimsicalSites.forEach((site, index) => {
-                let cleanDisplay = site.url.replace(/^https?:\/\//i, '').replace(/^www\./i, '').replace(/\/$/, '');
-                if (cleanDisplay.length > 28) cleanDisplay = cleanDisplay.substring(0, 26) + '...';
+            // Populate selector dropdown
+            whimsicalFolders.forEach(folder => {
+                const opt = document.createElement('option');
+                opt.value = folder.id;
+                opt.innerText = folder.name;
+                selectEl.appendChild(opt);
+            });
 
-                const chip = document.createElement('div');
-                chip.className = 'whimsical-chip';
-                chip.innerHTML = `
-                    <a href="${site.url}" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
-                        ✨ <span>${cleanDisplay}</span> <span class="arrow-up-right">↗</span>
-                    </a>
-                    <button class="webhub-chip-del" onclick="deleteWhimsicalSite(${index})">✕</button>
+            // Populate folder cards
+            whimsicalFolders.forEach((folder, folderIndex) => {
+                const card = document.createElement('div');
+                card.className = `whimsical-folder-card ${folder.open ? 'open' : ''}`;
+                card.id = `folder-card-${folder.id}`;
+
+                const sitesList = folder.sites || [];
+
+                let chipsHtml = '';
+                if (sitesList.length === 0) {
+                    chipsHtml = '<span style="font-size:11px; color:var(--text-muted); padding:4px 0;">No links in this folder.</span>';
+                } else {
+                    sitesList.forEach((site, siteIndex) => {
+                        let cleanDisplay = site.url.replace(/^https?:\/\//i, '').replace(/^www\./i, '').replace(/\/$/, '');
+                        if (cleanDisplay.length > 28) cleanDisplay = cleanDisplay.substring(0, 26) + '...';
+
+                        chipsHtml += `
+                            <div class="whimsical-chip">
+                                <a href="${site.url}" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
+                                    ✨ <span>${cleanDisplay}</span> <span class="arrow-up-right">↗</span>
+                                </a>
+                                <button class="webhub-chip-del" onclick="deleteWhimsicalSite(${folderIndex}, ${siteIndex})">✕</button>
+                            </div>
+                        `;
+                    });
+                }
+
+                card.innerHTML = `
+                    <div class="whimsical-folder-header" onclick="toggleFolderOpen('${folder.id}')">
+                        <div class="whimsical-folder-header-left">
+                            <span>📁</span>
+                            <span class="whimsical-folder-name">${folder.name}</span>
+                            <span class="whimsical-folder-count">${sitesList.length}</span>
+                        </div>
+                        <div class="whimsical-folder-actions" onclick="event.stopPropagation()">
+                            <button class="folder-tool-btn" onclick="promptRenameFolder('${folder.id}')" title="Rename folder">✏️</button>
+                            <button class="folder-tool-btn" onclick="deleteFolder('${folder.id}')" title="Delete folder">🗑️</button>
+                            <span class="whimsical-folder-chevron">▼</span>
+                        </div>
+                    </div>
+                    <div class="whimsical-folder-content">
+                        ${chipsHtml}
+                    </div>
                 `;
-                list.appendChild(chip);
+
+                container.appendChild(card);
             });
 
             updateWhimsicalSubtitle();
         }
 
-        function addWhimsicalSite() {
+        function toggleFolderOpen(folderId) {
+            const folder = whimsicalFolders.find(f => f.id === folderId);
+            if (folder) {
+                folder.open = !folder.open;
+                saveWhimsicalFolders();
+                renderWhimsicalFolders();
+            }
+        }
+
+        function promptCreateFolder() {
+            const name = prompt("Enter new folder name (e.g. Games & Toys):");
+            if (!name || !name.trim()) return;
+
+            whimsicalFolders.push({
+                id: 'wf_' + Date.now(),
+                name: name.trim(),
+                open: true,
+                sites: []
+            });
+
+            saveWhimsicalFolders();
+            renderWhimsicalFolders();
+        }
+
+        function promptRenameFolder(folderId) {
+            const folder = whimsicalFolders.find(f => f.id === folderId);
+            if (!folder) return;
+
+            const newName = prompt("Rename folder:", folder.name);
+            if (!newName || !newName.trim()) return;
+
+            folder.name = newName.trim();
+            saveWhimsicalFolders();
+            renderWhimsicalFolders();
+        }
+
+        function deleteFolder(folderId) {
+            const folder = whimsicalFolders.find(f => f.id === folderId);
+            if (!folder) return;
+
+            const siteCount = folder.sites ? folder.sites.length : 0;
+            const confirmMsg = siteCount > 0 
+                ? `Delete folder "${folder.name}" and its ${siteCount} links?`
+                : `Delete folder "${folder.name}"?`;
+
+            if (confirm(confirmMsg)) {
+                whimsicalFolders = whimsicalFolders.filter(f => f.id !== folderId);
+                saveWhimsicalFolders();
+                renderWhimsicalFolders();
+            }
+        }
+
+        function addWhimsicalSiteToFolder() {
             const input = document.getElementById('newWhimsicalUrl');
+            const selectEl = document.getElementById('whimsicalFolderSelect');
             let url = input.value.trim();
             if (!url) return;
 
@@ -3293,16 +3584,50 @@
                 url = 'https://' + url;
             }
 
-            whimsicalSites.push({ id: 'whim_' + Date.now().toString(), url: url });
-            saveWhimsicalSites();
-            renderWhimsicalSites();
+            const targetFolderId = selectEl.value;
+            let folder = whimsicalFolders.find(f => f.id === targetFolderId);
+            if (!folder) {
+                if (whimsicalFolders.length === 0) {
+                    folder = { id: 'wf_general', name: 'General', open: true, sites: [] };
+                    whimsicalFolders.push(folder);
+                } else {
+                    folder = whimsicalFolders[0];
+                }
+            }
+
+            if (!folder.sites) folder.sites = [];
+            folder.sites.unshift({ id: 'whim_' + Date.now().toString(), url: url });
+            folder.open = true;
+
+            saveWhimsicalFolders();
+            renderWhimsicalFolders();
             input.value = '';
         }
 
-        function deleteWhimsicalSite(index) {
-            whimsicalSites.splice(index, 1);
-            saveWhimsicalSites();
-            renderWhimsicalSites();
+        function deleteWhimsicalSite(folderIndex, siteIndex) {
+            if (whimsicalFolders[folderIndex] && whimsicalFolders[folderIndex].sites) {
+                whimsicalFolders[folderIndex].sites.splice(siteIndex, 1);
+                saveWhimsicalFolders();
+                renderWhimsicalFolders();
+            }
+        }
+
+        // 🎲 SURPRISE ME: RANDOM DISCOVERY ENGINE
+        function launchRandomWhimsicalSite() {
+            const allSites = [];
+            whimsicalFolders.forEach(folder => {
+                if (folder.sites && folder.sites.length > 0) {
+                    folder.sites.forEach(s => allSites.push(s));
+                }
+            });
+
+            if (allSites.length === 0) {
+                alert("No whimsical websites found yet! Add some links below first.");
+                return;
+            }
+
+            const randomSite = allSites[Math.floor(Math.random() * allSites.length)];
+            window.open(randomSite.url, '_blank', 'noopener,noreferrer');
         }
 
         // Milk Tracker Logic
@@ -4068,7 +4393,7 @@
             saveCartoonsList();
             saveMilkData();
             saveWorkoutData();
-            saveWhimsicalSites();
+            saveWhimsicalFolders();
             syncAllWishlistBlocks();
 
             const payload = getFullPayload();
@@ -4135,7 +4460,7 @@
                 workoutSites,
                 workoutMedia,
                 workoutSimpleNotes,
-                whimsicalSites,
+                whimsicalFolders,
                 profileName1: localStorage.getItem('lc_profile_name_1') || 'User 1',
                 profileName2: localStorage.getItem('lc_profile_name_2') || 'User 2'
             };
@@ -4222,7 +4547,11 @@
                         if (ta) ta.value = workoutSimpleNotes;
                     }
 
-                    if (data.whimsicalSites) whimsicalSites = data.whimsicalSites;
+                    if (data.whimsicalFolders) {
+                        whimsicalFolders = data.whimsicalFolders;
+                    } else if (data.whimsicalSites) {
+                        whimsicalFolders = [{ id: 'wf_migrated', name: 'General', open: true, sites: data.whimsicalSites }];
+                    }
 
                     if (data.profileName1) localStorage.setItem('lc_profile_name_1', data.profileName1);
                     if (data.profileName2) localStorage.setItem('lc_profile_name_2', data.profileName2);
@@ -4234,7 +4563,7 @@
                     saveCartoonsList();
                     saveMilkData();
                     saveWorkoutData();
-                    saveWhimsicalSites();
+                    saveWhimsicalFolders();
                     saveWishlistBlocks();
 
                     loadCustomProfileNames();
@@ -4243,7 +4572,7 @@
                     loadCartoonsList();
                     loadMilkData();
                     loadWorkoutData();
-                    loadWhimsicalSites();
+                    loadWhimsicalFolders();
 
                     statusEl.innerText = '✓ Restored successfully!';
                     statusEl.style.color = '#2E7D32';
@@ -4295,7 +4624,7 @@
             loadCartoonsList();
             loadMilkData();
             loadWorkoutData();
-            loadWhimsicalSites();
+            loadWhimsicalFolders();
             sortNotesList();
             renderNotesList();
             checkBackupReminder(); 
