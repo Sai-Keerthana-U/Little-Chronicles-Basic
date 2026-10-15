@@ -347,6 +347,12 @@
             line-height: 1;
         }
 
+        .icon-badge img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+        }
+
         .card-arrow {
             width: 20px;
             height: 20px;
@@ -1208,7 +1214,7 @@
         }
 
         /* ----------------------------------------------------
-           OPTION 2: FOLDER-BASED WHIMSICAL WEBSITES & RANDOM
+           OPTION 2: FOLDER-BASED WHIMSICAL WEBSITES
            ---------------------------------------------------- */
         .whimsical-top-controls {
             display: flex;
@@ -1349,16 +1355,12 @@
         .whimsical-folder-chevron {
             font-size: 9px;
             color: var(--text-muted);
-            transition: transform 0.2s ease;
             margin-left: 4px;
         }
 
-        .whimsical-folder-card.open .whimsical-folder-chevron {
-            transform: rotate(180deg);
-        }
-
+        /* Strict Toggle Display for Folder Contents */
         .whimsical-folder-content {
-            display: none;
+            display: none !important;
             padding: 10px 12px 12px;
             flex-wrap: wrap;
             gap: 6px;
@@ -1367,7 +1369,7 @@
         }
 
         .whimsical-folder-card.open .whimsical-folder-content {
-            display: flex;
+            display: flex !important;
         }
 
         .whimsical-chip {
@@ -2561,7 +2563,6 @@
                 <button class="drawer-close-btn" onclick="closeDriveSettingsModal()">✕</button>
             </div>
 
-            <!-- Profile Display Names Customizer -->
             <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
                 <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Profile Display Names</div>
                 <div style="display: flex; gap: 8px;">
@@ -3381,7 +3382,7 @@
         }
 
         // ----------------------------------------------------
-        // OPTION 2: FOLDER-BASED WHIMSICAL WEBSITES LOGIC
+        // OPTION 2: FOLDER-BASED WHIMSICAL WEBSITES
         // ----------------------------------------------------
         let whimsicalFolders = [];
 
@@ -3391,7 +3392,6 @@
                 if (storedFolders) {
                     whimsicalFolders = JSON.parse(storedFolders);
                 } else {
-                    // Migrate flat list if present
                     const oldFlatSites = localStorage.getItem('lc_whimsical_sites');
                     if (oldFlatSites) {
                         const parsedFlat = JSON.parse(oldFlatSites);
@@ -3460,10 +3460,9 @@
             selectEl.innerHTML = '';
 
             if (whimsicalFolders.length === 0) {
-                whimsicalFolders.push({ id: 'wf_' + Date.now(), name: 'General', open: true, sites: [] });
+                whimsicalFolders.push({ id: 'wf_' + Date.now(), name: 'General', open: false, sites: [] });
             }
 
-            // Populate selector dropdown
             whimsicalFolders.forEach(folder => {
                 const opt = document.createElement('option');
                 opt.value = folder.id;
@@ -3471,10 +3470,10 @@
                 selectEl.appendChild(opt);
             });
 
-            // Populate folder cards
             whimsicalFolders.forEach((folder, folderIndex) => {
+                const isOpen = !!folder.open;
                 const card = document.createElement('div');
-                card.className = `whimsical-folder-card ${folder.open ? 'open' : ''}`;
+                card.className = `whimsical-folder-card ${isOpen ? 'open' : ''}`;
                 card.id = `folder-card-${folder.id}`;
 
                 const sitesList = folder.sites || [];
@@ -3505,10 +3504,10 @@
                             <span class="whimsical-folder-name">${folder.name}</span>
                             <span class="whimsical-folder-count">${sitesList.length}</span>
                         </div>
-                        <div class="whimsical-folder-actions" onclick="event.stopPropagation()">
-                            <button class="folder-tool-btn" onclick="promptRenameFolder('${folder.id}')" title="Rename folder">✏️</button>
-                            <button class="folder-tool-btn" onclick="deleteFolder('${folder.id}')" title="Delete folder">🗑️</button>
-                            <span class="whimsical-folder-chevron">▼</span>
+                        <div class="whimsical-folder-actions">
+                            <button class="folder-tool-btn" onclick="event.stopPropagation(); promptRenameFolder('${folder.id}')" title="Rename folder">✏️</button>
+                            <button class="folder-tool-btn" onclick="event.stopPropagation(); deleteFolder('${folder.id}')" title="Delete folder">🗑️</button>
+                            <span class="whimsical-folder-chevron">${isOpen ? '▲' : '▼'}</span>
                         </div>
                     </div>
                     <div class="whimsical-folder-content">
@@ -3612,7 +3611,6 @@
             }
         }
 
-        // 🎲 SURPRISE ME: RANDOM DISCOVERY ENGINE
         function launchRandomWhimsicalSite() {
             const allSites = [];
             whimsicalFolders.forEach(folder => {
@@ -4241,7 +4239,7 @@
                 const isBlank = !currentEl || currentEl.innerText.trim() === '' || currentEl.innerHTML === '<br>';
                 if (isBlank && wishlistBlocks.length > 1) {
                     e.preventDefault();
-                    wishlistBlocks = wishlistBlocks.filter(b => b.id !== blockId);
+                    wishlistBlocks = wishlistBlocks.filter(b => !b.id !== blockId);
                     saveWishlistBlocks();
                     renderWishlistBlocks();
                 }
