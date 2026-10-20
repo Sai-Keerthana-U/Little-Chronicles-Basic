@@ -347,12 +347,6 @@
             line-height: 1;
         }
 
-        .icon-badge img {
-            width: 26px;
-            height: 26px;
-            object-fit: contain;
-        }
-
         .card-arrow {
             width: 20px;
             height: 20px;
@@ -1099,6 +1093,37 @@
             display: flex;
         }
 
+        /* Meal Plan Action Cards */
+        .meal-plan-card-body {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            padding: 12px 14px;
+            margin-top: 6px;
+        }
+
+        .meal-plan-open-btn {
+            background: var(--primary);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .meal-plan-open-btn:active {
+            transform: scale(0.96);
+        }
+
         /* Workout / Subtabs */
         .webhub-subtabs {
             display: flex;
@@ -1213,9 +1238,7 @@
             box-sizing: border-box;
         }
 
-        /* ----------------------------------------------------
-           OPTION 2: FOLDER-BASED WHIMSICAL WEBSITES
-           ---------------------------------------------------- */
+        /* Whimsical Websites */
         .whimsical-top-controls {
             display: flex;
             align-items: center;
@@ -1358,7 +1381,6 @@
             margin-left: 4px;
         }
 
-        /* Strict Toggle Display for Folder Contents */
         .whimsical-folder-content {
             display: none !important;
             padding: 10px 12px 12px;
@@ -2108,6 +2130,32 @@
                     </div>
                 </div>
 
+                <!-- FEATURE: USER 1 MEAL PLAN -->
+                <div class="dropdown-feature-card open" id="user1MealPlanCard">
+                    <div class="dropdown-feature-header" onclick="toggleCardDropdown('user1MealPlanCard')">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">🥗</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Meal Plan</span>
+                                <span class="feature-sub-title" id="user1MealPlanSub">Private Drive File</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="meal-plan-card-body">
+                            <div>
+                                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Personal Meal Plan</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Stored privately in Google Drive</div>
+                            </div>
+                            <button id="user1MealPlanBtn" class="meal-plan-open-btn" onclick="openMealPlan(1)">
+                                ↗ Open Plan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- FEATURE: BOOKS OVERVIEW ACCORDION -->
                 <div class="dropdown-feature-card" id="user1BooksOverviewCard">
                     <div class="dropdown-feature-header" onclick="toggleBooksOverviewDropdown()">
@@ -2383,6 +2431,32 @@
                         <div class="milk-chips-history" id="milkChipsHistory"></div>
                     </div>
                 </div>
+
+                <!-- FEATURE: USER 2 MEAL PLAN -->
+                <div class="dropdown-feature-card open" id="user2MealPlanCard">
+                    <div class="dropdown-feature-header" onclick="toggleCardDropdown('user2MealPlanCard')">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">🥗</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Meal Plan</span>
+                                <span class="feature-sub-title" id="user2MealPlanSub">Private Drive File</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="meal-plan-card-body">
+                            <div>
+                                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Personal Meal Plan</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Stored privately in Google Drive</div>
+                            </div>
+                            <button id="user2MealPlanBtn" class="meal-plan-open-btn" onclick="openMealPlan(2)">
+                                ↗ Open Plan
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 
                 <!-- FEATURE 2: WISHLIST -->
                 <div class="dropdown-feature-card open" id="wishlistCard">
@@ -2555,7 +2629,7 @@
         </div>
     </div>
 
-    <!-- MODAL: SETTINGS & BACKUP -->
+    <!-- MODAL: SETTINGS & BACKUP (WITH PRIVATE MEAL PLAN LINKS) -->
     <div class="modal-overlay" id="driveModal" onclick="closeDriveSettingsModal(event)">
         <div class="modal-sheet" onclick="event.stopPropagation()">
             <div class="modal-header">
@@ -2563,11 +2637,24 @@
                 <button class="drawer-close-btn" onclick="closeDriveSettingsModal()">✕</button>
             </div>
 
+            <!-- Profile Display Names Customizer -->
             <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
                 <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Profile Display Names</div>
                 <div style="display: flex; gap: 8px;">
                     <input type="text" id="customNameInput1" class="webhub-input" placeholder="Name for Profile 1" oninput="saveCustomProfileNames()">
                     <input type="text" id="customNameInput2" class="webhub-input" placeholder="Name for Profile 2" oninput="saveCustomProfileNames()">
+                </div>
+            </div>
+
+            <!-- Private Meal Plan Links Setup (Zero traces on GitHub) -->
+            <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Private Meal Plan URLs</div>
+                <p style="font-size: 11px; color: var(--text-muted); line-height: 1.35;">
+                    Paste private Google Drive file or preview links here. Stored only in your device's browser.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <input type="url" id="mealPlanUrl1" class="webhub-input" placeholder="Profile 1 Meal Plan URL (https://drive...)" oninput="saveMealPlanLinks()">
+                    <input type="url" id="mealPlanUrl2" class="webhub-input" placeholder="Profile 2 Meal Plan URL (https://drive...)" oninput="saveMealPlanLinks()">
                 </div>
             </div>
 
@@ -2615,6 +2702,7 @@
     </div>
 
     <script>
+        // Custom Profile Names Logic
         function loadCustomProfileNames() {
             const name1 = localStorage.getItem('lc_profile_name_1') || 'User 1';
             const name2 = localStorage.getItem('lc_profile_name_2') || 'User 2';
@@ -2644,6 +2732,55 @@
             const tab2 = document.getElementById('profileTabBtn2');
             if (tab1) tab1.innerText = name1;
             if (tab2) tab2.innerText = name2;
+        }
+
+        // Private Meal Plan Logic
+        function loadMealPlanLinks() {
+            const url1 = localStorage.getItem('lc_mealplan_url_1') || '';
+            const url2 = localStorage.getItem('lc_mealplan_url_2') || '';
+
+            const inp1 = document.getElementById('mealPlanUrl1');
+            const inp2 = document.getElementById('mealPlanUrl2');
+            if (inp1) inp1.value = url1;
+            if (inp2) inp2.value = url2;
+
+            const btn1 = document.getElementById('user1MealPlanBtn');
+            const btn2 = document.getElementById('user2MealPlanBtn');
+            if (btn1) btn1.innerText = url1 ? '↗ Open Plan' : '⚙️ Configure Link';
+            if (btn2) btn2.innerText = url2 ? '↗ Open Plan' : '⚙️ Configure Link';
+        }
+
+        function saveMealPlanLinks() {
+            const inp1 = document.getElementById('mealPlanUrl1');
+            const inp2 = document.getElementById('mealPlanUrl2');
+            const url1 = inp1 ? inp1.value.trim() : '';
+            const url2 = inp2 ? inp2.value.trim() : '';
+
+            localStorage.setItem('lc_mealplan_url_1', url1);
+            localStorage.setItem('lc_mealplan_url_2', url2);
+
+            const btn1 = document.getElementById('user1MealPlanBtn');
+            const btn2 = document.getElementById('user2MealPlanBtn');
+            if (btn1) btn1.innerText = url1 ? '↗ Open Plan' : '⚙️ Configure Link';
+            if (btn2) btn2.innerText = url2 ? '↗ Open Plan' : '⚙️ Configure Link';
+        }
+
+        function openMealPlan(profileNum) {
+            const url = localStorage.getItem('lc_mealplan_url_' + profileNum);
+            if (url && url.trim()) {
+                window.open(url.trim(), '_blank', 'noopener,noreferrer');
+            } else {
+                openDriveSettingsModal();
+                setTimeout(() => {
+                    const inp = document.getElementById('mealPlanUrl' + profileNum);
+                    if (inp) inp.focus();
+                }, 200);
+            }
+        }
+
+        function toggleCardDropdown(cardId) {
+            const card = document.getElementById(cardId);
+            if (card) card.classList.toggle('open');
         }
 
         function switchProfile(button, profileKey) {
@@ -4239,7 +4376,7 @@
                 const isBlank = !currentEl || currentEl.innerText.trim() === '' || currentEl.innerHTML === '<br>';
                 if (isBlank && wishlistBlocks.length > 1) {
                     e.preventDefault();
-                    wishlistBlocks = wishlistBlocks.filter(b => !b.id !== blockId);
+                    wishlistBlocks = wishlistBlocks.filter(b => b.id !== blockId);
                     saveWishlistBlocks();
                     renderWishlistBlocks();
                 }
@@ -4392,6 +4529,7 @@
             saveMilkData();
             saveWorkoutData();
             saveWhimsicalFolders();
+            saveMealPlanLinks();
             syncAllWishlistBlocks();
 
             const payload = getFullPayload();
@@ -4459,6 +4597,8 @@
                 workoutMedia,
                 workoutSimpleNotes,
                 whimsicalFolders,
+                mealPlanUrl1: localStorage.getItem('lc_mealplan_url_1') || '',
+                mealPlanUrl2: localStorage.getItem('lc_mealplan_url_2') || '',
                 profileName1: localStorage.getItem('lc_profile_name_1') || 'User 1',
                 profileName2: localStorage.getItem('lc_profile_name_2') || 'User 2'
             };
@@ -4551,6 +4691,9 @@
                         whimsicalFolders = [{ id: 'wf_migrated', name: 'General', open: true, sites: data.whimsicalSites }];
                     }
 
+                    if (data.mealPlanUrl1) localStorage.setItem('lc_mealplan_url_1', data.mealPlanUrl1);
+                    if (data.mealPlanUrl2) localStorage.setItem('lc_mealplan_url_2', data.mealPlanUrl2);
+
                     if (data.profileName1) localStorage.setItem('lc_profile_name_1', data.profileName1);
                     if (data.profileName2) localStorage.setItem('lc_profile_name_2', data.profileName2);
 
@@ -4565,6 +4708,7 @@
                     saveWishlistBlocks();
 
                     loadCustomProfileNames();
+                    loadMealPlanLinks();
                     loadWishlistPage();
                     loadBookOverviews();
                     loadCartoonsList();
@@ -4616,6 +4760,7 @@
                 setTheme('light');
             }
             loadCustomProfileNames();
+            loadMealPlanLinks();
             updateDashboardCounts();
             loadWishlistPage();
             loadBookOverviews();
