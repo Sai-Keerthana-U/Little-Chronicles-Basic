@@ -459,7 +459,7 @@
             background: var(--surface-card);
             border-radius: 20px;
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             max-height: 85vh;
             padding: 20px 18px 24px;
             box-shadow: 0 12px 36px rgba(0,0,0,0.3);
@@ -1414,6 +1414,219 @@
             background: var(--primary-soft);
         }
 
+        /* ----------------------------------------------------
+           NEW FEATURE: KITCHEN DECK (RECIPES & COOK MODE)
+           ---------------------------------------------------- */
+        .recipe-item-card {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s ease;
+        }
+
+        .recipe-header {
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .recipe-header-title-box {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            flex: 1;
+        }
+
+        .recipe-title-text {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .recipe-tags-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .recipe-meta-pill {
+            font-size: 10px;
+            font-weight: 700;
+            background: var(--surface-card);
+            border: var(--card-border);
+            color: var(--text-muted);
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+
+        .recipe-body-wrap {
+            display: none;
+            flex-direction: column;
+            padding: 14px;
+            border-top: var(--card-border);
+            background: var(--surface-card);
+            gap: 12px;
+        }
+
+        .recipe-item-card.open .recipe-body-wrap {
+            display: flex;
+        }
+
+        .recipe-controls-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed rgba(0,0,0,0.08);
+        }
+
+        .cook-mode-btn {
+            background: #2E7D32;
+            color: #FFFFFF;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .cook-mode-btn:active {
+            transform: scale(0.96);
+        }
+
+        .recipe-section-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .ingredient-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .ingredient-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .ingredient-row.checked span {
+            text-decoration: line-through;
+            opacity: 0.45;
+        }
+
+        .recipe-steps-list {
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-main);
+        }
+
+        /* Large Cook Mode Overlay */
+        .cook-mode-overlay {
+            position: fixed !important;
+            top: 0 !important; left: 0 !important;
+            width: 100vw !important; height: 100vh !important;
+            background: rgba(0, 0, 0, 0.75) !important;
+            backdrop-filter: blur(8px) !important;
+            z-index: 2000 !important;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+
+        .cook-mode-overlay.open {
+            display: flex !important;
+        }
+
+        .cook-mode-modal {
+            background: var(--surface-card);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            padding: 24px 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+        }
+
+        .cook-mode-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 12px;
+        }
+
+        .cook-mode-title {
+            font-size: 19px;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.3;
+        }
+
+        .cook-step-card {
+            background: var(--surface-subtle);
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+            padding: 14px 16px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .cook-step-num {
+            background: var(--primary);
+            color: #FFFFFF;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .cook-step-text {
+            font-size: 15px;
+            line-height: 1.55;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
         /* Milk Tracker */
         .milk-progress-box {
             background: var(--surface-subtle);
@@ -2156,6 +2369,28 @@
                     </div>
                 </div>
 
+                <!-- NEW FEATURE: KITCHEN DECK (RECIPES & COOK MODE) -->
+                <div class="dropdown-feature-card open" id="kitchenDeckCard">
+                    <div class="dropdown-feature-header" onclick="toggleKitchenDeckDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">🍳</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Kitchen Deck</span>
+                                <span class="feature-sub-title" id="recipeDeckCountSub">0 recipes</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div id="recipesDeckContainer" style="display:flex; flex-direction:column; gap:10px; padding-top:6px;"></div>
+
+                        <button class="add-note-btn" style="width: 100%; margin-top: 4px;" onclick="openRecipeEditorModal()">
+                            <span>+</span> Add New Recipe
+                        </button>
+                    </div>
+                </div>
+
                 <!-- FEATURE: BOOKS OVERVIEW ACCORDION -->
                 <div class="dropdown-feature-card" id="user1BooksOverviewCard">
                     <div class="dropdown-feature-header" onclick="toggleBooksOverviewDropdown()">
@@ -2222,8 +2457,8 @@
                     </div>
                 </div>
 
-                <!-- NEW FEATURE: WHIMSICAL WEBSITES (OPTION 2: FOLDERS + 🎲 SURPRISE ME) -->
-                <div class="dropdown-feature-card open" id="whimsicalCard">
+                <!-- FEATURE: WHIMSICAL WEBSITES -->
+                <div class="dropdown-feature-card" id="whimsicalCard">
                     <div class="dropdown-feature-header" onclick="toggleWhimsicalDropdown()">
                         <div class="feature-header-left">
                             <div class="feature-icon-badge">✨</div>
@@ -2236,7 +2471,6 @@
                     </div>
 
                     <div class="dropdown-feature-body">
-                        <!-- Top Action Controls: Surprise Me (Random) + Add Folder -->
                         <div class="whimsical-top-controls">
                             <button class="surprise-me-btn" onclick="launchRandomWhimsicalSite()" title="Open a random whimsical site!">
                                 🎲 Surprise Me!
@@ -2246,14 +2480,12 @@
                             </button>
                         </div>
 
-                        <!-- Add Link into Selected Folder Bar -->
                         <div class="whimsical-add-bar">
                             <select id="whimsicalFolderSelect" class="whimsical-folder-select"></select>
                             <input type="url" id="newWhimsicalUrl" class="webhub-input" placeholder="Paste website URL..." onkeypress="if(event.key==='Enter') addWhimsicalSiteToFolder()">
                             <button class="add-note-btn" onclick="addWhimsicalSiteToFolder()">+ Add</button>
                         </div>
 
-                        <!-- Dynamic Folder Accordions Stack -->
                         <div class="whimsical-folders-stack" id="whimsicalFoldersContainer"></div>
                     </div>
                 </div>
@@ -2549,6 +2781,69 @@
             </div>
         </main>
 
+    </div>
+
+    <!-- MODAL: KITCHEN DECK RECIPE EDITOR -->
+    <div class="modal-overlay" id="recipeEditorModal" onclick="closeRecipeEditorModal(event)">
+        <div class="modal-sheet" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title" id="recipeModalHeading">Add Recipe</h3>
+                <button class="drawer-close-btn" onclick="closeRecipeEditorModal()">✕</button>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <div>
+                    <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Recipe Title</label>
+                    <input type="text" id="recipeTitleInput" class="webhub-input" style="width:100%; margin-top:2px;" placeholder="e.g. 15-Minute Dal Tadka">
+                </div>
+
+                <div style="display:flex; gap:8px;">
+                    <div style="flex:1;">
+                        <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Prep Time</label>
+                        <input type="text" id="recipeTimeInput" class="webhub-input" style="width:100%; margin-top:2px;" placeholder="e.g. 20 min">
+                    </div>
+                    <div style="flex:1;">
+                        <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Tags (comma separated)</label>
+                        <input type="text" id="recipeTagsInput" class="webhub-input" style="width:100%; margin-top:2px;" placeholder="e.g. Quick, Protein">
+                    </div>
+                </div>
+
+                <div>
+                    <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Ingredients (one per line)</label>
+                    <textarea id="recipeIngredientsInput" class="webhub-simple-notes" style="height:90px; margin-top:2px;" placeholder="1 cup yellow moong dal&#10;1 tsp cumin seeds&#10;1 tbsp ghee"></textarea>
+                </div>
+
+                <div>
+                    <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Steps / Directions (one per line)</label>
+                    <textarea id="recipeDirectionsInput" class="webhub-simple-notes" style="height:90px; margin-top:2px;" placeholder="Wash dal and pressure cook for 3 whistles.&#10;Heat ghee in a pan and temper cumin.&#10;Stir together and serve hot."></textarea>
+                </div>
+
+                <button class="add-note-btn" style="width:100%; margin-top:4px;" onclick="saveRecipeFromModal()">Save Recipe</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: COOK MODE (COUNTER TOP BIG VIEW) -->
+    <div class="cook-mode-overlay" id="cookModeOverlay" onclick="closeCookMode(event)">
+        <div class="cook-mode-modal" onclick="event.stopPropagation()">
+            <div class="cook-mode-header">
+                <div>
+                    <div style="font-size:11px; font-weight:700; color:#00E676; text-transform:uppercase; letter-spacing:0.8px;">👨‍🍳 COOK MODE ACTIVE</div>
+                    <div class="cook-mode-title" id="cookModeTitle">Recipe Title</div>
+                </div>
+                <button class="drawer-close-btn" onclick="closeCookMode()">✕</button>
+            </div>
+
+            <div>
+                <div class="recipe-section-title">Ingredients Checklist</div>
+                <div class="ingredient-checklist" id="cookModeIngredientsList"></div>
+            </div>
+
+            <div style="border-top: 1px solid var(--card-border); padding-top: 14px;">
+                <div class="recipe-section-title">Preparation Steps</div>
+                <div style="display:flex; flex-direction:column; gap:10px;" id="cookModeStepsList"></div>
+            </div>
+        </div>
     </div>
 
     <!-- CARTOON LONG-PRESS ACTION SHEET -->
@@ -3041,1737 +3336,4 @@
                 panelNotes.style.display = 'block';
                 panelTodo.style.display = 'none';
                 hubActionBtn.innerHTML = '<span>+</span> New Note';
-                if (sortNotesBtn) sortNotesBtn.style.display = 'inline-flex';
-                if (globalToolbar) globalToolbar.style.display = 'flex';
-            } else {
-                tabTodoBtn.classList.add('active');
-                tabNotesBtn.classList.remove('active');
-                panelNotes.style.display = 'none';
-                panelTodo.style.display = 'block';
-                hubActionBtn.innerHTML = '<span>+</span> Focus Input';
-                if (sortNotesBtn) sortNotesBtn.style.display = 'none';
-                if (globalToolbar) globalToolbar.style.display = 'none';
-                setTimeout(() => {
-                    const todoInput = document.getElementById('todoInput');
-                    if (todoInput) todoInput.focus();
-                }, 50);
-            }
-        }
-
-        function handleHubAction() {
-            if (currentHubTab === 'notes') addNewNoteItem();
-            else document.getElementById('todoInput').focus();
-        }
-
-        const NOTE_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
-        let noteSortAsc = false;
-        let lastFocusedNoteId = null;
-        let savedNoteSelectionRange = null;
-
-        function getFormattedTimestamp() {
-            const now = new Date();
-            const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            return dateStr + ', ' + timeStr;
-        }
-
-        let notesList = [
-            {
-                id: '1',
-                text: 'Welcome to your private dashboard!\n• Tap any note to edit.\n• Use the toolbar above for formatting.',
-                color: 'default',
-                timestamp: getFormattedTimestamp(),
-                createdAt: Date.now(),
-                minimized: false,
-                pinned: true,
-                favorite: false
-            }
-        ];
-
-        try {
-            const sn = localStorage.getItem('lc_sticky_notes');
-            if (sn) notesList = JSON.parse(sn);
-            const sa = localStorage.getItem('lc_sticky_sort_asc');
-            if (sa !== null) noteSortAsc = (sa === 'true');
-        } catch (e) {
-            console.error(e);
-        }
-
-        function saveNotesList() {
-            try {
-                localStorage.setItem('lc_sticky_notes', JSON.stringify(notesList));
-            } catch (e) {
-                console.error(e);
-            }
-        }
-
-        function sortNotesList() {
-            notesList.sort((a, b) => {
-                if (!!a.pinned !== !!b.pinned) return a.pinned ? -1 : 1;
-                if (!!a.favorite !== !!b.favorite) return a.favorite ? -1 : 1;
-                const timeA = a.createdAt || parseInt(a.id) || 0;
-                const timeB = b.createdAt || parseInt(b.id) || 0;
-                return noteSortAsc ? (timeA - timeB) : (timeB - timeA);
-            });
-        }
-
-        document.addEventListener('selectionchange', () => {
-            const sel = window.getSelection();
-            if (!sel || sel.rangeCount === 0) return;
-            const node = sel.anchorNode;
-            if (!node) return;
-            const editorEl = node.nodeType === 3 ? node.parentElement.closest('.notepad-body') : node.closest('.notepad-body');
-            if (editorEl) {
-                savedNoteSelectionRange = sel.getRangeAt(0).cloneRange();
-            }
-        });
-
-        function restoreSelection() {
-            if (savedNoteSelectionRange) {
-                const sel = window.getSelection();
-                sel.removeAllRanges();
-                sel.addRange(savedNoteSelectionRange);
-            } else if (lastFocusedNoteId) {
-                const el = document.getElementById('note-body-' + lastFocusedNoteId);
-                if (el && document.activeElement !== el) {
-                    el.focus({ preventScroll: true });
-                }
-            }
-        }
-
-        function applyFormatting(e, command, value = null) {
-            if (e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-            restoreSelection();
-            document.execCommand(command, false, value);
-            if (lastFocusedNoteId) {
-                const el = document.getElementById('note-body-' + lastFocusedNoteId);
-                if (el) updateNoteItemText(lastFocusedNoteId, el);
-            }
-        }
-
-        function applyTextColor(color, e) {
-            if (e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-            restoreSelection();
-            document.execCommand('foreColor', false, color);
-            if (lastFocusedNoteId) {
-                const el = document.getElementById('note-body-' + lastFocusedNoteId);
-                if (el) updateNoteItemText(lastFocusedNoteId, el);
-            }
-        }
-
-        function applyHighlightColor(color, e) {
-            if (e) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-            restoreSelection();
-            if (!document.execCommand('hiliteColor', false, color)) {
-                document.execCommand('backColor', false, color);
-            }
-            if (lastFocusedNoteId) {
-                const el = document.getElementById('note-body-' + lastFocusedNoteId);
-                if (el) updateNoteItemText(lastFocusedNoteId, el);
-            }
-        }
-
-        function handleNoteKeyDown(e, id) {
-            const sel = window.getSelection();
-            if (!sel || sel.rangeCount === 0) return;
-
-            const range = sel.getRangeAt(0);
-            const node = sel.anchorNode;
-            const li = node.nodeType === 3 ? node.parentElement.closest('li') : node.closest('li');
-
-            if (!li) return;
-
-            const isAtStart = range.startOffset === 0 && (range.startContainer === li || range.startContainer === li.firstChild);
-
-            if (e.key === 'Backspace' && isAtStart) {
-                e.preventDefault();
-                const listType = li.closest('ol') ? 'insertOrderedList' : 'insertUnorderedList';
-                document.execCommand(listType, false, null);
-                const el = document.getElementById('note-body-' + id);
-                if (el) updateNoteItemText(id, el);
-            } else if (e.key === 'Enter') {
-                if (li.innerText.trim() === '' || li.innerHTML === '<br>') {
-                    e.preventDefault();
-                    const listType = li.closest('ol') ? 'insertOrderedList' : 'insertUnorderedList';
-                    document.execCommand(listType, false, null);
-                    const el = document.getElementById('note-body-' + id);
-                    if (el) updateNoteItemText(id, el);
-                }
-            }
-        }
-
-        function toggleStickySort() {
-            noteSortAsc = !noteSortAsc;
-            try {
-                localStorage.setItem('lc_sticky_sort_asc', noteSortAsc);
-            } catch(e) {}
-            sortNotesList();
-            saveNotesList();
-            renderNotesList();
-        }
-
-        function togglePinNote(id) {
-            const note = notesList.find(n => n.id === id);
-            if (note) {
-                note.pinned = !note.pinned;
-                sortNotesList();
-                saveNotesList();
-                renderNotesList();
-            }
-        }
-
-        function toggleStarNote(id) {
-            const note = notesList.find(n => n.id === id);
-            if (note) {
-                note.favorite = !note.favorite;
-                sortNotesList();
-                saveNotesList();
-                renderNotesList();
-            }
-        }
-
-        function toggleMinimizeNoteCard(id) {
-            const note = notesList.find(n => n.id === id);
-            if (note) {
-                note.minimized = !note.minimized;
-                saveNotesList();
-                renderNotesList();
-            }
-        }
-
-        function cycleNoteColor(id) {
-            const note = notesList.find(n => n.id === id);
-            if (note) {
-                const currentIndex = NOTE_COLORS.indexOf(note.color || 'default');
-                note.color = NOTE_COLORS[(currentIndex + 1) % NOTE_COLORS.length];
-                saveNotesList();
-                const el = document.getElementById('notepad-card-' + id);
-                if (el) {
-                    NOTE_COLORS.forEach(c => el.classList.remove('color-' + c));
-                    el.classList.add('color-' + note.color);
-                }
-            }
-        }
-
-        function renderNotesList() {
-            const container = document.getElementById('stickyNotesContainer');
-            if (!container) return;
-            container.innerHTML = '';
-
-            const indicator = document.getElementById('sortDirectionIndicator');
-            if (indicator) indicator.innerText = noteSortAsc ? '↑' : '↓';
-
-            if (notesList.length === 0) {
-                container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 40px 0; font-size: 13px;">No notes yet. Tap <strong>+ New Note</strong> to start writing!</div>`;
-                updateDashboardCounts();
-                return;
-            }
-
-            notesList.forEach(note => {
-                const noteEl = document.createElement('div');
-                const colorClass = note.color ? 'color-' + note.color : 'color-default';
-                const isMin = !!note.minimized;
-                const isPinned = !!note.pinned;
-                const isFav = !!note.favorite;
-
-                noteEl.className = `notepad-card ${colorClass}${isMin ? ' minimized' : ''}${isPinned ? ' is-pinned' : ''}`;
-                noteEl.id = 'notepad-card-' + note.id;
-
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = note.text || '';
-                const plainSnippet = (tempDiv.innerText || tempDiv.textContent || '').trim().replace(/\n/g, ' • ');
-
-                noteEl.innerHTML = `
-                    <div class="notepad-card-header">
-                        <span class="notepad-timestamp">${note.timestamp || ''}</span>
-                        <div class="notepad-card-actions">
-                            <button type="button" class="notepad-card-btn ${isPinned ? 'active-pin' : ''}" title="${isPinned ? 'Unpin' : 'Pin'}" onclick="togglePinNote('${note.id}')">${isPinned ? '📌' : '📍'}</button>
-                            <button type="button" class="notepad-card-btn ${isFav ? 'active-star' : ''}" title="${isFav ? 'Unfavorite' : 'Favorite'}" onclick="toggleStarNote('${note.id}')">${isFav ? '★' : '☆'}</button>
-                            <button type="button" class="notepad-card-btn" title="${isMin ? 'Expand' : 'Minimize'}" onclick="toggleMinimizeNoteCard('${note.id}')">${isMin ? '＋' : '—'}</button>
-                            <button type="button" class="notepad-card-btn" title="Color" onclick="cycleNoteColor('${note.id}')">🎨</button>
-                            <button type="button" class="notepad-card-btn" style="color:#E53935;" title="Delete" onclick="deleteNoteItem('${note.id}')">🗑️</button>
-                        </div>
-                    </div>
-                    <div class="notepad-preview-title" onclick="toggleMinimizeNoteCard('${note.id}')">${plainSnippet || 'Empty Note'}</div>
-                    <div class="notepad-body" id="note-body-${note.id}" contenteditable="true" 
-                         onfocus="lastFocusedNoteId='${note.id}';"
-                         onkeydown="handleNoteKeyDown(event, '${note.id}')"
-                         oninput="updateNoteItemText('${note.id}', this)" placeholder="Write your note here...">${note.text}</div>
-                `;
-                container.appendChild(noteEl);
-            });
-            updateDashboardCounts(); 
-        }
-
-        function addNewNoteItem() {
-            const newNote = {
-                id: Date.now().toString(),
-                text: '',
-                color: 'default',
-                timestamp: getFormattedTimestamp(),
-                createdAt: Date.now(),
-                minimized: false,
-                pinned: false,
-                favorite: false
-            };
-            notesList.unshift(newNote);
-            sortNotesList();
-            saveNotesList();
-            renderNotesList();
-        }
-
-        function updateNoteItemText(id, element) {
-            const note = notesList.find(n => n.id === id);
-            if (note) {
-                note.text = element.innerHTML;
-                saveNotesList();
-            }
-        }
-
-        function deleteNoteItem(id) {
-            if (confirm("Delete this note?")) {
-                notesList = notesList.filter(n => n.id !== id);
-                saveNotesList();
-                renderNotesList();
-            }
-        }
-
-        // WORKOUT HUB LOGIC
-        let workoutSites = [];
-        let workoutMedia = [];
-        let workoutSimpleNotes = '';
-
-        function loadWorkoutData() {
-            try {
-                const sSites = localStorage.getItem('lc_workout_sites') || localStorage.getItem('lc_webhub_sites');
-                if (sSites) workoutSites = JSON.parse(sSites);
-                else workoutSites = [];
-
-                const sMedia = localStorage.getItem('lc_workout_media') || localStorage.getItem('lc_webhub_media');
-                if (sMedia) workoutMedia = JSON.parse(sMedia);
-                else workoutMedia = [];
-
-                const sNotes = localStorage.getItem('lc_workout_notes') || localStorage.getItem('lc_webhub_notes');
-                if (sNotes !== null) workoutSimpleNotes = sNotes;
-            } catch(e) {
-                workoutSites = [];
-                workoutMedia = [];
-                workoutSimpleNotes = '';
-            }
-
-            const isCardOpen = localStorage.getItem('lc_workout_open');
-            const card = document.getElementById('workoutCard');
-            if (card && isCardOpen !== null) {
-                if (isCardOpen === 'false') card.classList.remove('open');
-                else card.classList.add('open');
-            }
-
-            const textarea = document.getElementById('workoutSimpleNotesText');
-            if (textarea) textarea.value = workoutSimpleNotes;
-
-            renderWorkoutSites();
-            renderWorkoutMedia();
-        }
-
-        function saveWorkoutData() {
-            try {
-                localStorage.setItem('lc_workout_sites', JSON.stringify(workoutSites));
-                localStorage.setItem('lc_workout_media', JSON.stringify(workoutMedia));
-                localStorage.setItem('lc_workout_notes', workoutSimpleNotes);
-            } catch(e) {}
-        }
-
-        function toggleWorkoutDropdown() {
-            const card = document.getElementById('workoutCard');
-            if (card) {
-                card.classList.toggle('open');
-                try {
-                    localStorage.setItem('lc_workout_open', card.classList.contains('open'));
-                } catch(e) {}
-            }
-        }
-
-        function switchWorkoutSubtab(tab) {
-            document.querySelectorAll('.webhub-subtab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById('subtabSitesBtn').classList.toggle('active', tab === 'sites');
-            document.getElementById('subtabMediaBtn').classList.toggle('active', tab === 'media');
-            document.getElementById('subtabNotesBtn').classList.toggle('active', tab === 'notes');
-
-            document.getElementById('workoutPanelSites').style.display = tab === 'sites' ? 'flex' : 'none';
-            document.getElementById('workoutPanelMedia').style.display = tab === 'media' ? 'flex' : 'none';
-            document.getElementById('workoutPanelNotes').style.display = tab === 'notes' ? 'flex' : 'none';
-        }
-
-        function renderWorkoutSites() {
-            const list = document.getElementById('workoutSitesList');
-            if (!list) return;
-            list.innerHTML = '';
-
-            if (workoutSites.length === 0) {
-                list.innerHTML = '<span style="font-size:11px; color:var(--text-muted);">No websites saved yet.</span>';
-                return;
-            }
-
-            workoutSites.forEach((site, index) => {
-                const chip = document.createElement('div');
-                chip.className = 'webhub-chip';
-                chip.innerHTML = `
-                    <a href="${site.url}" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
-                        🌐 ${site.name} <span class="arrow-up-right">↗</span>
-                    </a>
-                    <button class="webhub-chip-del" onclick="deleteWorkoutSite(${index})">✕</button>
-                `;
-                list.appendChild(chip);
-            });
-        }
-
-        function addWorkoutSite() {
-            const nameInput = document.getElementById('newSiteName');
-            const urlInput = document.getElementById('newSiteUrl');
-            const name = nameInput.value.trim();
-            let url = urlInput.value.trim();
-
-            if (!name || !url) return;
-            if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
-
-            workoutSites.push({ id: 'w_s_' + Date.now().toString(), name, url });
-            saveWorkoutData();
-            renderWorkoutSites();
-            nameInput.value = '';
-            urlInput.value = '';
-        }
-
-        function deleteWorkoutSite(index) {
-            workoutSites.splice(index, 1);
-            saveWorkoutData();
-            renderWorkoutSites();
-        }
-
-        function renderWorkoutMedia() {
-            const list = document.getElementById('workoutMediaList');
-            if (!list) return;
-            list.innerHTML = '';
-
-            if (workoutMedia.length === 0) {
-                list.innerHTML = '<span style="font-size:11px; color:var(--text-muted);">No video or reel links saved yet.</span>';
-                return;
-            }
-
-            workoutMedia.forEach((media, index) => {
-                const isYt = media.type === 'youtube' || media.url.includes('youtu');
-                const isInsta = media.type === 'instagram' || media.url.includes('instagram');
-                const tagClass = isYt ? 'youtube' : (isInsta ? 'instagram' : '');
-                const icon = isYt ? '▶️ YouTube' : (isInsta ? '📸 Insta' : '🎬 Video');
-
-                const chip = document.createElement('div');
-                chip.className = `webhub-chip ${tagClass}`;
-                chip.innerHTML = `
-                    <a href="${media.url}" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
-                        ${icon}: ${media.title} <span class="arrow-up-right">↗</span>
-                    </a>
-                    <button class="webhub-chip-del" onclick="deleteWorkoutMedia(${index})">✕</button>
-                `;
-                list.appendChild(chip);
-            });
-        }
-
-        function addWorkoutMedia() {
-            const titleInput = document.getElementById('newMediaTitle');
-            const urlInput = document.getElementById('newMediaUrl');
-            const title = titleInput.value.trim();
-            let url = urlInput.value.trim();
-
-            if (!title || !url) return;
-            if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
-
-            let type = 'video';
-            if (url.includes('youtu.be') || url.includes('youtube.com')) type = 'youtube';
-            else if (url.includes('instagram.com')) type = 'instagram';
-
-            workoutMedia.push({ id: 'w_m_' + Date.now().toString(), title, url, type });
-            saveWorkoutData();
-            renderWorkoutMedia();
-            titleInput.value = '';
-            urlInput.value = '';
-        }
-
-        function deleteWorkoutMedia(index) {
-            workoutMedia.splice(index, 1);
-            saveWorkoutData();
-            renderWorkoutMedia();
-        }
-
-        function saveWorkoutSimpleNotes() {
-            const textarea = document.getElementById('workoutSimpleNotesText');
-            if (textarea) {
-                workoutSimpleNotes = textarea.value;
-                saveWorkoutData();
-            }
-        }
-
-        // ----------------------------------------------------
-        // OPTION 2: FOLDER-BASED WHIMSICAL WEBSITES
-        // ----------------------------------------------------
-        let whimsicalFolders = [];
-
-        function loadWhimsicalFolders() {
-            try {
-                const storedFolders = localStorage.getItem('lc_whimsical_folders');
-                if (storedFolders) {
-                    whimsicalFolders = JSON.parse(storedFolders);
-                } else {
-                    const oldFlatSites = localStorage.getItem('lc_whimsical_sites');
-                    if (oldFlatSites) {
-                        const parsedFlat = JSON.parse(oldFlatSites);
-                        whimsicalFolders = [
-                            {
-                                id: 'wf_general',
-                                name: 'General',
-                                open: true,
-                                sites: parsedFlat
-                            }
-                        ];
-                    } else {
-                        whimsicalFolders = [
-                            { id: 'wf_explorables', name: 'Interactive & Explorables', open: true, sites: [] },
-                            { id: 'wf_data', name: 'Data Stories & Essays', open: false, sites: [] },
-                            { id: 'wf_thinking', name: 'Philosophy & Logic', open: false, sites: [] }
-                        ];
-                    }
-                }
-            } catch(e) {
-                whimsicalFolders = [
-                    { id: 'wf_general', name: 'General', open: true, sites: [] }
-                ];
-            }
-
-            const isCardOpen = localStorage.getItem('lc_whimsical_open');
-            const card = document.getElementById('whimsicalCard');
-            if (card && isCardOpen !== null) {
-                if (isCardOpen === 'false') card.classList.remove('open');
-                else card.classList.add('open');
-            }
-
-            renderWhimsicalFolders();
-        }
-
-        function saveWhimsicalFolders() {
-            try {
-                localStorage.setItem('lc_whimsical_folders', JSON.stringify(whimsicalFolders));
-            } catch(e) {}
-            updateWhimsicalSubtitle();
-        }
-
-        function toggleWhimsicalDropdown() {
-            const card = document.getElementById('whimsicalCard');
-            if (card) {
-                card.classList.toggle('open');
-                try {
-                    localStorage.setItem('lc_whimsical_open', card.classList.contains('open'));
-                } catch(e) {}
-            }
-        }
-
-        function updateWhimsicalSubtitle() {
-            const sub = document.getElementById('whimsicalSub');
-            if (!sub) return;
-            const totalSites = whimsicalFolders.reduce((sum, f) => sum + (f.sites ? f.sites.length : 0), 0);
-            sub.innerText = `${totalSites} ${totalSites === 1 ? 'link' : 'links'} across ${whimsicalFolders.length} folders`;
-        }
-
-        function renderWhimsicalFolders() {
-            const container = document.getElementById('whimsicalFoldersContainer');
-            const selectEl = document.getElementById('whimsicalFolderSelect');
-            if (!container || !selectEl) return;
-
-            container.innerHTML = '';
-            selectEl.innerHTML = '';
-
-            if (whimsicalFolders.length === 0) {
-                whimsicalFolders.push({ id: 'wf_' + Date.now(), name: 'General', open: false, sites: [] });
-            }
-
-            whimsicalFolders.forEach(folder => {
-                const opt = document.createElement('option');
-                opt.value = folder.id;
-                opt.innerText = folder.name;
-                selectEl.appendChild(opt);
-            });
-
-            whimsicalFolders.forEach((folder, folderIndex) => {
-                const isOpen = !!folder.open;
-                const card = document.createElement('div');
-                card.className = `whimsical-folder-card ${isOpen ? 'open' : ''}`;
-                card.id = `folder-card-${folder.id}`;
-
-                const sitesList = folder.sites || [];
-
-                let chipsHtml = '';
-                if (sitesList.length === 0) {
-                    chipsHtml = '<span style="font-size:11px; color:var(--text-muted); padding:4px 0;">No links in this folder.</span>';
-                } else {
-                    sitesList.forEach((site, siteIndex) => {
-                        let cleanDisplay = site.url.replace(/^https?:\/\//i, '').replace(/^www\./i, '').replace(/\/$/, '');
-                        if (cleanDisplay.length > 28) cleanDisplay = cleanDisplay.substring(0, 26) + '...';
-
-                        chipsHtml += `
-                            <div class="whimsical-chip">
-                                <a href="${site.url}" target="_blank" rel="noopener noreferrer" style="color:inherit; text-decoration:none; display:inline-flex; align-items:center; gap:5px;">
-                                    ✨ <span>${cleanDisplay}</span> <span class="arrow-up-right">↗</span>
-                                </a>
-                                <button class="webhub-chip-del" onclick="deleteWhimsicalSite(${folderIndex}, ${siteIndex})">✕</button>
-                            </div>
-                        `;
-                    });
-                }
-
-                card.innerHTML = `
-                    <div class="whimsical-folder-header" onclick="toggleFolderOpen('${folder.id}')">
-                        <div class="whimsical-folder-header-left">
-                            <span>📁</span>
-                            <span class="whimsical-folder-name">${folder.name}</span>
-                            <span class="whimsical-folder-count">${sitesList.length}</span>
-                        </div>
-                        <div class="whimsical-folder-actions">
-                            <button class="folder-tool-btn" onclick="event.stopPropagation(); promptRenameFolder('${folder.id}')" title="Rename folder">✏️</button>
-                            <button class="folder-tool-btn" onclick="event.stopPropagation(); deleteFolder('${folder.id}')" title="Delete folder">🗑️</button>
-                            <span class="whimsical-folder-chevron">${isOpen ? '▲' : '▼'}</span>
-                        </div>
-                    </div>
-                    <div class="whimsical-folder-content">
-                        ${chipsHtml}
-                    </div>
-                `;
-
-                container.appendChild(card);
-            });
-
-            updateWhimsicalSubtitle();
-        }
-
-        function toggleFolderOpen(folderId) {
-            const folder = whimsicalFolders.find(f => f.id === folderId);
-            if (folder) {
-                folder.open = !folder.open;
-                saveWhimsicalFolders();
-                renderWhimsicalFolders();
-            }
-        }
-
-        function promptCreateFolder() {
-            const name = prompt("Enter new folder name (e.g. Games & Toys):");
-            if (!name || !name.trim()) return;
-
-            whimsicalFolders.push({
-                id: 'wf_' + Date.now(),
-                name: name.trim(),
-                open: true,
-                sites: []
-            });
-
-            saveWhimsicalFolders();
-            renderWhimsicalFolders();
-        }
-
-        function promptRenameFolder(folderId) {
-            const folder = whimsicalFolders.find(f => f.id === folderId);
-            if (!folder) return;
-
-            const newName = prompt("Rename folder:", folder.name);
-            if (!newName || !newName.trim()) return;
-
-            folder.name = newName.trim();
-            saveWhimsicalFolders();
-            renderWhimsicalFolders();
-        }
-
-        function deleteFolder(folderId) {
-            const folder = whimsicalFolders.find(f => f.id === folderId);
-            if (!folder) return;
-
-            const siteCount = folder.sites ? folder.sites.length : 0;
-            const confirmMsg = siteCount > 0 
-                ? `Delete folder "${folder.name}" and its ${siteCount} links?`
-                : `Delete folder "${folder.name}"?`;
-
-            if (confirm(confirmMsg)) {
-                whimsicalFolders = whimsicalFolders.filter(f => f.id !== folderId);
-                saveWhimsicalFolders();
-                renderWhimsicalFolders();
-            }
-        }
-
-        function addWhimsicalSiteToFolder() {
-            const input = document.getElementById('newWhimsicalUrl');
-            const selectEl = document.getElementById('whimsicalFolderSelect');
-            let url = input.value.trim();
-            if (!url) return;
-
-            if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                url = 'https://' + url;
-            }
-
-            const targetFolderId = selectEl.value;
-            let folder = whimsicalFolders.find(f => f.id === targetFolderId);
-            if (!folder) {
-                if (whimsicalFolders.length === 0) {
-                    folder = { id: 'wf_general', name: 'General', open: true, sites: [] };
-                    whimsicalFolders.push(folder);
-                } else {
-                    folder = whimsicalFolders[0];
-                }
-            }
-
-            if (!folder.sites) folder.sites = [];
-            folder.sites.unshift({ id: 'whim_' + Date.now().toString(), url: url });
-            folder.open = true;
-
-            saveWhimsicalFolders();
-            renderWhimsicalFolders();
-            input.value = '';
-        }
-
-        function deleteWhimsicalSite(folderIndex, siteIndex) {
-            if (whimsicalFolders[folderIndex] && whimsicalFolders[folderIndex].sites) {
-                whimsicalFolders[folderIndex].sites.splice(siteIndex, 1);
-                saveWhimsicalFolders();
-                renderWhimsicalFolders();
-            }
-        }
-
-        function launchRandomWhimsicalSite() {
-            const allSites = [];
-            whimsicalFolders.forEach(folder => {
-                if (folder.sites && folder.sites.length > 0) {
-                    folder.sites.forEach(s => allSites.push(s));
-                }
-            });
-
-            if (allSites.length === 0) {
-                alert("No whimsical websites found yet! Add some links below first.");
-                return;
-            }
-
-            const randomSite = allSites[Math.floor(Math.random() * allSites.length)];
-            window.open(randomSite.url, '_blank', 'noopener,noreferrer');
-        }
-
-        // Milk Tracker Logic
-        let milkEntries = [];
-
-        function getTodayDateString() {
-            const d = new Date();
-            return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-        }
-
-        function loadMilkData() {
-            try {
-                const stored = localStorage.getItem('lc_milk_data') || localStorage.getItem('lc_adhu_milk_data');
-                const lastDate = localStorage.getItem('lc_milk_date') || localStorage.getItem('lc_adhu_milk_date');
-                const today = getTodayDateString();
-
-                if (stored && lastDate === today) {
-                    milkEntries = JSON.parse(stored);
-                } else {
-                    milkEntries = [];
-                    localStorage.setItem('lc_milk_date', today);
-                }
-            } catch(e) {
-                milkEntries = [];
-            }
-
-            renderMilkTracker();
-        }
-
-        function saveMilkData() {
-            try {
-                localStorage.setItem('lc_milk_data', JSON.stringify(milkEntries));
-                localStorage.setItem('lc_milk_date', getTodayDateString());
-            } catch(e) {}
-        }
-
-        function toggleMilkDropdown() {
-            const card = document.getElementById('milkCard');
-            if (card) card.classList.toggle('open');
-        }
-
-        function renderMilkTracker() {
-            const total = milkEntries.reduce((sum, item) => sum + item.amount, 0);
-
-            document.getElementById('milkTotalVal').innerText = total;
-            document.getElementById('milkHeaderSub').innerText = `Today: ${total} ml`;
-
-            const minPct = Math.round((total / 600) * 100);
-            const maxPct = Math.round((total / 900) * 100);
-
-            document.getElementById('milkMinPct').innerText = `${minPct}%`;
-            document.getElementById('milkMaxPct').innerText = `${maxPct}%`;
-
-            const barFillPct = Math.min(100, Math.round((total / 900) * 100));
-            const progressBar = document.getElementById('milkProgressBar');
-            if (progressBar) {
-                progressBar.style.width = `${barFillPct}%`;
-                progressBar.style.background = total >= 600 ? 'linear-gradient(90deg, #FFB380 0%, #00E676 100%)' : '#FFB380';
-            }
-
-            const container = document.getElementById('milkChipsHistory');
-            if (!container) return;
-            container.innerHTML = '';
-
-            if (milkEntries.length === 0) {
-                container.innerHTML = '<span style="font-size:11px; color:var(--text-muted);">No entries logged today.</span>';
-                return;
-            }
-
-            milkEntries.forEach((item, index) => {
-                const chip = document.createElement('div');
-                chip.className = 'milk-entry-chip';
-                chip.innerHTML = `
-                    <span><strong>${item.amount}</strong> ml</span>
-                    <button class="milk-entry-del" onclick="deleteMilkEntry(${index})">✕</button>
-                `;
-                container.appendChild(chip);
-            });
-        }
-
-        function addMilkEntry() {
-            const input = document.getElementById('milkInputVal');
-            const val = parseInt(input.value);
-            if (!val || val <= 0) return;
-
-            milkEntries.push({ id: Date.now().toString(), amount: val });
-            saveMilkData();
-            renderMilkTracker();
-            input.value = '';
-        }
-
-        function logQuickMilk(amount) {
-            milkEntries.push({ id: Date.now().toString(), amount: amount });
-            saveMilkData();
-            renderMilkTracker();
-        }
-
-        function deleteMilkEntry(index) {
-            milkEntries.splice(index, 1);
-            saveMilkData();
-            renderMilkTracker();
-        }
-
-        // Cartoons Logic
-        let cartoonsList = [];
-        let activeCartoonId = null;
-        let pressTimer = null;
-
-        function loadCartoonsList() {
-            try {
-                const stored = localStorage.getItem('lc_cartoons_list');
-                if (stored) {
-                    cartoonsList = JSON.parse(stored);
-                } else {
-                    cartoonsList = [];
-                }
-            } catch(e) {
-                cartoonsList = [];
-            }
-
-            renderCartoonsTierBoard();
-        }
-
-        function saveCartoonsList() {
-            try {
-                localStorage.setItem('lc_cartoons_list', JSON.stringify(cartoonsList));
-            } catch(e) {}
-            updateCartoonsCountSub();
-        }
-
-        function toggleCartoonsTierDropdown() {
-            const card = document.getElementById('cartoonsTierCard');
-            if (card) card.classList.toggle('open');
-        }
-
-        function updateCartoonsCountSub() {
-            const sub = document.getElementById('cartoonsCountSub');
-            if (!sub) return;
-            const count = cartoonsList.length;
-            sub.innerText = count + (count === 1 ? ' cartoon' : ' cartoons');
-        }
-
-        function renderCartoonsTierBoard() {
-            ['S', 'A', 'B', 'C', 'D'].forEach(tier => {
-                const wrap = document.getElementById('tier-wrap-' + tier);
-                if (wrap) wrap.innerHTML = '';
-            });
-
-            cartoonsList.forEach(item => {
-                const wrap = document.getElementById('tier-wrap-' + item.tier);
-                if (wrap) {
-                    const chip = document.createElement('div');
-                    chip.className = 'cartoon-chip';
-                    chip.innerHTML = `<span>${item.name}</span>`;
-
-                    chip.addEventListener('pointerdown', (e) => startCartoonPress(item.id, e));
-                    chip.addEventListener('pointerup', cancelCartoonPress);
-                    chip.addEventListener('pointerleave', cancelCartoonPress);
-                    chip.addEventListener('contextmenu', (e) => e.preventDefault());
-                    chip.addEventListener('click', () => openCartoonActionSheet(item.id));
-
-                    wrap.appendChild(chip);
-                }
-            });
-
-            updateCartoonsCountSub();
-        }
-
-        function startCartoonPress(id, e) {
-            cancelCartoonPress();
-            pressTimer = setTimeout(() => {
-                openCartoonActionSheet(id);
-            }, 450);
-        }
-
-        function cancelCartoonPress() {
-            if (pressTimer) {
-                clearTimeout(pressTimer);
-                pressTimer = null;
-            }
-        }
-
-        function openCartoonActionSheet(id) {
-            cancelCartoonPress();
-            const item = cartoonsList.find(c => c.id === id);
-            if (!item) return;
-
-            activeCartoonId = id;
-            document.getElementById('sheetCartoonTitle').innerText = `${item.name} (${item.tier} Tier)`;
-            document.getElementById('tierActionSheetModal').classList.add('open');
-        }
-
-        function closeCartoonActionSheet() {
-            document.getElementById('tierActionSheetModal').classList.remove('open');
-            activeCartoonId = null;
-        }
-
-        function moveActiveCartoon(newTier) {
-            if (!activeCartoonId) return;
-            const item = cartoonsList.find(c => c.id === activeCartoonId);
-            if (item) {
-                item.tier = newTier;
-                saveCartoonsList();
-                renderCartoonsTierBoard();
-            }
-            closeCartoonActionSheet();
-        }
-
-        function renameActiveCartoon() {
-            if (!activeCartoonId) return;
-            const item = cartoonsList.find(c => c.id === activeCartoonId);
-            if (!item) return;
-
-            const newName = prompt("Rename item:", item.name);
-            if (newName && newName.trim()) {
-                item.name = newName.trim();
-                saveCartoonsList();
-                renderCartoonsTierBoard();
-            }
-            closeCartoonActionSheet();
-        }
-
-        function deleteActiveCartoon() {
-            if (!activeCartoonId) return;
-            cartoonsList = cartoonsList.filter(c => c.id !== activeCartoonId);
-            saveCartoonsList();
-            renderCartoonsTierBoard();
-            closeCartoonActionSheet();
-        }
-
-        function addCartoonItem() {
-            const input = document.getElementById('newCartoonName');
-            const tierSelect = document.getElementById('newCartoonTier');
-            const name = input.value.trim();
-            if (!name) return;
-
-            const tier = tierSelect.value || 'S';
-            cartoonsList.push({
-                id: 'c_' + Date.now().toString(),
-                name: name,
-                tier: tier
-            });
-
-            saveCartoonsList();
-            renderCartoonsTierBoard();
-            input.value = '';
-        }
-
-        // To-Do Logic
-        let todoList = [
-            { id: '1', text: 'Sample generic task', completed: false, timestamp: getFormattedTimestamp() }
-        ];
-
-        try {
-            const td = localStorage.getItem('lc_todo_list');
-            if (td) todoList = JSON.parse(td);
-        } catch (e) {
-            console.error(e);
-        }
-
-        function saveTodoList() {
-            try {
-                localStorage.setItem('lc_todo_list', JSON.stringify(todoList));
-            } catch (e) {
-                console.error(e);
-            }
-        }
-
-        function renderTodoList() {
-            const container = document.getElementById('todoContainer');
-            if (!container) return;
-            container.innerHTML = '';
-
-            if (todoList.length === 0) {
-                container.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 30px 0; font-size: 12.5px;">All clear! Type a task above to add it.</div>`;
-            } else {
-                todoList.forEach(item => {
-                    const itemEl = document.createElement('div');
-                    itemEl.className = 'todo-item ' + (item.completed ? 'completed' : '');
-                    itemEl.innerHTML = `
-                        <div class="todo-item-left" onclick="toggleTodoItem('${item.id}')">
-                            <div class="todo-checkbox">${item.completed ? '✓' : ''}</div>
-                            <div class="todo-content">
-                                <span class="todo-text">${item.text}</span>
-                                <span class="todo-timestamp">${item.timestamp || ''}</span>
-                            </div>
-                        </div>
-                        <button class="todo-del-btn" onclick="deleteTodoItem('${item.id}')">✕</button>
-                    `;
-                    container.appendChild(itemEl);
-                });
-            }
-            updateDashboardCounts(); 
-        }
-
-        function addTodoItem() {
-            const input = document.getElementById('todoInput');
-            const val = input.value.trim();
-            if (!val) return;
-
-            todoList.unshift({
-                id: Date.now().toString(),
-                text: val,
-                completed: false,
-                timestamp: getFormattedTimestamp()
-            });
-
-            saveTodoList();
-            renderTodoList();
-            input.value = '';
-        }
-
-        function toggleTodoItem(id) {
-            const item = todoList.find(t => t.id === id);
-            if (item) {
-                item.completed = !item.completed;
-                saveTodoList();
-                renderTodoList();
-            }
-        }
-
-        function deleteTodoItem(id) {
-            todoList = todoList.filter(t => t.id !== id);
-            saveTodoList();
-            renderTodoList();
-        }
-
-        // Books Overview Logic
-        let bookOverviews = [];
-
-        function loadBookOverviews() {
-            try {
-                const stored = localStorage.getItem('lc_book_overviews') || localStorage.getItem('lc_kee_book_overviews');
-                if (stored) {
-                    bookOverviews = JSON.parse(stored);
-                } else {
-                    bookOverviews = [];
-                }
-            } catch(e) {
-                bookOverviews = [];
-            }
-
-            renderBookOverviews();
-        }
-
-        function saveBookOverviews() {
-            try {
-                localStorage.setItem('lc_book_overviews', JSON.stringify(bookOverviews));
-            } catch (e) {}
-            updateBookOverviewSub();
-        }
-
-        function toggleBooksOverviewDropdown() {
-            const card = document.getElementById('user1BooksOverviewCard');
-            if (card) card.classList.toggle('open');
-        }
-
-        function updateBookOverviewSub() {
-            const sub = document.getElementById('booksOverviewSub');
-            if (!sub) return;
-            const len = bookOverviews.length;
-            sub.innerText = len + (len === 1 ? ' book' : ' books');
-        }
-
-        function renderBookOverviews() {
-            const container = document.getElementById('booksOverviewContainer');
-            if (!container) return;
-            container.innerHTML = '';
-
-            if (bookOverviews.length === 0) {
-                container.innerHTML = '<div style="text-align:center; font-size:12px; color:var(--text-muted); padding:10px 0;">No book overviews yet. Click "+ Add Book Overview" below.</div>';
-                updateBookOverviewSub();
-                return;
-            }
-
-            bookOverviews.forEach(item => {
-                const row = document.createElement('div');
-                row.className = 'book-overview-item' + (item.expanded ? ' expanded' : '');
-                row.id = 'bo-item-' + item.id;
-
-                const hasDrive = item.driveUrl && item.driveUrl.trim();
-                const driveButtonHtml = hasDrive 
-                    ? `<a href="${item.driveUrl}" target="_blank" rel="noopener noreferrer" class="book-drive-pill-link" title="Open in Google Drive">☁️ Drive File ↗</a>`
-                    : `<button class="book-inner-action-btn" onclick="editBookDriveLink('${item.id}')">☁️ + Add Drive Link</button>`;
-
-                row.innerHTML = `
-                    <div class="book-overview-header" onclick="toggleBookOverviewItem('${item.id}')">
-                        <span class="book-overview-title-text">${item.title || 'Untitled Book'}</span>
-                        <div class="book-overview-chevron-circle">▼</div>
-                    </div>
-
-                    <div class="book-overview-body-wrap">
-                        <div class="book-overview-top-meta">
-                            ${driveButtonHtml}
-                            <div class="book-overview-inner-actions">
-                                ${hasDrive ? `<button class="book-inner-action-btn" onclick="editBookDriveLink('${item.id}')">✏️ Edit Link</button>` : ''}
-                                <button class="book-inner-action-btn delete" onclick="deleteBookOverviewItem('${item.id}')">🗑️ Delete</button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Title</label>
-                            <input type="text" class="book-overview-title-edit-input" value="${item.title || ''}" placeholder="Enter title..." oninput="updateBookOverviewTitle('${item.id}', this.value)">
-                        </div>
-
-                        <div class="context-toolbar" id="bo-toolbar-${item.id}">
-                            <button class="wishlist-format-btn bold" onmousedown="applyOverviewFormat(event, '${item.id}', 'bold')">B</button>
-                            <button class="wishlist-format-btn italic" onmousedown="applyOverviewFormat(event, '${item.id}', 'italic')">I</button>
-                            <button class="wishlist-format-btn strike" onmousedown="applyOverviewFormat(event, '${item.id}', 'strikeThrough')">S</button>
-                            <button class="wishlist-format-btn" onmousedown="applyOverviewFormat(event, '${item.id}', 'insertUnorderedList')">•</button>
-                        </div>
-
-                        <div>
-                            <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Overview & Notes</label>
-                            <div class="book-overview-editor" id="bo-editor-${item.id}" contenteditable="true" 
-                                 placeholder="Write summary, key takeaways..." 
-                                 onfocus="showOverviewToolbar('${item.id}')" 
-                                 onblur="hideOverviewToolbar('${item.id}')" 
-                                 oninput="updateBookOverviewContent('${item.id}', this.innerHTML)">${item.content || ''}</div>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(row);
-            });
-
-            updateBookOverviewSub();
-        }
-
-        function editBookDriveLink(id) {
-            const item = bookOverviews.find(b => b.id === id);
-            if (!item) return;
-
-            const current = item.driveUrl || '';
-            const newUrl = prompt("Enter Google Drive file/folder URL (leave blank to remove):", current);
-            if (newUrl === null) return;
-
-            let formatted = newUrl.trim();
-            if (formatted && !formatted.startsWith('http://') && !formatted.startsWith('https://')) {
-                formatted = 'https://' + formatted;
-            }
-
-            item.driveUrl = formatted;
-            saveBookOverviews();
-            renderBookOverviews();
-        }
-
-        function toggleBookOverviewItem(id) {
-            const item = bookOverviews.find(b => b.id === id);
-            if (item) {
-                item.expanded = !item.expanded;
-                saveBookOverviews();
-                renderBookOverviews();
-            }
-        }
-
-        function updateBookOverviewTitle(id, val) {
-            const item = bookOverviews.find(b => b.id === id);
-            if (item) {
-                item.title = val;
-                saveBookOverviews();
-            }
-        }
-
-        function updateBookOverviewContent(id, html) {
-            const item = bookOverviews.find(b => b.id === id);
-            if (item) {
-                item.content = html;
-                saveBookOverviews();
-            }
-        }
-
-        function addBookOverview() {
-            const newId = 'bo_' + Date.now().toString();
-            bookOverviews.unshift({
-                id: newId,
-                title: 'New Book Overview',
-                content: '',
-                driveUrl: '',
-                expanded: true
-            });
-            saveBookOverviews();
-            renderBookOverviews();
-        }
-
-        function deleteBookOverviewItem(id) {
-            if (confirm("Delete this overview?")) {
-                bookOverviews = bookOverviews.filter(b => b.id !== id);
-                saveBookOverviews();
-                renderBookOverviews();
-            }
-        }
-
-        function showOverviewToolbar(id) {
-            const tb = document.getElementById('bo-toolbar-' + id);
-            if (tb) tb.classList.add('visible');
-        }
-
-        function hideOverviewToolbar(id) {
-            setTimeout(() => {
-                const ed = document.getElementById('bo-editor-' + id);
-                if (document.activeElement !== ed) {
-                    const tb = document.getElementById('bo-toolbar-' + id);
-                    if (tb) tb.classList.remove('visible');
-                }
-            }, 180);
-        }
-
-        function applyOverviewFormat(e, id, command) {
-            e.preventDefault();
-            const ed = document.getElementById('bo-editor-' + id);
-            if (ed) {
-                ed.focus({ preventScroll: true });
-                document.execCommand(command, false, null);
-                updateBookOverviewContent(id, ed.innerHTML);
-            }
-        }
-
-        // Wishlist Logic
-        const WL_SHEET_COLORS = ['default', 'yellow', 'green', 'pink', 'blue', 'purple'];
-        let currentWlColor = 'default';
-        let savedRange = null;
-        let wishlistBlocks = [];
-
-        function cleanHtmlContent(raw) {
-            if (!raw) return '';
-            let s = raw.trim();
-            return s.replace(/^(\s*<br\s*\/?>|\s*&nbsp;|\s+)+/gi, '');
-        }
-
-        function toggleWishlistDropdown() {
-            const card = document.getElementById('wishlistCard');
-            if (card) card.classList.toggle('open');
-        }
-
-        function updateWishlistSubtitle() {
-            const sub = document.getElementById('wishlistSub');
-            if (!sub) return;
-            const count = wishlistBlocks.filter(b => b.html && b.html.trim() !== '').length;
-            sub.innerText = count + (count === 1 ? ' item' : ' items');
-        }
-
-        function loadWishlistPage() {
-            try {
-                const storedBlocks = localStorage.getItem('lc_wishlist_blocks') || localStorage.getItem('lc_adhu_blocks');
-                if (storedBlocks) {
-                    wishlistBlocks = JSON.parse(storedBlocks);
-                    wishlistBlocks.forEach(b => {
-                        b.html = cleanHtmlContent(b.html);
-                    });
-                } else {
-                    const oldContent = localStorage.getItem('lc_adhu_wishlist_content');
-                    if (oldContent && oldContent.trim() !== '') {
-                        wishlistBlocks = [{ id: Date.now().toString(), html: cleanHtmlContent(oldContent), checked: false }];
-                    } else {
-                        wishlistBlocks = [{ id: Date.now().toString(), html: '', checked: false }];
-                    }
-                }
-            } catch(e) {
-                wishlistBlocks = [{ id: Date.now().toString(), html: '', checked: false }];
-            }
-
-            renderWishlistBlocks();
-            updateWishlistSubtitle();
-        }
-
-        function saveWishlistBlocks() {
-            try {
-                localStorage.setItem('lc_wishlist_blocks', JSON.stringify(wishlistBlocks));
-                localStorage.setItem('lc_adhu_blocks', JSON.stringify(wishlistBlocks));
-            } catch (e) {}
-            updateWishlistSubtitle();
-        }
-
-        function syncAllWishlistBlocks() {
-            wishlistBlocks.forEach(b => {
-                const el = document.getElementById('wl-block-' + b.id);
-                if (el) b.html = cleanHtmlContent(el.innerHTML);
-            });
-            saveWishlistBlocks();
-        }
-
-        function renderWishlistBlocks() {
-            const container = document.getElementById('wishlistBlocksContainer');
-            if (!container) return;
-            container.innerHTML = '';
-
-            wishlistBlocks.forEach((block, index) => {
-                const el = document.createElement('div');
-                el.className = 'wl-block ' + (block.checked ? 'checked' : '');
-                el.innerHTML = `
-                    <div class="todo-checkbox" style="${block.checked ? 'background: var(--primary); border-color: var(--primary); color: #fff;' : ''}" onclick="toggleWishlistBlockCheck('${block.id}')">
-                        ${block.checked ? '✓' : ''}
-                    </div>
-                    <div class="wl-block-editor" id="wl-block-${block.id}" contenteditable="true" oninput="updateWishlistBlockHtml('${block.id}')" onkeydown="handleBlockKeyDown(event, '${block.id}', ${index})" placeholder="Add item or note...">${block.html || ''}</div>
-                `;
-                container.appendChild(el);
-            });
-            updateWishlistSubtitle();
-        }
-
-        function handleBlockKeyDown(e, blockId, index) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                syncAllWishlistBlocks();
-                const newBlock = { id: Date.now().toString(), html: '', checked: false };
-                wishlistBlocks.splice(index + 1, 0, newBlock);
-                saveWishlistBlocks();
-                renderWishlistBlocks();
-            } else if (e.key === 'Backspace') {
-                const currentEl = document.getElementById('wl-block-' + blockId);
-                const isBlank = !currentEl || currentEl.innerText.trim() === '' || currentEl.innerHTML === '<br>';
-                if (isBlank && wishlistBlocks.length > 1) {
-                    e.preventDefault();
-                    wishlistBlocks = wishlistBlocks.filter(b => b.id !== blockId);
-                    saveWishlistBlocks();
-                    renderWishlistBlocks();
-                }
-            }
-        }
-
-        function updateWishlistBlockHtml(id) {
-            const block = wishlistBlocks.find(b => b.id === id);
-            const el = document.getElementById('wl-block-' + id);
-            if (block && el) {
-                block.html = cleanHtmlContent(el.innerHTML);
-                saveWishlistBlocks();
-            }
-        }
-
-        function toggleWishlistBlockCheck(id) {
-            syncAllWishlistBlocks();
-            const block = wishlistBlocks.find(b => b.id === id);
-            if (block) {
-                block.checked = !block.checked;
-                saveWishlistBlocks();
-                renderWishlistBlocks();
-            }
-        }
-
-        function addWishlistBlock() {
-            syncAllWishlistBlocks();
-            const newId = Date.now().toString();
-            wishlistBlocks.push({ id: newId, html: '', checked: false });
-            saveWishlistBlocks();
-            renderWishlistBlocks();
-        }
-
-        function deleteCheckedWishlistItems() {
-            if (confirm("Delete checked items?")) {
-                wishlistBlocks = wishlistBlocks.filter(b => !b.checked);
-                if (wishlistBlocks.length === 0) {
-                    wishlistBlocks = [{ id: Date.now().toString(), html: '', checked: false }];
-                }
-                saveWishlistBlocks();
-                renderWishlistBlocks();
-            }
-        }
-
-        function applyWishlistFormat(e, command) {
-            e.preventDefault();
-            document.execCommand(command, false, null);
-            syncAllWishlistBlocks();
-        }
-
-        function cycleWishlistColor(e) {
-            e.preventDefault();
-            const curIdx = WL_SHEET_COLORS.indexOf(currentWlColor);
-            const nextColor = WL_SHEET_COLORS[(curIdx + 1) % WL_SHEET_COLORS.length];
-            applySheetColorClass(nextColor);
-        }
-
-        function applySheetColorClass(colorName) {
-            currentWlColor = colorName;
-            const card = document.getElementById('wishlistCard');
-            if (!card) return;
-            WL_SHEET_COLORS.forEach(c => card.classList.remove('wl-color-' + c));
-            card.classList.add('wl-color-' + colorName);
-        }
-
-        function openWishlistLinkModal(e) {
-            e.preventDefault();
-            const sel = window.getSelection();
-            if (sel && sel.getRangeAt && sel.rangeCount) {
-                savedRange = sel.getRangeAt(0);
-            }
-            document.getElementById('wlLinkUrl').value = '';
-            document.getElementById('wlLinkName').value = '';
-            document.getElementById('wishlistLinkModal').classList.add('open');
-        }
-
-        function closeWishlistLinkModal(e) {
-            if (!e || e.target.id === 'wishlistLinkModal' || e.target.classList.contains('drawer-close-btn')) {
-                document.getElementById('wishlistLinkModal').classList.remove('open');
-            }
-        }
-
-        function insertCustomHyperlink() {
-            let url = document.getElementById('wlLinkUrl').value.trim();
-            const name = document.getElementById('wlLinkName').value.trim();
-            if (!url) return;
-            if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
-
-            const displayName = name || url;
-            closeWishlistLinkModal();
-
-            if (savedRange) {
-                const sel = window.getSelection();
-                sel.removeAllRanges();
-                sel.addRange(savedRange);
-            }
-
-            document.execCommand('insertHTML', false, `<a href="${url}" target="_blank" rel="noopener noreferrer">${displayName}</a>&nbsp;`);
-            syncAllWishlistBlocks();
-        }
-
-        // Backup and Storage Management
-        function checkBackupReminder() {
-            const badge = document.getElementById('backupBadge');
-            const lastBackupStr = localStorage.getItem('lc_last_backup_time');
-            const twoDays = 2 * 24 * 60 * 60 * 1000; 
-            if (!lastBackupStr || (Date.now() - parseInt(lastBackupStr)) > twoDays) {
-                if (badge) badge.style.display = 'block'; 
-            } else {
-                if (badge) badge.style.display = 'none'; 
-            }
-        }
-
-        function markBackupComplete() {
-            try {
-                localStorage.setItem('lc_last_backup_time', Date.now().toString());
-            } catch(e) {}
-            checkBackupReminder();
-        }
-
-        function dismissNeonBanner() {
-            const b = document.getElementById('neonTickerBanner');
-            if (b) b.style.display = 'none';
-        }
-
-        let localDirHandle = null;
-
-        async function pickLocalBackupDirectory() {
-            if ('showDirectoryPicker' in window) {
-                try {
-                    localDirHandle = await window.showDirectoryPicker();
-                    document.getElementById('localPathLabel').innerText = `✓ Selected: ${localDirHandle.name}`;
-                    document.getElementById('localPathLabel').style.color = '#2E7D32';
-                } catch(err) {
-                    if (err.name !== 'AbortError') {
-                        alert('Could not set local directory: ' + err.message);
-                    }
-                }
-            } else {
-                alert('Directory picking is not supported by your current browser.');
-            }
-        }
-
-        async function triggerAppSave() {
-            saveNotesList();
-            saveTodoList();
-            saveLinksToStorage();
-            saveBookOverviews();
-            saveCartoonsList();
-            saveMilkData();
-            saveWorkoutData();
-            saveWhimsicalFolders();
-            saveMealPlanLinks();
-            syncAllWishlistBlocks();
-
-            const payload = getFullPayload();
-            const jsonString = JSON.stringify(payload, null, 2);
-            localStorage.setItem('lc_full_app_snapshot', jsonString);
-
-            const saveBtn = document.getElementById('bannerSaveBtn');
-            if (saveBtn) {
-                const originalText = saveBtn.innerHTML;
-                saveBtn.innerHTML = '✓ Saved!';
-                saveBtn.style.background = '#00F5D4';
-                saveBtn.style.color = '#101018';
-                setTimeout(() => {
-                    saveBtn.innerHTML = originalText;
-                    saveBtn.style.background = 'rgba(0, 245, 212, 0.15)';
-                    saveBtn.style.color = '#FFFFFF';
-                }, 2000);
-            }
-
-            if (localDirHandle) {
-                try {
-                    const fileHandle = await localDirHandle.getFileHandle('TheMotherboard-Backup.json', { create: true });
-                    const writable = await fileHandle.createWritable();
-                    await writable.write(jsonString);
-                    await writable.close();
-                    markBackupComplete();
-                    return;
-                } catch(err) {
-                    console.warn(err);
-                }
-            }
-
-            triggerDownload(jsonString, 'TheMotherboard-Backup.json');
-        }
-
-        function openDriveSettingsModal() {
-            document.getElementById('syncStatus').innerText = '';
-            document.getElementById('driveModal').classList.add('open');
-        }
-
-        function closeDriveSettingsModal(e) {
-            if (!e || e.target.id === 'driveModal' || e.target.classList.contains('drawer-close-btn')) {
-                document.getElementById('driveModal').classList.remove('open');
-            }
-        }
-
-        function getFullPayload() {
-            return {
-                app: 'The Motherboard',
-                lastUpdated: new Date().toISOString(),
-                notesList,
-                stickyNotes: notesList,
-                todoList,
-                userEbooks,
-                userAudiobooks,
-                userTools,
-                wishlistBlocks,
-                adhuBlocks: wishlistBlocks,
-                bookOverviews,
-                keeBookOverviews: bookOverviews,
-                cartoonsList,
-                milkData: milkEntries,
-                milkDate: getTodayDateString(),
-                workoutSites,
-                workoutMedia,
-                workoutSimpleNotes,
-                whimsicalFolders,
-                mealPlanUrl1: localStorage.getItem('lc_mealplan_url_1') || '',
-                mealPlanUrl2: localStorage.getItem('lc_mealplan_url_2') || '',
-                profileName1: localStorage.getItem('lc_profile_name_1') || 'User 1',
-                profileName2: localStorage.getItem('lc_profile_name_2') || 'User 2'
-            };
-        }
-
-        async function saveDirectToGoogleDrive() {
-            const payload = getFullPayload();
-            const jsonString = JSON.stringify(payload, null, 2);
-            const statusEl = document.getElementById('syncStatus');
-            const fileName = 'TheMotherboard-Data.txt';
-
-            try {
-                const file = new File([jsonString], fileName, { type: 'text/plain' });
-                if (!navigator.canShare || !navigator.canShare({ files: [file] })) {
-                    triggerDownload(jsonString, fileName);
-                    return;
-                }
-                await navigator.share({
-                    title: 'The Motherboard Backup',
-                    text: 'Save data snapshot to Google Drive.',
-                    files: [file]
-                });
-                statusEl.innerText = '✓ Shared successfully!';
-                statusEl.style.color = '#2E7D32';
-                markBackupComplete(); 
-            } catch (err) {
-                if (err.name !== 'AbortError') triggerDownload(jsonString, fileName);
-            }
-        }
-
-        function triggerDownload(content, fName) {
-            const blob = new Blob([content], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const dlAnchor = document.createElement('a');
-            dlAnchor.href = url;
-            dlAnchor.download = fName;
-            document.body.appendChild(dlAnchor);
-            dlAnchor.click();
-            document.body.removeChild(dlAnchor);
-            URL.revokeObjectURL(url);
-            markBackupComplete(); 
-        }
-
-        function handleRestoreFile(input) {
-            const file = input.files[0];
-            const statusEl = document.getElementById('syncStatus');
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    
-                    if (data.notesList || data.stickyNotes) {
-                        notesList = data.notesList || data.stickyNotes;
-                    }
-                    if (data.todoList) todoList = data.todoList;
-                    
-                    if (data.userEbooks) userEbooks = data.userEbooks;
-                    if (data.userAudiobooks) userAudiobooks = data.userAudiobooks;
-                    if (data.userTools) userTools = data.userTools;
-                    
-                    if (data.adhuBlocks || data.wishlistBlocks) {
-                        wishlistBlocks = data.adhuBlocks || data.wishlistBlocks;
-                        wishlistBlocks.forEach(b => {
-                            b.html = cleanHtmlContent(b.html);
-                        });
-                    } else if (data.adhuWishlistContent !== undefined) {
-                        wishlistBlocks = [{ id: Date.now().toString(), html: cleanHtmlContent(data.adhuWishlistContent), checked: false }];
-                    }
-
-                    if (data.bookOverviews || data.keeBookOverviews) {
-                        bookOverviews = data.bookOverviews || data.keeBookOverviews;
-                    }
-
-                    if (data.cartoonsList) cartoonsList = data.cartoonsList;
-                    if (data.milkData) milkEntries = data.milkData;
-
-                    if (data.workoutSites || data.webHubSites) workoutSites = data.workoutSites || data.webHubSites;
-                    if (data.workoutMedia || data.webHubMedia) workoutMedia = data.workoutMedia || data.webHubMedia;
-                    if (data.workoutSimpleNotes !== undefined || data.webHubSimpleNotes !== undefined) {
-                        workoutSimpleNotes = (data.workoutSimpleNotes !== undefined) ? data.workoutSimpleNotes : data.webHubSimpleNotes;
-                        const ta = document.getElementById('workoutSimpleNotesText');
-                        if (ta) ta.value = workoutSimpleNotes;
-                    }
-
-                    if (data.whimsicalFolders) {
-                        whimsicalFolders = data.whimsicalFolders;
-                    } else if (data.whimsicalSites) {
-                        whimsicalFolders = [{ id: 'wf_migrated', name: 'General', open: true, sites: data.whimsicalSites }];
-                    }
-
-                    if (data.mealPlanUrl1) localStorage.setItem('lc_mealplan_url_1', data.mealPlanUrl1);
-                    if (data.mealPlanUrl2) localStorage.setItem('lc_mealplan_url_2', data.mealPlanUrl2);
-
-                    if (data.profileName1) localStorage.setItem('lc_profile_name_1', data.profileName1);
-                    if (data.profileName2) localStorage.setItem('lc_profile_name_2', data.profileName2);
-
-                    saveNotesList();
-                    saveTodoList();
-                    saveLinksToStorage();
-                    saveBookOverviews();
-                    saveCartoonsList();
-                    saveMilkData();
-                    saveWorkoutData();
-                    saveWhimsicalFolders();
-                    saveWishlistBlocks();
-
-                    loadCustomProfileNames();
-                    loadMealPlanLinks();
-                    loadWishlistPage();
-                    loadBookOverviews();
-                    loadCartoonsList();
-                    loadMilkData();
-                    loadWorkoutData();
-                    loadWhimsicalFolders();
-
-                    statusEl.innerText = '✓ Restored successfully!';
-                    statusEl.style.color = '#2E7D32';
-                    markBackupComplete(); 
-                    updateDashboardCounts();
-                    renderNotesList();
-                    renderTodoList();
-                } catch (err) {
-                    statusEl.innerText = 'Error: Invalid file format.';
-                    statusEl.style.color = '#E53935';
-                }
-            };
-            reader.readAsText(file);
-            input.value = '';
-        }
-
-        // Theme Toggle
-        const moonIcon = document.getElementById('moonIcon');
-        const sunIcon = document.getElementById('sunIcon');
-
-        function setTheme(theme) {
-            document.documentElement.setAttribute('data-theme', theme);
-            try { localStorage.setItem('lc_theme', theme); } catch (e) {}
-            if (theme === 'dark') {
-                if (moonIcon) moonIcon.style.display = 'none';
-                if (sunIcon) sunIcon.style.display = 'block';
-            } else {
-                if (moonIcon) moonIcon.style.display = 'block';
-                if (sunIcon) sunIcon.style.display = 'none';
-            }
-        }
-
-        function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-            setTheme(currentTheme === 'dark' ? 'light' : 'dark');
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            try {
-                const savedTheme = localStorage.getItem('lc_theme');
-                if (savedTheme) setTheme(savedTheme);
-            } catch (e) {
-                setTheme('light');
-            }
-            loadCustomProfileNames();
-            loadMealPlanLinks();
-            updateDashboardCounts();
-            loadWishlistPage();
-            loadBookOverviews();
-            loadCartoonsList();
-            loadMilkData();
-            loadWorkoutData();
-            loadWhimsicalFolders();
-            sortNotesList();
-            renderNotesList();
-            checkBackupReminder(); 
-        });
-    </script>
-</body>
-</html>
+                if (sortNotesBtn)
