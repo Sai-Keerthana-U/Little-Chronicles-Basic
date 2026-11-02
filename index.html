@@ -165,6 +165,18 @@
             height: 16px;
         }
 
+        .notification-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 8px;
+            height: 8px;
+            background-color: #00F5D4;
+            border-radius: 50%;
+            border: 2px solid var(--bg-color);
+            box-shadow: 0 0 8px #00F5D4;
+        }
+
         .profile-switcher {
             background: var(--surface-subtle);
             border: var(--card-border);
@@ -241,6 +253,10 @@
             font-weight: 700;
             color: #00F5D4;
             text-shadow: 0 0 6px rgba(0, 245, 212, 0.6);
+        }
+
+        .marquee-content:hover {
+            animation-play-state: paused;
         }
 
         @keyframes marqueeScroll {
@@ -418,6 +434,112 @@
             margin-top: 4px;
         }
 
+        /* Modal Overlay System */
+        .modal-overlay, .drawer-overlay {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: rgba(0, 0, 0, 0.45) !important;
+            backdrop-filter: blur(4px) !important;
+            z-index: 1000 !important;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+
+        .modal-overlay.open, .drawer-overlay.open {
+            display: flex !important;
+        }
+
+        .modal-sheet, .drawer-sheet {
+            background: var(--surface-card);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 420px;
+            max-height: 85vh;
+            padding: 20px 18px 24px;
+            box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            border: var(--card-border);
+            position: relative;
+            z-index: 1001;
+        }
+
+        .modal-header, .drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title, .drawer-title {
+            font-size: 16.5px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .drawer-close-btn {
+            background: var(--surface-subtle);
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .drawer-links-wrap {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .resource-pill {
+            background: var(--surface-subtle);
+            color: var(--text-main);
+            padding: 9px 14px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 12.5px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid transparent;
+            cursor: pointer;
+        }
+
+        .manage-pill-btn {
+            background: var(--primary-soft);
+            color: var(--primary);
+            border: 1px dashed var(--primary);
+            padding: 9px 14px;
+            border-radius: 12px;
+            font-size: 12.5px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .arrow-up-right {
+            font-size: 10px;
+            opacity: 0.6;
+        }
+
         /* Feature Card Accordions */
         .features-stack {
             display: flex;
@@ -562,4 +684,2393 @@
             padding: 2px 6px;
             border-radius: 6px;
             background: var(--surface-card);
-            color: var(--
+            color: var(--text-muted);
+            border: var(--card-border);
+        }
+
+        .recipe-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .cook-mode-trigger-btn {
+            background: linear-gradient(135deg, #FF7043 0%, #D84315 100%);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            padding: 5px 10px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 8px rgba(216, 67, 21, 0.25);
+        }
+
+        .recipe-item-body {
+            display: none;
+            padding: 12px 14px 14px;
+            border-top: var(--card-border);
+            background: var(--surface-card);
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .recipe-item-card.open .recipe-item-body {
+            display: flex;
+        }
+
+        .recipe-section-label {
+            font-size: 10.5px;
+            font-weight: 800;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .recipe-ingredients-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .ingredient-check-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12.5px;
+            color: var(--text-main);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .ingredient-check-row.checked {
+            text-decoration: line-through;
+            opacity: 0.45;
+        }
+
+        .ingredient-check-box {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            border: 1.5px solid var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            flex-shrink: 0;
+        }
+
+        .ingredient-check-row.checked .ingredient-check-box {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #FFFFFF;
+        }
+
+        .recipe-steps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding-left: 18px;
+            font-size: 12.5px;
+            line-height: 1.5;
+            color: var(--text-main);
+        }
+
+        /* FULL SCREEN COOK MODE OVERLAY */
+        .cook-mode-overlay {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100vw !important;
+            height: 100vh !important;
+            background: var(--bg-color) !important;
+            z-index: 2000 !important;
+            display: none;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 20px 18px 40px;
+            box-sizing: border-box;
+        }
+
+        .cook-mode-overlay.open {
+            display: flex !important;
+        }
+
+        .cook-mode-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .cook-mode-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .cook-mode-close-btn {
+            background: var(--surface-card);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+            cursor: pointer;
+        }
+
+        .cook-mode-card {
+            background: var(--surface-card);
+            border-radius: 16px;
+            border: var(--card-border);
+            padding: 16px 18px;
+            margin-bottom: 14px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .cook-step-badge {
+            display: inline-block;
+            background: var(--primary);
+            color: #FFFFFF;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        .cook-step-text {
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.55;
+            color: var(--text-main);
+        }
+
+        /* Whimsical & Other Styles (retained) */
+        .whimsical-top-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .surprise-me-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #FF007F 0%, #7928CA 100%);
+            color: #FFFFFF;
+            border: none;
+            border-radius: var(--radius-inner);
+            padding: 10px 14px;
+            font-size: 12.5px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 0, 127, 0.3);
+            letter-spacing: 0.2px;
+        }
+
+        .new-folder-action-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            color: var(--text-main);
+            border-radius: var(--radius-inner);
+            padding: 10px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+        .whimsical-add-bar {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            background: var(--surface-subtle);
+            padding: 8px 10px;
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+        }
+
+        .whimsical-folder-select {
+            background: var(--surface-card);
+            border: var(--card-border);
+            border-radius: 8px;
+            padding: 7px 8px;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            outline: none;
+            max-width: 110px;
+        }
+
+        .whimsical-folders-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-top: 2px;
+        }
+
+        .whimsical-folder-card {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .whimsical-folder-header {
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .whimsical-folder-header-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .whimsical-folder-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .whimsical-folder-count {
+            font-size: 10.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+            background: var(--surface-card);
+            padding: 2px 7px;
+            border-radius: 999px;
+            border: var(--card-border);
+        }
+
+        .whimsical-folder-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .folder-tool-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 11px;
+            cursor: pointer;
+            padding: 2px 4px;
+            opacity: 0.6;
+        }
+
+        .whimsical-folder-chevron {
+            font-size: 9px;
+            color: var(--text-muted);
+            margin-left: 4px;
+        }
+
+        .whimsical-folder-content {
+            display: none !important;
+            padding: 10px 12px 12px;
+            flex-wrap: wrap;
+            gap: 6px;
+            border-top: var(--card-border);
+            background: var(--surface-card);
+        }
+
+        .whimsical-folder-card.open .whimsical-folder-content {
+            display: flex !important;
+        }
+
+        .whimsical-chip {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 5px 11px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .webhub-subtabs {
+            display: flex;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 3px;
+            gap: 3px;
+            margin-top: 10px;
+        }
+
+        .webhub-subtab-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 6px 0;
+            border-radius: 999px;
+            font-family: inherit;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .webhub-subtab-btn.active {
+            background: var(--surface-card);
+            color: var(--primary);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .webhub-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-top: 4px;
+        }
+
+        .webhub-input-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .webhub-input {
+            flex: 1;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 12px;
+            color: var(--text-main);
+            outline: none;
+            font-family: inherit;
+        }
+
+        .webhub-badges-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding-top: 2px;
+        }
+
+        .webhub-chip {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 10px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .webhub-chip.youtube {
+            border-color: rgba(229, 57, 53, 0.3);
+            background: rgba(229, 57, 53, 0.08);
+        }
+
+        .webhub-chip.instagram {
+            border-color: rgba(233, 30, 99, 0.3);
+            background: rgba(233, 30, 99, 0.08);
+        }
+
+        .webhub-chip-del {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            padding: 0 2px;
+            opacity: 0.6;
+        }
+
+        .webhub-simple-notes {
+            width: 100%;
+            height: 110px;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-family: inherit;
+            font-size: 13px;
+            color: var(--text-main);
+            line-height: 1.5;
+            outline: none;
+            resize: none;
+            box-sizing: border-box;
+        }
+
+        .meal-plan-card-body {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            padding: 12px 14px;
+            margin-top: 6px;
+        }
+
+        .meal-plan-open-btn {
+            background: var(--primary);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* PDF Viewer Frame */
+        .pdf-view-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .pdf-controls-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .pdf-action-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            padding: 8px 14px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .pdf-action-btn.primary {
+            background: var(--primary);
+            color: #FFFFFF;
+            border: none;
+        }
+
+        .pdf-viewer-frame {
+            width: 100%;
+            height: 72vh;
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+            background: #FFFFFF;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pdf-viewer-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .pdf-placeholder-msg {
+            color: var(--text-muted);
+            font-size: 13px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Notepad & Todo Layout */
+        .notes-view-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .back-nav-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 7px 12px;
+            color: var(--text-main);
+            font-size: 12.5px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .notes-actions-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sort-notes-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            outline: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .add-note-btn {
+            background: var(--primary);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 999px;
+            padding: 7px 14px;
+            font-size: 12.5px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(148, 93, 76, 0.2);
+            outline: none;
+            justify-content: center;
+        }
+
+        .hub-tabs {
+            display: flex;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 3px;
+            margin-bottom: 12px;
+            gap: 4px;
+        }
+
+        .hub-tab-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 7px 0;
+            border-radius: 999px;
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .hub-tab-btn.active {
+            background: var(--surface-card);
+            color: var(--primary);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .notepad-global-toolbar {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: var(--surface-card);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            padding: 8px 10px;
+            margin-bottom: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .notepad-toolbar-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+        }
+
+        .notepad-format-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .notepad-toolbar-btn {
+            background: var(--surface-subtle);
+            border: 1px solid transparent;
+            color: var(--text-main);
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 5px 8px;
+            border-radius: 6px;
+            line-height: 1;
+            user-select: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+        }
+
+        .notepad-toolbar-btn.bold { font-weight: 800; }
+        .notepad-toolbar-btn.italic { font-style: italic; font-family: serif; }
+        .notepad-toolbar-btn.strike { text-decoration: line-through; }
+        .notepad-toolbar-btn.icon-only { font-size: 14px; padding: 4px 8px; }
+
+        .color-section-wrap {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .color-label-tag {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .swatch-strip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--surface-subtle);
+            padding: 3px 6px;
+            border-radius: 8px;
+        }
+
+        .color-swatch-dot {
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            display: inline-block;
+            box-sizing: border-box;
+        }
+
+        .clear-highlight-text-btn {
+            background: transparent;
+            border: none;
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0 3px;
+            line-height: 1;
+        }
+
+        .notes-stack-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .notepad-card {
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+            box-shadow: var(--card-shadow);
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+            background-color: var(--note-default);
+            transition: all 0.2s ease;
+        }
+
+        .notepad-card.is-pinned {
+            border: 1.5px solid var(--primary);
+            box-shadow: 0 4px 18px rgba(148, 93, 76, 0.15);
+        }
+
+        .notepad-card.color-default { background-color: var(--note-default); }
+        .notepad-card.color-yellow { background-color: var(--note-yellow); }
+        .notepad-card.color-green { background-color: var(--note-green); }
+        .notepad-card.color-pink { background-color: var(--note-pink); }
+        .notepad-card.color-blue { background-color: var(--note-blue); }
+        .notepad-card.color-purple { background-color: var(--note-purple); }
+
+        .notepad-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+        }
+
+        .notepad-timestamp {
+            font-size: 10.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .notepad-card-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .notepad-card-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 13px;
+            cursor: pointer;
+            padding: 3px 6px;
+            border-radius: 5px;
+            opacity: 0.45;
+            line-height: 1;
+        }
+
+        .notepad-body {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-main);
+            outline: none;
+            word-break: break-word;
+            white-space: pre-wrap;
+            min-height: 48px;
+            font-family: inherit;
+        }
+
+        .notepad-preview-title {
+            display: none;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-top: 2px;
+            cursor: pointer;
+        }
+
+        .notepad-card.minimized .notepad-body { display: none; }
+        .notepad-card.minimized .notepad-preview-title { display: block; }
+
+        .todo-input-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .todo-input {
+            flex: 1;
+            background: var(--surface-card);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            padding: 10px 14px;
+            font-size: 13.5px;
+            font-family: inherit;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .todo-add-btn {
+            background: var(--primary);
+            color: #FFFFFF;
+            border: none;
+            border-radius: var(--radius-inner);
+            padding: 0 16px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .todo-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .todo-item {
+            background: var(--surface-card);
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+            box-shadow: var(--card-shadow);
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .todo-item-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .todo-checkbox {
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
+            border: 2px solid var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .todo-item.completed .todo-checkbox {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #FFFFFF;
+        }
+
+        .todo-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .todo-text {
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+            opacity: 0.45;
+        }
+
+        .todo-timestamp {
+            font-size: 9.5px;
+            color: var(--text-muted);
+        }
+
+        .todo-del-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 15px;
+            cursor: pointer;
+            padding: 3px;
+            opacity: 0.6;
+        }
+
+        /* Wishlist, Milk & Cartoons Styles (retained) */
+        .adhu-dropdown-card.wl-color-default { background: var(--surface-card); }
+        .adhu-card-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 12px;
+            gap: 8px;
+        }
+
+        .wishlist-format-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 3px 6px;
+        }
+
+        .wishlist-format-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 4px 7px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.75;
+        }
+
+        .wishlist-clear-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #E53935;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .wl-block {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 5px 0;
+        }
+        
+        .wl-block-editor {
+            flex: 1;
+            outline: none;
+            font-size: 14.5px;
+            line-height: 22px;
+            color: var(--text-main);
+            word-break: break-word;
+        }
+
+        .milk-progress-box {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .milk-metrics-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .milk-total-current {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1;
+        }
+
+        .milk-targets-sub {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-align: right;
+        }
+
+        .milk-bar-track {
+            width: 100%;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.06);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .milk-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #FFB380 0%, #00E676 100%);
+            transition: width 0.3s ease;
+        }
+
+        .milk-pct-tags {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11.5px;
+            font-weight: 700;
+        }
+
+        .milk-pct-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: var(--surface-card);
+            border: var(--card-border);
+        }
+
+        .milk-input-bar {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .milk-input {
+            flex: 1;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 10px;
+            padding: 9px 12px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .milk-quick-pills {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding: 2px 0;
+            scrollbar-width: none;
+        }
+
+        .milk-pill-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 5px 11px;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .milk-chips-history {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            max-height: 85px;
+            overflow-y: auto;
+        }
+
+        .milk-entry-chip {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .milk-entry-del {
+            background: transparent;
+            border: none;
+            color: #E53935;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .tier-board {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: var(--surface-subtle);
+            padding: 8px;
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+        }
+
+        .tier-row {
+            display: flex;
+            align-items: center;
+            background: var(--surface-card);
+            border-radius: 8px;
+            border: var(--card-border);
+            height: 44px;
+            min-height: 44px;
+            overflow: hidden;
+        }
+
+        .tier-badge {
+            width: 44px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 800;
+            color: #1a1a1a;
+            flex-shrink: 0;
+        }
+
+        .tier-badge.badge-s { background-color: var(--tier-s); }
+        .tier-badge.badge-a { background-color: var(--tier-a); }
+        .tier-badge.badge-b { background-color: var(--tier-b); }
+        .tier-badge.badge-c { background-color: var(--tier-c); }
+        .tier-badge.badge-d { background-color: var(--tier-d); }
+
+        .tier-items-wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 10px;
+            height: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        .cartoon-chip {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            color: var(--text-main);
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .tier-input-bar {
+            display: flex;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .tier-input {
+            flex: 1;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12.5px;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .tier-select {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .book-overview-item {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-overview-header {
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+
+        .book-overview-title-text {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .book-overview-body-wrap {
+            display: none;
+            flex-direction: column;
+            padding: 12px 14px 14px;
+            border-top: var(--card-border);
+            background: var(--surface-card);
+            gap: 10px;
+        }
+
+        .book-overview-item.expanded .book-overview-body-wrap {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <!-- Header -->
+        <header>
+            <div class="app-title">The Motherboard</div>
+            
+            <div class="header-actions">
+                <button class="theme-toggle-btn" id="headerSettingsBtn" onclick="openDriveSettingsModal()" title="Settings & Backup">
+                    ⚙️
+                    <span id="backupBadge" class="notification-badge" style="display: none;"></span>
+                </button>
+
+                <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle Theme">
+                    <svg id="moonIcon" class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sunIcon" class="theme-icon" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+
+                <div class="profile-switcher" id="profileSwitcher">
+                    <button class="switch-btn active" id="profileTabBtn1" onclick="switchProfile(this, 'user1')">User 1</button>
+                    <button class="switch-btn" id="profileTabBtn2" onclick="switchProfile(this, 'user2')">User 2</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Permanent Neon Banner -->
+        <div class="neon-ticker-banner" id="neonTickerBanner">
+            <div class="neon-tag"><span>⚡</span> SYNC</div>
+            <div class="marquee-track">
+                <div class="marquee-content">
+                    REMINDER: Don't forget to save your local database copy & sync with Google Drive! • Tap 'Save' or 'Drive' to update.
+                </div>
+            </div>
+            <div class="neon-banner-actions">
+                <button class="neon-banner-btn" id="bannerSaveBtn" onclick="triggerAppSave()">💾 Save</button>
+                <button class="neon-banner-btn" onclick="openDriveSettingsModal()">☁️ Drive</button>
+                <button class="neon-close-btn" onclick="dismissNeonBanner()">✕</button>
+            </div>
+        </div>
+
+        <!-- USER 1 DASHBOARD -->
+        <main id="view-user1" class="view-content active-view">
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+                
+                <!-- 2x2 Bento Grid -->
+                <div class="bento-grid">
+                    <div class="compact-card" onclick="openResourceDrawer('ebooks')">
+                        <div class="card-top">
+                            <div class="icon-badge">🌐</div>
+                            <div class="card-arrow">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </div>
+                        <div class="card-bottom">
+                            <h3 class="card-heading">eBooks Vault</h3>
+                            <p class="card-subtitle" id="ebookCount">2 resources</p>
+                        </div>
+                    </div>
+
+                    <div class="compact-card" onclick="openResourceDrawer('audiobooks')">
+                        <div class="card-top">
+                            <div class="icon-badge">🎧</div>
+                            <div class="card-arrow">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </div>
+                        <div class="card-bottom">
+                            <h3 class="card-heading">Audiobook Stash</h3>
+                            <p class="card-subtitle" id="audioCount">1 resource</p>
+                        </div>
+                    </div>
+
+                    <div class="compact-card" onclick="openResourceDrawer('tools')">
+                        <div class="card-top">
+                            <div class="icon-badge">⚡</div>
+                            <div class="card-arrow">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </div>
+                        <div class="card-bottom">
+                            <h3 class="card-heading">Tools & Converters</h3>
+                            <p class="card-subtitle" id="toolsCount">1 tool</p>
+                        </div>
+                    </div>
+
+                    <div class="split-card-wrapper">
+                        <div class="micro-card" onclick="openSpecificNotesView('notes')">
+                            <div class="micro-icon">📝</div>
+                            <div class="micro-heading">Notes</div>
+                            <div class="micro-subtitle" id="stickyCount">0 notes</div>
+                        </div>
+                        <div class="micro-card" onclick="openSpecificNotesView('todo')">
+                            <div class="micro-icon">✅</div>
+                            <div class="micro-heading">To-Do</div>
+                            <div class="micro-subtitle" id="todoCount">0 pending</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FEATURE: USER 1 MEAL PLAN -->
+                <div class="dropdown-feature-card open" id="user1MealPlanCard">
+                    <div class="dropdown-feature-header" onclick="toggleCardDropdown('user1MealPlanCard')">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">🥗</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Meal Plan</span>
+                                <span class="feature-sub-title">Private Drive File</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="meal-plan-card-body">
+                            <div>
+                                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Personal Meal Plan</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Stored privately in Google Drive</div>
+                            </div>
+                            <button id="user1MealPlanBtn" class="meal-plan-open-btn" onclick="openMealPlan(1)">
+                                ↗ Open Plan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEW FEATURE: KITCHEN DECK (RECIPES) -->
+                <div class="dropdown-feature-card open" id="kitchenDeckCard">
+                    <div class="dropdown-feature-header" onclick="toggleCardDropdown('kitchenDeckCard')">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">🍳</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Kitchen Deck</span>
+                                <span class="feature-sub-title" id="recipesCountSub">0 recipes</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <button class="add-note-btn" style="width: 100%;" onclick="openRecipeEditorModal()">
+                            <span>+</span> Add New Recipe
+                        </button>
+                        <div class="recipe-cards-list" id="kitchenDeckContainer"></div>
+                    </div>
+                </div>
+
+                <!-- FEATURE: BOOKS OVERVIEW ACCORDION -->
+                <div class="dropdown-feature-card" id="user1BooksOverviewCard">
+                    <div class="dropdown-feature-header" onclick="toggleBooksOverviewDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">📖</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Books Overview</span>
+                                <span class="feature-sub-title" id="booksOverviewSub">0 overviews</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div id="booksOverviewContainer" style="display: flex; flex-direction: column; gap: 8px; padding-top: 12px;"></div>
+                        <button class="add-note-btn" style="width: 100%; margin-top: 4px;" onclick="addBookOverview()">
+                            <span>+</span> Add Book Overview
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FEATURE: WORKOUT HUB -->
+                <div class="dropdown-feature-card" id="workoutCard">
+                    <div class="dropdown-feature-header" onclick="toggleWorkoutDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">💪</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Workout</span>
+                                <span class="feature-sub-title" id="workoutCountSub">Websites, Videos & Notes</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="webhub-subtabs">
+                            <button class="webhub-subtab-btn active" id="subtabSitesBtn" onclick="switchWorkoutSubtab('sites')">🔗 Websites</button>
+                            <button class="webhub-subtab-btn" id="subtabMediaBtn" onclick="switchWorkoutSubtab('media')">📱 YouTube / Insta</button>
+                            <button class="webhub-subtab-btn" id="subtabNotesBtn" onclick="switchWorkoutSubtab('notes')">📝 Notes</button>
+                        </div>
+
+                        <div class="webhub-panel" id="workoutPanelSites">
+                            <div class="webhub-input-row">
+                                <input type="text" id="newSiteName" class="webhub-input" placeholder="Site name...">
+                                <input type="url" id="newSiteUrl" class="webhub-input" placeholder="URL...">
+                                <button class="add-note-btn" onclick="addWorkoutSite()">+ Add</button>
+                            </div>
+                            <div class="webhub-badges-grid" id="workoutSitesList"></div>
+                        </div>
+
+                        <div class="webhub-panel" id="workoutPanelMedia" style="display:none;">
+                            <div class="webhub-input-row">
+                                <input type="text" id="newMediaTitle" class="webhub-input" placeholder="Video title...">
+                                <input type="url" id="newMediaUrl" class="webhub-input" placeholder="YouTube/Insta link...">
+                                <button class="add-note-btn" onclick="addWorkoutMedia()">+ Add</button>
+                            </div>
+                            <div class="webhub-badges-grid" id="workoutMediaList"></div>
+                        </div>
+
+                        <div class="webhub-panel" id="workoutPanelNotes" style="display:none;">
+                            <textarea id="workoutSimpleNotesText" class="webhub-simple-notes" placeholder="Jot down workout splits, routine plans, reps, weights..." oninput="saveWorkoutSimpleNotes()"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FEATURE: WHIMSICAL WEBSITES -->
+                <div class="dropdown-feature-card open" id="whimsicalCard">
+                    <div class="dropdown-feature-header" onclick="toggleWhimsicalDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">✨</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Whimsical Websites</span>
+                                <span class="feature-sub-title" id="whimsicalSub">0 links</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="whimsical-top-controls">
+                            <button class="surprise-me-btn" onclick="launchRandomWhimsicalSite()">🎲 Surprise Me!</button>
+                            <button class="new-folder-action-btn" onclick="promptCreateFolder()">📁 + New Folder</button>
+                        </div>
+
+                        <div class="whimsical-add-bar">
+                            <select id="whimsicalFolderSelect" class="whimsical-folder-select"></select>
+                            <input type="url" id="newWhimsicalUrl" class="webhub-input" placeholder="Paste URL..." onkeypress="if(event.key==='Enter') addWhimsicalSiteToFolder()">
+                            <button class="add-note-btn" onclick="addWhimsicalSiteToFolder()">+ Add</button>
+                        </div>
+
+                        <div class="whimsical-folders-stack" id="whimsicalFoldersContainer"></div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- USER 2 DASHBOARD -->
+        <main id="view-user2" class="view-content">
+            <div class="features-stack">
+
+                <!-- FEATURE 1: MILK TRACKER -->
+                <div class="dropdown-feature-card open" id="milkCard">
+                    <div class="dropdown-feature-header" onclick="toggleMilkDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">🍼</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Milk Tracker</span>
+                                <span class="feature-sub-title" id="milkHeaderSub">Today: 0 ml</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="milk-progress-box">
+                            <div class="milk-metrics-row">
+                                <div>
+                                    <span style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Consumed</span>
+                                    <div class="milk-total-current"><span id="milkTotalVal">0</span> <small style="font-size:14px; font-weight:600;">ml</small></div>
+                                </div>
+                                <div class="milk-targets-sub">
+                                    Min: <strong>600 ml</strong><br>
+                                    Max: <strong>900 ml</strong>
+                                </div>
+                            </div>
+
+                            <div class="milk-bar-track">
+                                <div class="milk-bar-fill" id="milkProgressBar" style="width: 0%;"></div>
+                            </div>
+
+                            <div class="milk-pct-tags">
+                                <div class="milk-pct-pill"><span style="color:var(--text-muted);">Min Goal:</span> <strong id="milkMinPct" style="color: #FF9800;">0%</strong></div>
+                                <div class="milk-pct-pill"><span style="color:var(--text-muted);">Max Goal:</span> <strong id="milkMaxPct" style="color: #2E7D32;">0%</strong></div>
+                            </div>
+                        </div>
+
+                        <div class="milk-input-bar">
+                            <input type="number" id="milkInputVal" class="milk-input" placeholder="Amount (ml)..." min="1" step="5" onkeypress="if(event.key==='Enter') addMilkEntry()">
+                            <button class="add-note-btn" onclick="addMilkEntry()">+ Log</button>
+                        </div>
+
+                        <div class="milk-quick-pills">
+                            <span class="milk-pill-btn" onclick="logQuickMilk(60)">+60 ml</span>
+                            <span class="milk-pill-btn" onclick="logQuickMilk(90)">+90 ml</span>
+                            <span class="milk-pill-btn" onclick="logQuickMilk(120)">+120 ml</span>
+                            <span class="milk-pill-btn" onclick="logQuickMilk(150)">+150 ml</span>
+                            <span class="milk-pill-btn" onclick="logQuickMilk(180)">+180 ml</span>
+                        </div>
+
+                        <div class="milk-chips-history" id="milkChipsHistory"></div>
+                    </div>
+                </div>
+
+                <!-- FEATURE: USER 2 MEAL PLAN -->
+                <div class="dropdown-feature-card open" id="user2MealPlanCard">
+                    <div class="dropdown-feature-header" onclick="toggleCardDropdown('user2MealPlanCard')">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">🥗</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Meal Plan</span>
+                                <span class="feature-sub-title">Private Drive File</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="meal-plan-card-body">
+                            <div>
+                                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Personal Meal Plan</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Stored privately in Google Drive</div>
+                            </div>
+                            <button id="user2MealPlanBtn" class="meal-plan-open-btn" onclick="openMealPlan(2)">
+                                ↗ Open Plan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FEATURE 2: WISHLIST -->
+                <div class="dropdown-feature-card open" id="wishlistCard">
+                    <div class="dropdown-feature-header" onclick="toggleWishlistDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">📚</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Wishlist</span>
+                                <span class="feature-sub-title" id="wishlistSub">0 items</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="adhu-card-toolbar">
+                            <div class="wishlist-format-toolbar">
+                                <button class="wishlist-format-btn" onmousedown="openWishlistLinkModal(event)">🔗</button>
+                                <button class="wishlist-format-btn" onmousedown="applyWishlistFormat(event, 'insertUnorderedList')">•</button>
+                                <button class="wishlist-format-btn" onmousedown="applyWishlistFormat(event, 'bold')">B</button>
+                                <button class="wishlist-format-btn" onmousedown="applyWishlistFormat(event, 'italic')">I</button>
+                                <button class="wishlist-format-btn" onmousedown="applyWishlistFormat(event, 'strikeThrough')">S</button>
+                            </div>
+                            <button class="wishlist-clear-btn" onclick="deleteCheckedWishlistItems()">🗑️</button>
+                        </div>
+                        <div id="wishlistBlocksContainer" style="display:flex; flex-direction:column; gap:4px;"></div>
+                        <button class="add-note-btn" style="width: 100%; margin-top: 6px;" onclick="addWishlistBlock()"><span>+</span> Add New Line</button>
+                    </div>
+                </div>
+
+                <!-- FEATURE 3: CARTOONS TIER LIST -->
+                <div class="dropdown-feature-card open" id="cartoonsTierCard">
+                    <div class="dropdown-feature-header" onclick="toggleCartoonsTierDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">📺</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Cartoons Tier List</span>
+                                <span class="feature-sub-title" id="cartoonsCountSub">0 cartoons</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="tier-board">
+                            <div class="tier-row"><div class="tier-badge badge-s">S</div><div class="tier-items-wrap" id="tier-wrap-S"></div></div>
+                            <div class="tier-row"><div class="tier-badge badge-a">A</div><div class="tier-items-wrap" id="tier-wrap-A"></div></div>
+                            <div class="tier-row"><div class="tier-badge badge-b">B</div><div class="tier-items-wrap" id="tier-wrap-B"></div></div>
+                            <div class="tier-row"><div class="tier-badge badge-c">C</div><div class="tier-items-wrap" id="tier-wrap-C"></div></div>
+                            <div class="tier-row"><div class="tier-badge badge-d">D</div><div class="tier-items-wrap" id="tier-wrap-D"></div></div>
+                        </div>
+
+                        <div class="tier-input-bar">
+                            <input type="text" id="newCartoonName" class="tier-input" placeholder="Item name..." onkeypress="if(event.key==='Enter') addCartoonItem()">
+                            <select id="newCartoonTier" class="tier-select">
+                                <option value="S">S</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                            <button class="add-note-btn" onclick="addCartoonItem()">+ Add</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- NOTES VIEW -->
+        <main id="view-notes" class="view-content">
+            <div class="notes-view-header">
+                <button class="back-nav-btn" onclick="closeNotesView()">← Dashboard</button>
+                <div class="notes-actions-group">
+                    <button class="sort-notes-btn" onclick="toggleStickySort()">⇅ Date <span id="sortDirectionIndicator">↓</span></button>
+                    <button class="add-note-btn" id="hubActionBtn" onclick="handleHubAction()"><span>+</span> New Note</button>
+                </div>
+            </div>
+
+            <div class="hub-tabs">
+                <button class="hub-tab-btn active" id="tabNotesBtn" onclick="switchHubTab('notes')">📝 Notepad</button>
+                <button class="hub-tab-btn" id="tabTodoBtn" onclick="switchHubTab('todo')">✅ To-Do List</button>
+            </div>
+
+            <div class="notepad-global-toolbar" id="notepadGlobalToolbar">
+                <div class="notepad-toolbar-row">
+                    <div class="notepad-format-group">
+                        <button type="button" class="notepad-toolbar-btn" onpointerdown="applyFormatting(event, 'undo')">↺</button>
+                        <button type="button" class="notepad-toolbar-btn bold" onpointerdown="applyFormatting(event, 'bold')">B</button>
+                        <button type="button" class="notepad-toolbar-btn italic" onpointerdown="applyFormatting(event, 'italic')">I</button>
+                        <button type="button" class="notepad-toolbar-btn strike" onpointerdown="applyFormatting(event, 'strikeThrough')">S</button>
+                    </div>
+                    <div class="notepad-format-group">
+                        <button type="button" class="notepad-toolbar-btn icon-only" onpointerdown="applyFormatting(event, 'insertUnorderedList')">⁝≡</button>
+                        <button type="button" class="notepad-toolbar-btn icon-only" onpointerdown="applyFormatting(event, 'insertOrderedList')">1≡</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="panelNotes"><div class="notes-stack-container" id="stickyNotesContainer"></div></div>
+            <div id="panelTodo" style="display: none;">
+                <div class="todo-input-bar">
+                    <input type="text" id="todoInput" class="todo-input" placeholder="Add a new task..." onkeypress="if(event.key==='Enter') addTodoItem()">
+                    <button class="todo-add-btn" onclick="addTodoItem()">Add</button>
+                </div>
+                <div class="todo-list" id="todoContainer"></div>
+            </div>
+        </main>
+
+    </div>
+
+    <!-- MODAL: RECIPE EDITOR -->
+    <div class="modal-overlay" id="recipeModal" onclick="closeRecipeModal(event)">
+        <div class="modal-sheet" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title" id="recipeModalTitle">New Recipe</h3>
+                <button class="drawer-close-btn" onclick="closeRecipeModal()">✕</button>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <input type="text" id="recNameInput" class="webhub-input" placeholder="Recipe Title (e.g. 15-Min Dal Khichdi)">
+                <input type="text" id="recTagsInput" class="webhub-input" placeholder="Tags (comma separated, e.g. ⏱️ 15m, Comfort, 👶 Kid-Friendly)">
+                
+                <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-top: 4px;">INGREDIENTS (One per line)</label>
+                <textarea id="recIngredientsInput" class="webhub-simple-notes" style="height: 90px;" placeholder="1 cup Rice&#10;1/2 cup Moong Dal&#10;1 tsp Ghee&#10;Pinch of Turmeric"></textarea>
+
+                <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); margin-top: 4px;">PREP & COOK STEPS (One step per line)</label>
+                <textarea id="recStepsInput" class="webhub-simple-notes" style="height: 100px;" placeholder="Wash dal and rice together.&#10;Heat ghee in cooker and add cumin.&#10;Add 4 cups water and pressure cook for 3 whistles."></textarea>
+
+                <button class="modal-save-btn" style="background: var(--primary); color: #fff; padding: 10px; border-radius: 8px; font-weight: 700; border: none; cursor: pointer;" onclick="saveRecipe()">Save to Kitchen Deck</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FULL SCREEN COOK MODE OVERLAY -->
+    <div class="cook-mode-overlay" id="cookModeOverlay">
+        <div class="cook-mode-header">
+            <div>
+                <span style="font-size: 11px; font-weight: 800; color: #D84315; text-transform: uppercase;">👨‍🍳 COOK MODE</span>
+                <div class="cook-mode-title" id="cookModeRecipeTitle">Recipe Title</div>
+            </div>
+            <button class="cook-mode-close-btn" onclick="exitCookMode()">Done Cooking ✓</button>
+        </div>
+
+        <div style="margin-bottom: 16px;">
+            <div class="cook-mode-card">
+                <span class="cook-step-badge">PREP CHECKLIST</span>
+                <div class="recipe-ingredients-checklist" id="cookModeIngredientsList" style="margin-top: 8px;"></div>
+            </div>
+        </div>
+
+        <div id="cookModeStepsList"></div>
+    </div>
+
+    <!-- MODAL: SETTINGS & BACKUP -->
+    <div class="modal-overlay" id="driveModal" onclick="closeDriveSettingsModal(event)">
+        <div class="modal-sheet" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title">Settings & Backup</h3>
+                <button class="drawer-close-btn" onclick="closeDriveSettingsModal()">✕</button>
+            </div>
+
+            <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Profile Display Names</div>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="customNameInput1" class="webhub-input" placeholder="Name 1" oninput="saveCustomProfileNames()">
+                    <input type="text" id="customNameInput2" class="webhub-input" placeholder="Name 2" oninput="saveCustomProfileNames()">
+                </div>
+            </div>
+
+            <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Private Meal Plan URLs</div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <input type="url" id="mealPlanUrl1" class="webhub-input" placeholder="Profile 1 Meal Plan URL" oninput="saveMealPlanLinks()">
+                    <input type="url" id="mealPlanUrl2" class="webhub-input" placeholder="Profile 2 Meal Plan URL" oninput="saveMealPlanLinks()">
+                </div>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button class="modal-save-btn" style="background: var(--primary); color: #fff; padding: 10px; border-radius: 8px; border:none; font-weight:700;" onclick="triggerAppSave()">💾 Save Full Backup File</button>
+                <button class="modal-save-btn" style="background:#2E7D32; color: #fff; padding: 10px; border-radius: 8px; border:none; font-weight:700;" onclick="saveDirectToGoogleDrive()">☁️ Upload to Google Drive</button>
+                <input type="file" id="restoreFileInput" accept=".txt,.json" style="display:none;" onchange="handleRestoreFile(this)">
+                <button class="modal-save-btn" style="background:var(--surface-subtle); color:var(--text-main); border:var(--card-border); padding: 10px; border-radius: 8px; font-weight:700;" onclick="document.getElementById('restoreFileInput').click()">📥 Restore from File</button>
+            </div>
+
+            <div id="syncStatus" style="font-size: 12px; text-align: center; color: var(--text-muted); font-weight: 600;"></div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD / MANAGE USER LINKS -->
+    <div class="drawer-overlay" id="resourceDrawer" onclick="closeResourceDrawer(event)">
+        <div class="drawer-sheet" onclick="event.stopPropagation()">
+            <div class="drawer-header">
+                <h3 class="drawer-title" id="drawerTitle">Resources</h3>
+                <button class="drawer-close-btn" onclick="closeResourceDrawer()">✕</button>
+            </div>
+            <div class="drawer-links-wrap" id="drawerLinksContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // Profile Switcher
+        function loadCustomProfileNames() {
+            const n1 = localStorage.getItem('lc_profile_name_1') || 'User 1';
+            const n2 = localStorage.getItem('lc_profile_name_2') || 'User 2';
+            document.getElementById('profileTabBtn1').innerText = n1;
+            document.getElementById('profileTabBtn2').innerText = n2;
+            const i1 = document.getElementById('customNameInput1');
+            const i2 = document.getElementById('customNameInput2');
+            if (i1) i1.value = n1;
+            if (i2) i2.value = n2;
+        }
+
+        function saveCustomProfileNames() {
+            const n1 = document.getElementById('customNameInput1').value.trim() || 'User 1';
+            const n2 = document.getElementById('customNameInput2').value.trim() || 'User 2';
+            localStorage.setItem('lc_profile_name_1', n1);
+            localStorage.setItem('lc_profile_name_2', n2);
+            document.getElementById('profileTabBtn1').innerText = n1;
+            document.getElementById('profileTabBtn2').innerText = n2;
+        }
+
+        function switchProfile(btn, key) {
+            document.querySelectorAll('.switch-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active-view'));
+            document.getElementById('view-' + key).classList.add('active-view');
+        }
+
+        function toggleCardDropdown(id) {
+            const c = document.getElementById(id);
+            if (c) c.classList.toggle('open');
+        }
+
+        // Private Meal Plan Logic
+        function loadMealPlanLinks() {
+            const u1 = localStorage.getItem('lc_mealplan_url_1') || '';
+            const u2 = localStorage.getItem('lc_mealplan_url_2') || '';
+            if (document.getElementById('mealPlanUrl1')) document.getElementById('mealPlanUrl1').value = u1;
+            if (document.getElementById('mealPlanUrl2')) document.getElementById('mealPlanUrl2').value = u2;
+            const b1 = document.getElementById('user1MealPlanBtn');
+            const b2 = document.getElementById('user2MealPlanBtn');
+            if (b1) b1.innerText = u1 ? '↗ Open Plan' : '⚙️ Set Link';
+            if (b2) b2.innerText = u2 ? '↗ Open Plan' : '⚙️ Set Link';
+        }
+
+        function saveMealPlanLinks() {
+            const u1 = document.getElementById('mealPlanUrl1').value.trim();
+            const u2 = document.getElementById('mealPlanUrl2').value.trim();
+            localStorage.setItem('lc_mealplan_url_1', u1);
+            localStorage.setItem('lc_mealplan_url_2', u2);
+            loadMealPlanLinks();
+        }
+
+        function openMealPlan(p) {
+            const url = localStorage.getItem('lc_mealplan_url_' + p);
+            if (url) window.open(url, '_blank');
+            else openDriveSettingsModal();
+        }
+
+        // ----------------------------------------------------
+        // KITCHEN DECK (RECIPES) ENGINE
+        // ----------------------------------------------------
+        let recipesDeck = [];
+        let editingRecipeId = null;
+
+        function loadRecipesDeck() {
+            try {
+                const stored = localStorage.getItem('lc_recipes_deck');
+                recipesDeck = stored ? JSON.parse(stored) : [];
+            } catch(e) {
+                recipesDeck = [];
+            }
+            renderRecipesDeck();
+        }
+
+        function saveRecipesDeck() {
+            try {
+                localStorage.setItem('lc_recipes_deck', JSON.stringify(recipesDeck));
+            } catch(e) {}
+            updateRecipesCount();
+        }
+
+        function updateRecipesCount() {
+            const sub = document.getElementById('recipesCountSub');
+            if (sub) sub.innerText = `${recipesDeck.length} ${recipesDeck.length === 1 ? 'recipe' : 'recipes'}`;
+        }
+
+        function renderRecipesDeck() {
+            const container = document.getElementById('kitchenDeckContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (recipesDeck.length === 0) {
+                container.innerHTML = '<span style="font-size:11px; color:var(--text-muted); text-align:center; padding:12px 0;">No recipes saved yet. Tap "+ Add New Recipe" to start your deck!</span>';
+                updateRecipesCount();
+                return;
+            }
+
+            recipesDeck.forEach(recipe => {
+                const card = document.createElement('div');
+                card.className = `recipe-item-card ${recipe.open ? 'open' : ''}`;
+                card.id = `rec-card-${recipe.id}`;
+
+                const tagPillsHtml = (recipe.tags || []).map(t => `<span class="recipe-tag-pill">${t}</span>`).join('');
+
+                const ingredientsHtml = (recipe.ingredients || []).map((ing, i) => `
+                    <div class="ingredient-check-row ${ing.checked ? 'checked' : ''}" onclick="toggleIngredientCheck('${recipe.id}', ${i})">
+                        <div class="ingredient-check-box">${ing.checked ? '✓' : ''}</div>
+                        <span>${ing.text}</span>
+                    </div>
+                `).join('');
+
+                const stepsHtml = (recipe.steps || []).map(s => `<li>${s}</li>`).join('');
+
+                card.innerHTML = `
+                    <div class="recipe-item-header" onclick="toggleRecipeCardOpen('${recipe.id}')">
+                        <div class="recipe-title-group">
+                            <span class="recipe-name">${recipe.name}</span>
+                            <div class="recipe-tag-pills">${tagPillsHtml}</div>
+                        </div>
+                        <div class="recipe-item-actions" onclick="event.stopPropagation()">
+                            <button class="cook-mode-trigger-btn" onclick="enterCookMode('${recipe.id}')">👨‍🍳 Cook</button>
+                            <button class="folder-tool-btn" onclick="editRecipe('${recipe.id}')">✏️</button>
+                            <button class="folder-tool-btn" onclick="deleteRecipe('${recipe.id}')">🗑️</button>
+                            <span class="whimsical-folder-chevron">${recipe.open ? '▲' : '▼'}</span>
+                        </div>
+                    </div>
+                    <div class="recipe-item-body">
+                        <div>
+                            <div class="recipe-section-label">Ingredients Checklist</div>
+                            <div class="recipe-ingredients-checklist">${ingredientsHtml}</div>
+                        </div>
+                        <div style="margin-top:6px;">
+                            <div class="recipe-section-label">Prep & Cook Steps</div>
+                            <ol class="recipe-steps-list">${stepsHtml}</ol>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            updateRecipesCount();
+        }
+
+        function toggleRecipeCardOpen(id) {
+            const r = recipesDeck.find(item => item.id === id);
+            if (r) {
+                r.open = !r.open;
+                saveRecipesDeck();
+                renderRecipesDeck();
+            }
+        }
+
+        function toggleIngredientCheck(recId, ingIndex) {
+            const r = recipesDeck.find(item => item.id === recId);
+            if (r && r.ingredients[ingIndex]) {
+                r.ingredients[ingIndex].checked = !r.ingredients[ingIndex].checked;
+                saveRecipesDeck();
+                renderRecipesDeck();
+            }
+        }
+
+        function openRecipeEditorModal() {
+            editingRecipeId = null;
+            document.getElementById('recipeModalTitle').innerText = 'New Recipe';
+            document.getElementById('recNameInput').value = '';
+            document.getElementById('recTagsInput').value = '';
+            document.getElementById('recIngredientsInput').value = '';
+            document.getElementById('recStepsInput').value = '';
+            document.getElementById('recipeModal').classList.add('open');
+        }
+
+        function editRecipe(id) {
+            const r = recipesDeck.find(item => item.id === id);
+            if (!r) return;
+            editingRecipeId = id;
+            document.getElementById('recipeModalTitle').innerText = 'Edit Recipe';
+            document.getElementById('recNameInput').value = r.name || '';
+            document.getElementById('recTagsInput').value = (r.tags || []).join(', ');
+            document.getElementById('recIngredientsInput').value = (r.ingredients || []).map(i => i.text).join('\n');
+            document.getElementById('recStepsInput').value = (r.steps || []).join('\n');
+            document.getElementById('recipeModal').classList.add('open');
+        }
+
+        function closeRecipeModal(e) {
+            if (!e || e.target.id === 'recipeModal' || e.target.classList.contains('drawer-close-btn')) {
+                document.getElementById('recipeModal').classList.remove('open');
+            }
+        }
+
+        function saveRecipe() {
+            const name = document.getElementById('recNameInput').value.trim();
+            if (!name) {
+                alert('Please enter a recipe name.');
+                return;
+            }
+            const tags = document.getElementById('recTagsInput').value.split(',').map(t => t.trim()).filter(Boolean);
+            const ingredients = document.getElementById('recIngredientsInput').value.split('\n').map(t => t.trim()).filter(Boolean).map(text => ({ text, checked: false }));
+            const steps = document.getElementById('recStepsInput').value.split('\n').map(t => t.trim()).filter(Boolean);
+
+            if (editingRecipeId) {
+                const r = recipesDeck.find(item => item.id === editingRecipeId);
+                if (r) {
+                    r.name = name;
+                    r.tags = tags;
+                    r.ingredients = ingredients;
+                    r.steps = steps;
+                }
+            } else {
+                recipesDeck.unshift({
+                    id: 'rec_' + Date.now(),
+                    name,
+                    tags,
+                    ingredients,
+                    steps,
+                    open: true
+                });
+            }
+
+            saveRecipesDeck();
+            renderRecipesDeck();
+            document.getElementById('recipeModal').classList.remove('open');
+        }
+
+        function deleteRecipe(id) {
+            if (confirm('Delete this recipe?')) {
+                recipesDeck = recipesDeck.filter(item => item.id !== id);
+                saveRecipesDeck();
+                renderRecipesDeck();
+            }
+        }
+
+        // 👨‍🍳 COOK MODE FULL SCREEN OVERLAY
+        function enterCookMode(id) {
+            const r = recipesDeck.find(item => item.id === id);
+            if (!r) return;
+
+            document.getElementById('cookModeRecipeTitle').innerText = r.name;
+            
+            const ingList = document.getElementById('cookModeIngredientsList');
+            ingList.innerHTML = (r.ingredients || []).map((ing, i) => `
+                <div class="ingredient-check-row ${ing.checked ? 'checked' : ''}" onclick="toggleCookModeIngCheck('${r.id}', ${i})">
+                    <div class="ingredient-check-box">${ing.checked ? '✓' : ''}</div>
+                    <span style="font-size:14px; font-weight:600;">${ing.text}</span>
+                </div>
+            `).join('');
+
+            const stepsContainer = document.getElementById('cookModeStepsList');
+            stepsContainer.innerHTML = (r.steps || []).map((step, idx) => `
+                <div class="cook-mode-card">
+                    <span class="cook-step-badge">STEP ${idx + 1}</span>
+                    <div class="cook-step-text">${step}</div>
+                </div>
+            `).join('');
+
+            document.getElementById('cookModeOverlay').classList.add('open');
+        }
+
+        function toggleCookModeIngCheck(recId, ingIdx) {
+            toggleIngredientCheck(recId, ingIdx);
+            enterCookMode(recId);
+        }
+
+        function exitCookMode() {
+            document.getElementById('cookModeOverlay').classList.remove('open');
+            renderRecipesDeck();
+        }
+
+        // Whimsical Folders Logic
+        let whimsicalFolders = [];
+        function loadWhimsicalFolders() {
+            try {
+                const stored = localStorage.getItem('lc_whimsical_folders');
+                whimsicalFolders = stored ? JSON.parse(stored) : [{ id: 'wf_general', name: 'General', open: true, sites: [] }];
+            } catch(e) {
+                whimsicalFolders = [{ id: 'wf_general', name: 'General', open: true, sites: [] }];
+            }
+            renderWhimsicalFolders();
+        }
+
+        function saveWhimsicalFolders() {
+            localStorage.setItem('lc_whimsical_folders', JSON.stringify(whimsicalFolders));
+            updateWhimsicalSubtitle();
+        }
+
+        function toggleWhimsicalDropdown() { toggleCardDropdown('whimsicalCard'); }
+
+        function updateWhimsicalSubtitle() {
+            const sub = document.getElementById('whimsicalSub');
+            if (!sub) return;
+            const count = whimsicalFolders.reduce((sum, f) => sum + (f.sites ? f.sites.length : 0), 0);
+            sub.innerText = `${count} links across ${whimsicalFolders.length} folders`;
+        }
+
+        function renderWhimsicalFolders() {
+            const container = document.getElementById('whimsicalFoldersContainer');
+            const selectEl = document.getElementById('whimsicalFolderSelect');
+            if (!container || !selectEl) return;
+            container.innerHTML = '';
+            selectEl.innerHTML = '';
+
+            whimsicalFolders.forEach(folder => {
+                const opt = document.createElement('option');
+                opt.value = folder.id;
+                opt.innerText = folder.name;
+                selectEl.appendChild(opt);
+            });
+
+            whimsicalFolders.forEach((folder, folderIndex) => {
+                const isOpen = !!folder.open;
+                const card = document.createElement('div');
+                card.className = `whimsical-folder-card ${isOpen ? 'open' : ''}`;
+                const sitesList = folder.sites || [];
+
+                let chipsHtml = sitesList.length === 0 ? '<span style="font-size:11px; color:var(--text-muted);">No links.</span>' : '';
+                sitesList.forEach((site, siteIndex) => {
+                    let clean = site.url.replace(/^https?:\/\//i, '').replace(/^www\./i, '').replace(/\/$/, '');
+                    chipsHtml += `
+                        <div class="whimsical-chip">
+                            <a href="${site.url}" target="_blank" style="color:inherit; text-decoration:none;">✨ ${clean} ↗</a>
+                            <button class="webhub-chip-del" onclick="deleteWhimsicalSite(${folderIndex}, ${siteIndex})">✕</button>
+                        </div>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="whimsical-folder-header" onclick="toggleFolderOpen('${folder.id}')">
+                        <div class="whimsical-folder-header-left">
+                            <span>📁</span>
+                            <span class="whimsical-folder-name">${folder.name}</span>
+                            <span class="whimsical-folder-count">${sitesList.length}</span>
+                        </div>
+                        <div class="whimsical-folder-actions">
+                            <button class="folder-tool-btn" onclick="event.stopPropagation(); promptRenameFolder('${folder.id}')">✏️</button>
+                            <button class="folder-tool-btn" onclick="event.stopPropagation(); deleteFolder('${folder.id}')">🗑️</button>
+                            <span class="whimsical-folder-chevron">${isOpen ? '▲' : '▼'}</span>
+                        </div>
+                    </div>
+                    <div class="whimsical-folder-content">${chipsHtml}</div>
+                `;
+                container.appendChild(card);
+            });
+            updateWhimsicalSubtitle();
+        }
+
+        function toggleFolderOpen(id) {
+            const f = whimsicalFolders.find(item => item.id === id);
+            if (f) {
+                f.open = !f.open;
+                saveWhimsicalFolders();
+                renderWhimsicalFolders();
+            }
+        }
+
+        function promptCreateFolder() {
+            const name = prompt("Folder name:");
+            if (name && name.trim()) {
+                whimsicalFolders.push({ id: 'wf_' + Date.now(), name: name.trim(), open: true, sites: [] });
+                saveWhimsicalFolders();
+                renderWhimsicalFolders();
+            }
+        }
+
+        function promptRenameFolder(id) {
+            const f = whimsicalFolders.find(item => item.id === id);
+            if (!f) return;
+            const n = prompt("New name:", f.name);
+            if (n && n.trim()) {
+                f.name = n.trim();
+                saveWhimsicalFolders();
+                renderWhimsicalFolders();
+            }
+        }
+
+        function deleteFolder(id) {
+            if (confirm("Delete this folder?")) {
+                whimsicalFolders = whimsicalFolders.filter(item => item.id !== id);
+                saveWhimsicalFolders();
+                renderWhimsicalFolders();
+            }
+        }
+
+        function addWhimsicalSiteToFolder() {
+            const input = document.getElementById('newWhimsicalUrl');
+            let url = input.value.trim();
+            if (!url) return;
+            if (!url.startsWith('http')) url = 'https://' + url;
+            const fid = document.getElementById('whimsicalFolderSelect').value;
+            let folder = whimsicalFolders.find(item => item.id === fid) || whimsicalFolders[0];
+            if (!folder.sites) folder.sites = [];
+            folder.sites.unshift({ id: 'w_' + Date.now(), url });
+            folder.open = true;
+            saveWhimsicalFolders();
+            renderWhimsicalFolders();
+            input.value = '';
+        }
+
+        function deleteWhimsicalSite(fIdx, sIdx) {
+            whimsicalFolders[fIdx].sites.splice(sIdx, 1);
+            saveWhimsicalFolders();
+            renderWhimsicalFolders();
+        }
+
+        function launchRandomWhimsicalSite() {
+            const all = [];
+            whimsicalFolders.forEach(f => (f.sites || []).forEach(s => all.push(s)));
+            if (all.length === 0) alert("No links found!");
+            else window.open(all[Math.floor(Math.random() * all.length)].url, '_blank');
+        }
+
+        // Backup & Save Engine
+        function triggerAppSave() {
+            saveNotesList();
+            saveTodoList();
+            saveWhimsicalFolders();
+            saveRecipesDeck();
+
+            const payload = {
+                app: 'The Motherboard',
+                lastUpdated: new Date().toISOString(),
+                notesList,
+                todoList,
+                recipesDeck,
+                whimsicalFolders,
+                mealPlanUrl1: localStorage.getItem('lc_mealplan_url_1') || '',
+                mealPlanUrl2: localStorage.getItem('lc_mealplan_url_2') || '',
+                profileName1: localStorage.getItem('lc_profile_name_1') || 'User 1',
+                profileName2: localStorage.getItem('lc_profile_name_2') || 'User 2'
+            };
+            const json = JSON.stringify(payload, null, 2);
+            localStorage.setItem('lc_full_app_snapshot', json);
+
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'TheMotherboard-Backup.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function saveDirectToGoogleDrive() { triggerAppSave(); }
+
+        function handleRestoreFile(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.notesList) notesList = data.notesList;
+                    if (data.todoList) todoList = data.todoList;
+                    if (data.recipesDeck) recipesDeck = data.recipesDeck;
+                    if (data.whimsicalFolders) whimsicalFolders = data.whimsicalFolders;
+                    if (data.mealPlanUrl1) localStorage.setItem('lc_mealplan_url_1', data.mealPlanUrl1);
+                    if (data.mealPlanUrl2) localStorage.setItem('lc_mealplan_url_2', data.mealPlanUrl2);
+                    if (data.profileName1) localStorage.setItem('lc_profile_name_1', data.profileName1);
+                    if (data.profileName2) localStorage.setItem('lc_profile_name_2', data.profileName2);
+
+                    saveNotesList();
+                    saveTodoList();
+                    saveRecipesDeck();
+                    saveWhimsicalFolders();
+                    loadCustomProfileNames();
+                    loadMealPlanLinks();
+                    loadRecipesDeck();
+                    loadWhimsicalFolders();
+                    renderNotesList();
+                    renderTodoList();
+
+                    document.getElementById('syncStatus').innerText = '✓ Restored successfully!';
+                } catch(err) {
+                    document.getElementById('syncStatus').innerText = 'Error restoring file.';
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function openDriveSettingsModal() { document.getElementById('driveModal').classList.add('open'); }
+        function closeDriveSettingsModal(e) {
+            if (!e || e.target.id === 'driveModal' || e.target.classList.contains('drawer-close-btn')) {
+                document.getElementById('driveModal').classList.remove('open');
+            }
+        }
+
+        // Sticky Notes & To-Do Setup
+        let notesList = [];
+        let todoList = [];
+        let noteSortAsc = false;
+        let currentHubTab = 'notes';
+
+        function loadNotesAndTodos() {
+            try {
+                notesList = JSON.parse(localStorage.getItem('lc_sticky_notes')) || [];
+                todoList = JSON.parse(localStorage.getItem('lc_todo_list')) || [];
+            } catch(e) {}
+            renderNotesList();
+            renderTodoList();
+        }
+
+        function saveNotesList() { localStorage.setItem('lc_sticky_notes', JSON.stringify(notesList)); }
+        function saveTodoList() { localStorage.setItem('lc_todo_list', JSON.stringify(todoList)); }
+
+        function renderNotesList() {
+            const container = document.getElementById('stickyNotesContainer');
+            if (!container) return;
+            container.innerHTML = notesList.length === 0 ? '<div style="text-align:center; padding:20px; font-size:12px; color:var(--text-muted);">No notes.</div>' : '';
+            notesList.forEach(note => {
+                const el = document.createElement('div');
+                el.className = 'notepad-card';
+                el.innerHTML = `<div class="notepad-body" contenteditable="true" oninput="updateNoteText('${note.id}', this)">${note.text || ''}</div>`;
+                container.appendChild(el);
+            });
+            document.getElementById('stickyCount').innerText = `${notesList.length} notes`;
+        }
+
+        function updateNoteText(id, el) {
+            const n = notesList.find(i => i.id === id);
+            if (n) { n.text = el.innerHTML; saveNotesList(); }
+        }
+
+        function renderTodoList() {
+            const container = document.getElementById('todoContainer');
+            if (!container) return;
+            container.innerHTML = todoList.length === 0 ? '<div style="text-align:center; padding:20px; font-size:12px; color:var(--text-muted);">No tasks.</div>' : '';
+            todoList.forEach((t, i) => {
+                const el = document.createElement('div');
+                el.className = `todo-item ${t.completed ? 'completed' : ''}`;
+                el.innerHTML = `
+                    <div class="todo-item-left" onclick="toggleTodoItem(${i})">
+                        <div class="todo-checkbox">${t.completed ? '✓' : ''}</div>
+                        <span class="todo-text">${t.text}</span>
+                    </div>
+                    <button class="todo-del-btn" onclick="deleteTodoItem(${i})">✕</button>
+                `;
+                container.appendChild(el);
+            });
+            document.getElementById('todoCount').innerText = `${todoList.filter(t => !t.completed).length} pending`;
+        }
+
+        function toggleTodoItem(i) { todoList[i].completed = !todoList[i].completed; saveTodoList(); renderTodoList(); }
+        function deleteTodoItem(i) { todoList.splice(i, 1); saveTodoList(); renderTodoList(); }
+        function addTodoItem() {
+            const input = document.getElementById('todoInput');
+            if (input.value.trim()) {
+                todoList.unshift({ text: input.value.trim(), completed: false });
+                saveTodoList();
+                renderTodoList();
+                input.value = '';
+            }
+        }
+
+        function openSpecificNotesView(tab) {
+            document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active-view'));
+            document.getElementById('view-notes').classList.add('active-view');
+            switchHubTab(tab);
+        }
+
+        function closeNotesView() {
+            document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active-view'));
+            document.getElementById('view-user1').classList.add('active-view');
+        }
+
+        function switchHubTab(tab) {
+            currentHubTab = tab;
+            document.getElementById('tabNotesBtn').classList.toggle('active', tab === 'notes');
+            document.getElementById('tabTodoBtn').classList.toggle('active', tab === 'todo');
+            document.getElementById('panelNotes').style.display = tab === 'notes' ? 'block' : 'none';
+            document.getElementById('panelTodo').style.display = tab === 'todo' ? 'block' : 'none';
+        }
+
+        function handleHubAction() {
+            if (currentHubTab === 'notes') {
+                notesList.unshift({ id: 'n_' + Date.now(), text: 'New note...' });
+                saveNotesList();
+                renderNotesList();
+            } else {
+                document.getElementById('todoInput').focus();
+            }
+        }
+
+        function toggleStickySort() {
+            noteSortAsc = !noteSortAsc;
+            notesList.reverse();
+            saveNotesList();
+            renderNotesList();
+        }
+
+        function applyFormatting(e, cmd) {
+            e.preventDefault();
+            document.execCommand(cmd, false, null);
+        }
+
+        // Theme Toggle
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme') || 'light';
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('lc_theme', next);
+            document.getElementById('moonIcon').style.display = next === 'dark' ? 'none' : 'block';
+            document.getElementById('sunIcon').style.display = next === 'dark' ? 'block' : 'none';
+        }
+
+        function dismissNeonBanner() { document.getElementById('neonTickerBanner').style.display = 'none'; }
+        function openResourceDrawer() { document.getElementById('resourceDrawer').classList.add('open'); }
+        function closeResourceDrawer() { document.getElementById('resourceDrawer').classList.remove('open'); }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('lc_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('moonIcon').style.display = savedTheme === 'dark' ? 'none' : 'block';
+            document.getElementById('sunIcon').style.display = savedTheme === 'dark' ? 'block' : 'none';
+
+            loadCustomProfileNames();
+            loadMealPlanLinks();
+            loadRecipesDeck();
+            loadWhimsicalFolders();
+            loadNotesAndTodos();
+        });
+    </script>
+</body>
+</html>
