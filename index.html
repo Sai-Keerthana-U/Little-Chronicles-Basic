@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>The Motherboard</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
@@ -459,7 +459,7 @@
             background: var(--surface-card);
             border-radius: 20px;
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             max-height: 85vh;
             padding: 20px 18px 24px;
             box-shadow: 0 12px 36px rgba(0,0,0,0.3);
@@ -537,6 +537,467 @@
 
         .arrow-up-right {
             font-size: 10px;
+            opacity: 0.6;
+        }
+
+        /* PDF Viewer Frame */
+        .pdf-view-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .pdf-controls-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .pdf-action-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            padding: 8px 14px;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .pdf-action-btn.primary {
+            background: var(--primary);
+            color: #FFFFFF;
+            border: none;
+        }
+
+        .pdf-viewer-frame {
+            width: 100%;
+            height: 72vh;
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+            background: #FFFFFF;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pdf-viewer-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .pdf-placeholder-msg {
+            color: var(--text-muted);
+            font-size: 13px;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Notes & To-Do Header */
+        .notes-view-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .back-nav-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 7px 12px;
+            color: var(--text-main);
+            font-size: 12.5px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .notes-actions-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sort-notes-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            outline: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .add-note-btn {
+            background: var(--primary);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 999px;
+            padding: 7px 14px;
+            font-size: 12.5px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(148, 93, 76, 0.2);
+            outline: none;
+            justify-content: center;
+        }
+
+        .hub-tabs {
+            display: flex;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 3px;
+            margin-bottom: 12px;
+            gap: 4px;
+        }
+
+        .hub-tab-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 7px 0;
+            border-radius: 999px;
+            font-family: inherit;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.2s ease;
+        }
+
+        .hub-tab-btn.active {
+            background: var(--surface-card);
+            color: var(--primary);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        /* 2-Row Notepad Toolbar */
+        .notepad-global-toolbar {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            background: var(--surface-card);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            padding: 8px 10px;
+            margin-bottom: 12px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .notepad-toolbar-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+        }
+
+        .notepad-format-group {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .notepad-toolbar-btn {
+            background: var(--surface-subtle);
+            border: 1px solid transparent;
+            color: var(--text-main);
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 5px 8px;
+            border-radius: 6px;
+            line-height: 1;
+            user-select: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+        }
+
+        .notepad-toolbar-btn.bold { font-weight: 800; }
+        .notepad-toolbar-btn.italic { font-style: italic; font-family: serif; }
+        .notepad-toolbar-btn.strike { text-decoration: line-through; }
+        .notepad-toolbar-btn.icon-only { font-size: 14px; padding: 4px 8px; }
+
+        .color-section-wrap {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .color-label-tag {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+        }
+
+        .swatch-strip {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--surface-subtle);
+            padding: 3px 6px;
+            border-radius: 8px;
+        }
+
+        .color-swatch-dot {
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            display: inline-block;
+            box-sizing: border-box;
+        }
+
+        .clear-highlight-text-btn {
+            background: transparent;
+            border: none;
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0 3px;
+            line-height: 1;
+        }
+
+        .notes-stack-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .notepad-card {
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+            box-shadow: var(--card-shadow);
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+            background-color: var(--note-default);
+            transition: all 0.2s ease;
+        }
+
+        .notepad-card.is-pinned {
+            border: 1.5px solid var(--primary);
+            box-shadow: 0 4px 18px rgba(148, 93, 76, 0.15);
+        }
+
+        .notepad-card.color-default { background-color: var(--note-default); }
+        .notepad-card.color-yellow { background-color: var(--note-yellow); }
+        .notepad-card.color-green { background-color: var(--note-green); }
+        .notepad-card.color-pink { background-color: var(--note-pink); }
+        .notepad-card.color-blue { background-color: var(--note-blue); }
+        .notepad-card.color-purple { background-color: var(--note-purple); }
+
+        .notepad-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+        }
+
+        .notepad-timestamp {
+            font-size: 10.5px;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .notepad-card-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .notepad-card-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 13px;
+            cursor: pointer;
+            padding: 3px 6px;
+            border-radius: 5px;
+            opacity: 0.45;
+            line-height: 1;
+        }
+
+        .notepad-body {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-main);
+            outline: none;
+            word-break: break-word;
+            white-space: pre-wrap;
+            min-height: 48px;
+            font-family: inherit;
+        }
+
+        .notepad-body ul, .notepad-body ol {
+            padding-left: 24px;
+            margin: 6px 0;
+            list-style-position: outside;
+        }
+
+        .notepad-body li {
+            margin-bottom: 3px;
+            padding-left: 4px;
+        }
+
+        .notepad-card.minimized {
+            padding: 10px 14px;
+        }
+
+        .notepad-card.minimized .notepad-body {
+            display: none;
+        }
+
+        .notepad-card.minimized .notepad-preview-title {
+            display: block;
+        }
+
+        .notepad-preview-title {
+            display: none;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding-top: 2px;
+            cursor: pointer;
+        }
+
+        /* To-Do Styles */
+        .todo-input-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .todo-input {
+            flex: 1;
+            background: var(--surface-card);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            padding: 10px 14px;
+            font-size: 13.5px;
+            font-family: inherit;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .todo-add-btn {
+            background: var(--primary);
+            color: #FFFFFF;
+            border: none;
+            border-radius: var(--radius-inner);
+            padding: 0 16px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .todo-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .todo-item {
+            background: var(--surface-card);
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+            box-shadow: var(--card-shadow);
+            padding: 10px 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .todo-item-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .todo-checkbox {
+            width: 18px;
+            height: 18px;
+            border-radius: 5px;
+            border: 2px solid var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .todo-item.completed .todo-checkbox {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: #FFFFFF;
+        }
+
+        .todo-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .todo-text {
+            font-size: 13.5px;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .todo-item.completed .todo-text {
+            text-decoration: line-through;
+            opacity: 0.45;
+        }
+
+        .todo-timestamp {
+            font-size: 9.5px;
+            color: var(--text-muted);
+        }
+
+        .todo-del-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 15px;
+            cursor: pointer;
+            padding: 3px;
             opacity: 0.6;
         }
 
@@ -632,25 +1093,242 @@
             display: flex;
         }
 
-        /* Kitchen Deck */
-        .recipe-cards-list {
+        /* Meal Plan Action Cards */
+        .meal-plan-card-body {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            padding: 12px 14px;
+            margin-top: 6px;
+        }
+
+        .meal-plan-open-btn {
+            background: var(--primary);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .meal-plan-open-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* Workout / Subtabs */
+        .webhub-subtabs {
+            display: flex;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 3px;
+            gap: 3px;
             margin-top: 10px;
         }
 
-        .recipe-item-card {
+        .webhub-subtab-btn {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 6px 0;
+            border-radius: 999px;
+            font-family: inherit;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .webhub-subtab-btn.active {
+            background: var(--surface-card);
+            color: var(--primary);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .webhub-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-top: 4px;
+        }
+
+        .webhub-input-row {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .webhub-input {
+            flex: 1;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 12px;
+            color: var(--text-main);
+            outline: none;
+            font-family: inherit;
+        }
+
+        .webhub-badges-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding-top: 2px;
+        }
+
+        .webhub-chip {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 10px;
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .webhub-chip.youtube {
+            border-color: rgba(229, 57, 53, 0.3);
+            background: rgba(229, 57, 53, 0.08);
+        }
+
+        .webhub-chip.instagram {
+            border-color: rgba(233, 30, 99, 0.3);
+            background: rgba(233, 30, 99, 0.08);
+        }
+
+        .webhub-chip-del {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 12px;
+            padding: 0 2px;
+            opacity: 0.6;
+        }
+
+        .webhub-simple-notes {
+            width: 100%;
+            height: 110px;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-family: inherit;
+            font-size: 13px;
+            color: var(--text-main);
+            line-height: 1.5;
+            outline: none;
+            resize: none;
+            box-sizing: border-box;
+        }
+
+        /* Whimsical Websites */
+        .whimsical-top-controls {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .surprise-me-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #FF007F 0%, #7928CA 100%);
+            color: #FFFFFF;
+            border: none;
+            border-radius: var(--radius-inner);
+            padding: 10px 14px;
+            font-size: 12.5px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(255, 0, 127, 0.3);
+            letter-spacing: 0.2px;
+        }
+
+        .surprise-me-btn:active {
+            transform: scale(0.96);
+        }
+
+        .new-folder-action-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            color: var(--text-main);
+            border-radius: var(--radius-inner);
+            padding: 10px 14px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+        .new-folder-action-btn:active {
+            transform: scale(0.96);
+        }
+
+        .whimsical-add-bar {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            background: var(--surface-subtle);
+            padding: 8px 10px;
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+        }
+
+        .whimsical-folder-select {
+            background: var(--surface-card);
+            border: var(--card-border);
+            border-radius: 8px;
+            padding: 7px 8px;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            outline: none;
+            max-width: 110px;
+        }
+
+        .whimsical-folders-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding-top: 2px;
+        }
+
+        .whimsical-folder-card {
             background: var(--surface-subtle);
             border: var(--card-border);
             border-radius: var(--radius-inner);
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            transition: all 0.2s ease;
         }
 
-        .recipe-item-header {
-            padding: 12px 14px;
+        .whimsical-folder-header {
+            padding: 10px 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -658,77 +1336,2004 @@
             user-select: none;
         }
 
-        .recipe-title-group {
+        .whimsical-folder-header-left {
             display: flex;
-            flex-direction: column;
-            gap: 4px;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
         }
 
-        .recipe-name {
-            font-size: 13.5px;
+        .whimsical-folder-name {
+            font-size: 13px;
             font-weight: 700;
             color: var(--text-main);
         }
 
-        .recipe-tag-pills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-        }
-
-        .recipe-tag-pill {
-            font-size: 9.5px;
-            font-weight: 700;
-            padding: 2px 6px;
-            border-radius: 6px;
-            background: var(--surface-card);
+        .whimsical-folder-count {
+            font-size: 10.5px;
+            font-weight: 600;
             color: var(--text-muted);
+            background: var(--surface-card);
+            padding: 2px 7px;
+            border-radius: 999px;
             border: var(--card-border);
         }
 
-        .recipe-item-actions {
+        .whimsical-folder-actions {
             display: flex;
             align-items: center;
             gap: 6px;
         }
 
-        .cook-mode-trigger-btn {
-            background: linear-gradient(135deg, #FF7043 0%, #D84315 100%);
+        .folder-tool-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 11px;
+            cursor: pointer;
+            padding: 2px 4px;
+            opacity: 0.6;
+        }
+
+        .whimsical-folder-chevron {
+            font-size: 9px;
+            color: var(--text-muted);
+            margin-left: 4px;
+        }
+
+        .whimsical-folder-content {
+            display: none !important;
+            padding: 10px 12px 12px;
+            flex-wrap: wrap;
+            gap: 6px;
+            border-top: var(--card-border);
+            background: var(--surface-card);
+        }
+
+        .whimsical-folder-card.open .whimsical-folder-content {
+            display: flex !important;
+        }
+
+        .whimsical-chip {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 5px 11px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: transform 0.15s ease;
+        }
+
+        .whimsical-chip:active {
+            transform: scale(0.96);
+            background: var(--primary-soft);
+        }
+
+        /* ----------------------------------------------------
+           NEW FEATURE: KITCHEN DECK (RECIPES & COOK MODE)
+           ---------------------------------------------------- */
+        .recipe-item-card {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s ease;
+        }
+
+        .recipe-header {
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .recipe-header-title-box {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            flex: 1;
+        }
+
+        .recipe-title-text {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .recipe-tags-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .recipe-meta-pill {
+            font-size: 10px;
+            font-weight: 700;
+            background: var(--surface-card);
+            border: var(--card-border);
+            color: var(--text-muted);
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+
+        .recipe-body-wrap {
+            display: none;
+            flex-direction: column;
+            padding: 14px;
+            border-top: var(--card-border);
+            background: var(--surface-card);
+            gap: 12px;
+        }
+
+        .recipe-item-card.open .recipe-body-wrap {
+            display: flex;
+        }
+
+        .recipe-controls-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed rgba(0,0,0,0.08);
+        }
+
+        .cook-mode-btn {
+            background: #2E7D32;
             color: #FFFFFF;
             border: none;
+            padding: 6px 12px;
             border-radius: 8px;
-            padding: 5px 10px;
-            font-size: 11px;
-            font-weight: 800;
+            font-size: 11.5px;
+            font-weight: 700;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 4px;
-            box-shadow: 0 2px 8px rgba(216, 67, 21, 0.25);
+            gap: 5px;
         }
 
-        .recipe-item-body {
+        .cook-mode-btn:active {
+            transform: scale(0.96);
+        }
+
+        .recipe-section-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .ingredient-checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .ingredient-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .ingredient-row.checked span {
+            text-decoration: line-through;
+            opacity: 0.45;
+        }
+
+        .recipe-steps-list {
+            padding-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text-main);
+        }
+
+        /* Large Cook Mode Overlay */
+        .cook-mode-overlay {
+            position: fixed !important;
+            top: 0 !important; left: 0 !important;
+            width: 100vw !important; height: 100vh !important;
+            background: rgba(0, 0, 0, 0.75) !important;
+            backdrop-filter: blur(8px) !important;
+            z-index: 2000 !important;
             display: none;
-            padding: 12px 14px 14px;
-            border-top: var(--card-border);
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+
+        .cook-mode-overlay.open {
+            display: flex !important;
+        }
+
+        .cook-mode-modal {
             background: var(--surface-card);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 480px;
+            max-height: 90vh;
+            padding: 24px 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+        }
+
+        .cook-mode-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 12px;
+        }
+
+        .cook-mode-title {
+            font-size: 19px;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1.3;
+        }
+
+        .cook-step-card {
+            background: var(--surface-subtle);
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+            padding: 14px 16px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .cook-step-num {
+            background: var(--primary);
+            color: #FFFFFF;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .cook-step-text {
+            font-size: 15px;
+            line-height: 1.55;
+            font-weight: 600;
+            color: var(--text-main);
+        }
+
+        /* Milk Tracker */
+        .milk-progress-box {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            padding: 12px 14px;
+            display: flex;
             flex-direction: column;
             gap: 10px;
         }
 
-        .recipe-item-card.open .recipe-item-body {
+        .milk-metrics-row {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+
+        .milk-total-current {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-main);
+            line-height: 1;
+        }
+
+        .milk-targets-sub {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-align: right;
+            line-height: 1.35;
+        }
+
+        .milk-bar-track {
+            width: 100%;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.06);
+            border-radius: 999px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .milk-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #FFB380 0%, #00E676 100%);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .milk-pct-tags {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11.5px;
+            font-weight: 700;
+        }
+
+        .milk-pct-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: var(--surface-card);
+            border: var(--card-border);
+        }
+
+        .milk-input-bar {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .milk-input {
+            flex: 1;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 10px;
+            padding: 9px 12px;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .milk-quick-pills {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding: 2px 0;
+            scrollbar-width: none;
+        }
+
+        .milk-quick-pills::-webkit-scrollbar {
+            display: none;
+        }
+
+        .milk-pill-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 5px 11px;
+            font-size: 11.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .milk-chips-history {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            max-height: 85px;
+            overflow-y: auto;
+            padding-top: 2px;
+        }
+
+        .milk-entry-chip {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--text-main);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .milk-entry-del {
+            background: transparent;
+            border: none;
+            color: #E53935;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 0;
+            line-height: 1;
+        }
+
+        /* Tier Board */
+        .tier-board {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: var(--surface-subtle);
+            padding: 8px;
+            border-radius: var(--radius-inner);
+            border: var(--card-border);
+        }
+
+        .tier-row {
+            display: flex;
+            align-items: center;
+            background: var(--surface-card);
+            border-radius: 8px;
+            border: var(--card-border);
+            height: 44px;
+            min-height: 44px;
+            overflow: hidden;
+        }
+
+        .tier-badge {
+            width: 44px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: 800;
+            color: #1a1a1a;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        [data-theme="dark"] .tier-badge {
+            color: #f4efeb;
+        }
+
+        .tier-badge.badge-s { background-color: var(--tier-s); }
+        .tier-badge.badge-a { background-color: var(--tier-a); }
+        .tier-badge.badge-b { background-color: var(--tier-b); }
+        .tier-badge.badge-c { background-color: var(--tier-c); }
+        .tier-badge.badge-d { background-color: var(--tier-d); }
+
+        .tier-items-wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0 10px;
+            height: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .tier-items-wrap::-webkit-scrollbar {
+            display: none;
+        }
+
+        .cartoon-chip {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            color: var(--text-main);
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            user-select: none;
+            flex-shrink: 0;
+        }
+
+        .tier-input-bar {
+            display: flex;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .tier-input {
+            flex: 1;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 12.5px;
+            font-family: inherit;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        .tier-select {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            outline: none;
+        }
+
+        /* Long Press Sheet */
+        .tier-sheet-backdrop {
+            position: fixed !important;
+            top: 0 !important; left: 0 !important; width: 100vw !important; height: 100vh !important;
+            background: rgba(0, 0, 0, 0.45) !important;
+            backdrop-filter: blur(4px) !important;
+            z-index: 1100 !important;
+            display: none;
+            align-items: flex-end;
+            justify-content: center;
+        }
+
+        .tier-sheet-backdrop.open {
+            display: flex !important;
+        }
+
+        .tier-action-sheet {
+            background: var(--surface-card);
+            border-radius: 20px 20px 0 0;
+            width: 100%;
+            max-width: 440px;
+            padding: 20px 18px 28px;
+            box-shadow: 0 -8px 28px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            border-top: var(--card-border);
+        }
+
+        .tier-sheet-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-main);
+            text-align: center;
+        }
+
+        .tier-choice-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: 4px 0;
+        }
+
+        .tier-choice-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            font-size: 16px;
+            font-weight: 800;
+            color: #111;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tier-choice-btn.badge-s { background: var(--tier-s); }
+        .tier-choice-btn.badge-a { background: var(--tier-a); }
+        .tier-choice-btn.badge-b { background: var(--tier-b); }
+        .tier-choice-btn.badge-c { background: var(--tier-c); }
+        .tier-choice-btn.badge-d { background: var(--tier-d); }
+
+        .tier-action-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .sheet-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 12.5px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+        }
+
+        .sheet-btn.edit {
+            background: var(--surface-subtle);
+            color: var(--text-main);
+            border: var(--card-border);
+        }
+
+        .sheet-btn.delete {
+            background: rgba(229, 57, 53, 0.12);
+            color: #E53935;
+        }
+
+        /* Books Overview */
+        .book-overview-item {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: var(--radius-inner);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s ease;
+        }
+
+        .book-overview-header {
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .book-overview-title-text {
+            flex: 1;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            line-height: 1.35;
+        }
+
+        .book-overview-chevron-circle {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--surface-card);
+            border: var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8px;
+            color: var(--text-muted);
+            transition: transform 0.25s ease;
+            flex-shrink: 0;
+        }
+
+        .book-overview-item.expanded .book-overview-chevron-circle {
+            transform: rotate(180deg);
+        }
+
+        .book-overview-body-wrap {
+            display: none;
+            flex-direction: column;
+            padding: 12px 14px 14px;
+            border-top: var(--card-border);
+            background: var(--surface-card);
+            gap: 10px;
+        }
+
+        .book-overview-item.expanded .book-overview-body-wrap {
             display: flex;
         }
 
-        .recipe-section-label {
-            font-size: 10.5px;
-            font-weight: 800;
+        .book-overview-top-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed rgba(0,0,0,0.08);
+            gap: 8px;
+        }
+
+        .book-drive-pill-link {
+            background: var(--primary-soft);
+            color: var(--primary);
+            font-size: 11.5px;
+            font-weight: 700;
+            padding: 5px 11px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            border: 1px solid rgba(148, 93, 76, 0.2);
+            line-height: 1.2;
+        }
+
+        .book-inner-action-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            font-size: 11px;
+            font-weight: 600;
             color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .book-inner-action-btn.delete {
+            color: #E53935;
+            border-color: rgba(229, 57, 53, 0.2);
+        }
+
+        .book-overview-title-edit-input {
+            width: 100%;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--text-main);
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 6px;
+            padding: 6px 10px;
+            outline: none;
+            font-family: inherit;
             margin-bottom: 4px;
         }
 
-        .recipe-ingredients-checklist {
+        .context-toolbar {
+            display: none;
+            align-items: center;
+            gap: 3px;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 3px 6px;
+            width: fit-content;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .context-toolbar.visible {
+            display: inline-flex;
+        }
+
+        .book-overview-editor {
+            outline: none;
+            font-size: 13.5px;
+            line-height: 1.6;
+            color: var(--text-main);
+            min-height: 70px;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+
+        .book-overview-editor ul, .book-overview-editor ol {
+            padding-left: 18px;
+            margin: 4px 0;
+        }
+
+        /* Wishlist */
+        .adhu-dropdown-card.wl-color-default { background: var(--surface-card); }
+        .adhu-dropdown-card.wl-color-yellow { background: var(--sticky-yellow); }
+        .adhu-dropdown-card.wl-color-green { background: var(--sticky-green); }
+        .adhu-dropdown-card.wl-color-pink { background: var(--sticky-pink); }
+        .adhu-dropdown-card.wl-color-blue { background: var(--sticky-blue); }
+        .adhu-dropdown-card.wl-color-purple { background: var(--sticky-purple); }
+
+        .adhu-card-toolbar {
             display: flex;
-            flex-direction
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 12px;
+            gap: 8px;
+        }
+
+        .wishlist-format-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            padding: 3px 6px;
+        }
+
+        .wishlist-format-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-main);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 4px 7px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.75;
+            line-height: 1;
+        }
+
+        .wishlist-format-btn.btn-large-link {
+            font-size: 16px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: var(--surface-card);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+            opacity: 1;
+        }
+
+        .wishlist-format-btn.bold { font-weight: 800; }
+        .wishlist-format-btn.italic { font-style: italic; font-family: serif; }
+        .wishlist-format-btn.strike { text-decoration: line-through; }
+
+        .wishlist-clear-btn {
+            background: var(--surface-subtle);
+            border: var(--card-border);
+            border-radius: 999px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #E53935;
+            cursor: pointer;
+            font-size: 13px;
+            outline: none;
+            padding: 0;
+            opacity: 0.8;
+        }
+
+        .wl-block {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 5px 0;
+        }
+        
+        .wl-block .todo-checkbox {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            flex-shrink: 0;
+            box-sizing: border-box;
+        }
+
+        .wl-block-editor {
+            flex: 1;
+            outline: none;
+            font-size: 14.5px;
+            line-height: 22px;
+            min-height: 22px;
+            color: var(--text-main);
+            word-break: break-word;
+            padding: 0;
+            margin: 0;
+            text-align: left;
+            white-space: normal;
+        }
+
+        .wl-block-editor ul, .wl-block-editor ol {
+            padding-left: 18px;
+            margin: 4px 0;
+        }
+
+        .wl-block-editor li {
+            margin-bottom: 2px;
+        }
+
+        .wl-block-editor a {
+            color: var(--primary);
+            text-decoration: underline;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        
+        <!-- Header -->
+        <header>
+            <div class="app-title">The Motherboard</div>
+            
+            <div class="header-actions">
+                <button class="theme-toggle-btn" id="headerSettingsBtn" onclick="openDriveSettingsModal()" title="Settings & Backup">
+                    ⚙️
+                    <span id="backupBadge" class="notification-badge" style="display: none;"></span>
+                </button>
+
+                <button class="theme-toggle-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle Theme">
+                    <svg id="moonIcon" class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sunIcon" class="theme-icon" style="display:none;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+
+                <div class="profile-switcher" id="profileSwitcher">
+                    <button class="switch-btn active" id="profileTabBtn1" onclick="switchProfile(this, 'user1')">User 1</button>
+                    <button class="switch-btn" id="profileTabBtn2" onclick="switchProfile(this, 'user2')">User 2</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Permanent Scrolling Neon Ticker Banner -->
+        <div class="neon-ticker-banner" id="neonTickerBanner">
+            <div class="neon-tag"><span>⚡</span> SYNC</div>
+            <div class="marquee-track">
+                <div class="marquee-content">
+                    REMINDER: Don't forget to save your local database copy & sync with Google Drive! • Tap 'Save' or 'Drive' to update.
+                </div>
+            </div>
+            <div class="neon-banner-actions">
+                <button class="neon-banner-btn" id="bannerSaveBtn" onclick="triggerAppSave()">💾 Save</button>
+                <button class="neon-banner-btn" onclick="openDriveSettingsModal()">☁️ Drive</button>
+                <button class="neon-close-btn" onclick="dismissNeonBanner()">✕</button>
+            </div>
+        </div>
+
+        <!-- USER 1 DASHBOARD -->
+        <main id="view-user1" class="view-content active-view">
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+                
+                <!-- 2x2 Bento Grid -->
+                <div class="bento-grid">
+                    <div class="compact-card" onclick="openResourceDrawer('ebooks')">
+                        <div class="card-top">
+                            <div class="icon-badge">🌐</div>
+                            <div class="card-arrow">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </div>
+                        <div class="card-bottom">
+                            <h3 class="card-heading">eBooks Vault</h3>
+                            <p class="card-subtitle" id="ebookCount">5 resources</p>
+                        </div>
+                    </div>
+
+                    <div class="compact-card" onclick="openResourceDrawer('audiobooks')">
+                        <div class="card-top">
+                            <div class="icon-badge">🎧</div>
+                            <div class="card-arrow">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </div>
+                        <div class="card-bottom">
+                            <h3 class="card-heading">Audiobook Stash</h3>
+                            <p class="card-subtitle" id="audioCount">5 resources</p>
+                        </div>
+                    </div>
+
+                    <div class="compact-card" onclick="openResourceDrawer('tools')">
+                        <div class="card-top">
+                            <div class="icon-badge">⚡</div>
+                            <div class="card-arrow">
+                                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </div>
+                        </div>
+                        <div class="card-bottom">
+                            <h3 class="card-heading">Tools & Converters</h3>
+                            <p class="card-subtitle" id="toolsCount">4 tools</p>
+                        </div>
+                    </div>
+
+                    <div class="split-card-wrapper">
+                        <div class="micro-card" onclick="openSpecificNotesView('notes')">
+                            <div class="micro-icon">📝</div>
+                            <div class="micro-heading">Notes</div>
+                            <div class="micro-subtitle" id="stickyCount">0 notes</div>
+                        </div>
+                        <div class="micro-card" onclick="openSpecificNotesView('todo')">
+                            <div class="micro-icon">✅</div>
+                            <div class="micro-heading">To-Do</div>
+                            <div class="micro-subtitle" id="todoCount">0 pending</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FEATURE: USER 1 MEAL PLAN -->
+                <div class="dropdown-feature-card open" id="user1MealPlanCard">
+                    <div class="dropdown-feature-header" onclick="toggleCardDropdown('user1MealPlanCard')">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">🥗</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Meal Plan</span>
+                                <span class="feature-sub-title" id="user1MealPlanSub">Private Drive File</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="meal-plan-card-body">
+                            <div>
+                                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Personal Meal Plan</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Stored privately in Google Drive</div>
+                            </div>
+                            <button id="user1MealPlanBtn" class="meal-plan-open-btn" onclick="openMealPlan(1)">
+                                ↗ Open Plan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEW FEATURE: KITCHEN DECK (RECIPES & COOK MODE) -->
+                <div class="dropdown-feature-card open" id="kitchenDeckCard">
+                    <div class="dropdown-feature-header" onclick="toggleKitchenDeckDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">🍳</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Kitchen Deck</span>
+                                <span class="feature-sub-title" id="recipeDeckCountSub">0 recipes</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div id="recipesDeckContainer" style="display:flex; flex-direction:column; gap:10px; padding-top:6px;"></div>
+
+                        <button class="add-note-btn" style="width: 100%; margin-top: 4px;" onclick="openRecipeEditorModal()">
+                            <span>+</span> Add New Recipe
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FEATURE: BOOKS OVERVIEW ACCORDION -->
+                <div class="dropdown-feature-card" id="user1BooksOverviewCard">
+                    <div class="dropdown-feature-header" onclick="toggleBooksOverviewDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">📖</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Books Overview</span>
+                                <span class="feature-sub-title" id="booksOverviewSub">0 overviews</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div id="booksOverviewContainer" style="display: flex; flex-direction: column; gap: 8px; padding-top: 12px;"></div>
+
+                        <button class="add-note-btn" style="width: 100%; margin-top: 4px;" onclick="addBookOverview()">
+                            <span>+</span> Add Book Overview
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FEATURE: WORKOUT HUB -->
+                <div class="dropdown-feature-card" id="workoutCard">
+                    <div class="dropdown-feature-header" onclick="toggleWorkoutDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">💪</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Workout</span>
+                                <span class="feature-sub-title" id="workoutCountSub">Websites, Videos & Routine Notes</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="webhub-subtabs">
+                            <button class="webhub-subtab-btn active" id="subtabSitesBtn" onclick="switchWorkoutSubtab('sites')">🔗 Websites</button>
+                            <button class="webhub-subtab-btn" id="subtabMediaBtn" onclick="switchWorkoutSubtab('media')">📱 YouTube / Insta</button>
+                            <button class="webhub-subtab-btn" id="subtabNotesBtn" onclick="switchWorkoutSubtab('notes')">📝 Notes</button>
+                        </div>
+
+                        <div class="webhub-panel" id="workoutPanelSites">
+                            <div class="webhub-input-row">
+                                <input type="text" id="newSiteName" class="webhub-input" placeholder="Site name (e.g. Workout Plans)">
+                                <input type="url" id="newSiteUrl" class="webhub-input" placeholder="URL (https://...)">
+                                <button class="add-note-btn" onclick="addWorkoutSite()">+ Add</button>
+                            </div>
+                            <div class="webhub-badges-grid" id="workoutSitesList"></div>
+                        </div>
+
+                        <div class="webhub-panel" id="workoutPanelMedia" style="display:none;">
+                            <div class="webhub-input-row">
+                                <input type="text" id="newMediaTitle" class="webhub-input" placeholder="Video/Reel title (e.g. Squat Form)">
+                                <input type="url" id="newMediaUrl" class="webhub-input" placeholder="YouTube/Insta link...">
+                                <button class="add-note-btn" onclick="addWorkoutMedia()">+ Add</button>
+                            </div>
+                            <div class="webhub-badges-grid" id="workoutMediaList"></div>
+                        </div>
+
+                        <div class="webhub-panel" id="workoutPanelNotes" style="display:none;">
+                            <textarea id="workoutSimpleNotesText" class="webhub-simple-notes" placeholder="Jot down workout splits, routine plans, reps, weights or reminders..." oninput="saveWorkoutSimpleNotes()"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FEATURE: WHIMSICAL WEBSITES -->
+                <div class="dropdown-feature-card" id="whimsicalCard">
+                    <div class="dropdown-feature-header" onclick="toggleWhimsicalDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">✨</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Whimsical Websites</span>
+                                <span class="feature-sub-title" id="whimsicalSub">0 links</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="whimsical-top-controls">
+                            <button class="surprise-me-btn" onclick="launchRandomWhimsicalSite()" title="Open a random whimsical site!">
+                                🎲 Surprise Me!
+                            </button>
+                            <button class="new-folder-action-btn" onclick="promptCreateFolder()">
+                                📁 + New Folder
+                            </button>
+                        </div>
+
+                        <div class="whimsical-add-bar">
+                            <select id="whimsicalFolderSelect" class="whimsical-folder-select"></select>
+                            <input type="url" id="newWhimsicalUrl" class="webhub-input" placeholder="Paste website URL..." onkeypress="if(event.key==='Enter') addWhimsicalSiteToFolder()">
+                            <button class="add-note-btn" onclick="addWhimsicalSiteToFolder()">+ Add</button>
+                        </div>
+
+                        <div class="whimsical-folders-stack" id="whimsicalFoldersContainer"></div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- IN-APP PDF VIEWER VIEW -->
+        <main id="view-pdf" class="view-content">
+            <div class="pdf-view-header">
+                <button class="back-nav-btn" onclick="closePdfView()">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    Dashboard
+                </button>
+                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">PDF Viewer</div>
+            </div>
+
+            <div class="pdf-controls-bar">
+                <input type="file" id="pdfFileInput" accept="application/pdf" style="display:none;" onchange="loadPdfFromFile(this)">
+                <button class="pdf-action-btn primary" onclick="document.getElementById('pdfFileInput').click()">
+                    📁 Open from Drive / Device
+                </button>
+                <a href="https://drive.google.com" target="_blank" rel="noopener noreferrer" class="pdf-action-btn">
+                    ☁️ Google Drive ↗
+                </a>
+            </div>
+
+            <div class="pdf-viewer-frame">
+                <iframe id="pdfFrame" src="about:blank" style="display:none;"></iframe>
+                <div class="pdf-placeholder-msg" id="pdfPlaceholder">
+                    Select a PDF from your Google Drive or phone storage to view it here.
+                </div>
+            </div>
+        </main>
+
+        <!-- NOTES & TO-DO VIEW -->
+        <main id="view-notes" class="view-content">
+            <div class="notes-view-header">
+                <button class="back-nav-btn" onclick="closeNotesView()">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                    Dashboard
+                </button>
+
+                <div class="notes-actions-group">
+                    <button class="sort-notes-btn" id="sortNotesBtn" onclick="toggleStickySort()" title="Sort by Date">
+                        ⇅ Date <span id="sortDirectionIndicator">↓</span>
+                    </button>
+                    <button class="add-note-btn" id="hubActionBtn" onclick="handleHubAction()">
+                        <span>+</span> New Note
+                    </button>
+                </div>
+            </div>
+
+            <div class="hub-tabs">
+                <button class="hub-tab-btn active" id="tabNotesBtn" onclick="switchHubTab('notes')">
+                    📝 Notepad
+                </button>
+                <button class="hub-tab-btn" id="tabTodoBtn" onclick="switchHubTab('todo')">
+                    ✅ To-Do List
+                </button>
+            </div>
+
+            <div class="notepad-global-toolbar" id="notepadGlobalToolbar">
+                <div class="notepad-toolbar-row">
+                    <div class="notepad-format-group">
+                        <button type="button" class="notepad-toolbar-btn" onpointerdown="applyFormatting(event, 'undo')" title="Undo">↺ Undo</button>
+                        <button type="button" class="notepad-toolbar-btn bold" onpointerdown="applyFormatting(event, 'bold')" title="Bold">B</button>
+                        <button type="button" class="notepad-toolbar-btn italic" onpointerdown="applyFormatting(event, 'italic')" title="Italic">I</button>
+                        <button type="button" class="notepad-toolbar-btn strike" onpointerdown="applyFormatting(event, 'strikeThrough')" title="Strikethrough">S</button>
+                    </div>
+
+                    <div class="notepad-format-group">
+                        <button type="button" class="notepad-toolbar-btn icon-only" onpointerdown="applyFormatting(event, 'insertUnorderedList')" title="Bullet List">⁝≡</button>
+                        <button type="button" class="notepad-toolbar-btn icon-only" onpointerdown="applyFormatting(event, 'insertOrderedList')" title="Numbered List">1≡</button>
+                    </div>
+                </div>
+
+                <div class="notepad-toolbar-row">
+                    <div class="color-section-wrap">
+                        <span class="color-label-tag">Text:</span>
+                        <div class="swatch-strip">
+                            <span class="color-swatch-dot" style="background:#2D2725;" onpointerdown="applyTextColor('#2D2725', event)" title="Black / Default"></span>
+                            <span class="color-swatch-dot" style="background:#945D4C;" onpointerdown="applyTextColor('#945D4C', event)" title="Ochre"></span>
+                            <span class="color-swatch-dot" style="background:#1976D2;" onpointerdown="applyTextColor('#1976D2', event)" title="Blue"></span>
+                            <span class="color-swatch-dot" style="background:#2E7D32;" onpointerdown="applyTextColor('#2E7D32', event)" title="Green"></span>
+                            <span class="color-swatch-dot" style="background:#D32F2F;" onpointerdown="applyTextColor('#D32F2F', event)" title="Red"></span>
+                        </div>
+                    </div>
+
+                    <div class="color-section-wrap">
+                        <span class="color-label-tag">Highlight:</span>
+                        <div class="swatch-strip">
+                            <span class="color-swatch-dot" style="background:#FFF176;" onpointerdown="applyHighlightColor('#FFF176', event)" title="Yellow"></span>
+                            <span class="color-swatch-dot" style="background:#A5D6A7;" onpointerdown="applyHighlightColor('#A5D6A7', event)" title="Green"></span>
+                            <span class="color-swatch-dot" style="background:#F48FB1;" onpointerdown="applyHighlightColor('#F48FB1', event)" title="Pink"></span>
+                            <span class="color-swatch-dot" style="background:#90CAF9;" onpointerdown="applyHighlightColor('#90CAF9', event)" title="Blue"></span>
+                            <button type="button" class="clear-highlight-text-btn" onpointerdown="applyHighlightColor('transparent', event)" title="Clear Highlight">None</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="panelNotes">
+                <div class="notes-stack-container" id="stickyNotesContainer"></div>
+            </div>
+
+            <div id="panelTodo" style="display: none;">
+                <div class="todo-input-bar">
+                    <input type="text" id="todoInput" class="todo-input" placeholder="Add a new task..." onkeypress="if(event.key==='Enter') addTodoItem()">
+                    <button class="todo-add-btn" onclick="addTodoItem()">Add</button>
+                </div>
+                <div class="todo-list" id="todoContainer"></div>
+            </div>
+        </main>
+
+        <!-- USER 2 DASHBOARD -->
+        <main id="view-user2" class="view-content">
+            <div class="features-stack">
+
+                <!-- FEATURE 1: MILK TRACKER -->
+                <div class="dropdown-feature-card open" id="milkCard">
+                    <div class="dropdown-feature-header" onclick="toggleMilkDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">🍼</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Milk Tracker</span>
+                                <span class="feature-sub-title" id="milkHeaderSub">Today: 0 ml</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="milk-progress-box">
+                            <div class="milk-metrics-row">
+                                <div>
+                                    <span style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Consumed</span>
+                                    <div class="milk-total-current"><span id="milkTotalVal">0</span> <small style="font-size:14px; font-weight:600;">ml</small></div>
+                                </div>
+                                <div class="milk-targets-sub">
+                                    Min: <strong>600 ml</strong><br>
+                                    Max: <strong>900 ml</strong>
+                                </div>
+                            </div>
+
+                            <div class="milk-bar-track">
+                                <div class="milk-bar-fill" id="milkProgressBar" style="width: 0%;"></div>
+                            </div>
+
+                            <div class="milk-pct-tags">
+                                <div class="milk-pct-pill">
+                                    <span style="color:var(--text-muted);">Min Goal:</span>
+                                    <strong id="milkMinPct" style="color: #FF9800;">0%</strong>
+                                </div>
+                                <div class="milk-pct-pill">
+                                    <span style="color:var(--text-muted);">Max Goal:</span>
+                                    <strong id="milkMaxPct" style="color: #2E7D32;">0%</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="milk-input-bar">
+                            <input type="number" id="milkInputVal" class="milk-input" placeholder="Amount (ml)..." min="1" step="5" onkeypress="if(event.key==='Enter') addMilkEntry()">
+                            <button class="add-note-btn" onclick="addMilkEntry()">+ Log</button>
+                        </div>
+
+                        <div class="milk-quick-pills">
+                            <span class="milk-pill-btn" onclick="logQuickMilk(60)">+60 ml</span>
+                            <span class="milk-pill-btn" onclick="logQuickMilk(90)">+90 ml</span>
+                            <span class="milk-pill-btn" onclick="logQuickMilk(120)">+120 ml</span>
+                            <span class="milk-pill-btn" onclick="logQuickMilk(150)">+150 ml</span>
+                            <span class="milk-pill-btn" onclick="logQuickMilk(180)">+180 ml</span>
+                        </div>
+
+                        <div class="milk-chips-history" id="milkChipsHistory"></div>
+                    </div>
+                </div>
+
+                <!-- FEATURE: USER 2 MEAL PLAN -->
+                <div class="dropdown-feature-card open" id="user2MealPlanCard">
+                    <div class="dropdown-feature-header" onclick="toggleCardDropdown('user2MealPlanCard')">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">🥗</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Meal Plan</span>
+                                <span class="feature-sub-title" id="user2MealPlanSub">Private Drive File</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="meal-plan-card-body">
+                            <div>
+                                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Personal Meal Plan</div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Stored privately in Google Drive</div>
+                            </div>
+                            <button id="user2MealPlanBtn" class="meal-plan-open-btn" onclick="openMealPlan(2)">
+                                ↗ Open Plan
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- FEATURE 2: WISHLIST -->
+                <div class="dropdown-feature-card open" id="wishlistCard">
+                    <div class="dropdown-feature-header" onclick="toggleWishlistDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">📚</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Wishlist</span>
+                                <span class="feature-sub-title" id="wishlistSub">0 items</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="adhu-card-toolbar">
+                            <div class="wishlist-format-toolbar">
+                                <button class="wishlist-format-btn btn-large-link" onmousedown="openWishlistLinkModal(event)" title="Add Hyperlink">🔗</button>
+                                <button class="wishlist-format-btn" onmousedown="applyWishlistFormat(event, 'insertUnorderedList')" title="Bullet Points">•</button>
+                                <button class="wishlist-format-btn bold" onmousedown="applyWishlistFormat(event, 'bold')" title="Bold">B</button>
+                                <button class="wishlist-format-btn italic" onmousedown="applyWishlistFormat(event, 'italic')" title="Italic">I</button>
+                                <button class="wishlist-format-btn strike" onmousedown="applyWishlistFormat(event, 'strikeThrough')" title="Strikethrough">S</button>
+                                <button class="wishlist-format-btn" onmousedown="cycleWishlistColor(event)" title="Cycle Card Color">🎨</button>
+                            </div>
+
+                            <button class="wishlist-clear-btn" onclick="deleteCheckedWishlistItems()" title="Delete Selected Items">
+                                🗑️
+                            </button>
+                        </div>
+
+                        <div id="wishlistBlocksContainer" style="display:flex; flex-direction:column; gap:4px;"></div>
+
+                        <button class="add-note-btn" style="width: 100%; margin-top: 6px;" onclick="addWishlistBlock()">
+                            <span>+</span> Add New Line
+                        </button>
+                    </div>
+                </div>
+
+                <!-- FEATURE 3: CARTOONS TIER LIST -->
+                <div class="dropdown-feature-card open" id="cartoonsTierCard">
+                    <div class="dropdown-feature-header" onclick="toggleCartoonsTierDropdown()">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">📺</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Cartoons Tier List</span>
+                                <span class="feature-sub-title" id="cartoonsCountSub">0 cartoons</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="tier-board">
+                            <div class="tier-row">
+                                <div class="tier-badge badge-s">S</div>
+                                <div class="tier-items-wrap" id="tier-wrap-S"></div>
+                            </div>
+                            <div class="tier-row">
+                                <div class="tier-badge badge-a">A</div>
+                                <div class="tier-items-wrap" id="tier-wrap-A"></div>
+                            </div>
+                            <div class="tier-row">
+                                <div class="tier-badge badge-b">B</div>
+                                <div class="tier-items-wrap" id="tier-wrap-B"></div>
+                            </div>
+                            <div class="tier-row">
+                                <div class="tier-badge badge-c">C</div>
+                                <div class="tier-items-wrap" id="tier-wrap-C"></div>
+                            </div>
+                            <div class="tier-row">
+                                <div class="tier-badge badge-d">D</div>
+                                <div class="tier-items-wrap" id="tier-wrap-D"></div>
+                            </div>
+                        </div>
+
+                        <div class="tier-input-bar">
+                            <input type="text" id="newCartoonName" class="tier-input" placeholder="Item name..." onkeypress="if(event.key==='Enter') addCartoonItem()">
+                            <select id="newCartoonTier" class="tier-select">
+                                <option value="S">S</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                            </select>
+                            <button class="add-note-btn" onclick="addCartoonItem()">+ Add</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+    </div>
+
+    <!-- MODAL: KITCHEN DECK RECIPE EDITOR -->
+    <div class="modal-overlay" id="recipeEditorModal" onclick="closeRecipeEditorModal(event)">
+        <div class="modal-sheet" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title" id="recipeModalHeading">Add Recipe</h3>
+                <button class="drawer-close-btn" onclick="closeRecipeEditorModal()">✕</button>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:10px;">
+                <div>
+                    <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Recipe Title</label>
+                    <input type="text" id="recipeTitleInput" class="webhub-input" style="width:100%; margin-top:2px;" placeholder="e.g. 15-Minute Dal Tadka">
+                </div>
+
+                <div style="display:flex; gap:8px;">
+                    <div style="flex:1;">
+                        <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Prep Time</label>
+                        <input type="text" id="recipeTimeInput" class="webhub-input" style="width:100%; margin-top:2px;" placeholder="e.g. 20 min">
+                    </div>
+                    <div style="flex:1;">
+                        <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Tags (comma separated)</label>
+                        <input type="text" id="recipeTagsInput" class="webhub-input" style="width:100%; margin-top:2px;" placeholder="e.g. Quick, Protein">
+                    </div>
+                </div>
+
+                <div>
+                    <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Ingredients (one per line)</label>
+                    <textarea id="recipeIngredientsInput" class="webhub-simple-notes" style="height:90px; margin-top:2px;" placeholder="1 cup yellow moong dal&#10;1 tsp cumin seeds&#10;1 tbsp ghee"></textarea>
+                </div>
+
+                <div>
+                    <label style="font-size:10px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Steps / Directions (one per line)</label>
+                    <textarea id="recipeDirectionsInput" class="webhub-simple-notes" style="height:90px; margin-top:2px;" placeholder="Wash dal and pressure cook for 3 whistles.&#10;Heat ghee in a pan and temper cumin.&#10;Stir together and serve hot."></textarea>
+                </div>
+
+                <button class="add-note-btn" style="width:100%; margin-top:4px;" onclick="saveRecipeFromModal()">Save Recipe</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: COOK MODE (COUNTER TOP BIG VIEW) -->
+    <div class="cook-mode-overlay" id="cookModeOverlay" onclick="closeCookMode(event)">
+        <div class="cook-mode-modal" onclick="event.stopPropagation()">
+            <div class="cook-mode-header">
+                <div>
+                    <div style="font-size:11px; font-weight:700; color:#00E676; text-transform:uppercase; letter-spacing:0.8px;">👨‍🍳 COOK MODE ACTIVE</div>
+                    <div class="cook-mode-title" id="cookModeTitle">Recipe Title</div>
+                </div>
+                <button class="drawer-close-btn" onclick="closeCookMode()">✕</button>
+            </div>
+
+            <div>
+                <div class="recipe-section-title">Ingredients Checklist</div>
+                <div class="ingredient-checklist" id="cookModeIngredientsList"></div>
+            </div>
+
+            <div style="border-top: 1px solid var(--card-border); padding-top: 14px;">
+                <div class="recipe-section-title">Preparation Steps</div>
+                <div style="display:flex; flex-direction:column; gap:10px;" id="cookModeStepsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CARTOON LONG-PRESS ACTION SHEET -->
+    <div class="tier-sheet-backdrop" id="tierActionSheetModal" onclick="closeCartoonActionSheet()">
+        <div class="tier-action-sheet" onclick="event.stopPropagation()">
+            <div class="tier-sheet-title" id="sheetCartoonTitle">Options</div>
+            
+            <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-align:center;">MOVE TO TIER</div>
+            <div class="tier-choice-row">
+                <button class="tier-choice-btn badge-s" onclick="moveActiveCartoon('S')">S</button>
+                <button class="tier-choice-btn badge-a" onclick="moveActiveCartoon('A')">A</button>
+                <button class="tier-choice-btn badge-b" onclick="moveActiveCartoon('B')">B</button>
+                <button class="tier-choice-btn badge-c" onclick="moveActiveCartoon('C')">C</button>
+                <button class="tier-choice-btn badge-d" onclick="moveActiveCartoon('D')">D</button>
+            </div>
+
+            <div class="tier-action-row">
+                <button class="sheet-btn edit" onclick="renameActiveCartoon()">✏️ Edit Name</button>
+                <button class="sheet-btn delete" onclick="deleteActiveCartoon()">🗑️ Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD HYPERLINK TO WISHLIST -->
+    <div class="modal-overlay" id="wishlistLinkModal" onclick="closeWishlistLinkModal(event)">
+        <div class="modal-sheet" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title">Insert Hyperlink</h3>
+                <button class="drawer-close-btn" onclick="closeWishlistLinkModal()">✕</button>
+            </div>
+
+            <div class="modal-form">
+                <input type="url" id="wlLinkUrl" class="modal-input" placeholder="URL (https://...)">
+                <input type="text" id="wlLinkName" class="modal-input" placeholder="Display Name">
+                <button class="modal-save-btn" onclick="insertCustomHyperlink()">Add Link</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP MODAL FOR CATEGORY RESOURCES -->
+    <div class="drawer-overlay" id="resourceDrawer" onclick="closeResourceDrawer(event)">
+        <div class="drawer-sheet" onclick="event.stopPropagation()">
+            <div class="drawer-header">
+                <div class="drawer-title-group">
+                    <span id="drawerIcon" style="font-size: 20px;">🌐</span>
+                    <h3 class="drawer-title" id="drawerTitle">Resources</h3>
+                </div>
+                <button class="drawer-close-btn" onclick="closeResourceDrawer()">✕</button>
+            </div>
+
+            <div class="drawer-links-wrap" id="drawerLinksContainer"></div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD / MANAGE USER LINKS -->
+    <div class="modal-overlay" id="linkModal" onclick="closeLinkModal(event)">
+        <div class="modal-sheet" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title">Manage Links</h3>
+                <button class="drawer-close-btn" onclick="closeLinkModal()">✕</button>
+            </div>
+
+            <div class="modal-form">
+                <select id="modalCategory" class="modal-select">
+                    <option value="ebooks">eBooks Vault</option>
+                    <option value="audiobooks">Audiobook Stash</option>
+                    <option value="tools">Tools & Converters</option>
+                </select>
+                <input type="text" id="modalLinkName" class="modal-input" placeholder="Site Name">
+                <input type="url" id="modalLinkUrl" class="modal-input" placeholder="URL (https://...)">
+                <button class="modal-save-btn" onclick="saveNewUserLink()">+ Add Resource</button>
+            </div>
+
+            <div style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">
+                Current Links (Tap ✕ to remove)
+            </div>
+            <div class="existing-links-list" id="modalExistingLinks"></div>
+        </div>
+    </div>
+
+    <!-- MODAL: SETTINGS & BACKUP (WITH PRIVATE MEAL PLAN LINKS) -->
+    <div class="modal-overlay" id="driveModal" onclick="closeDriveSettingsModal(event)">
+        <div class="modal-sheet" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title">Settings & Backup</h3>
+                <button class="drawer-close-btn" onclick="closeDriveSettingsModal()">✕</button>
+            </div>
+
+            <!-- Profile Display Names Customizer -->
+            <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Profile Display Names</div>
+                <div style="display: flex; gap: 8px;">
+                    <input type="text" id="customNameInput1" class="webhub-input" placeholder="Name for Profile 1" oninput="saveCustomProfileNames()">
+                    <input type="text" id="customNameInput2" class="webhub-input" placeholder="Name for Profile 2" oninput="saveCustomProfileNames()">
+                </div>
+            </div>
+
+            <!-- Private Meal Plan Links Setup (Zero traces on GitHub) -->
+            <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Private Meal Plan URLs</div>
+                <p style="font-size: 11px; color: var(--text-muted); line-height: 1.35;">
+                    Paste private Google Drive file or preview links here. Stored only in your device's browser.
+                </p>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <input type="url" id="mealPlanUrl1" class="webhub-input" placeholder="Profile 1 Meal Plan URL (https://drive...)" oninput="saveMealPlanLinks()">
+                    <input type="url" id="mealPlanUrl2" class="webhub-input" placeholder="Profile 2 Meal Plan URL (https://drive...)" oninput="saveMealPlanLinks()">
+                </div>
+            </div>
+
+            <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Instant Local Backup</div>
+                <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.4;">
+                    Download an updated snapshot of your entire dashboard data.
+                </p>
+                <button class="modal-save-btn" style="background: var(--primary);" onclick="triggerAppSave()">
+                    💾 Save Full Backup File
+                </button>
+            </div>
+
+            <div style="background: var(--surface-subtle); padding: 12px; border-radius: var(--radius-inner); border: var(--card-border); display: flex; flex-direction: column; gap: 8px;">
+                <div style="font-size: 13px; font-weight: 700; color: var(--text-main);">Auto-Save Folder (Optional)</div>
+                <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.4;">
+                    Select a local folder on your device to write backups directly without popup prompts.
+                </p>
+                <button class="modal-save-btn" style="background: var(--surface-card); color: var(--text-main); border: var(--card-border);" onclick="pickLocalBackupDirectory()">
+                    📁 Select Local Folder
+                </button>
+                <div id="localPathLabel" style="font-size: 11px; font-weight: 600; color: var(--text-muted); word-break: break-all;">
+                    No directory set (defaults to standard downloads)
+                </div>
+            </div>
+
+            <p style="font-size: 12px; color: var(--text-muted); line-height: 1.45; margin: 0;">
+                Export or import to Google Drive and local JSON files.
+            </p>
+
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <button class="modal-save-btn" style="background:#2E7D32;" onclick="saveDirectToGoogleDrive()">
+                    ☁️ Upload to Google Drive
+                </button>
+
+                <input type="file" id="restoreFileInput" accept=".txt,.json,application/json,text/plain" style="display:none;" onchange="handleRestoreFile(this)">
+                
+                <button class="modal-save-btn" style="background:var(--surface-subtle); color:var(--text-main); border:var(--card-border);" onclick="document.getElementById('restoreFileInput').click()">
+                    📥 Restore from File
+                </button>
+            </div>
+
+            <div id="syncStatus" style="font-size: 12px; text-align: center; color: var(--text-muted); font-weight: 600; min-height: 16px;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Custom Profile Names Logic
+        function loadCustomProfileNames() {
+            const name1 = localStorage.getItem('lc_profile_name_1') || 'User 1';
+            const name2 = localStorage.getItem('lc_profile_name_2') || 'User 2';
+
+            const tab1 = document.getElementById('profileTabBtn1');
+            const tab2 = document.getElementById('profileTabBtn2');
+            const inp1 = document.getElementById('customNameInput1');
+            const inp2 = document.getElementById('customNameInput2');
+
+            if (tab1) tab1.innerText = name1;
+            if (tab2) tab2.innerText = name2;
+            if (inp1) inp1.value = name1;
+            if (inp2) inp2.value = name2;
+        }
+
+        function saveCustomProfileNames() {
+            const inp1 = document.getElementById('customNameInput1');
+            const inp2 = document.getElementById('customNameInput2');
+
+            const name1 = (inp1 && inp1.value.trim()) ? inp1.value.trim() : 'User 1';
+            const name2 = (inp2 && inp2.value.trim()) ? inp2.value.trim() : 'User 2';
+
+            localStorage.setItem('lc_profile_name_1', name1);
+            localStorage.setItem('lc_profile_name_2', name2);
+
+            const tab1 = document.getElementById('profileTabBtn1');
+            const tab2 = document.getElementById('profileTabBtn2');
+            if (tab1) tab1.innerText = name1;
+            if (tab2) tab2.innerText = name2;
+        }
+
+        // Private Meal Plan Logic
+        function loadMealPlanLinks() {
+            const url1 = localStorage.getItem('lc_mealplan_url_1') || '';
+            const url2 = localStorage.getItem('lc_mealplan_url_2') || '';
+
+            const inp1 = document.getElementById('mealPlanUrl1');
+            const inp2 = document.getElementById('mealPlanUrl2');
+            if (inp1) inp1.value = url1;
+            if (inp2) inp2.value = url2;
+
+            const btn1 = document.getElementById('user1MealPlanBtn');
+            const btn2 = document.getElementById('user2MealPlanBtn');
+            if (btn1) btn1.innerText = url1 ? '↗ Open Plan' : '⚙️ Configure Link';
+            if (btn2) btn2.innerText = url2 ? '↗ Open Plan' : '⚙️ Configure Link';
+        }
+
+        function saveMealPlanLinks() {
+            const inp1 = document.getElementById('mealPlanUrl1');
+            const inp2 = document.getElementById('mealPlanUrl2');
+            const url1 = inp1 ? inp1.value.trim() : '';
+            const url2 = inp2 ? inp2.value.trim() : '';
+
+            localStorage.setItem('lc_mealplan_url_1', url1);
+            localStorage.setItem('lc_mealplan_url_2', url2);
+
+            const btn1 = document.getElementById('user1MealPlanBtn');
+            const btn2 = document.getElementById('user2MealPlanBtn');
+            if (btn1) btn1.innerText = url1 ? '↗ Open Plan' : '⚙️ Configure Link';
+            if (btn2) btn2.innerText = url2 ? '↗ Open Plan' : '⚙️ Configure Link';
+        }
+
+        function openMealPlan(profileNum) {
+            const url = localStorage.getItem('lc_mealplan_url_' + profileNum);
+            if (url && url.trim()) {
+                window.open(url.trim(), '_blank', 'noopener,noreferrer');
+            } else {
+                openDriveSettingsModal();
+                setTimeout(() => {
+                    const inp = document.getElementById('mealPlanUrl' + profileNum);
+                    if (inp) inp.focus();
+                }, 200);
+            }
+        }
+
+        function toggleCardDropdown(cardId) {
+            const card = document.getElementById(cardId);
+            if (card) card.classList.toggle('open');
+        }
+
+        function switchProfile(button, profileKey) {
+            document.querySelectorAll('.switch-btn').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active-view'));
+            const targetView = document.getElementById('view-' + profileKey);
+            if (targetView) targetView.classList.add('active-view');
+        }
+
+        function openSpecificNotesView(tab) {
+            document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active-view'));
+            document.getElementById('view-notes').classList.add('active-view');
+            document.getElementById('profileSwitcher').style.visibility = 'hidden';
+            sortNotesList();
+            renderNotesList();
+            renderTodoList();
+            switchHubTab(tab);
+        }
+
+        function closeNotesView() {
+            document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active-view'));
+            document.getElementById('view-user1').classList.add('active-view');
+            document.getElementById('profileSwitcher').style.visibility = 'visible';
+            updateDashboardCounts();
+        }
+
+        function openPdfView() {
+            closeResourceDrawer();
+            document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active-view'));
+            document.getElementById('view-pdf').classList.add('active-view');
+            document.getElementById('profileSwitcher').style.visibility = 'hidden';
+        }
+
+        function closePdfView() {
+            document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active-view'));
+            document.getElementById('view-user1').classList.add('active-view');
+            document.getElementById('profileSwitcher').style.visibility = 'visible';
+        }
+
+        function loadPdfFromFile(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const fileUrl = URL.createObjectURL(file);
+                const frame = document.getElementById('pdfFrame');
+                const placeholder = document.getElementById('pdfPlaceholder');
+
+                frame.src = fileUrl;
+                frame.style.display = 'block';
+                placeholder.style.display = 'none';
+            }
+        }
+
+        const defaultEbooks = [
+            { id: '1', name: 'Open Culture', url: 'https://www.openculture.com/free_ebooks' },
+            { id: '2', name: 'Project Gutenberg', url: 'https://www.gutenberg.org' }
+        ];
+
+        const defaultAudiobooks = [
+            { id: 'a1', name: 'LibriVox Free Audio', url: 'https://librivox.org' }
+        ];
+
+        const defaultTools = [
+            { id: 't0', name: '📖 PDF Reader', action: 'openPdfView' }
+        ];
+
+        let userEbooks = defaultEbooks;
+        let userAudiobooks = defaultAudiobooks;
+        let userTools = defaultTools;
+
+        try {
+            const se = localStorage.getItem('lc_user_ebooks');
+            if (se) userEbooks = JSON.parse(se);
+            const sa = localStorage.getItem('lc_user_audiobooks');
+            if (sa) userAudiobooks = JSON.parse(sa);
+            const st = localStorage.getItem('lc_user_tools');
+            if (st) userTools = JSON.parse(st);
+        } catch (e) {
+            console.error(e);
+        }
+
+        function saveLinksToStorage() {
+            try {
+                localStorage.setItem('lc_user_ebooks', JSON.stringify(userEbooks));
+                localStorage.setItem('lc_user_audiobooks', JSON.stringify(userAudiobooks));
+                localStorage.setItem('lc_user_tools', JSON.stringify(userTools));
+            } catch (e) {
+                console.error(e);
+            }
+            updateDashboardCounts();
+        }
+
+        function updateDashboardCounts() {
+            const eb = document.getElementById('ebookCount');
+            if (eb) eb.innerText = userEbooks.length + ' resources';
+            const au = document.getElementById('audioCount');
+            if (au) au.innerText = userAudiobooks.length + ' resources';
+            const to = document.getElementById('toolsCount');
+            if (to) to.innerText = userTools.length + ' tools';
+
+            const sc = document.getElementById('stickyCount');
+            if (sc) sc.innerText = notesList.length + (notesList.length === 1 ? ' note' : ' notes');
+
+            const tc = document.getElementById('todoCount');
+            if (tc) {
+                const pending = todoList.filter(t => !t.completed).length;
+                tc.innerText = pending + ' pending';
+            }
+        }
+
+        let currentActiveCategory = 'ebooks';
+
+        function openResourceDrawer(category) {
+            currentActiveCategory = category;
+            const drawer = document.getElementById('resourceDrawer');
+            const title = document.getElementById('drawerTitle');
+            const icon = document.getElementById('drawerIcon');
+            const container = document.getElementById('drawerLinksContainer');
+
+            container.innerHTML = '';
+            let linksList = [];
+
+            if (category === 'ebooks') {
+                title.innerText = 'eBooks Vault';
+                icon.innerText = '🌐';
+                linksList = userEbooks;
+            } else if (category === 'audiobooks') {
+                title.innerText = 'Audiobook Stash';
+                icon.innerText = '🎧';
+                linksList = userAudiobooks;
+            } else {
+                title.innerText = 'Tools & Converters';
+                icon.innerText = '⚡';
+                linksList = userTools;
+            }
+
+            linksList.forEach(link => {
+                if (link.action === 'openPdfView') {
+                    const btn = document.createElement('div');
+                    btn.className = 'resource-pill';
+                    btn.innerHTML = link.name;
+                    btn.onclick = openPdfView;
+                    container.appendChild(btn);
+                } else {
+                    const a = document.createElement('a');
+                    a.href = link.url;
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    a.className = 'resource-pill';
+                    a.innerHTML = link.name + ' <span class="arrow-up-right">↗</span>';
+                    container.appendChild(a);
+                }
+            });
+
+            const addBtn = document.createElement('button');
+            addBtn.className = 'manage-pill-btn';
+            addBtn.innerHTML = '<span>+</span> Add / Manage';
+            addBtn.onclick = () => {
+                closeResourceDrawer();
+                openLinkModal(category);
+            };
+            container.appendChild(addBtn);
+
+            drawer.classList.add('open');
+        }
+
+        function closeResourceDrawer(e) {
+            if (!e || e.target.id === 'resourceDrawer' || e.target.classList.contains('drawer-close-btn')) {
+                document.getElementById('resourceDrawer').classList.remove('open');
+            }
+        }
+
+        function openLinkModal(preselectCategory) {
+            document.getElementById('modalCategory').value = preselectCategory || 'ebooks';
+            document.getElementById('modalLinkName').value = '';
+            document.getElementById('modalLinkUrl').value = '';
+            document.getElementById('linkModal').classList.add('open');
+            renderExistingModalLinks();
+        }
+
+        function closeLinkModal(e) {
+            if (!e || e.target.id === 'linkModal' || e.target.classList.contains('drawer-close-btn')) {
+                document.getElementById('linkModal').classList.remove('open');
+            }
+        }
+
+        function renderExistingModalLinks() {
+            const container = document.getElementById('modalExistingLinks');
+            container.innerHTML = '';
+
+            const allLinks = [
+                ...userEbooks.map(l => ({ ...l, type: 'eBook' })),
+                ...userAudiobooks.map(l => ({ ...l, type: 'Audio' })),
+                ...userTools.filter(l => !l.action).map(l => ({ ...l, type: 'Tool' }))
+            ];
+
+            allLinks.forEach(link => {
+                const row = document.createElement('div');
+                row.className = 'existing-link-row';
+                row.innerHTML = `
+                    <span class="existing-link-name">
+                        <small style="opacity:0.6;font-size:10px;">[${link.type}]</small> 
+                        ${link.name}
+                    </span>
+                    <button class="existing-link-del" onclick="deleteUserLink('${link.id}', '${link.type}')">✕</button>
+                `;
+                container.appendChild(row);
+            });
+        }
+
+        function saveNewUserLink() {
+            const cat = document.getElementById('modalCategory').value;
+            const name = document.getElementById('modalLinkName').value.trim();
+            let url = document.getElementById('modalLinkUrl').value.trim();
+
+            if (!name || !url) return;
+            if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
+
+            const newLink = { id: Date.now().toString(), name, url };
+
+            if (cat === 'ebooks') userEbooks.push(newLink);
+            else if (cat === 'audiobooks') userAudiobooks.push(newLink);
+            else userTools.push(newLink);
+
+            saveLinksToStorage();
+            renderExistingModalLinks();
+
+            document.getElementById('modalLinkName').value = '';
+            document.getElementById('modalLinkUrl').value = '';
+        }
+
+        function deleteUserLink(id, type) {
+            if (type === 'eBook') userEbooks = userEbooks.filter(l => l.id !== id);
+            else if (type === 'Audio') userAudiobooks = userAudiobooks.filter(l => l.id !== id);
+            else userTools = userTools.filter(l => l.id !== id);
+
+            saveLinksToStorage();
+            renderExistingModalLinks();
+        }
+
+        // Hub Navigation
+        let currentHubTab = 'notes';
+
+        function switchHubTab(tab) {
+            currentHubTab = tab;
+            const tabNotesBtn = document.getElementById('tabNotesBtn');
+            const tabTodoBtn = document.getElementById('tabTodoBtn');
+            const panelNotes = document.getElementById('panelNotes');
+            const panelTodo = document.getElementById('panelTodo');
+            const hubActionBtn = document.getElementById('hubActionBtn');
+            const sortNotesBtn = document.getElementById('sortNotesBtn');
+            const globalToolbar = document.getElementById('notepadGlobalToolbar');
+
+            if (tab === 'notes') {
+                tabNotesBtn.classList.add('active');
+                tabTodoBtn.classList.remove('active');
+                panelNotes.style.display = 'block';
+                panelTodo.style.display = 'none';
+                hubActionBtn.innerHTML = '<span>+</span> New Note';
+                if (sortNotesBtn)
