@@ -2166,6 +2166,81 @@
             font-weight: 600;
             cursor: pointer;
         }
+    
+/* Smart Meal Nutrient Builder */
+.nutrient-cat-label {
+    font-size: 10.5px;
+    font-weight: 800;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-top: 6px;
+    margin-bottom: 4px;
+}
+
+.ingredient-pills-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.ing-pill-btn {
+    background: var(--surface-subtle);
+    border: var(--card-border);
+    border-radius: 999px;
+    padding: 5px 10px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-main);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+}
+
+.ing-pill-btn.selected {
+    background: var(--primary);
+    color: #FFFFFF;
+    border-color: var(--primary);
+    box-shadow: 0 2px 6px rgba(148, 93, 76, 0.25);
+}
+
+.nutrient-meter-box {
+    background: var(--surface-subtle);
+    border: var(--card-border);
+    border-radius: var(--radius-inner);
+    padding: 12px;
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.nutrient-badges-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.nutrient-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 9px;
+    border-radius: 8px;
+    background: var(--surface-card);
+    color: var(--text-muted);
+    border: var(--card-border);
+    opacity: 0.45;
+    transition: all 0.2s ease;
+}
+
+.nutrient-badge.active {
+    opacity: 1;
+    background: var(--primary-soft);
+    color: var(--primary);
+    border-color: var(--primary);
+    transform: scale(1.03);
+}
+
     </style>
 </head>
 <body>
@@ -2581,7 +2656,47 @@
                         <div class="milk-chips-history" id="milkChipsHistory"></div>
                     </div>
                 </div>
-                                <!-- FEATURE: FEEDING GAP CALCULATOR (NO SAVE) -->
+
+                <!-- FEATURE: SMART MEAL NUTRIENT BUILDER -->
+                <div class="dropdown-feature-card open" id="nutrientBuilderCard">
+                    <div class="dropdown-feature-header" onclick="toggleCardDropdown('nutrientBuilderCard')">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">🥣</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Meal Nutrient Checker</span>
+                                <span class="feature-sub-title" id="nutrientSelectedSub">Tap ingredients to see nutrients</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-top:4px;">
+                            <span style="font-size:11px; font-weight:700; color:var(--text-muted);">SELECT INGREDIENTS FED:</span>
+                            <button class="folder-tool-btn" style="color:#E53935; opacity:1; font-weight:700;" onclick="clearSelectedIngredients()">Clear All ✕</button>
+                        </div>
+
+                        <div>
+                            <div class="nutrient-cat-label">🌾 Cereals / Grains</div>
+                            <div class="ingredient-pills-wrap" id="pills-grains"></div>
+
+                            <div class="nutrient-cat-label">🥕 Veggies</div>
+                            <div class="ingredient-pills-wrap" id="pills-veggies"></div>
+
+                            <div class="nutrient-cat-label">🍌 Fruits</div>
+                            <div class="ingredient-pills-wrap" id="pills-fruits"></div>
+                        </div>
+
+                        <div class="nutrient-meter-box">
+                            <div style="font-size:10.5px; font-weight:800; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.4px;">
+                                Nutrients Covered in This Meal:
+                            </div>
+                            <div class="nutrient-badges-grid" id="nutrientBadgesGrid"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FEATURE: FEEDING GAP CALCULATOR (NO SAVE) -->
                 <div class="dropdown-feature-card open" id="feedingGapCard">
                     <div class="dropdown-feature-header" onclick="toggleCardDropdown('feedingGapCard')">
                         <div class="feature-header-left">
@@ -2611,7 +2726,6 @@
                         </div>
                     </div>
                 </div>
-
 
                 <!-- FEATURE: USER 2 MEAL PLAN -->
                 <div class="dropdown-feature-card open" id="user2MealPlanCard">
@@ -4951,9 +5065,114 @@
             loadWhimsicalFolders();
             sortNotesList();
             renderNotesList();
-            checkBackupReminder(); 
+            checkBackupReminder();
             setGapTimeNow();
+            initNutrientBuilder();
         });
+
+        // Smart Meal Nutrient Builder (All 20 Custom Baby Foods)
+        const BABY_FOOD_DB = {
+            grains: [
+                { name: 'Rice', nutrients: ['energy'] },
+                { name: 'Dalia', nutrients: ['fiber', 'protein', 'iron', 'energy'] },
+                { name: 'Suji', nutrients: ['energy', 'iron'] },
+                { name: 'Moong dal', nutrients: ['protein', 'iron', 'fiber'] },
+                { name: 'Masoor dal', nutrients: ['protein', 'iron', 'fiber'] },
+                { name: 'Ragi', nutrients: ['calcium', 'iron', 'fiber', 'protein'] },
+                { name: 'Oats', nutrients: ['fiber', 'protein', 'iron', 'energy'] },
+                { name: 'Sabudana', nutrients: ['energy', 'calcium'] }
+            ],
+            veggies: [
+                { name: 'Carrot', nutrients: ['vita', 'fiber'] },
+                { name: 'Beetroot', nutrients: ['iron', 'fiber', 'potassium'] },
+                { name: 'Bottle gourd', nutrients: ['hydration', 'fiber'] },
+                { name: 'Spinach', nutrients: ['iron', 'calcium', 'vita', 'fiber'] },
+                { name: 'Sweet potato', nutrients: ['vita', 'fiber', 'energy', 'potassium'] },
+                { name: 'Pumpkin', nutrients: ['vita', 'fiber', 'potassium'] },
+                { name: 'Ridge gourd', nutrients: ['hydration', 'fiber'] },
+                { name: 'Potato', nutrients: ['energy', 'potassium', 'fiber'] }
+            ],
+            fruits: [
+                { name: 'Banana', nutrients: ['potassium', 'energy', 'fiber'] },
+                { name: 'Apple', nutrients: ['fiber', 'vitc'] },
+                { name: 'Pear', nutrients: ['fiber', 'vitc', 'hydration'] },
+                { name: 'Sapota', nutrients: ['energy', 'fiber', 'iron', 'calcium'] }
+            ]
+        };
+
+        const NUTRIENT_LABELS = [
+            { key: 'protein', label: '💪 Protein' },
+            { key: 'iron', label: '🩸 Iron' },
+            { key: 'calcium', label: '🦴 Calcium' },
+            { key: 'fiber', label: '🌾 Fiber' },
+            { key: 'vita', label: '👁️ Vitamin A' },
+            { key: 'vitc', label: '🍊 Vitamin C' },
+            { key: 'potassium', label: '🍌 Potassium' },
+            { key: 'energy', label: '⚡ Energy / Carbs' },
+            { key: 'hydration', label: '💧 Hydration' }
+        ];
+
+        let selectedBabyIngredients = new Set();
+
+        function initNutrientBuilder() {
+            ['grains', 'veggies', 'fruits'].forEach(cat => {
+                const wrap = document.getElementById('pills-' + cat);
+                if (!wrap) return;
+                wrap.innerHTML = '';
+                BABY_FOOD_DB[cat].forEach(item => {
+                    const btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'ing-pill-btn' + (selectedBabyIngredients.has(item.name) ? ' selected' : '');
+                    btn.innerText = item.name;
+                    btn.onclick = () => toggleBabyIngredient(item.name);
+                    wrap.appendChild(btn);
+                });
+            });
+            updateNutrientMeter();
+        }
+
+        function toggleBabyIngredient(name) {
+            if (selectedBabyIngredients.has(name)) {
+                selectedBabyIngredients.delete(name);
+            } else {
+                selectedBabyIngredients.add(name);
+            }
+            initNutrientBuilder();
+        }
+
+        function clearSelectedIngredients() {
+            selectedBabyIngredients.clear();
+            initNutrientBuilder();
+        }
+
+        function updateNutrientMeter() {
+            const grid = document.getElementById('nutrientBadgesGrid');
+            const sub = document.getElementById('nutrientSelectedSub');
+            if (!grid) return;
+
+            const activeNutrients = new Set();
+            ['grains', 'veggies', 'fruits'].forEach(cat => {
+                BABY_FOOD_DB[cat].forEach(item => {
+                    if (selectedBabyIngredients.has(item.name)) {
+                        item.nutrients.forEach(n => activeNutrients.add(n));
+                    }
+                });
+            });
+
+            if (sub) {
+                if (selectedBabyIngredients.size === 0) {
+                    sub.innerText = 'Tap ingredients to see nutrients';
+                } else {
+                    sub.innerText = `${selectedBabyIngredients.size} selected • ${activeNutrients.size} nutrients covered`;
+                }
+            }
+
+            grid.innerHTML = NUTRIENT_LABELS.map(n => {
+                const isLit = activeNutrients.has(n.key);
+                return `<div class="nutrient-badge ${isLit ? 'active' : ''}">${n.label}</div>`;
+            }).join('');
+        }
+
         // Ephemeral Feeding Gap Calculator (Zero Storage)
 let currentGapMode = 'milk2solids';
 
