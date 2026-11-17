@@ -1627,6 +1627,82 @@
             line-height: 1;
         }
 
+        /* Feeding Gap Calculator */
+.gap-calc-toggle {
+    display: flex;
+    background: var(--surface-subtle);
+    border: var(--card-border);
+    border-radius: 999px;
+    padding: 3px;
+    gap: 3px;
+    margin-top: 8px;
+}
+
+.gap-calc-btn {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 7px 0;
+    border-radius: 999px;
+    font-family: inherit;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.gap-calc-btn.active {
+    background: var(--surface-card);
+    color: var(--primary);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.gap-time-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.gap-time-input {
+    flex: 1;
+    background: var(--surface-subtle);
+    border: var(--card-border);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-main);
+    font-family: inherit;
+    outline: none;
+}
+
+.gap-result-box {
+    background: var(--primary-soft);
+    border: 1px dashed var(--primary);
+    border-radius: var(--radius-inner);
+    padding: 12px 14px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.gap-result-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.gap-result-window {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+
         /* Tier Board */
         .tier-board {
             display: flex;
@@ -4846,6 +4922,56 @@
             renderNotesList();
             checkBackupReminder(); 
         });
+        // Ephemeral Feeding Gap Calculator (Zero Storage)
+let currentGapMode = 'milk2solids';
+
+function setGapMode(mode) {
+    currentGapMode = mode;
+    document.getElementById('btnMilkToSolids').classList.toggle('active', mode === 'milk2solids');
+    document.getElementById('btnSolidsToMilk').classList.toggle('active', mode === 'solids2milk');
+    calculateFeedingWindow();
+}
+
+function setGapTimeNow() {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    const input = document.getElementById('gapBaseTime');
+    if (input) {
+        input.value = `${hh}:${mm}`;
+        calculateFeedingWindow();
+    }
+}
+
+function formatMinutesToAMPM(totalMins) {
+    const wrapped = ((totalMins % 1440) + 1440) % 1440;
+    let h = Math.floor(wrapped / 60);
+    const m = String(wrapped % 60).padStart(2, '0');
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return `${h}:${m} ${ampm}`;
+}
+
+function calculateFeedingWindow() {
+    const input = document.getElementById('gapBaseTime');
+    const labelEl = document.getElementById('gapResultLabel');
+    const windowEl = document.getElementById('gapResultWindow');
+    if (!input || !input.value) return;
+
+    const [hh, mm] = input.value.split(':').map(Number);
+    const baseTotalMins = hh * 60 + mm;
+
+    if (currentGapMode === 'milk2solids') {
+        // Milk -> Solids: +60 to +90 mins
+        labelEl.innerText = 'Recommended Solids Window (+1 to 1.5 hrs)';
+        windowEl.innerText = `${formatMinutesToAMPM(baseTotalMins + 60)} – ${formatMinutesToAMPM(baseTotalMins + 90)}`;
+    } else {
+        // Solids -> Milk: +90 to +120 mins
+        labelEl.innerText = 'Recommended Milk Window (+1.5 to 2 hrs)';
+        windowEl.innerText = `${formatMinutesToAMPM(baseTotalMins + 90)} – ${formatMinutesToAMPM(baseTotalMins + 120)}`;
+    }
+}
+
     </script>
 </body>
 </html>
