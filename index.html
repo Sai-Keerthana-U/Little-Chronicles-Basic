@@ -2677,6 +2677,9 @@
                         </div>
 
                         <div>
+                            <div class="nutrient-cat-label">🧈 Healthy Fats</div>
+                            <div class="ingredient-pills-wrap" id="pills-fats"></div>
+
                             <div class="nutrient-cat-label">🌾 Cereals / Grains</div>
                             <div class="ingredient-pills-wrap" id="pills-grains"></div>
 
@@ -5070,8 +5073,11 @@
             initNutrientBuilder();
         });
 
-        // Smart Meal Nutrient Builder (All 20 Custom Baby Foods)
+        // Smart Meal Nutrient Builder (Including Ghee / Healthy Fats + All 20 Custom Baby Foods)
         const BABY_FOOD_DB = {
+            fats: [
+                { name: 'Ghee', nutrients: ['fats', 'energy'] }
+            ],
             grains: [
                 { name: 'Rice', nutrients: ['energy'] },
                 { name: 'Dalia', nutrients: ['fiber', 'protein', 'iron', 'energy'] },
@@ -5101,6 +5107,7 @@
         };
 
         const NUTRIENT_LABELS = [
+            { key: 'fats', label: '🧠 Healthy Fats' },
             { key: 'protein', label: '💪 Protein' },
             { key: 'iron', label: '🩸 Iron' },
             { key: 'calcium', label: '🦴 Calcium' },
@@ -5115,7 +5122,7 @@
         let selectedBabyIngredients = new Set();
 
         function initNutrientBuilder() {
-            ['grains', 'veggies', 'fruits'].forEach(cat => {
+            ['fats', 'grains', 'veggies', 'fruits'].forEach(cat => {
                 const wrap = document.getElementById('pills-' + cat);
                 if (!wrap) return;
                 wrap.innerHTML = '';
@@ -5151,7 +5158,7 @@
             if (!grid) return;
 
             const activeNutrients = new Set();
-            ['grains', 'veggies', 'fruits'].forEach(cat => {
+            ['fats', 'grains', 'veggies', 'fruits'].forEach(cat => {
                 BABY_FOOD_DB[cat].forEach(item => {
                     if (selectedBabyIngredients.has(item.name)) {
                         item.nutrients.forEach(n => activeNutrients.add(n));
@@ -5226,3 +5233,4 @@ function calculateFeedingWindow() {
     </script>
 </body>
 </html>
+
