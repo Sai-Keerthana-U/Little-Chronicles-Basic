@@ -2581,6 +2581,37 @@
                         <div class="milk-chips-history" id="milkChipsHistory"></div>
                     </div>
                 </div>
+                                <!-- FEATURE: FEEDING GAP CALCULATOR (NO SAVE) -->
+                <div class="dropdown-feature-card open" id="feedingGapCard">
+                    <div class="dropdown-feature-header" onclick="toggleCardDropdown('feedingGapCard')">
+                        <div class="feature-header-left">
+                            <div class="feature-icon-badge">⏳</div>
+                            <div class="feature-titles-group">
+                                <span class="feature-main-title">Feeding Gap Timer</span>
+                                <span class="feature-sub-title">Milk ↔ Solids Window Calculator</span>
+                            </div>
+                        </div>
+                        <div class="feature-chevron">▼</div>
+                    </div>
+
+                    <div class="dropdown-feature-body">
+                        <div class="gap-calc-toggle">
+                            <button class="gap-calc-btn active" id="btnMilkToSolids" onclick="setGapMode('milk2solids')">🍼 Milk → 🥣 Solids</button>
+                            <button class="gap-calc-btn" id="btnSolidsToMilk" onclick="setGapMode('solids2milk')">🥣 Solids → 🍼 Milk</button>
+                        </div>
+
+                        <div class="gap-time-row">
+                            <input type="time" id="gapBaseTime" class="gap-time-input" oninput="calculateFeedingWindow()">
+                            <button class="add-note-btn" onclick="setGapTimeNow()">Now</button>
+                        </div>
+
+                        <div class="gap-result-box">
+                            <span class="gap-result-label" id="gapResultLabel">Recommended Solids Window (+1 to 1.5 hrs)</span>
+                            <div class="gap-result-window" id="gapResultWindow">-- : --</div>
+                        </div>
+                    </div>
+                </div>
+
 
                 <!-- FEATURE: USER 2 MEAL PLAN -->
                 <div class="dropdown-feature-card open" id="user2MealPlanCard">
@@ -4921,6 +4952,7 @@
             sortNotesList();
             renderNotesList();
             checkBackupReminder(); 
+            setGapTimeNow();
         });
         // Ephemeral Feeding Gap Calculator (Zero Storage)
 let currentGapMode = 'milk2solids';
